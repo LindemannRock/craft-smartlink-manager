@@ -55,7 +55,7 @@ class SmartlinksController extends Controller
                 return $this->redirect('smartlink-manager/analytics');
             }
             if ($user->checkPermission('smartLinkManager:viewLogs')) {
-                return $this->redirect('smartlink-manager/logs');
+                return $this->redirect('smartlink-manager/logs/system');
             }
             if ($user->checkPermission('smartLinkManager:manageSettings')) {
                 return $this->redirect('smartlink-manager/settings');

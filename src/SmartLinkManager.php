@@ -483,9 +483,6 @@ class SmartLinkManager extends Plugin
             'smartlink-manager/settings/cleanup-analytics' => 'smartlink-manager/settings/cleanup-analytics',
             // QR Code generation for preview
             'smartlink-manager/qr-code/generate' => 'smartlink-manager/qr-code/generate',
-            // Logging routes
-            'smartlink-manager/logs' => 'logging-library/logs/index',
-            'smartlink-manager/logs/download' => 'logging-library/logs/download',
         ];
     }
 
@@ -548,10 +545,10 @@ class SmartLinkManager extends Plugin
                 'label' => Craft::t('smartlink-manager', 'Clear cache'),
             ],
             'smartLinkManager:viewLogs' => [
-                'label' => Craft::t('smartlink-manager', 'View logs'),
+                'label' => Craft::t('smartlink-manager', 'View system logs'),
                 'nested' => [
                     'smartLinkManager:downloadLogs' => [
-                        'label' => Craft::t('smartlink-manager', 'Download logs'),
+                        'label' => Craft::t('smartlink-manager', 'Download system logs'),
                     ],
                 ],
             ],
