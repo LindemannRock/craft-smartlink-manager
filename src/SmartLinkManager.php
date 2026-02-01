@@ -250,7 +250,7 @@ class SmartLinkManager extends Plugin
                                 $redis = $cache->redis;
 
                                 // Get all keys from tracking sets
-                                $qrKeys = $redis->executeCommand('SMEMBERS', ['smartlinkmanager-qr-keys']) ?: [];
+                                $qrKeys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet($this->id, 'qr')]) ?: [];
                                 $deviceKeys = $redis->executeCommand('SMEMBERS', ['smartlinkmanager-device-keys']) ?: [];
 
                                 // Delete QR cache keys using Craft's cache component
@@ -264,7 +264,7 @@ class SmartLinkManager extends Plugin
                                 }
 
                                 // Clear the tracking sets
-                                $redis->executeCommand('DEL', ['smartlinkmanager-qr-keys']);
+                                $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet($this->id, 'qr')]);
                                 $redis->executeCommand('DEL', ['smartlinkmanager-device-keys']);
                             }
                         } else {

@@ -464,7 +464,7 @@ class QrCodeService extends Component
             // Track key in set for selective deletion
             if ($cache instanceof \yii\redis\Cache) {
                 $redis = $cache->redis;
-                $redis->executeCommand('SADD', ['smartlinkmanager-qr-keys', $cacheKey]);
+                $redis->executeCommand('SADD', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'qr'), $cacheKey]);
             }
 
             return;

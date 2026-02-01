@@ -46,28 +46,29 @@ class DeviceDetectionService extends Component
     {
         $data = $this->detectDeviceInfo($userAgent);
 
-        $deviceInfo = new DeviceInfo();
-        $deviceInfo->userAgent = $data['userAgent'] ?? null;
-        $deviceInfo->deviceType = $data['deviceType'] ?? null;
-        $deviceInfo->isMobile = $data['isMobile'] ?? null;
-        $deviceInfo->isTablet = $data['isTablet'] ?? null;
-        $deviceInfo->isDesktop = $data['isDesktop'] ?? null;
-        $deviceInfo->isMobileApp = $data['isMobileApp'] ?? null;
-        $deviceInfo->brand = $data['deviceBrand'] ?? null;
-        $deviceInfo->model = $data['deviceModel'] ?? null;
-        $deviceInfo->osName = $data['osName'] ?? null;
-        $deviceInfo->osVersion = $data['osVersion'] ?? null;
-        $deviceInfo->clientType = $data['clientType'] ?? null;
-        $deviceInfo->browser = $data['browser'] ?? null;
-        $deviceInfo->browserVersion = $data['browserVersion'] ?? null;
-        $deviceInfo->browserEngine = $data['browserEngine'] ?? null;
-        $deviceInfo->isBot = (bool)($data['isRobot'] ?? false);
-        $deviceInfo->botName = $data['botName'] ?? null;
-        $deviceInfo->platform = $data['platform'] ?? null;
-        $deviceInfo->vendor = $data['vendor'] ?? null;
+        /** @var DeviceInfo $deviceInfo */
+        $deviceInfo = $this->buildDeviceModel($data, DeviceInfo::class, [
+            'userAgent' => 'userAgent',
+            'deviceType' => 'deviceType',
+            'isMobile' => 'isMobile',
+            'isTablet' => 'isTablet',
+            'isDesktop' => 'isDesktop',
+            'isMobileApp' => 'isMobileApp',
+            'brand' => 'deviceBrand',
+            'model' => 'deviceModel',
+            'osName' => 'osName',
+            'osVersion' => 'osVersion',
+            'clientType' => 'clientType',
+            'browser' => 'browser',
+            'browserVersion' => 'browserVersion',
+            'browserEngine' => 'browserEngine',
+            'isBot' => 'isRobot',
+            'botName' => 'botName',
+            'platform' => 'platform',
+            'vendor' => 'vendor',
+        ]);
 
-        // Apply SmartLink-specific language detection (supports browser/ip/both)
-        $deviceInfo->language = $this->detectLanguage();
+        $deviceInfo->language = $data['language'] ?? null;
 
         return $deviceInfo;
     }
@@ -109,129 +110,7 @@ class DeviceDetectionService extends Component
      */
     public function detectLanguage(): string
     {
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $request = Craft::$app->getRequest();
-        $detectedLang = null;
-        
-        // Always check URL parameter first (highest priority)
-        $langParam = $request->getQueryParam('lang') ?? $request->getQueryParam('locale');
-        if ($langParam) {
-            $detectedLang = substr($langParam, 0, 2);
-        }
-        
-        // Apply detection method from settings
-        if (!$detectedLang) {
-            switch ($settings->languageDetectionMethod) {
-                case 'browser':
-                    $detectedLang = $this->_detectFromBrowser();
-                    break;
-                    
-                case 'ip':
-                    if ($settings->enableGeoDetection) {
-                        $detectedLang = $this->_detectFromIp();
-                    }
-                    break;
-                    
-                case 'both':
-                    // Try browser first, then IP
-                    $detectedLang = $this->_detectFromBrowser();
-                    if (!$detectedLang && $settings->enableGeoDetection) {
-                        $detectedLang = $this->_detectFromIp();
-                    }
-                    break;
-            }
-        }
-        
-        // Default to site language if nothing detected
-        if (!$detectedLang) {
-            $detectedLang = substr(Craft::$app->language, 0, 2);
-        }
-        
-        // Validate against site languages
-        $supportedLanguages = [];
-        foreach (Craft::$app->getSites()->getAllSites() as $site) {
-            $supportedLanguages[] = substr($site->language, 0, 2);
-        }
-        $supportedLanguages = array_unique($supportedLanguages);
-        
-        if (!in_array($detectedLang, $supportedLanguages)) {
-            // Default to primary site language
-            $detectedLang = substr(Craft::$app->getSites()->getPrimarySite()->language, 0, 2);
-        }
-        
-        return $detectedLang;
-    }
-    
-    /**
-     * Detect language from browser headers
-     */
-    private function _detectFromBrowser(): ?string
-    {
-        $acceptLanguage = Craft::$app->getRequest()->getHeaders()->get('Accept-Language');
-        if ($acceptLanguage) {
-            // Parse Accept-Language header
-            $languages = [];
-            $parts = explode(',', $acceptLanguage);
-            foreach ($parts as $part) {
-                $lang = explode(';', $part);
-                $code = substr(trim($lang[0]), 0, 2);
-                $quality = isset($lang[1]) ? (float) str_replace('q=', '', $lang[1]) : 1.0;
-                $languages[$code] = $quality;
-            }
-            
-            // Sort by quality
-            arsort($languages);
-            return array_key_first($languages);
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Detect language from IP geolocation
-     */
-    private function _detectFromIp(): ?string
-    {
-        // Get IP address
-        $ip = Craft::$app->getRequest()->getUserIP();
-        if (!$ip) {
-            return null;
-        }
-        
-        // Get location from analytics service
-        $location = SmartLinkManager::$plugin->analytics->getLocationFromIp($ip);
-        if ($location && isset($location['countryCode'])) {
-            // Map common country codes to languages
-            $countryToLang = [
-                'SA' => 'ar', // Saudi Arabia
-                'AE' => 'ar', // UAE
-                'KW' => 'ar', // Kuwait
-                'QA' => 'ar', // Qatar
-                'BH' => 'ar', // Bahrain
-                'OM' => 'ar', // Oman
-                'EG' => 'ar', // Egypt
-                'JO' => 'ar', // Jordan
-                'LB' => 'ar', // Lebanon
-                'IQ' => 'ar', // Iraq
-                'SY' => 'ar', // Syria
-                'YE' => 'ar', // Yemen
-                'LY' => 'ar', // Libya
-                'TN' => 'ar', // Tunisia
-                'DZ' => 'ar', // Algeria
-                'MA' => 'ar', // Morocco
-                'US' => 'en', // United States
-                'GB' => 'en', // United Kingdom
-                'CA' => 'en', // Canada
-                'AU' => 'en', // Australia
-                'NZ' => 'en', // New Zealand
-                'IE' => 'en', // Ireland
-                // Add more mappings as needed
-            ];
-            
-            return $countryToLang[$location['countryCode']] ?? null;
-        }
-        
-        return null;
+        return $this->detectLanguageFromConfig();
     }
 
     /**
@@ -313,10 +192,15 @@ class DeviceDetectionService extends Component
             'cacheStorageMethod' => $settings->cacheStorageMethod,
             'cacheDuration' => (int) $settings->deviceDetectionCacheDuration,
             'cachePath' => PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device'),
-            'cacheKeyPrefix' => 'smartlinks:device:',
-            'cacheKeySet' => 'smartlinkmanager-device-keys',
-            'includeLanguage' => false,
+            'cacheKeyPrefix' => PluginHelper::getCacheKeyPrefix(SmartLinkManager::$plugin->id, 'device'),
+            'cacheKeySet' => PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device'),
+            'includeLanguage' => true,
             'includePlatform' => true,
+            'languageDetectionMethod' => $settings->languageDetectionMethod ?? 'browser',
+            'enableGeoDetection' => (bool) $settings->enableGeoDetection,
+            'geoLookupCallback' => function(string $ip): ?array {
+                return SmartLinkManager::$plugin->analytics->getLocationFromIp($ip);
+            },
         ];
     }
 }
