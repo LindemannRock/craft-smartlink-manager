@@ -10,9 +10,8 @@ namespace lindemannrock\smartlinkmanager\services;
 
 use Craft;
 use craft\base\Component;
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Client\Browser;
 use lindemannrock\base\helpers\PluginHelper;
+use lindemannrock\base\traits\DeviceDetectionTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\models\DeviceInfo;
@@ -26,11 +25,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 class DeviceDetectionService extends Component
 {
     use LoggingTrait;
-
-    /**
-     * @var DeviceDetector|null
-     */
-    private ?DeviceDetector $_detector = null;
+    use DeviceDetectionTrait;
 
     /**
      * @inheritdoc
@@ -49,115 +44,31 @@ class DeviceDetectionService extends Component
      */
     public function detectDevice(?string $userAgent = null): DeviceInfo
     {
-        $settings = SmartLinkManager::$plugin->getSettings();
-        
-        // Try to get from cache if enabled
-        if ($settings->cacheDeviceDetection && $userAgent) {
-            $cached = $this->_getCachedDeviceInfo($userAgent);
+        $data = $this->detectDeviceInfo($userAgent);
 
-            if ($cached !== null) {
-                $deviceInfo = new DeviceInfo();
-                $deviceInfo->setAttributes($cached, false);
-                return $deviceInfo;
-            }
-        }
-        
-        $detector = $this->_getDetector();
-        
-        if ($userAgent) {
-            $detector->setUserAgent($userAgent);
-        } else {
-            $userAgent = Craft::$app->getRequest()->getUserAgent() ?? '';
-            $detector->setUserAgent($userAgent);
-        }
-        
-        $detector->parse();
-        
         $deviceInfo = new DeviceInfo();
-        $deviceInfo->userAgent = $userAgent;
-        
-        // Check if it's a bot
-        if ($detector->isBot()) {
-            $deviceInfo->isBot = true;
-            $botInfo = $detector->getBot();
-            $deviceInfo->botName = $botInfo['name'] ?? null;
-            $deviceInfo->platform = 'other';
-            return $deviceInfo;
-        }
-        
-        // Get device type
-        $deviceType = $detector->getDeviceName();
-        $deviceInfo->deviceType = strtolower($deviceType ?: 'desktop');
-        
-        // Set device booleans based on Matomo detection
-        $deviceInfo->isMobile = $detector->isMobile();
-        $deviceInfo->isTablet = $detector->isTablet();
-        $deviceInfo->isDesktop = $detector->isDesktop();
-        
-        // Additional device type checks
-        $deviceInfo->isMobileApp = $detector->isMobileApp();
-        
-        // Get brand and model
-        $deviceInfo->brand = $detector->getBrandName() ?: null;
-        $deviceInfo->model = $detector->getModel() ?: null;
-        
-        // Get OS information
-        $osInfo = $detector->getOs();
-        if ($osInfo) {
-            $deviceInfo->osName = $osInfo['name'] ?? null;
-            $deviceInfo->osVersion = $osInfo['version'] ?? null;
-            
-            // Determine platform based on OS
-            $osName = strtolower($osInfo['name'] ?? '');
-            if (str_contains($osName, 'ios') || str_contains($osName, 'iphone') || str_contains($osName, 'ipad')) {
-                $deviceInfo->platform = 'ios';
-                $deviceInfo->vendor = 'Apple';
-            } elseif (str_contains($osName, 'android')) {
-                // Check for Huawei/HarmonyOS
-                $ua = strtolower($userAgent);
-                if (str_contains($ua, 'harmonyos') || str_contains($ua, 'huawei') || str_contains($ua, 'honor')) {
-                    $deviceInfo->platform = 'huawei';
-                    $deviceInfo->vendor = 'Huawei';
-                } else {
-                    $deviceInfo->platform = 'android';
-                }
-            } elseif (str_contains($osName, 'windows phone')) {
-                $deviceInfo->platform = 'windows';
-                $deviceInfo->vendor = 'Microsoft';
-            } elseif (str_contains($osName, 'windows')) {
-                $deviceInfo->platform = 'windows';
-            } elseif (str_contains($osName, 'mac') || str_contains($osName, 'os x')) {
-                $deviceInfo->platform = 'macos';
-                $deviceInfo->vendor = 'Apple';
-            } elseif (str_contains($osName, 'linux') || str_contains($osName, 'ubuntu')) {
-                $deviceInfo->platform = 'linux';
-            } else {
-                $deviceInfo->platform = 'other';
-            }
-        }
-        
-        // Get client/browser information
-        $clientInfo = $detector->getClient();
-        if ($clientInfo) {
-            $deviceInfo->clientType = $clientInfo['type'] ?? null;
-            $deviceInfo->browser = $clientInfo['name'] ?? null;
-            $deviceInfo->browserVersion = $clientInfo['version'] ?? null;
-            $deviceInfo->browserEngine = $clientInfo['engine'] ?? null;
-        }
-        
-        // Set vendor if not already set
-        if (!$deviceInfo->vendor && $deviceInfo->brand) {
-            $deviceInfo->vendor = $deviceInfo->brand;
-        }
-        
-        // Get language from Accept-Language header
+        $deviceInfo->userAgent = $data['userAgent'] ?? null;
+        $deviceInfo->deviceType = $data['deviceType'] ?? null;
+        $deviceInfo->isMobile = $data['isMobile'] ?? null;
+        $deviceInfo->isTablet = $data['isTablet'] ?? null;
+        $deviceInfo->isDesktop = $data['isDesktop'] ?? null;
+        $deviceInfo->isMobileApp = $data['isMobileApp'] ?? null;
+        $deviceInfo->brand = $data['deviceBrand'] ?? null;
+        $deviceInfo->model = $data['deviceModel'] ?? null;
+        $deviceInfo->osName = $data['osName'] ?? null;
+        $deviceInfo->osVersion = $data['osVersion'] ?? null;
+        $deviceInfo->clientType = $data['clientType'] ?? null;
+        $deviceInfo->browser = $data['browser'] ?? null;
+        $deviceInfo->browserVersion = $data['browserVersion'] ?? null;
+        $deviceInfo->browserEngine = $data['browserEngine'] ?? null;
+        $deviceInfo->isBot = (bool)($data['isRobot'] ?? false);
+        $deviceInfo->botName = $data['botName'] ?? null;
+        $deviceInfo->platform = $data['platform'] ?? null;
+        $deviceInfo->vendor = $data['vendor'] ?? null;
+
+        // Apply SmartLink-specific language detection (supports browser/ip/both)
         $deviceInfo->language = $this->detectLanguage();
-        
-        // Cache the result if enabled
-        if ($settings->cacheDeviceDetection && $userAgent) {
-            $this->_cacheDeviceInfo($userAgent, $deviceInfo->toArray(), $settings->deviceDetectionCacheDuration);
-        }
-        
+
         return $deviceInfo;
     }
 
@@ -353,20 +264,6 @@ class DeviceDetectionService extends Component
     }
 
     /**
-     * Get DeviceDetector instance
-     *
-     * @return DeviceDetector
-     */
-    private function _getDetector(): DeviceDetector
-    {
-        if ($this->_detector === null) {
-            $this->_detector = new DeviceDetector();
-        }
-        
-        return $this->_detector;
-    }
-
-    /**
      * Get URL for specific platform
      *
      * @param string $platform
@@ -405,77 +302,21 @@ class DeviceDetectionService extends Component
     }
 
     /**
-     * Get cached device info from storage (file or Redis)
-     *
-     * @param string $userAgent
-     * @return array|null
+     * @inheritdoc
      */
-    private function _getCachedDeviceInfo(string $userAgent): ?array
+    protected function getDeviceDetectionConfig(): array
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $cacheKey = 'smartlinks:device:' . md5($userAgent);
 
-        // Use Redis/database cache if configured
-        if ($settings->cacheStorageMethod === 'redis') {
-            $cached = Craft::$app->cache->get($cacheKey);
-            return $cached !== false ? $cached : null;
-        }
-
-        // Use file-based cache (default)
-        $cachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device');
-        $cacheFile = $cachePath . md5($userAgent) . '.cache';
-
-        if (!file_exists($cacheFile)) {
-            return null;
-        }
-
-        // Check if cache is expired
-        $mtime = filemtime($cacheFile);
-        if (time() - $mtime > $settings->deviceDetectionCacheDuration) {
-            @unlink($cacheFile);
-            return null;
-        }
-
-        $data = file_get_contents($cacheFile);
-        return unserialize($data);
-    }
-
-    /**
-     * Cache device info to storage (file or Redis)
-     *
-     * @param string $userAgent
-     * @param array $data
-     * @param int $duration
-     * @return void
-     */
-    private function _cacheDeviceInfo(string $userAgent, array $data, int $duration): void
-    {
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $cacheKey = 'smartlinks:device:' . md5($userAgent);
-
-        // Use Redis/database cache if configured
-        if ($settings->cacheStorageMethod === 'redis') {
-            $cache = Craft::$app->cache;
-            $cache->set($cacheKey, $data, $duration);
-
-            // Track key in set for selective deletion
-            if ($cache instanceof \yii\redis\Cache) {
-                $redis = $cache->redis;
-                $redis->executeCommand('SADD', ['smartlinkmanager-device-keys', $cacheKey]);
-            }
-
-            return;
-        }
-
-        // Use file-based cache (default)
-        $cachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device');
-
-        // Create directory if it doesn't exist
-        if (!is_dir($cachePath)) {
-            \craft\helpers\FileHelper::createDirectory($cachePath);
-        }
-
-        $cacheFile = $cachePath . md5($userAgent) . '.cache';
-        file_put_contents($cacheFile, serialize($data));
+        return [
+            'cacheEnabled' => (bool) $settings->cacheDeviceDetection,
+            'cacheStorageMethod' => $settings->cacheStorageMethod,
+            'cacheDuration' => (int) $settings->deviceDetectionCacheDuration,
+            'cachePath' => PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device'),
+            'cacheKeyPrefix' => 'smartlinks:device:',
+            'cacheKeySet' => 'smartlinkmanager-device-keys',
+            'includeLanguage' => false,
+            'includePlatform' => true,
+        ];
     }
 }
