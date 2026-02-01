@@ -375,7 +375,7 @@ class SmartLinkManager extends Plugin
      * @param bool $includeLinks
      * @param bool $includeLogs
      * @return array
-     * @since 5.14.0
+     * @since 5.20.0
      */
     public function getCpSections(Settings $settings, bool $includeLinks = true, bool $includeLogs = false): array
     {
