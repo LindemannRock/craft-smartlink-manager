@@ -621,7 +621,7 @@ class SettingsController extends Controller
                     $redis = $cache->redis;
 
                     // Get all device cache keys from tracking set
-                    $keys = $redis->executeCommand('SMEMBERS', ['smartlinkmanager-device-keys']) ?: [];
+                    $keys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]) ?: [];
 
                     // Delete device cache keys using Craft's cache component
                     foreach ($keys as $key) {
@@ -629,7 +629,7 @@ class SettingsController extends Controller
                     }
 
                     // Clear the tracking set
-                    $redis->executeCommand('DEL', ['smartlinkmanager-device-keys']);
+                    $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]);
                 }
             } else {
                 // Clear file cache
@@ -689,7 +689,7 @@ class SettingsController extends Controller
                     }
 
                     // Get all device cache keys from tracking set
-                    $deviceKeys = $redis->executeCommand('SMEMBERS', ['smartlinkmanager-device-keys']) ?: [];
+                    $deviceKeys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]) ?: [];
 
                     // Delete device cache keys using Craft's cache component
                     foreach ($deviceKeys as $key) {
@@ -698,7 +698,7 @@ class SettingsController extends Controller
 
                     // Clear the tracking sets
                     $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'qr')]);
-                    $redis->executeCommand('DEL', ['smartlinkmanager-device-keys']);
+                    $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]);
                 }
             } else {
                 // Clear QR code file caches

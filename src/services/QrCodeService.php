@@ -126,7 +126,7 @@ class QrCodeService extends Component
      */
     private function _getCacheKey(string $url, int $size, string $color, string $bgColor, string $format, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
     {
-        return 'smartlinks:qr:' . md5(implode(':', [
+        return PluginHelper::getCacheKeyPrefix(SmartLinkManager::$plugin->id, 'qr') . md5(implode(':', [
             $url,
             $size,
             $color,
