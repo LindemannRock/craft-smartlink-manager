@@ -28,6 +28,7 @@ use craft\utilities\ClearCaches;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use lindemannrock\base\helpers\CpNavHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\LoggingLibrary;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -342,38 +343,14 @@ class SmartLinkManager extends Plugin
         $item = parent::getCpNavItem();
         $user = Craft::$app->getUser();
 
-        // Check if user has view access to each section
-        $hasLinksAccess = $user->checkPermission('smartLinkManager:viewLinks');
-        $hasAnalyticsAccess = $user->checkPermission('smartLinkManager:viewAnalytics') && $settings->enableAnalytics;
-        $hasLogsAccess = $user->checkPermission('smartLinkManager:viewSystemLogs');
-        $hasSettingsAccess = $user->checkPermission('smartLinkManager:manageSettings');
-
-        // If no access at all, hide the plugin from nav
-        if (!$hasLinksAccess && !$hasAnalyticsAccess && !$hasLogsAccess && !$hasSettingsAccess) {
-            return null;
-        }
-
         if ($item) {
             $item['label'] = $settings->getFullName();
 
             // Use Craft's built-in link icon
             $item['icon'] = '@appicons/link.svg';
 
-            $item['subnav'] = [];
-
-            if ($hasLinksAccess) {
-                $item['subnav']['links'] = [
-                    'label' => 'Links',
-                    'url' => 'smartlink-manager',
-                ];
-            }
-
-            if ($hasAnalyticsAccess) {
-                $item['subnav']['analytics'] = [
-                    'label' => Craft::t('smartlink-manager', 'Analytics'),
-                    'url' => 'smartlink-manager/analytics',
-                ];
-            }
+            $sections = $this->getCpSections($settings);
+            $item['subnav'] = CpNavHelper::buildSubnav($user, $settings, $sections);
 
             // Add logs section using the logging library
             if (PluginHelper::isPluginEnabled('logging-library')) {
@@ -382,15 +359,63 @@ class SmartLinkManager extends Plugin
                 ]);
             }
 
-            if ($hasSettingsAccess) {
-                $item['subnav']['settings'] = [
-                    'label' => Craft::t('smartlink-manager', 'Settings'),
-                    'url' => 'smartlink-manager/settings',
-                ];
+            // Hide from nav if no accessible subnav items
+            if (empty($item['subnav'])) {
+                return null;
             }
         }
 
         return $item;
+    }
+
+    /**
+     * Get CP sections for nav + default route resolution
+     *
+     * @param Settings $settings
+     * @param bool $includeLinks
+     * @param bool $includeLogs
+     * @return array
+     * @since 5.14.0
+     */
+    public function getCpSections(Settings $settings, bool $includeLinks = true, bool $includeLogs = false): array
+    {
+        $sections = [];
+
+        if ($includeLinks) {
+            $sections[] = [
+                'key' => 'links',
+                'label' => Craft::t('smartlink-manager', 'Links'),
+                'url' => 'smartlink-manager',
+                'permissionsAll' => ['smartLinkManager:viewLinks'],
+            ];
+        }
+
+        $sections[] = [
+            'key' => 'analytics',
+            'label' => Craft::t('smartlink-manager', 'Analytics'),
+            'url' => 'smartlink-manager/analytics',
+            'permissionsAll' => ['smartLinkManager:viewAnalytics'],
+            'when' => $settings->enableAnalytics,
+        ];
+
+        if ($includeLogs) {
+            $sections[] = [
+                'key' => 'logs',
+                'label' => Craft::t('smartlink-manager', 'Logs'),
+                'url' => 'smartlink-manager/logs',
+                'permissionsAll' => ['smartLinkManager:viewSystemLogs'],
+                'when' => fn() => PluginHelper::isPluginEnabled('logging-library'),
+            ];
+        }
+
+        $sections[] = [
+            'key' => 'settings',
+            'label' => Craft::t('smartlink-manager', 'Settings'),
+            'url' => 'smartlink-manager/settings',
+            'permissionsAll' => ['smartLinkManager:manageSettings'],
+        ];
+
+        return $sections;
     }
 
     /**

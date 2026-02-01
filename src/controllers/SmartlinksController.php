@@ -12,6 +12,7 @@ use Craft;
 use craft\base\Element;
 use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
+use lindemannrock\base\helpers\CpNavHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -51,14 +52,10 @@ class SmartlinksController extends Controller
 
         // If user doesn't have viewLinks permission, redirect to first accessible section
         if (!$user->checkPermission('smartLinkManager:viewLinks')) {
-            if ($user->checkPermission('smartLinkManager:viewAnalytics') && $settings->enableAnalytics) {
-                return $this->redirect('smartlink-manager/analytics');
-            }
-            if ($user->checkPermission('smartLinkManager:viewSystemLogs')) {
-                return $this->redirect('smartlink-manager/logs');
-            }
-            if ($user->checkPermission('smartLinkManager:manageSettings')) {
-                return $this->redirect('smartlink-manager/settings');
+            $sections = SmartLinkManager::$plugin->getCpSections($settings, false, true);
+            $route = CpNavHelper::firstAccessibleRoute($user, $settings, $sections);
+            if ($route) {
+                return $this->redirect($route);
             }
             // No access at all
             $this->requirePermission('smartLinkManager:viewLinks');
