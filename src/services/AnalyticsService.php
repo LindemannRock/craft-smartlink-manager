@@ -16,6 +16,7 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
+use lindemannrock\base\helpers\DateRangeHelper;
 use lindemannrock\base\helpers\GeoHelper;
 use lindemannrock\base\traits\GeoLookupTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -336,22 +337,7 @@ class AnalyticsService extends Component
      */
     private function applyDateRangeFilter(Query $query, string $dateRange, string $dateColumn = 'dateCreated'): Query
     {
-        $startDate = $this->getStartDateForRange($dateRange);
-        $endDate = $this->getEndDateForRange($dateRange);
-
-        // Debug logging
-        if ($dateRange === 'today') {
-            $this->logInfo('Today filter', ['start' => $startDate, 'end' => $endDate]);
-        }
-
-        if ($startDate) {
-            $query->andWhere(['>=', $dateColumn, $startDate]);
-        }
-
-        if ($endDate) {
-            $query->andWhere(['<=', $dateColumn, $endDate]);
-        }
-
+        DateRangeHelper::applyToQuery($query, $dateRange, $dateColumn);
         return $query;
     }
 
@@ -1131,6 +1117,168 @@ class AnalyticsService extends Component
             'categoryPercentages' => $categoryPercentages,
             'totalClicks' => $totalClicks,
         ];
+    }
+
+    /**
+     * Get analytics data formatted for export
+     *
+     * Returns an array of data that can be used with ExportHelper.
+     *
+     * @param int|null $smartLinkId Optional link ID to filter by
+     * @param string $dateRange Date range to filter
+     * @param int|null $siteId Optional site ID to filter by
+     * @return array Array of formatted export data
+     * @since 5.5.0
+     */
+    public function getExportData(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    {
+        $query = (new Query())
+            ->from('{{%smartlinkmanager_analytics}}')
+            ->select([
+                'dateCreated',
+                'linkId',
+                'siteId',
+                'metadata',
+                'deviceType',
+                'deviceBrand',
+                'deviceModel',
+                'osName',
+                'osVersion',
+                'browser',
+                'browserVersion',
+                'country',
+                'city',
+                'language',
+                'referrer',
+                'userAgent',
+            ])
+            ->orderBy(['dateCreated' => SORT_DESC]);
+
+        // Apply date range filter
+        $this->applyDateRangeFilter($query, $dateRange);
+
+        // Filter by smart link if specified
+        if ($smartLinkId) {
+            $query->andWhere(['linkId' => $smartLinkId]);
+        }
+
+        // Filter by site if specified
+        if ($siteId) {
+            $query->andWhere(['siteId' => $siteId]);
+        }
+
+        $results = $query->all();
+
+        // Get settings
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $geoEnabled = $settings->enableGeoDetection ?? true;
+
+        // Format data for export
+        $exportData = [];
+        foreach ($results as $row) {
+            // Get the link
+            $smartLink = SmartLink::find()
+                ->id($row['linkId'])
+                ->status(null)
+                ->one();
+
+            if (!$smartLink) {
+                continue;
+            }
+
+            // Get the actual status
+            $status = $smartLink->getStatus();
+            $statusLabel = match ($status) {
+                SmartLink::STATUS_ENABLED => 'Active',
+                SmartLink::STATUS_DISABLED => 'Disabled',
+                SmartLink::STATUS_PENDING => 'Pending',
+                SmartLink::STATUS_EXPIRED => 'Expired',
+                default => 'Unknown'
+            };
+
+            // Get site name and build the smart link URL
+            $siteName = '';
+            $smartLinkUrl = '';
+            if (!empty($row['siteId'])) {
+                $site = Craft::$app->getSites()->getSiteById($row['siteId']);
+                $siteName = $site ? $site->name : '';
+                $smartLinkUrl = UrlHelper::siteUrl("go/{$smartLink->slug}", null, null, $row['siteId']);
+            }
+
+            // Parse metadata for source, clickType, platform, and destination URL
+            $metadata = !empty($row['metadata']) ? Json::decode($row['metadata']) : [];
+            $sourceValue = $metadata['source'] ?? 'direct';
+            $clickTypeValue = $metadata['clickType'] ?? 'redirect';
+
+            // Format source for display
+            $source = match ($sourceValue) {
+                'qr' => 'QR',
+                'landing' => 'Landing',
+                default => 'Direct'
+            };
+
+            // Format click type
+            $clickType = match ($clickTypeValue) {
+                'button' => 'Button',
+                default => 'Redirect'
+            };
+
+            // Get platform and destination URL based on click type
+            $platformLabel = '';
+            $destinationUrl = '';
+            if ($clickTypeValue === 'button') {
+                // For button clicks, show which button URL was clicked
+                $destinationUrl = $metadata['buttonUrl'] ?? '';
+                if (isset($metadata['platform'])) {
+                    $platformDisplay = [
+                        'ios' => 'iOS',
+                        'android' => 'Android',
+                        'macos' => 'macOS',
+                        'windows' => 'Windows',
+                        'linux' => 'Linux',
+                        'huawei' => 'Huawei',
+                        'amazon' => 'Amazon',
+                        'other' => 'Other',
+                    ];
+                    $platformLabel = $platformDisplay[$metadata['platform']] ?? ucfirst($metadata['platform']);
+                }
+            } else {
+                // For redirects, show which URL they were sent to
+                $destinationUrl = $metadata['redirectUrl'] ?? $metadata['buttonUrl'] ?? '';
+            }
+
+            $record = [
+                'dateCreated' => $row['dateCreated'],
+                'name' => $smartLink->title ?? '',
+                'status' => $statusLabel,
+                'smartLinkUrl' => $smartLinkUrl,
+                'siteName' => $siteName,
+                'clickType' => $clickType,
+                'platform' => $platformLabel,
+                'source' => $source,
+                'destinationUrl' => $destinationUrl,
+                'referrer' => $row['referrer'] ?? '',
+                'deviceType' => $row['deviceType'] ?? '',
+                'deviceBrand' => $row['deviceBrand'] ?? '',
+                'deviceModel' => $row['deviceModel'] ?? '',
+                'osName' => $row['osName'] ?? '',
+                'osVersion' => $row['osVersion'] ?? '',
+                'browser' => $row['browser'] ?? '',
+                'browserVersion' => $row['browserVersion'] ?? '',
+                'language' => $row['language'] ?? '',
+                'userAgent' => $row['userAgent'] ?? '',
+            ];
+
+            // Add geo fields if enabled
+            if ($geoEnabled) {
+                $record['country'] = GeoHelper::getCountryName($row['country'] ?? '');
+                $record['city'] = $row['city'] ?? '';
+            }
+
+            $exportData[] = $record;
+        }
+
+        return $exportData;
     }
 
     /**

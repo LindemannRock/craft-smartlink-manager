@@ -98,8 +98,8 @@ class SmartLinkManager extends Plugin
         PluginHelper::bootstrap(
             $this,
             'smartlinkHelper',
-            ['smartLinkManager:viewLogs'],
-            ['smartLinkManager:downloadLogs']
+            ['smartLinkManager:viewSystemLogs'],
+            ['smartLinkManager:downloadSystemLogs']
         );
         PluginHelper::applyPluginNameFromConfig($this);
 
@@ -345,7 +345,7 @@ class SmartLinkManager extends Plugin
         // Check if user has view access to each section
         $hasLinksAccess = $user->checkPermission('smartLinkManager:viewLinks');
         $hasAnalyticsAccess = $user->checkPermission('smartLinkManager:viewAnalytics') && $settings->enableAnalytics;
-        $hasLogsAccess = $user->checkPermission('smartLinkManager:viewLogs');
+        $hasLogsAccess = $user->checkPermission('smartLinkManager:viewSystemLogs');
         $hasSettingsAccess = $user->checkPermission('smartLinkManager:manageSettings');
 
         // If no access at all, hide the plugin from nav
@@ -376,10 +376,9 @@ class SmartLinkManager extends Plugin
             }
 
             // Add logs section using the logging library
-            if (Craft::$app->getPlugins()->isPluginInstalled('logging-library') &&
-                Craft::$app->getPlugins()->isPluginEnabled('logging-library')) {
+            if (PluginHelper::isPluginEnabled('logging-library')) {
                 $item = LoggingLibrary::addLogsNav($item, $this->handle, [
-                    'smartLinkManager:viewLogs',
+                    'smartLinkManager:viewSystemLogs',
                 ]);
             }
 
@@ -468,6 +467,7 @@ class SmartLinkManager extends Plugin
             'smartlink-manager/smartlinks/<smartLinkId:\d+>' => 'smartlink-manager/smartlinks/edit',
             'smartlink-manager/analytics' => 'smartlink-manager/analytics/index',
             'smartlink-manager/analytics/<linkId:\d+>' => 'smartlink-manager/analytics/link',
+            'smartlink-manager/analytics/export' => 'smartlink-manager/analytics/export',
             'smartlink-manager/settings' => 'smartlink-manager/settings/index',
             'smartlink-manager/settings/general' => 'smartlink-manager/settings/general',
             'smartlink-manager/settings/analytics' => 'smartlink-manager/settings/analytics',
@@ -545,10 +545,15 @@ class SmartLinkManager extends Plugin
                 'label' => Craft::t('smartlink-manager', 'Clear cache'),
             ],
             'smartLinkManager:viewLogs' => [
-                'label' => Craft::t('smartlink-manager', 'View system logs'),
+                'label' => Craft::t('smartlink-manager', 'View logs'),
                 'nested' => [
-                    'smartLinkManager:downloadLogs' => [
-                        'label' => Craft::t('smartlink-manager', 'Download system logs'),
+                    'smartLinkManager:viewSystemLogs' => [
+                        'label' => Craft::t('smartlink-manager', 'View system logs'),
+                        'nested' => [
+                            'smartLinkManager:downloadSystemLogs' => [
+                                'label' => Craft::t('smartlink-manager', 'Download system logs'),
+                            ],
+                        ],
                     ],
                 ],
             ],

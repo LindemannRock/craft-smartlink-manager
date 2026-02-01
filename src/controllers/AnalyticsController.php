@@ -10,6 +10,8 @@ namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
 use craft\web\Controller;
+use lindemannrock\base\helpers\DateRangeHelper;
+use lindemannrock\base\helpers\ExportHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use yii\web\Response;
@@ -56,7 +58,7 @@ class AnalyticsController extends Controller
 
         // Get date range and site
         $request = Craft::$app->getRequest();
-        $dateRange = $request->getParam('dateRange', 'last7days');
+        $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange());
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
 
@@ -99,7 +101,7 @@ class AnalyticsController extends Controller
 
         $request = Craft::$app->getRequest();
         $smartLinkId = $request->getParam('smartLinkId');
-        $dateRange = $request->getParam('dateRange', 'last7days');
+        $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange());
         $type = $request->getParam('type', 'summary');
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
@@ -179,7 +181,7 @@ class AnalyticsController extends Controller
         }
 
         $smartLinkId = Craft::$app->getRequest()->getParam('smartLinkId');
-        $range = Craft::$app->getRequest()->getParam('range', 'last7days');
+        $range = Craft::$app->getRequest()->getParam('range', DateRangeHelper::getDefaultDateRange());
 
         if (!$smartLinkId) {
             return $this->asJson([
@@ -241,7 +243,10 @@ class AnalyticsController extends Controller
     /**
      * Export analytics data
      *
+     * Supports CSV, JSON, and Excel formats using ExportHelper.
+     *
      * @return Response
+     * @since 1.0.0
      */
     public function actionExport(): Response
     {
@@ -254,10 +259,10 @@ class AnalyticsController extends Controller
         }
 
         $request = Craft::$app->getRequest();
-        $smartLinkId = $request->getParam('smartLinkId');
-        $dateRange = $request->getParam('dateRange', 'last7days');
-        $format = $request->getParam('format', 'csv');
-        $siteId = $request->getParam('siteId');
+        $smartLinkId = $request->getQueryParam('smartLinkId');
+        $dateRange = $request->getQueryParam('dateRange', DateRangeHelper::getDefaultDateRange());
+        $format = $request->getQueryParam('format', 'csv');
+        $siteId = $request->getQueryParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
 
         // If exporting for a specific SmartLink, check if it has analytics enabled
@@ -278,53 +283,90 @@ class AnalyticsController extends Controller
             }
         }
 
-        try {
-            $data = SmartLinkManager::$plugin->analytics->exportAnalytics($smartLinkId, $dateRange, $format, $siteId);
+        // Get export data
+        $exportData = SmartLinkManager::$plugin->analytics->getExportData(
+            $smartLinkId ? (int)$smartLinkId : null,
+            $dateRange,
+            $siteId
+        );
 
-            // Generate filename
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $filenamePart = strtolower(str_replace(' ', '-', $settings->getLowerDisplayName()));
-            $baseFilename = $filenamePart . '-analytics';
-            if ($smartLinkId) {
-                $smartLink = \lindemannrock\smartlinkmanager\elements\SmartLink::find()
-                    ->id($smartLinkId)
-                    ->one();
-                if ($smartLink) {
-                    // Clean the slug for filename
-                    $cleanSlug = preg_replace('/[^a-zA-Z0-9-_]/', '', $smartLink->slug);
-                    $singularPart = strtolower(str_replace(' ', '-', $settings->getLowerDisplayName()));
-                    $baseFilename = $singularPart . '-' . $cleanSlug . '-analytics';
-                }
-            }
-
-            // Get site name for filename
-            $sitePart = 'all';
-            if ($siteId) {
-                $site = Craft::$app->getSites()->getSiteById($siteId);
-                if ($site) {
-                    $sitePart = strtolower(preg_replace('/[^a-zA-Z0-9-_]/', '', str_replace(' ', '-', $site->name)));
-                }
-            }
-
-            // Use "alltime" instead of "all" for clearer filename
-            $dateRangeLabel = $dateRange === 'all' ? 'alltime' : $dateRange;
-            $filename = $baseFilename . '-' . $sitePart . '-' . $dateRangeLabel . '-' . date('Y-m-d') . '.' . $format;
-
-            return Craft::$app->getResponse()->sendContentAsFile(
-                $data,
-                $filename,
-                [
-                    'mimeType' => $format === 'csv' ? 'text/csv' : 'application/json',
-                ]
-            );
-        } catch (\Exception $e) {
-            Craft::$app->getSession()->setError($e->getMessage());
-
-            // Preserve the date range when redirecting back
+        // Check for empty data
+        if (empty($exportData)) {
+            Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'No analytics data to export.'));
             if ($smartLinkId) {
                 return $this->redirect('smartlink-manager/smartlinks/' . $smartLinkId . '?range=' . $dateRange);
             }
             return $this->redirect('smartlink-manager/analytics?dateRange=' . $dateRange);
         }
+
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $geoEnabled = $settings->enableGeoDetection ?? true;
+
+        // Build filename parts
+        $dateRangeLabel = $dateRange === 'all' ? 'alltime' : $dateRange;
+        $filenameParts = ['analytics', $dateRangeLabel];
+
+        // Add slug to filename if specific smart link
+        if ($smartLinkId) {
+            $smartLink = \lindemannrock\smartlinkmanager\elements\SmartLink::find()
+                ->id($smartLinkId)
+                ->one();
+            if ($smartLink) {
+                $cleanSlug = preg_replace('/[^a-zA-Z0-9-_]/', '', $smartLink->slug);
+                array_unshift($filenameParts, $cleanSlug);
+            }
+        }
+
+        // Add site to filename if filtered
+        if ($siteId) {
+            $site = Craft::$app->getSites()->getSiteById($siteId);
+            if ($site) {
+                $filenameParts[] = strtolower(preg_replace('/[^a-zA-Z0-9-_]/', '', str_replace(' ', '-', $site->name)));
+            }
+        }
+
+        // Build headers for CSV/Excel
+        $headers = [
+            'dateCreated' => Craft::t('smartlink-manager', 'Date/Time'),
+            'name' => Craft::t('smartlink-manager', 'Name'),
+            'status' => Craft::t('smartlink-manager', 'Status'),
+            'smartLinkUrl' => Craft::t('smartlink-manager', 'Smart Link URL'),
+            'siteName' => Craft::t('smartlink-manager', 'Site'),
+            'clickType' => Craft::t('smartlink-manager', 'Type'),
+            'platform' => Craft::t('smartlink-manager', 'Button'),
+            'source' => Craft::t('smartlink-manager', 'Source'),
+            'destinationUrl' => Craft::t('smartlink-manager', 'Destination URL'),
+            'referrer' => Craft::t('smartlink-manager', 'Referrer'),
+            'deviceType' => Craft::t('smartlink-manager', 'Device Type'),
+            'deviceBrand' => Craft::t('smartlink-manager', 'Device Brand'),
+            'deviceModel' => Craft::t('smartlink-manager', 'Device Model'),
+            'osName' => Craft::t('smartlink-manager', 'OS'),
+            'osVersion' => Craft::t('smartlink-manager', 'OS Version'),
+            'browser' => Craft::t('smartlink-manager', 'Browser'),
+            'browserVersion' => Craft::t('smartlink-manager', 'Browser Version'),
+            'language' => Craft::t('smartlink-manager', 'Language'),
+            'userAgent' => Craft::t('smartlink-manager', 'User Agent'),
+        ];
+
+        // Add geo headers if enabled
+        if ($geoEnabled) {
+            $headers['country'] = Craft::t('smartlink-manager', 'Country');
+            $headers['city'] = Craft::t('smartlink-manager', 'City');
+        }
+
+        // Date columns for formatting
+        $dateColumns = ['dateCreated'];
+
+        // Export based on format
+        $extension = $format === 'excel' ? 'xlsx' : $format;
+        $filename = ExportHelper::filename($settings, $filenameParts, $extension);
+
+        return match ($format) {
+            'json' => ExportHelper::toJson($exportData, $filename, $dateColumns),
+            'excel' => ExportHelper::toExcel($exportData, $headers, $filename, $dateColumns, [
+                'sheetTitle' => Craft::t('smartlink-manager', 'Analytics'),
+            ]),
+            default => ExportHelper::toCsv($exportData, $headers, $filename, $dateColumns),
+        };
     }
 }
