@@ -221,7 +221,6 @@ class SmartlinksController extends Controller
             $smartLink->title = $request->getBodyParam('title');
             $smartLink->slug = $request->getBodyParam('slug');
             $smartLink->description = $request->getBodyParam('description');
-            $smartLink->icon = $request->getBodyParam('icon');
 
             // Handle authorId - elementSelectField returns an array
             $authorIds = $request->getBodyParam('authorId');

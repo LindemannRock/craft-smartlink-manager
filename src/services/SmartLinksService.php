@@ -278,7 +278,6 @@ class SmartLinksService extends Component
                 'windowsUrl' => $smartLink->windowsUrl,
                 'macUrl' => $smartLink->macUrl,
                 'fallbackUrl' => $smartLink->fallbackUrl,
-                'icon' => $smartLink->icon,
                 'trackAnalytics' => $smartLink->trackAnalytics,
                 'enabled' => $smartLink->enabled,
                 'qrCodeEnabled' => $smartLink->qrCodeEnabled,

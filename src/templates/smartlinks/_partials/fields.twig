@@ -205,15 +205,3 @@
     disabled: disabled
 }) }}
 
-{{ forms.textField({
-    label: "Icon"|t('smartlink-manager'),
-    instructions: "Icon identifier or URL for this {singularName}"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
-    id: 'icon',
-    name: 'icon',
-    value: smartLink.icon ?? '',
-    errors: smartLink.getErrors('icon'),
-    inputAttributes: {
-        dir: textDir
-    },
-    disabled: disabled
-}) }}

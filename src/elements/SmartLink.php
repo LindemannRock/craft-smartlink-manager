@@ -93,11 +93,6 @@ class SmartLink extends Element
     public ?string $fallbackUrl = null;
 
     /**
-     * @var string|null Icon
-     */
-    public ?string $icon = null;
-    
-    /**
      * @var int|null Image asset ID
      */
     public ?int $imageId = null;
@@ -595,7 +590,6 @@ class SmartLink extends Element
             'windowsUrl' => null,
             'macUrl' => null,
             'fallbackUrl' => null,
-            'icon' => null,
             'imageId' => null,
             'imageSize' => 'xl',
             'authorId' => null,
@@ -720,7 +714,6 @@ class SmartLink extends Element
             'windowsUrl',
             'macUrl',
             'fallbackUrl',
-            'icon',
             'imageId',
             'imageSize',
             'qrCodeEnabled',
@@ -1335,7 +1328,6 @@ class SmartLink extends Element
                 $record->slug = $this->slug;
             }
 
-            $record->icon = $this->icon;
             $record->authorId = $this->authorId;
             $record->postDate = $this->postDate ? DateTimeHelper::toIso8601($this->postDate) : null;
             $record->dateExpired = $this->dateExpired ? DateTimeHelper::toIso8601($this->dateExpired) : null;

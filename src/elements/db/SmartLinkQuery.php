@@ -129,7 +129,6 @@ class SmartLinkQuery extends ElementQuery
         $this->query->select([
             'smartlinkmanager.title',
             'smartlinkmanager.slug',
-            'smartlinkmanager.icon',
             'smartlinkmanager.authorId',
             'smartlinkmanager.postDate',
             'smartlinkmanager.dateExpired',

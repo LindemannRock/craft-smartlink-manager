@@ -26,7 +26,6 @@ use yii\db\ActiveQueryInterface;
  * @property string|null $windowsUrl
  * @property string|null $macUrl
  * @property string $fallbackUrl
- * @property string|null $icon
  * @property bool $trackAnalytics
  * @property bool $qrCodeEnabled
  * @property int $qrCodeSize
