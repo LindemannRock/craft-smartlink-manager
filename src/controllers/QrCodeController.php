@@ -63,6 +63,14 @@ class QrCodeController extends Controller
             throw new NotFoundHttpException('QR code not found.');
         }
 
+        // Check if SmartLink Manager is enabled for the smart link's site
+        $settings = SmartLinkManager::$plugin->getSettings();
+        if (!$settings->isSiteEnabled($smartLink->siteId)) {
+            $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
+            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            return $this->redirect($redirectUrl);
+        }
+
         // If QR is disabled, redirect to 404 redirect URL (consistent with smart link behavior)
         if (!$smartLink->qrCodeEnabled) {
             $settings = SmartLinkManager::$plugin->getSettings();
@@ -76,6 +84,7 @@ class QrCodeController extends Controller
         $format = $request->getQueryParam('format', SmartLinkManager::$plugin->getSettings()->defaultQrFormat);
         
         // Generate QR code data
+        $settings = SmartLinkManager::$plugin->getSettings();
         $options = [
             'size' => $size,
             'color' => $request->getQueryParam('color', str_replace('#', '', $smartLink->qrCodeColor)),
@@ -85,8 +94,15 @@ class QrCodeController extends Controller
             'moduleStyle' => $request->getQueryParam('moduleStyle'),
             'eyeStyle' => $request->getQueryParam('eyeStyle'),
             'eyeColor' => $request->getQueryParam('eyeColor', str_replace('#', '', $smartLink->qrCodeEyeColor)),
-            'logo' => $request->getQueryParam('logo', $smartLink->qrLogoId),
         ];
+
+        // Add logo if enabled (don't accept from query params for security)
+        if ($settings->enableQrLogo) {
+            $logoId = $smartLink->qrLogoId ?: $settings->defaultQrLogoId;
+            if ($logoId) {
+                $options['logo'] = $logoId;
+            }
+        }
 
         // Remove null values
         $options = array_filter($options, fn($value) => $value !== null);
@@ -150,7 +166,8 @@ class QrCodeController extends Controller
         $url = $request->getQueryParam('url');
         
         if ($isPreview && $url) {
-            // Preview mode - generate QR code for any URL
+            // Preview mode - generate QR code for any URL (requires login)
+            $this->requireLogin();
             $fullUrl = $url;
             $smartLink = null;
         } else {
@@ -174,9 +191,16 @@ class QrCodeController extends Controller
                 throw new NotFoundHttpException('QR code not found.');
             }
 
+            // Check if SmartLink Manager is enabled for the smart link's site
+            $settings = SmartLinkManager::$plugin->getSettings();
+            if (!$settings->isSiteEnabled($smartLink->siteId)) {
+                $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
+                $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+                return $this->redirect($redirectUrl);
+            }
+
             // If QR is disabled, redirect to 404 redirect URL (consistent with smart link behavior)
             if (!$smartLink->qrCodeEnabled) {
-                $settings = SmartLinkManager::$plugin->getSettings();
                 $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
                 return $this->redirect($redirectUrl);
             }
@@ -199,19 +223,44 @@ class QrCodeController extends Controller
         }
 
         // Get parameters
-        $options = [
-            'size' => $request->getQueryParam('size'),
-            'color' => $request->getQueryParam('color'),
-            'bg' => $request->getQueryParam('bg'),
-            'format' => $request->getQueryParam('format'),
-            'margin' => $request->getQueryParam('margin'),
-            'moduleStyle' => $request->getQueryParam('moduleStyle'),
-            'eyeStyle' => $request->getQueryParam('eyeStyle'),
-            'eyeColor' => $request->getQueryParam('eyeColor'),
-            'logo' => $request->getQueryParam('logo'),
-            'logoSize' => $request->getQueryParam('logoSize'),
-            'errorCorrection' => $request->getQueryParam('errorCorrection'),
-        ];
+        $settings = SmartLinkManager::$plugin->getSettings();
+
+        if ($smartLink) {
+            // Normal mode - use smartlink's configured settings, allow style overrides
+            $options = [
+                'size' => $request->getQueryParam('size', $smartLink->qrCodeSize),
+                'color' => $request->getQueryParam('color', str_replace('#', '', $smartLink->qrCodeColor ?: $settings->defaultQrColor)),
+                'bg' => $request->getQueryParam('bg', str_replace('#', '', $smartLink->qrCodeBgColor ?: $settings->defaultQrBgColor)),
+                'format' => $request->getQueryParam('format', $smartLink->qrCodeFormat ?: $settings->defaultQrFormat),
+                'margin' => $request->getQueryParam('margin', $settings->defaultQrMargin),
+                'moduleStyle' => $request->getQueryParam('moduleStyle', $settings->qrModuleStyle),
+                'eyeStyle' => $request->getQueryParam('eyeStyle', $settings->qrEyeStyle),
+                'eyeColor' => $request->getQueryParam('eyeColor', $smartLink->qrCodeEyeColor ? str_replace('#', '', $smartLink->qrCodeEyeColor) : ($settings->qrEyeColor ? str_replace('#', '', $settings->qrEyeColor) : null)),
+            ];
+
+            // Add logo if enabled (don't accept from query params for security)
+            if ($settings->enableQrLogo) {
+                $logoId = $smartLink->qrLogoId ?: $settings->defaultQrLogoId;
+                if ($logoId) {
+                    $options['logo'] = $logoId;
+                }
+            }
+        } else {
+            // Preview mode (requires login) - accept all params from query
+            $options = [
+                'size' => $request->getQueryParam('size'),
+                'color' => $request->getQueryParam('color'),
+                'bg' => $request->getQueryParam('bg'),
+                'format' => $request->getQueryParam('format'),
+                'margin' => $request->getQueryParam('margin'),
+                'moduleStyle' => $request->getQueryParam('moduleStyle'),
+                'eyeStyle' => $request->getQueryParam('eyeStyle'),
+                'eyeColor' => $request->getQueryParam('eyeColor'),
+                'logo' => $request->getQueryParam('logo'),
+                'logoSize' => $request->getQueryParam('logoSize'),
+                'errorCorrection' => $request->getQueryParam('errorCorrection'),
+            ];
+        }
 
         // Remove null values
         $options = array_filter($options, fn($value) => $value !== null);

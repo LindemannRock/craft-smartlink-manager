@@ -53,7 +53,7 @@ class SettingsController extends Controller
      */
     public function beforeAction($action): bool
     {
-        $this->requirePermission('smartLinkManager:settings');
+        $this->requirePermission('smartLinkManager:manageSettings');
 
         // Only field layouts respect allowAdminChanges (system config)
         // All other settings are operational and should always be editable
@@ -84,7 +84,7 @@ class SettingsController extends Controller
      */
     public function actionDebug(): Response
     {
-        $this->requirePermission('smartLinkManager:settings');
+        $this->requirePermission('smartLinkManager:manageSettings');
 
         // Test database query directly
         $row = (new \craft\db\Query())
@@ -332,7 +332,7 @@ class SettingsController extends Controller
     public function actionSaveFieldLayout(): ?Response
     {
         $this->requirePostRequest();
-        $this->requirePermission('smartLinkManager:settings');
+        $this->requirePermission('smartLinkManager:manageSettings');
 
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
         $fieldLayout->type = \lindemannrock\smartlinkmanager\elements\SmartLink::class;
@@ -374,7 +374,7 @@ class SettingsController extends Controller
         $this->requirePostRequest();
 
         // Check permission first
-        $this->requirePermission('smartLinkManager:settings');
+        $this->requirePermission('smartLinkManager:manageSettings');
 
         // No need to check allowAdminChanges since settings are stored in database
         // not in project config
@@ -548,6 +548,7 @@ class SettingsController extends Controller
     public function actionClearQrCache(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission('smartLinkManager:clearCache');
         $this->requireAcceptsJson();
 
         try {
@@ -608,6 +609,7 @@ class SettingsController extends Controller
     public function actionClearDeviceCache(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission('smartLinkManager:clearCache');
         $this->requireAcceptsJson();
 
         try {
@@ -668,6 +670,7 @@ class SettingsController extends Controller
     public function actionClearAllCaches(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission('smartLinkManager:clearCache');
         $this->requireAcceptsJson();
 
         try {

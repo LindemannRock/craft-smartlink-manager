@@ -90,6 +90,7 @@ class AnalyticsController extends Controller
         $this->requirePostRequest();
         $this->requireAcceptsJson();
         $this->requireLogin();
+        $this->requirePermission('smartLinkManager:viewAnalytics');
 
         // Check if analytics are globally enabled
         if (!SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
@@ -170,6 +171,7 @@ class AnalyticsController extends Controller
     public function actionGetAnalyticsData(): Response
     {
         $this->requireLogin();
+        $this->requirePermission('smartLinkManager:viewAnalytics');
         $this->requireAcceptsJson();
 
         // Check if analytics are globally enabled

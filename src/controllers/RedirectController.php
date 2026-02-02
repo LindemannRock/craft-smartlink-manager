@@ -51,6 +51,14 @@ class RedirectController extends Controller
         // Get current site for multi-site support
         $currentSite = Craft::$app->getSites()->getCurrentSite();
 
+        // Check if SmartLink Manager is enabled for the current site
+        $settings = SmartLinkManager::$plugin->getSettings();
+        if (!$settings->isSiteEnabled($currentSite->id)) {
+            $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $currentSite->id, 'slug' => $slug]);
+            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            return $this->redirect($redirectUrl);
+        }
+
         // Get the smart link for the current site
         // Get any status to check expired/disabled/pending separately
         $smartLink = SmartLink::find()
@@ -163,6 +171,14 @@ class RedirectController extends Controller
             $siteId = $site ? $site->id : Craft::$app->getSites()->getCurrentSite()->id;
         } else {
             $siteId = Craft::$app->getSites()->getCurrentSite()->id;
+        }
+
+        // Check if SmartLink Manager is enabled for the site
+        $settings = SmartLinkManager::$plugin->getSettings();
+        if (!$settings->isSiteEnabled($siteId)) {
+            $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $siteId, 'slug' => $slug]);
+            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            return $this->redirect($redirectUrl);
         }
 
         // Get the smart link for the site

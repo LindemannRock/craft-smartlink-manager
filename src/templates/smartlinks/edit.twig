@@ -287,48 +287,39 @@
         </fieldset>
     {% endif %}
 
-    <fieldset>
-        <legend class="h6">Status</legend>
-        <div class="meta">
+    <div class="meta">
+        {{ forms.lightswitchField({
+            label: "Enabled"|t('app'),
+            id: 'enabled',
+            name: 'enabled',
+            on: smartLink.enabled
+        }) }}
+
+        {% if craft.smartLinks.settings.enableAnalytics %}
             {{ forms.lightswitchField({
-                label: "Enabled"|t('app'),
-                id: 'enabled',
-                name: 'enabled',
-                on: smartLink.enabled
+                label: "Track Analytics"|t('smartlink-manager'),
+                id: 'trackAnalytics',
+                name: 'trackAnalytics',
+                on: smartLink.trackAnalytics ?? true
             }) }}
-        </div>
-    </fieldset>
+        {% else %}
+            {# Hidden field to ensure trackAnalytics is set to false when analytics are disabled #}
+            <input type="hidden" name="trackAnalytics" value="0">
+        {% endif %}
 
-    {% if craft.smartLinks.settings.enableAnalytics %}
-        <fieldset>
-            <legend class="h6">{{ "Analytics"|t('smartlink-manager') }}</legend>
-            <div class="meta">
-                {{ forms.lightswitchField({
-                    label: "Track Analytics"|t('smartlink-manager'),
-                    id: 'trackAnalytics',
-                    name: 'trackAnalytics',
-                    on: smartLink.trackAnalytics ?? true
-                }) }}
-            </div>
-        </fieldset>
-    {% else %}
-        {# Hidden field to ensure trackAnalytics is set to false when analytics are disabled #}
-        <input type="hidden" name="trackAnalytics" value="0">
-    {% endif %}
+        {{ forms.lightswitchField({
+            label: "Enable QR Code"|t('smartlink-manager'),
+            id: 'qrCodeEnabled',
+            name: 'qrCodeEnabled',
+            on: smartLink.qrCodeEnabled ?? true,
+            toggle: 'qr-settings'
+        }) }}
+    </div>
 
-    <fieldset>
+    <fieldset id="qr-settings" class="{{ not (smartLink.qrCodeEnabled ?? true) ? 'hidden' }}">
         <legend class="h6">{{ "QR Code"|t('smartlink-manager') }}</legend>
-        <div class="meta">
-            {{ forms.lightswitchField({
-                label: "Enable QR Code"|t('smartlink-manager'),
-                id: 'qrCodeEnabled',
-                name: 'qrCodeEnabled',
-                on: smartLink.qrCodeEnabled ?? true,
-                toggle: 'qr-settings'
-            }) }}
-        </div>
 
-        <div id="qr-settings" class="meta {{ not (smartLink.qrCodeEnabled ?? true) ? 'hidden' }}">
+        <div class="meta">
             {% if smartLink.id %}
                 <div class="field">
                     <div class="heading">

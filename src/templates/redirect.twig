@@ -159,15 +159,14 @@
 
 			if (debugMode) {
 				console.log('🐛 DEBUG MODE ENABLED');
-				console.log('🔗 Smart Link Slug:', '{{ smartLink.slug }}');
+				console.log('🔗 Smart Link Slug:', {{ smartLink.slug|json_encode|raw }});
 				console.log('📊 Event Type:', 'redirect');
 
 				// SEOmatic tracking debug
 				console.log('\n📡 SEOmatic Integration:');
 				{% if seomaticTracking %}
 					console.log('✅ SEOmatic tracking enabled');
-					console.log('📝 Tracking script rendered:');
-					console.log('{{ seomaticTracking|escape('js')|raw }}');
+					console.log('📝 Tracking script rendered (see page source for details)');
 
 					// Check if dataLayer exists
 					if (typeof window.dataLayer !== 'undefined') {
