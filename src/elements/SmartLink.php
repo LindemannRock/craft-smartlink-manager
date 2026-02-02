@@ -634,7 +634,7 @@ class SmartLink extends Element
         parent::init();
 
         // Set logging handle for LoggingTrait
-        $this->setLoggingHandle('smartlink-manager');
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
 
         // If we have an ID but no content loaded yet, load it now
         if ($this->id && $this->siteId && $this->fallbackUrl === null) {

@@ -35,7 +35,7 @@ class AnalyticsController extends Controller
     public function init(): void
     {
         parent::init();
-        $this->setLoggingHandle('smartlink-manager');
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
     }
 
     /**
@@ -58,7 +58,7 @@ class AnalyticsController extends Controller
 
         // Get date range and site
         $request = Craft::$app->getRequest();
-        $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange());
+        $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
 
@@ -101,7 +101,7 @@ class AnalyticsController extends Controller
 
         $request = Craft::$app->getRequest();
         $smartLinkId = $request->getParam('smartLinkId');
-        $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange());
+        $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $type = $request->getParam('type', 'summary');
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
@@ -181,7 +181,7 @@ class AnalyticsController extends Controller
         }
 
         $smartLinkId = Craft::$app->getRequest()->getParam('smartLinkId');
-        $range = Craft::$app->getRequest()->getParam('range', DateRangeHelper::getDefaultDateRange());
+        $range = Craft::$app->getRequest()->getParam('range', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
 
         if (!$smartLinkId) {
             return $this->asJson([
@@ -260,7 +260,7 @@ class AnalyticsController extends Controller
 
         $request = Craft::$app->getRequest();
         $smartLinkId = $request->getQueryParam('smartLinkId');
-        $dateRange = $request->getQueryParam('dateRange', DateRangeHelper::getDefaultDateRange());
+        $dateRange = $request->getQueryParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $format = $request->getQueryParam('format', 'csv');
         $siteId = $request->getQueryParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;

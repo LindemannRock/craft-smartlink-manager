@@ -10,6 +10,7 @@ namespace lindemannrock\smartlinkmanager\integrations;
 
 use Craft;
 use craft\helpers\App;
+use lindemannrock\smartlinkmanager\SmartLinkManager;
 use nystudio107\seomatic\Seomatic;
 use yii\base\Event;
 
@@ -42,7 +43,7 @@ class SeomaticIntegration extends BaseIntegration
         $this->name = 'SEOmatic';
 
         // Set logging handle for LoggingTrait
-        $this->setLoggingHandle('smartlink-manager');
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
     }
 
     /**

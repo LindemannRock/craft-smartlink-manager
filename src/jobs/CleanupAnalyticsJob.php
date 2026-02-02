@@ -41,7 +41,7 @@ class CleanupAnalyticsJob extends BaseJob
     public function init(): void
     {
         parent::init();
-        $this->setLoggingHandle('smartlink-manager');
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
 
         // Calculate and set next run time if not already set
         if ($this->reschedule && !$this->nextRunTime) {

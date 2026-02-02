@@ -36,7 +36,7 @@ class QrCodeController extends Controller
     public function init(): void
     {
         parent::init();
-        $this->setLoggingHandle('smartlink-manager');
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
     }
 
     /**

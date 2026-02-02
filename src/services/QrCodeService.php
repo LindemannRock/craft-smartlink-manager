@@ -43,7 +43,7 @@ class QrCodeService extends Component
     public function init(): void
     {
         parent::init();
-        $this->setLoggingHandle('smartlink-manager');
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
     }
 
     /**
