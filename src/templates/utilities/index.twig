@@ -1,374 +1,202 @@
-{% import "_includes/forms" as forms %}
+{% extends 'lindemannrock-base/_layouts/cp-utilities' %}
+
+{# Permission checks #}
+{% set canViewLinks = currentUser.can('smartLinkManager:viewLinks') %}
+{% set canViewAnalytics = currentUser.can('smartLinkManager:viewAnalytics') %}
+{% set canManageSettings = currentUser.can('smartLinkManager:manageSettings') %}
+{% set canClearCache = currentUser.can('smartLinkManager:clearCache') %}
+{% set canClearAnalytics = currentUser.can('smartLinkManager:clearAnalytics') %}
 
 {% set storageMethod = settings.cacheStorageMethod %}
 
-<div style="margin-bottom: 32px;">
-	<h2>{{ smartlinkHelper.fullName }}
-		{{ "Overview"|t('smartlink-manager') }}</h2>
-	<p class="light">{{ "Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes."|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}) }}</p>
-</div>
+{% set hasNavigation = canViewLinks or (settings.enableAnalytics and canViewAnalytics) or canManageSettings %}
+{% set hasCacheManagement = (settings.enableQrCodeCache or settings.cacheDeviceDetection) and canClearCache %}
+{% set hasAnalyticsManagement = settings.enableAnalytics and canClearAnalytics %}
+{% set hasAnyQuickAction = hasNavigation or hasCacheManagement or hasAnalyticsManagement %}
 
-<div style="margin-bottom: 40px;">
-	<h2>{{ "System Overview"|t('smartlink-manager') }}</h2>
+{% set utilitiesConfig = {
+    plugin: {
+        handle: 'smartlink-manager',
+        name: smartlinkHelper.fullName,
+    },
+    page: {
+        title: 'Overview'|t('smartlink-manager'),
+        description: 'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.'|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    },
+} %}
 
-	<div
-		style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; align-items: stretch;">
-		<!-- Links Status Card -->
-		<div
-			class="pane" style="padding: 24px; margin-block: 0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); display: flex; flex-direction: column; height: 100%;">
-			<!-- Header -->
-			<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-				<div style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></div>
-				<h4 style="margin: 0; color: #374151; font-size: 15px; font-weight: 600;">{{ "Links Status"|t('smartlink-manager') }}</h4>
-			</div>
+{% block overview %}
+    {# Links Status Card - dynamic sub-boxes based on counts #}
+    {% set linksSubBoxes = [{value: activeLinks, label: 'Active'|t('smartlink-manager')}] %}
+    {% if pendingLinks > 0 or (expiredLinks == 0 and disabledLinks == 0) %}
+        {% set linksSubBoxes = linksSubBoxes|merge([{value: pendingLinks, label: 'Pending'|t('smartlink-manager')}]) %}
+    {% endif %}
+    {% if expiredLinks > 0 or (pendingLinks == 0 and disabledLinks == 0) %}
+        {% set linksSubBoxes = linksSubBoxes|merge([{value: expiredLinks, label: 'Expired'|t('smartlink-manager')}]) %}
+    {% endif %}
+    {% if disabledLinks > 0 and linksSubBoxes|length < 3 %}
+        {% set linksSubBoxes = linksSubBoxes|merge([{value: disabledLinks, label: 'Disabled'|t('smartlink-manager')}]) %}
+    {% endif %}
 
-			<!-- Main Content -->
-			<div style="flex: 1; display: flex; flex-direction: column;">
-				<div style="font-size: 28px; font-weight: 700; color: #0f172a; line-height: 1; margin-bottom: 12px;">
-					{{ totalLinks|number_format }}
-				</div>
-				<div style="font-size: 14px; color: #4b5563; margin-bottom: 12px;">
-					{{ "Total {pluginName}"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}) }}
-				</div>
+    {% include 'lindemannrock-base/_components/cards/unified-card' with {
+        title: 'Links Status'|t('smartlink-manager'),
+        color: lrPaletteColor('emerald').color,
+        value: totalLinks,
+        description: 'Total {pluginName}'|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
+        subBoxes: linksSubBoxes,
+    } only %}
 
-				<!-- Bottom Boxes (max 3, hide zeros by priority: disabled, pending, expired) -->
-				<div style="margin-top: auto;">
-					{% set visibleBoxes = [] %}
-					{% set visibleBoxes = visibleBoxes|merge([{value: activeLinks, label: 'Active'|t('smartlink-manager')}]) %}
-					{% if pendingLinks > 0 or (expiredLinks == 0 and disabledLinks == 0) %}
-						{% set visibleBoxes = visibleBoxes|merge([{value: pendingLinks, label: 'Pending'|t('smartlink-manager')}]) %}
-					{% endif %}
-					{% if expiredLinks > 0 or (pendingLinks == 0 and disabledLinks == 0) %}
-						{% set visibleBoxes = visibleBoxes|merge([{value: expiredLinks, label: 'Expired'|t('smartlink-manager')}]) %}
-					{% endif %}
-					{% if disabledLinks > 0 and visibleBoxes|length < 3 %}
-						{% set visibleBoxes = visibleBoxes|merge([{value: disabledLinks, label: 'Disabled'|t('smartlink-manager')}]) %}
-					{% endif %}
+    {# Performance Card #}
+    {% if settings.enableAnalytics %}
+        {% include 'lindemannrock-base/_components/cards/unified-card' with {
+            title: 'Performance'|t('smartlink-manager'),
+            color: lrPaletteColor('sky').color,
+            value: totalClicks,
+            description: 'Total interactions tracked'|t('smartlink-manager'),
+            subBoxes: [
+                {value: qrScans, label: 'QR Scans'|t('smartlink-manager')},
+                {value: autoRedirects, label: 'Redirects'|t('smartlink-manager')},
+                {value: buttonClicks, label: 'Clicks'|t('smartlink-manager')},
+            ],
+        } only %}
+    {% endif %}
 
-					<div style="display: grid; grid-template-columns: repeat({{ visibleBoxes|length }}, 1fr); gap: 8px;">
-						{% for box in visibleBoxes %}
-						<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-							<div style="font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px;">{{ box.value|number_format }}</div>
-							<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ box.label }}</div>
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-			</div>
-		</div>
+    {# Cache Status Card - varies by storage method #}
+    {% if storageMethod == 'redis' %}
+        {% set cacheSubBoxes = [] %}
+        {% if settings.enableQrCodeCache %}
+            {% set cacheSubBoxes = cacheSubBoxes|merge([{value: '✓', label: 'QR Codes'|t('smartlink-manager')}]) %}
+        {% endif %}
+        {% if settings.cacheDeviceDetection %}
+            {% set cacheSubBoxes = cacheSubBoxes|merge([{value: '✓', label: 'Devices'|t('smartlink-manager')}]) %}
+        {% endif %}
 
-		{% if settings.enableAnalytics %}
-			<!-- Performance Card -->
-			<div
-				class="pane" style="padding: 24px; margin-block: 0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); display: flex; flex-direction: column; height: 100%;">
-				<!-- Header -->
-				<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-					<div style="width: 12px; height: 12px; border-radius: 50%; background: #0ea5e9;"></div>
-					<h4 style="margin: 0; color: #374151; font-size: 15px; font-weight: 600;">{{ "Performance"|t('smartlink-manager') }}</h4>
-				</div>
+        {% include 'lindemannrock-base/_components/cards/unified-card' with {
+            title: 'Cache Status'|t('smartlink-manager') ~ ' (Redis)',
+            color: lrPaletteColor('emerald').color,
+            value: 'Active'|t('smartlink-manager'),
+            subBoxes: cacheSubBoxes,
+        } only %}
+    {% else %}
+        {% include 'lindemannrock-base/_components/cards/unified-card' with {
+            title: 'Cache Status'|t('smartlink-manager') ~ ' (File)',
+            color: lrPaletteColor('emerald').color,
+            value: qrCacheFiles + deviceCacheFiles,
+            description: 'Total cached entries'|t('smartlink-manager'),
+            subBoxes: [
+                {value: qrCacheFiles, label: 'QR Codes'|t('smartlink-manager')},
+                {value: deviceCacheFiles, label: 'Devices'|t('smartlink-manager')},
+            ],
+        } only %}
+    {% endif %}
+{% endblock %}
 
-				<!-- Main Content -->
-				<div style="flex: 1; display: flex; flex-direction: column;">
-					<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
-						<div style="font-size: 28px; font-weight: 700; color: #0f172a; line-height: 1;">
-							{{ totalClicks|number_format }}
-						</div>
-					</div>
-					<div style="font-size: 14px; color: #4b5563; margin-bottom: 12px;">
-						{{ "Total interactions tracked"|t('smartlink-manager') }}
-					</div>
+{% block quickActions %}
+    {% if hasAnyQuickAction %}
+        {# Navigation Section #}
+        {% if hasNavigation %}
+            {% set navButtons = [] %}
+            {% if canViewLinks %}
+                {% set navButtons = navButtons|merge([{type: 'link', label: 'Manage {pluginName}'|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}), url: url('smartlink-manager')}]) %}
+            {% endif %}
+            {% if settings.enableAnalytics and canViewAnalytics %}
+                {% set navButtons = navButtons|merge([{type: 'link', label: 'View Analytics'|t('smartlink-manager'), url: url('smartlink-manager/analytics')}]) %}
+            {% endif %}
+            {% if canManageSettings %}
+                {% set navButtons = navButtons|merge([{type: 'link', label: 'View Settings'|t('smartlink-manager'), url: url('smartlink-manager/settings')}]) %}
+            {% endif %}
 
-					<!-- Bottom Boxes -->
-					<div style="margin-top: auto;">
-						<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px;">{{ qrScans|number_format }}</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'QR Scans'|t('smartlink-manager') }}</div>
-							</div>
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px;">{{ autoRedirects|number_format }}</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'Redirects'|t('smartlink-manager') }}</div>
-							</div>
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px;">{{ buttonClicks|number_format }}</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'Clicks'|t('smartlink-manager') }}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endif %}
+            {% include 'lindemannrock-base/_layouts/cp-utilities/_action-section' with {
+                title: 'Navigation'|t('smartlink-manager'),
+                description: 'Access main plugin sections'|t('smartlink-manager'),
+                buttons: navButtons,
+            } only %}
+        {% endif %}
 
-		<!-- Cache Status Card -->
-		<div
-			class="pane" style="padding: 24px; margin-block: 0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); display: flex; flex-direction: column; height: 100%;">
-			<!-- Header -->
-			<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-				<div style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e;"></div>
-				<h4 style="margin: 0; color: #374151; font-size: 15px; font-weight: 600;">
-					{{ "Cache Status"|t('smartlink-manager') }} ({{ storageMethod == 'redis' ? 'Redis' : 'File' }})
-				</h4>
-			</div>
+        {# Cache Management Section #}
+        {% if hasCacheManagement %}
+            {% set cacheButtons = [] %}
+            {% if settings.enableQrCodeCache %}
+                {% set cacheButtons = cacheButtons|merge([{
+                    id: 'clear-qr-cache',
+                    label: 'Clear QR Cache'|t('smartlink-manager'),
+                    count: storageMethod != 'redis' ? qrCacheFiles : null,
+                }]) %}
+            {% endif %}
+            {% if settings.cacheDeviceDetection %}
+                {% set cacheButtons = cacheButtons|merge([{
+                    id: 'clear-device-cache',
+                    label: 'Clear Device Cache'|t('smartlink-manager'),
+                    count: storageMethod != 'redis' ? deviceCacheFiles : null,
+                }]) %}
+            {% endif %}
+            {% if settings.enableQrCodeCache and settings.cacheDeviceDetection %}
+                {% set cacheButtons = cacheButtons|merge([{
+                    id: 'clear-all-caches',
+                    label: 'Clear All Caches'|t('smartlink-manager'),
+                    class: 'btn secondary',
+                    count: storageMethod != 'redis' ? (qrCacheFiles + deviceCacheFiles) : null,
+                }]) %}
+            {% endif %}
 
-			<!-- Main Content -->
-			<div style="flex: 1; display: flex; flex-direction: column;">
-				{% if storageMethod == 'redis' %}
-					<div style="font-size: 28px; font-weight: 700; color: #0f172a; line-height: 1;">
-						{{ "Active"|t('smartlink-manager') }}
-					</div>
+            {% include 'lindemannrock-base/_layouts/cp-utilities/_action-section' with {
+                title: 'Cache Management'|t('smartlink-manager'),
+                description: 'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.'|t('smartlink-manager'),
+                showSeparator: hasNavigation,
+                buttons: cacheButtons,
+            } only %}
+        {% endif %}
 
-					<!-- Info Boxes -->
-					<div style="margin-top: auto;">
-						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-							{% if settings.enableQrCodeCache %}
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 4px;">✓</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'QR Codes'|t('smartlink-manager') }}</div>
-							</div>
-							{% endif %}
-							{% if settings.cacheDeviceDetection %}
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 4px;">✓</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'Devices'|t('smartlink-manager') }}</div>
-							</div>
-							{% endif %}
-						</div>
-					</div>
-				{% else %}
-					<div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;">
-						<div style="font-size: 28px; font-weight: 700; color: #0f172a; line-height: 1;">
-							{{ (qrCacheFiles + deviceCacheFiles)|number_format }}
-						</div>
-					</div>
-					<div style="font-size: 14px; color: #4b5563; margin-bottom: 12px;">
-						{{ "Total cached entries"|t('smartlink-manager') }}
-					</div>
+        {# Analytics Management Section #}
+        {% if hasAnalyticsManagement %}
+            {% include 'lindemannrock-base/_layouts/cp-utilities/_action-section' with {
+                title: 'Analytics Data Management'|t('smartlink-manager'),
+                description: 'Permanently delete all analytics tracking data. This action cannot be undone!'|t('smartlink-manager'),
+                showSeparator: hasNavigation or hasCacheManagement,
+                buttons: [
+                    {id: 'clear-all-analytics', label: 'Clear All Analytics'|t('smartlink-manager'), class: 'btn secondary', count: totalClicks},
+                ],
+            } only %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
 
-					<!-- Bottom Boxes -->
-					<div style="margin-top: auto;">
-						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px;">{{ qrCacheFiles|number_format }}</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'QR Codes'|t('smartlink-manager') }}</div>
-							</div>
-							<div style="padding: 12px; background: rgba(255,255,255,0.9); border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; min-height: 60px; display: flex; flex-direction: column; justify-content: center;">
-								<div style="font-size: 16px; font-weight: 600; color: #374151; margin-bottom: 4px;">{{ deviceCacheFiles|number_format }}</div>
-								<div style="font-size: 11px; color: #4b5563; text-transform: uppercase;">{{ 'Devices'|t('smartlink-manager') }}</div>
-							</div>
-						</div>
-					</div>
-				{% endif %}
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Quick Actions -->
-<div style="margin-bottom: 40px;">
-	<h2>{{ 'Quick Actions'|t('smartlink-manager') }}</h2>
-
-	<div class="pane">
-		<div style="margin-bottom: 24px;">
-			<h3 style="margin-bottom: 8px;">{{ "Navigation"|t('smartlink-manager') }}</h3>
-			<p class="light" style="margin-bottom: 16px;">{{ "Access main plugin sections"|t('smartlink-manager') }}</p>
-			<div style="display: flex; gap: 10px; flex-wrap: wrap;">
-				{% if currentUser.can('smartLinkManager:viewLinks') %}
-					<a href="{{ url('smartlink-manager') }}" class="btn">
-						{{ "Manage {pluginName}"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}) }}
-					</a>
-				{% endif %}
-				{% if settings.enableAnalytics and currentUser.can('smartLinkManager:viewAnalytics') %}
-					<a href="{{ url('smartlink-manager/analytics') }}" class="btn">
-						{{ "View Analytics"|t('smartlink-manager') }}
-					</a>
-				{% endif %}
-				{% if currentUser.can('smartLinkManager:manageSettings') %}
-					<a href="{{ url('smartlink-manager/settings') }}" class="btn">
-						{{ "View Settings"|t('smartlink-manager') }}
-					</a>
-				{% endif %}
-			</div>
-		</div>
-
-
-		{% if (settings.enableQrCodeCache or settings.cacheDeviceDetection) and currentUser.can('smartLinkManager:clearCache') %}
-			<hr style="margin: 24px 0;">
-
-			<div>
-				<h3 style="margin-bottom: 8px;">{{ "Cache Management"|t('smartlink-manager') }}</h3>
-				<p class="light" style="margin-bottom: 16px;">{{ "Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting."|t('smartlink-manager') }}</p>
-
-				<div style="display: flex; gap: 10px; flex-wrap: wrap;">
-					{% if settings.enableQrCodeCache %}
-						<button type="button" class="btn" id="clear-qr-cache">
-							{{ "Clear QR Cache"|t('smartlink-manager') }}{% if storageMethod != 'redis' %} ({{ qrCacheFiles|number_format }}){% endif %}
-						</button>
-					{% endif %}
-
-					{% if settings.cacheDeviceDetection %}
-						<button type="button" class="btn" id="clear-device-cache">
-							{{ "Clear Device Cache"|t('smartlink-manager') }}{% if storageMethod != 'redis' %} ({{ deviceCacheFiles|number_format }}){% endif %}
-						</button>
-					{% endif %}
-
-					{% if settings.enableQrCodeCache and settings.cacheDeviceDetection %}
-						<button type="button" class="btn secondary" id="clear-all-caches">
-							{{ "Clear All Caches"|t('smartlink-manager') }}{% if storageMethod != 'redis' %} ({{ (qrCacheFiles + deviceCacheFiles)|number_format }}){% endif %}
-						</button>
-					{% endif %}
-				</div>
-			</div>
-		{% endif %}
-
-		{% if settings.enableAnalytics and currentUser.can('smartLinkManager:clearAnalytics') %}
-			<hr style="margin: 24px 0;">
-
-			<div>
-				<h3 style="margin-bottom: 8px;">{{ "Analytics Data Management"|t('smartlink-manager') }}</h3>
-				<p class="light" style="margin-bottom: 16px;">{{ "Permanently delete all analytics tracking data. This action cannot be undone!"|t('smartlink-manager') }}</p>
-
-				<div style="display: flex; gap: 10px; flex-wrap: wrap;">
-					<button type="button" class="btn secondary" id="clear-all-analytics">
-						{{ "Clear All Analytics"|t('smartlink-manager') }} ({{ totalClicks|number_format }})
-					</button>
-				</div>
-			</div>
-		{% endif %}
-	</div>
-</div>
-
+{% block scripts %}
 {% js %}
-// Cache clearing handlers
 {% if settings.qrCodeCacheDuration > 0 %}
-	$('#clear-qr-cache').on('click', function() {
-		    const $btn = $(this);
-		    $btn.addClass('loading').prop('disabled', true);
-	
-		    $.ajax({
-		        url: '{{ actionUrl('smartlink-manager/settings/clear-qr-cache')|raw }}',
-		        type: 'POST',
-		        dataType: 'json',
-		        data: {
-	{{ craft.app.config.general.csrfTokenName }}: '{{ craft.app.request.csrfToken }}'
-		        },
-		        success: function(response) {
-		            if (response.success) {
-		                Craft.cp.displayNotice(response.message);
-		                setTimeout(() => window.location.reload(), 1500);
-		            } else {
-		                Craft.cp.displayError(response.error || '{{ "Failed to clear QR cache"|t('smartlink-manager')|e('js') }}');
-		            }
-		        },
-		        error: function() {
-		            Craft.cp.displayError('{{ "Failed to clear QR cache"|t('smartlink-manager')|e('js') }}');
-		        },
-		        complete: function() {
-		            $btn.removeClass('loading').prop('disabled', false);
-		        }
-		    });
-		});
+{% include 'lindemannrock-base/_layouts/cp-utilities/_ajax-button' with {
+    id: 'clear-qr-cache',
+    action: actionUrl('smartlink-manager/settings/clear-qr-cache'),
+    errorMessage: 'Failed to clear QR cache'|t('smartlink-manager'),
+} only %}
 {% endif %}
 
 {% if settings.cacheDeviceDetection %}
-	$('#clear-device-cache').on('click', function() {
-		    const $btn = $(this);
-		    $btn.addClass('loading').prop('disabled', true);
-	
-		    $.ajax({
-		        url: '{{ actionUrl('smartlink-manager/settings/clear-device-cache')|raw }}',
-		        type: 'POST',
-		        dataType: 'json',
-		        data: {
-	{{ craft.app.config.general.csrfTokenName }}: '{{ craft.app.request.csrfToken }}'
-		        },
-		        success: function(response) {
-		            if (response.success) {
-		                Craft.cp.displayNotice(response.message);
-		                setTimeout(() => window.location.reload(), 1500);
-		            } else {
-		                Craft.cp.displayError(response.error || '{{ "Failed to clear device cache"|t('smartlink-manager')|e('js') }}');
-		            }
-		        },
-		        error: function() {
-		            Craft.cp.displayError('{{ "Failed to clear device cache"|t('smartlink-manager')|e('js') }}');
-		        },
-		        complete: function() {
-		            $btn.removeClass('loading').prop('disabled', false);
-		        }
-		    });
-		});
+{% include 'lindemannrock-base/_layouts/cp-utilities/_ajax-button' with {
+    id: 'clear-device-cache',
+    action: actionUrl('smartlink-manager/settings/clear-device-cache'),
+    errorMessage: 'Failed to clear device cache'|t('smartlink-manager'),
+} only %}
 {% endif %}
 
-$('#clear-all-caches').on('click', function() {
-    if (!confirm('{{ "Are you sure you want to clear all {pluginName} caches?"|t('smartlink-manager', { pluginName: smartlinkHelper.fullName })|e('js') }}')) {
-        return;
-    }
-
-    const $btn = $(this);
-    $btn.addClass('loading').prop('disabled', true);
-
-    $.ajax({
-        url: '{{ actionUrl('smartlink-manager/settings/clear-all-caches')|raw }}',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-{{ craft.app.config.general.csrfTokenName }}: '{{ craft.app.request.csrfToken }}'
-        },
-        success: function(response) {
-            if (response.success) {
-                Craft.cp.displayNotice(response.message);
-                setTimeout(() => window.location.reload(), 1500);
-            } else {
-                Craft.cp.displayError(response.error || '{{ "Failed to clear caches"|t('smartlink-manager')|e('js') }}');
-            }
-        },
-        error: function() {
-            Craft.cp.displayError('{{ "Failed to clear caches"|t('smartlink-manager')|e('js') }}');
-        },
-        complete: function() {
-            $btn.removeClass('loading').prop('disabled', false);
-        }
-    });
-});
+{% if settings.enableQrCodeCache and settings.cacheDeviceDetection %}
+{% include 'lindemannrock-base/_layouts/cp-utilities/_ajax-button' with {
+    id: 'clear-all-caches',
+    action: actionUrl('smartlink-manager/settings/clear-all-caches'),
+    confirm: 'Are you sure you want to clear all {pluginName} caches?'|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}),
+    errorMessage: 'Failed to clear caches'|t('smartlink-manager'),
+} only %}
+{% endif %}
 
 {% if settings.enableAnalytics %}
-	$('#clear-all-analytics').on('click', function() {
-		    if (!confirm('{{ "Are you sure you want to permanently delete ALL analytics data? This action cannot be undone!"|t('smartlink-manager')|e('js') }}')) {
-		        return;
-		    }
-	
-		    // Second confirmation for extra safety
-		    if (!confirm('{{ "This will delete all click tracking data and reset all click counts. Are you absolutely sure?"|t('smartlink-manager')|e('js') }}')) {
-		        return;
-		    }
-	
-		    const $btn = $(this);
-		    $btn.addClass('loading').prop('disabled', true);
-	
-		    $.ajax({
-		        url: '{{ actionUrl('smartlink-manager/settings/clear-all-analytics')|raw }}',
-		        type: 'POST',
-		        dataType: 'json',
-		        data: {
-	{{ craft.app.config.general.csrfTokenName }}: '{{ craft.app.request.csrfToken }}'
-		        },
-		        success: function(response) {
-		            if (response.success) {
-		                Craft.cp.displayNotice(response.message);
-		                setTimeout(() => window.location.reload(), 2000);
-		            } else {
-		                Craft.cp.displayError(response.error || '{{ "Failed to clear analytics"|t('smartlink-manager')|e('js') }}');
-		            }
-		        },
-		        error: function() {
-		            Craft.cp.displayError('{{ "Failed to clear analytics"|t('smartlink-manager')|e('js') }}');
-		        },
-		        complete: function() {
-		            $btn.removeClass('loading').prop('disabled', false);
-		        }
-		    });
-		});
+{% include 'lindemannrock-base/_layouts/cp-utilities/_ajax-button' with {
+    id: 'clear-all-analytics',
+    action: actionUrl('smartlink-manager/settings/clear-all-analytics'),
+    confirm: 'Are you sure you want to permanently delete ALL analytics data? This action cannot be undone!'|t('smartlink-manager'),
+    confirmSecond: 'This will delete all click tracking data and reset all click counts. Are you absolutely sure?'|t('smartlink-manager'),
+    errorMessage: 'Failed to clear analytics'|t('smartlink-manager'),
+    reloadDelay: 2000,
+} only %}
 {% endif %}
 {% endjs %}
-
-{% include 'lindemannrock-base/_components/plugin-credit' %}
+{% endblock %}
