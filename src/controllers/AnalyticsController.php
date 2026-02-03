@@ -262,7 +262,8 @@ class AnalyticsController extends Controller
 
         $request = Craft::$app->getRequest();
         $smartLinkId = $request->getQueryParam('smartLinkId');
-        $dateRange = $request->getQueryParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
+        // Accept both 'range' and 'dateRange' parameter names
+        $dateRange = $request->getQueryParam('range') ?? $request->getQueryParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $format = $request->getQueryParam('format', 'csv');
         $siteId = $request->getQueryParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;

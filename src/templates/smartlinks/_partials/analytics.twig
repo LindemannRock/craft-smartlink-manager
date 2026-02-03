@@ -1,244 +1,246 @@
-{% set dateRange = craft.app.request.getQueryParam('range') ?? 'last7days' %}
+{#
+ # Per-Smartlink Analytics Tab
+ #
+ # Uses the base plugin's analytics-panel partial for consistent styling.
+ #
+ # Variables available:
+ # - smartLink: The smartlink record
+ # - analyticsService: The analytics service
+ #}
 
-{# Get analytics data #}
-{% if analyticsService is defined and smartLink is defined %}
-    {% set analytics = analyticsService.getSmartLinkAnalytics(smartLink.id, dateRange) %}
-{% else %}
-    {% set analytics = { totalClicks: 0 } %}
-{% endif %}
+{# Get date range from URL #}
+{% set dateRange = craft.app.request.getQueryParam('range') ?? lrDefaultDateRange() %}
 
-<div class="analytics-container">
-    {# Date Range Selector - Always visible #}
-    <div class="analytics-header">
-        <div class="flex">
-            <div class="btngroup">
-                <button type="button" class="btn menubtn">
-                    <span>{{ dateRange == 'today' ? 'Today' : (dateRange == 'yesterday' ? 'Yesterday' : (dateRange == 'last7days' ? 'Last 7 days' : (dateRange == 'last30days' ? 'Last 30 days' : (dateRange == 'last90days' ? 'Last 90 days' : 'All time')))) }}</span>
-                </button>
-                <div class="menu">
-                    <ul>
-                        <li><a href="#" data-range="today" class="date-range-option {{ dateRange == 'today' ? 'sel' : '' }}">{{ "Today"|t('smartlink-manager') }}</a></li>
-                        <li><a href="#" data-range="yesterday" class="date-range-option {{ dateRange == 'yesterday' ? 'sel' : '' }}">{{ "Yesterday"|t('smartlink-manager') }}</a></li>
-                        <li><a href="#" data-range="last7days" class="date-range-option {{ dateRange == 'last7days' ? 'sel' : '' }}">{{ "Last 7 days"|t('smartlink-manager') }}</a></li>
-                        <li><a href="#" data-range="last30days" class="date-range-option {{ dateRange == 'last30days' ? 'sel' : '' }}">{{ "Last 30 days"|t('smartlink-manager') }}</a></li>
-                        <li><a href="#" data-range="last90days" class="date-range-option {{ dateRange == 'last90days' ? 'sel' : '' }}">{{ "Last 90 days"|t('smartlink-manager') }}</a></li>
-                        <li><a href="#" data-range="all" class="date-range-option {{ dateRange == 'all' ? 'sel' : '' }}">{{ "All time"|t('smartlink-manager') }}</a></li>
-                    </ul>
+{# Get analytics data for this smartlink #}
+{% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
+{% set settings = plugin.settings %}
+{% set analyticsService = plugin.analytics %}
+{% set analytics = analyticsService.getSmartLinkAnalytics(smartLink.id, dateRange) ?? {totalClicks: 0} %}
+
+{# Extract analytics breakdown data #}
+{% set deviceStats = analytics.deviceBreakdown ?? {} %}
+{% set platformStats = analytics.platformBreakdown ?? {} %}
+
+{% embed 'lindemannrock-base/_partials/analytics-panel' with {
+    config: {
+        dateRange: {
+            enabled: true,
+            current: dateRange,
+            param: 'range',
+            hash: 'analytics',
+        },
+        export: {
+            action: 'smartlink-manager/analytics/export',
+            permission: 'smartLinkManager:exportAnalytics',
+            extraParams: {smartLinkId: smartLink.id},
+        },
+    }
+} %}
+    {% block content %}
+        {% if analytics.totalClicks == 0 %}
+            <div class="lr-analytics-empty">
+                <p>{{ "No analytics data yet"|t('smartlink-manager') }}</p>
+                <p class="light">{{ "Analytics will appear here once your {singularName} starts receiving clicks."|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}) }}</p>
+            </div>
+        {% else %}
+            {# Summary Stats #}
+            <div class="lr-unified-cards">
+                {% include 'lindemannrock-base/_components/cards/unified-card' with {
+                    value: analytics.totalClicks,
+                    description: 'Total Interactions'|t('smartlink-manager'),
+                    align: 'center',
+                } only %}
+
+                {% include 'lindemannrock-base/_components/cards/unified-card' with {
+                    value: analytics.uniqueClicks,
+                    description: 'Unique Visitors'|t('smartlink-manager'),
+                    align: 'center',
+                } only %}
+
+                {% include 'lindemannrock-base/_components/cards/unified-card' with {
+                    value: analytics.averageClicksPerDay|number_format(2),
+                    description: 'Avg. Clicks/Day'|t('smartlink-manager'),
+                    align: 'center',
+                } only %}
+            </div>
+
+            {# Charts Section #}
+            <div class="lr-analytics-charts two-columns">
+                {# Device Breakdown #}
+                <div class="lr-chart-container">
+                    <h3>{{ "Device Breakdown"|t('smartlink-manager') }}</h3>
+                    {% if deviceStats|length %}
+                        <div style="height: 250px;">
+                            <canvas id="device-breakdown-chart"></canvas>
+                        </div>
+                    {% else %}
+                        <p class="light" style="text-align: center; padding: 40px 0;">{{ "Device information not available"|t('smartlink-manager') }}</p>
+                    {% endif %}
+                </div>
+
+                {# Operating System Breakdown #}
+                <div class="lr-chart-container">
+                    <h3>{{ "Operating System"|t('smartlink-manager') }}</h3>
+                    {% if platformStats|length %}
+                        <div style="height: 250px;">
+                            <canvas id="os-breakdown-chart"></canvas>
+                        </div>
+                    {% else %}
+                        <p class="light" style="text-align: center; padding: 40px 0;">{{ "OS information not available"|t('smartlink-manager') }}</p>
+                    {% endif %}
                 </div>
             </div>
-            <div class="flex-grow"></div>
-            {% if currentUser.can('smartLinkManager:exportAnalytics') %}
-                <div class="btngroup">
-                    <button type="button" class="btn menubtn" data-icon="download">{{ "Export"|t('smartlink-manager') }}</button>
-                    <div class="menu" data-align="right">
-                        <ul>
-                            <li><a href="#" class="export-analytics" data-format="csv">{{ "Export as CSV"|t('smartlink-manager') }}</a></li>
-                            <li><a href="#" class="export-analytics" data-format="json">{{ "Export as JSON"|t('smartlink-manager') }}</a></li>
-                        </ul>
+
+            {# Recent Clicks #}
+            {% set recentClicks = analyticsService.getRecentClicks(smartLink.id, 20, dateRange) %}
+            {% if recentClicks|length %}
+                <div class="lr-chart-container" style="margin-top: 24px;">
+                    <h3>{{ "Interactions (Last 20)"|t('smartlink-manager') }}</h3>
+                    <div class="lr-table-scroll">
+                        <table class="data fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>{{ "Date"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Time"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Site"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Type"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Button"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Source"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Destination URL"|t('smartlink-manager') }}</th>
+                                    <th>{{ "Device"|t('smartlink-manager') }}</th>
+                                    <th>{{ "OS"|t('smartlink-manager') }}</th>
+                                    {% if settings.enableGeoDetection %}
+                                        <th>{{ "Location"|t('smartlink-manager') }}</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for click in recentClicks %}
+                                    {% set metadata = click.metadata ? click.metadata|json_decode : {} %}
+                                    {% set clickType = metadata.clickType ?? 'redirect' %}
+                                    <tr>
+                                        <td>{{ click.dateCreated|date('short') }}</td>
+                                        <td>{{ click.dateCreated|time('short') }}</td>
+                                        <td>
+                                            {% if click.siteId %}
+                                                {% set site = craft.app.sites.getSiteById(click.siteId) %}
+                                                {{ site ? site.name : '—' }}
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if clickType == 'button' %}
+                                                {{ "Button"|t('smartlink-manager') }}
+                                            {% else %}
+                                                {{ "Redirect"|t('smartlink-manager') }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if clickType == 'button' %}
+                                                {% if metadata.platform is defined %}
+                                                    {% set platformDisplay = {
+                                                        'ios': 'iOS',
+                                                        'android': 'Android',
+                                                        'macos': 'macOS',
+                                                        'windows': 'Windows',
+                                                        'linux': 'Linux',
+                                                        'huawei': 'Huawei',
+                                                        'amazon': 'Amazon',
+                                                        'other': 'Other'
+                                                    } %}
+                                                    {{ platformDisplay[metadata.platform] ?? metadata.platform|capitalize }}
+                                                {% else %}
+                                                    —
+                                                {% endif %}
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% set source = metadata.source ?? 'direct' %}
+                                            {% if source == 'qr' %}
+                                                {{ "QR"|t('smartlink-manager') }}
+                                            {% elseif source == 'landing' %}
+                                                {{ "Landing"|t('smartlink-manager') }}
+                                            {% else %}
+                                                {{ "Direct"|t('smartlink-manager') }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if clickType == 'button' %}
+                                                {% set url = metadata.buttonUrl ?? '' %}
+                                            {% else %}
+                                                {% set url = metadata.redirectUrl ?? metadata.buttonUrl ?? '' %}
+                                            {% endif %}
+                                            {% if url %}
+                                                {% set domain = url|replace({'https://': '', 'http://': ''})|split('/')[0] %}
+                                                <span title="{{ url }}">{{ domain|truncate(30) }}</span>
+                                            {% else %}
+                                                —
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ click.deviceType ? click.deviceType|capitalize : '—' }}</td>
+                                        <td>{{ click.osName ?? '—' }}</td>
+                                        {% if settings.enableGeoDetection %}
+                                            <td>
+                                                {% if click.city and click.country %}
+                                                    {{ click.city }}, {{ click.country }}
+                                                {% elseif click.country %}
+                                                    {{ click.country }}
+                                                {% else %}
+                                                    —
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             {% endif %}
-        </div>
-    </div>
-    
-    <div id="analytics-content" data-smart-link-id="{{ smartLink.id }}">
-        {% include "smartlink-manager/smartlinks/_partials/analytics-content" %}
-    </div>
-</div>
+        {% endif %}
+    {% endblock %}
+{% endembed %}
 
-{% js %}
-$(document).ready(function() {
-    // Handle export clicks
-    $(document).on('click', '.export-analytics', function(e) {
-        e.preventDefault();
-        
-        const format = $(this).data('format');
-        const smartLinkId = $('#analytics-content').data('smart-link-id');
-        const currentRange = new URLSearchParams(window.location.search).get('range') || 'last7days';
-        
-        // Build export URL
-        const exportUrl = Craft.getActionUrl('smartlink-manager/analytics/export', {
-            smartLinkId: smartLinkId,
-            dateRange: currentRange,
-            format: format
+{# Chart initialization - uses lrCreateChart from AnalyticsAsset #}
+{% if analytics.totalClicks > 0 %}
+<script>
+document.addEventListener('lr:panelChartsReady', function() {
+    var chartColors = window.lrChartColors || ['#0EA5E9', '#8B5CF6', '#F59E0B', '#10B981', '#EF4444', '#6B7280'];
+
+    // Device Breakdown Chart
+    {% if deviceStats|length %}
+    var deviceCtx = document.getElementById('device-breakdown-chart');
+    if (deviceCtx) {
+        window.lrCreateChart('device-breakdown-chart', 'doughnut', {
+            labels: {{ deviceStats|keys|json_encode|raw }},
+            datasets: [{
+                data: {{ deviceStats|values|json_encode|raw }},
+                backgroundColor: chartColors
+            }]
+        }, {
+            plugins: { legend: { position: 'bottom' } }
         });
-        
-        // Trigger download
-        window.location.href = exportUrl;
-        
-        // Close the menu
-        $(this).closest('.menu').removeClass('active');
-        $(this).closest('.btngroup').find('.menubtn').removeClass('active');
-    });
-    
-    // Handle date range selection via AJAX
-    $(document).on('click', '.date-range-option', function(e) {
-        e.preventDefault();
-        
-        const $link = $(this);
-        const range = $link.data('range');
-        const smartLinkId = $('#analytics-content').data('smart-link-id');
-        
-        // Update the button text
-        const rangeLabels = {
-            'today': '{{ "Today"|t('smartlink-manager')|e('js') }}',
-            'yesterday': '{{ "Yesterday"|t('smartlink-manager')|e('js') }}',
-            'last7days': '{{ "Last 7 days"|t('smartlink-manager')|e('js') }}',
-            'last30days': '{{ "Last 30 days"|t('smartlink-manager')|e('js') }}',
-            'last90days': '{{ "Last 90 days"|t('smartlink-manager')|e('js') }}',
-            'all': '{{ "All time"|t('smartlink-manager')|e('js') }}'
-        };
-        
-        // Update button text immediately
-        $link.closest('.btngroup').find('.menubtn span').text(rangeLabels[range] || range);
-        
-        // Update selected state
-        $link.closest('ul').find('.sel').removeClass('sel');
-        $link.addClass('sel');
-        
-        // Close the menu
-        $link.closest('.menu').removeClass('active');
-        $link.closest('.btngroup').find('.menubtn').removeClass('active');
-        
-        // Show loading state
-        $('#analytics-content').addClass('loading').css('opacity', '0.5');
-        
-        // Make AJAX request
-        $.ajax({
-            url: Craft.getActionUrl('smartlink-manager/analytics/get-analytics-data'),
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                smartLinkId: smartLinkId,
-                range: range
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Update the content
-                    $('#analytics-content').html(response.html);
-                    
-                    // Update URL without reload
-                    const url = new URL(window.location);
-                    url.searchParams.set('range', range);
-                    window.history.pushState({}, '', url);
-                    
-                    // Force update the button text again in case it didn't stick
-                    $('.analytics-header .menubtn span').text(rangeLabels[range] || range);
-                } else {
-                    Craft.cp.displayError(response.error || '{{ "Failed to load analytics data"|t('smartlink-manager')|e('js') }}');
-                }
-            },
-            error: function() {
-                Craft.cp.displayError('{{ "Failed to load analytics data"|t('smartlink-manager')|e('js') }}');
-            },
-            complete: function() {
-                $('#analytics-content').removeClass('loading').css('opacity', '1');
-            }
-        });
-    });
-});
-{% endjs %}
-
-{% css %}
-.analytics-container {
-    padding: 24px 0;
-}
-
-.analytics-header {
-    margin-bottom: 24px;
-}
-
-.analytics-header .flex {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.analytics-header .flex-grow {
-    flex-grow: 1;
-}
-
-.analytics-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.stat-box {
-    background: #f3f7fc;
-    padding: 24px;
-    border-radius: 4px;
-    text-align: center;
-    border: 1px solid var(--border-hairline);
-}
-
-.stat-value {
-    font-size: 32px;
-    font-weight: 600;
-    color: #0d78f2;
-    margin-bottom: 8px;
-}
-
-.stat-label {
-    font-size: 14px;
-    color: #596673;
-}
-
-.device-stats,
-.platform-stats,
-.button-click-stats,
-.recent-clicks {
-    margin-bottom: 40px;
-}
-
-.button-click-stats p.light {
-    margin-bottom: 16px;
-    margin-top: -8px;
-}
-
-h3 {
-    margin-bottom: 16px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-/* Chart layout and sizing fixes */
-.analytics-charts.two-columns {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-@media (max-width: 1024px) {
-    .analytics-charts.two-columns {
-        grid-template-columns: 1fr;
     }
-}
+    {% endif %}
 
-.chart-container {
-    background: #fff;
-    border: 1px solid #e3e5e8;
-    border-radius: 4px;
-    padding: 24px;
-    min-width: 0; /* Allow flex/grid item to shrink below content size */
-    overflow: hidden; /* Prevent content from pushing out */
-}
-
-.chart-container h3 {
-    margin: 0 0 20px;
-    font-size: 16px;
-}
-
-.chart-container canvas {
-    max-height: 300px;
-    max-width: 100%;
-}
-
-/* Ensure chart wrapper respects container size */
-.chart-container > canvas {
-    display: block;
-    box-sizing: border-box;
-}
-{% endcss %}
+    // OS Breakdown Chart
+    {% if platformStats|length %}
+    var osCtx = document.getElementById('os-breakdown-chart');
+    if (osCtx) {
+        window.lrCreateChart('os-breakdown-chart', 'doughnut', {
+            labels: {{ platformStats|keys|json_encode|raw }},
+            datasets: [{
+                data: {{ platformStats|values|json_encode|raw }},
+                backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280']
+            }]
+        }, {
+            plugins: { legend: { position: 'bottom' } }
+        });
+    }
+    {% endif %}
+});
+</script>
+{% endif %}
