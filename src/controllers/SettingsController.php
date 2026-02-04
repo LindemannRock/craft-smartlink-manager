@@ -71,6 +71,7 @@ class SettingsController extends Controller
      * Settings index - redirect to general
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -81,6 +82,7 @@ class SettingsController extends Controller
      * Debug settings loading
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionDebug(): Response
     {
@@ -105,6 +107,7 @@ class SettingsController extends Controller
      * General settings
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionGeneral(): Response
     {
@@ -133,6 +136,7 @@ class SettingsController extends Controller
      * Analytics settings
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionAnalytics(): Response
     {
@@ -150,6 +154,7 @@ class SettingsController extends Controller
      * Integrations settings
      *
      * @return Response
+     * @since 1.23.0
      */
     public function actionIntegrations(): Response
     {
@@ -167,6 +172,7 @@ class SettingsController extends Controller
      * Export settings
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionExport(): Response
     {
@@ -184,6 +190,7 @@ class SettingsController extends Controller
      * QR Code settings
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionQrCode(): Response
     {
@@ -201,6 +208,7 @@ class SettingsController extends Controller
      * Behavior settings
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionBehavior(): Response
     {
@@ -218,6 +226,7 @@ class SettingsController extends Controller
      * Interface settings
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionInterface(): Response
     {
@@ -235,6 +244,7 @@ class SettingsController extends Controller
      * Cache settings
      *
      * @return Response
+     * @since 5.9.0
      */
     public function actionCache(): Response
     {
@@ -252,6 +262,7 @@ class SettingsController extends Controller
      * Field Layout settings
      *
      * @return Response
+     * @since 1.14.0
      */
     public function actionFieldLayout(): Response
     {
@@ -328,6 +339,7 @@ class SettingsController extends Controller
      * Save field layout
      *
      * @return Response|null
+     * @since 1.14.0
      */
     public function actionSaveFieldLayout(): ?Response
     {
@@ -365,6 +377,7 @@ class SettingsController extends Controller
      * Save settings
      *
      * @return Response|null
+     * @since 1.0.0
      */
     public function actionSave(): ?Response
     {
@@ -513,6 +526,7 @@ class SettingsController extends Controller
      *
      * @return Response
      * @throws ForbiddenHttpException
+     * @since 1.0.0
      */
     public function actionCleanupAnalytics(): Response
     {
@@ -544,6 +558,7 @@ class SettingsController extends Controller
      * Clear QR code cache
      *
      * @return Response
+     * @since 5.9.0
      */
     public function actionClearQrCache(): Response
     {
@@ -605,6 +620,7 @@ class SettingsController extends Controller
      * Clear device detection cache
      *
      * @return Response
+     * @since 5.9.0
      */
     public function actionClearDeviceCache(): Response
     {
@@ -666,6 +682,7 @@ class SettingsController extends Controller
      * Clear all SmartLink Manager caches
      *
      * @return Response
+     * @since 5.9.0
      */
     public function actionClearAllCaches(): Response
     {
@@ -747,6 +764,7 @@ class SettingsController extends Controller
      * Clear all analytics data
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionClearAllAnalytics(): Response
     {
@@ -794,6 +812,7 @@ class SettingsController extends Controller
      * Clean up invalid platform values in analytics data
      *
      * @return Response
+     * @since 1.18.0
      */
     public function actionCleanupPlatformValues(): Response
     {

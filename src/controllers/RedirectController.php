@@ -45,6 +45,7 @@ class RedirectController extends Controller
      *
      * @param string $slug
      * @return Response
+     * @since 1.0.0
      */
     public function actionIndex(string $slug): Response
     {
@@ -151,6 +152,7 @@ class RedirectController extends Controller
      * @param string $slug
      * @param string $platform Platform identifier (ios, android, huawei, amazon, windows, mac, fallback, auto)
      * @return Response
+     * @since 1.0.0
      */
     public function actionGo(string $slug, string $platform = 'auto'): Response
     {
@@ -310,6 +312,7 @@ class RedirectController extends Controller
      * This endpoint is never cached and provides real-time device info
      *
      * @return Response
+     * @since 1.7.0
      */
     public function actionRefreshCsrf(): Response
     {

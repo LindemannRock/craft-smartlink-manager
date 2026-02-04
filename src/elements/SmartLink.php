@@ -188,6 +188,8 @@ class SmartLink extends Element
 
     /**
      * Set metadata - handles JSON decoding from database
+     *
+     * @since 1.0.0
      */
     public function setMetadata(array|string|null $value): void
     {
@@ -526,6 +528,7 @@ class SmartLink extends Element
      * Get total clicks count
      *
      * @return int
+     * @since 1.0.0
      */
     public function getClicks(): int
     {
@@ -543,6 +546,7 @@ class SmartLink extends Element
      * Set clicks value (for caching purposes)
      *
      * @param int $clicks
+     * @since 1.0.0
      */
     public function setClicks(int $clicks): void
     {
@@ -553,6 +557,7 @@ class SmartLink extends Element
      * Get the author user element
      *
      * @return User|null
+     * @since 1.0.0
      */
     public function getAuthor(): ?User
     {
@@ -566,6 +571,7 @@ class SmartLink extends Element
      * Get the image asset element
      *
      * @return \craft\elements\Asset|null
+     * @since 1.0.0
      */
     public function getImage(): ?\craft\elements\Asset
     {
@@ -657,6 +663,8 @@ class SmartLink extends Element
     
     /**
      * Load content for the current site
+     *
+     * @since 1.0.0
      */
     public function loadContent(): void
     {
@@ -826,6 +834,8 @@ class SmartLink extends Element
 
     /**
      * Get the redirect URL for this smart link
+     *
+     * @since 1.0.0
      */
     public function getRedirectUrl(): string
     {
@@ -856,6 +866,8 @@ class SmartLink extends Element
 
     /**
      * Get the QR code URL for this smart link
+     *
+     * @since 1.0.0
      */
     public function getQrCodeUrl(array $options = []): string
     {
@@ -889,6 +901,8 @@ class SmartLink extends Element
     
     /**
      * Get the QR code display page URL for this smart link
+     *
+     * @since 1.0.0
      */
     public function getQrCodeDisplayUrl(array $options = []): string
     {
@@ -917,6 +931,7 @@ class SmartLink extends Element
      *
      * @param array $options Optional parameters to override defaults
      * @return string Data URI string
+     * @since 1.0.0
      */
     public function getQrCodeDataUri(array $options = []): string
     {
@@ -948,6 +963,7 @@ class SmartLink extends Element
      *
      * @param array $options Optional parameters to override defaults
      * @return string Binary image data (PNG or SVG)
+     * @since 1.0.0
      */
     public function getQrCode(array $options = []): string
     {
@@ -976,6 +992,8 @@ class SmartLink extends Element
 
     /**
      * Get analytics data for this smart link
+     *
+     * @since 1.0.0
      */
     public function getAnalyticsData(array $criteria = []): array
     {
@@ -987,6 +1005,7 @@ class SmartLink extends Element
      *
      * @param string $eventType Event type: 'qr_scan' or 'redirect'
      * @return \Twig\Markup|null HTML script tag or null if SEOmatic is not enabled
+     * @since 1.23.0
      */
     public function renderSeomaticTracking(string $eventType = 'qr_scan'): ?\Twig\Markup
     {

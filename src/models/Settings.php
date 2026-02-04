@@ -432,6 +432,7 @@ class Settings extends Model
      * Set enabled integrations from string (for form submission)
      *
      * @param string|array $value
+     * @since 1.1.0
      */
     public function setEnabledIntegrations($value): void
     {
@@ -454,6 +455,7 @@ class Settings extends Model
      * Set default QR logo ID from asset field (handles array input)
      *
      * @param int|array|null $value
+     * @since 1.0.0
      */
     public function setDefaultQrLogoId(int|array|null $value): void
     {
@@ -466,6 +468,8 @@ class Settings extends Model
 
     /**
      * Validate log level - debug requires devMode
+     *
+     * @since 1.0.0
      */
     public function validateLogLevel($attribute, $params, $validator)
     {
@@ -502,6 +506,8 @@ class Settings extends Model
 
     /**
      * Validate slug prefix to prevent conflicts
+     *
+     * @since 1.0.0
      */
     public function validateSlugPrefix($attribute, $params, $validator)
     {
@@ -552,6 +558,8 @@ class Settings extends Model
 
     /**
      * Validate QR prefix to prevent conflicts
+     *
+     * @since 1.0.0
      */
     public function validateQrPrefix($attribute, $params, $validator)
     {
@@ -632,6 +640,7 @@ class Settings extends Model
      *
      * @param int $siteId
      * @return bool
+     * @since 1.0.0
      */
     public function isSiteEnabled(int $siteId): bool
     {
@@ -647,6 +656,7 @@ class Settings extends Model
      * Get enabled site IDs, defaulting to all sites if none specified
      *
      * @return array
+     * @since 1.0.0
      */
     public function getEnabledSiteIds(): array
     {

@@ -579,6 +579,7 @@ class SeomaticIntegration extends BaseIntegration
      * Get list of available tracking scripts
      *
      * @return array
+     * @since 1.1.0
      */
     public function getAvailableScripts(): array
     {
@@ -590,6 +591,7 @@ class SeomaticIntegration extends BaseIntegration
      * Check if GTM is active
      *
      * @return bool
+     * @since 1.1.0
      */
     public function hasGoogleTagManager(): bool
     {
@@ -601,6 +603,7 @@ class SeomaticIntegration extends BaseIntegration
      * Check if Google Analytics is active
      *
      * @return bool
+     * @since 1.1.0
      */
     public function hasGoogleAnalytics(): bool
     {

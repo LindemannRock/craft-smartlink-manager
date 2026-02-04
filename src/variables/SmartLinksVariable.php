@@ -27,6 +27,7 @@ class SmartLinksVariable
      *
      * @param array $criteria
      * @return SmartLinkQuery
+     * @since 1.0.0
      */
     public function find(array $criteria = []): SmartLinkQuery
     {
@@ -44,6 +45,7 @@ class SmartLinksVariable
      *
      * @param array $criteria
      * @return SmartLink[]
+     * @since 1.0.0
      */
     public function all(array $criteria = []): array
     {
@@ -55,6 +57,7 @@ class SmartLinksVariable
      *
      * @param array $criteria
      * @return SmartLink|null
+     * @since 1.0.0
      */
     public function one(array $criteria = []): ?SmartLink
     {
@@ -66,6 +69,7 @@ class SmartLinksVariable
      *
      * @param int $id
      * @return SmartLink|null
+     * @since 1.0.0
      */
     public function getById(int $id): ?SmartLink
     {
@@ -77,6 +81,7 @@ class SmartLinksVariable
      *
      * @param string $slug
      * @return SmartLink|null
+     * @since 1.0.0
      */
     public function getBySlug(string $slug): ?SmartLink
     {
@@ -88,6 +93,7 @@ class SmartLinksVariable
      *
      * @param string $slug
      * @return SmartLinkQuery
+     * @since 1.0.0
      */
     public function slug(string $slug): SmartLinkQuery
     {
@@ -98,6 +104,7 @@ class SmartLinksVariable
      * Returns only active smart links.
      *
      * @return SmartLinkQuery
+     * @since 1.0.0
      */
     public function active(): SmartLinkQuery
     {
@@ -111,6 +118,7 @@ class SmartLinksVariable
      *
      * @param array $config
      * @return SmartLink
+     * @since 1.0.0
      */
     public function create(array $config = []): SmartLink
     {
@@ -129,6 +137,7 @@ class SmartLinksVariable
      * @param SmartLink $smartLink
      * @param array $criteria
      * @return array
+     * @since 1.0.0
      */
     public function getAnalytics(SmartLink $smartLink, array $criteria = []): array
     {
@@ -139,6 +148,7 @@ class SmartLinksVariable
      * Get the module instance
      *
      * @return SmartLinkManager
+     * @since 1.0.0
      */
     public function getModule(): SmartLinkManager
     {
@@ -149,6 +159,7 @@ class SmartLinksVariable
      * Get module settings
      *
      * @return \lindemannrock\smartlinkmanager\models\Settings
+     * @since 1.0.0
      */
     public function getSettings(): \lindemannrock\smartlinkmanager\models\Settings
     {

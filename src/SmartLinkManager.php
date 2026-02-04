@@ -456,6 +456,7 @@ class SmartLinkManager extends Plugin
      * Get sites where SmartLink Manager is enabled
      *
      * @return array
+     * @since 1.3.0
      */
     public function getEnabledSites(): array
     {
@@ -640,6 +641,7 @@ class SmartLinkManager extends Plugin
      *
      * @param \craft\events\ConfigEvent $event
      * @return void
+     * @since 1.15.0
      */
     public function handleChangedFieldLayout(\craft\events\ConfigEvent $event): void
     {
@@ -661,6 +663,7 @@ class SmartLinkManager extends Plugin
      *
      * @param \craft\events\ConfigEvent $event
      * @return void
+     * @since 1.15.0
      */
     public function handleDeletedFieldLayout(\craft\events\ConfigEvent $event): void
     {

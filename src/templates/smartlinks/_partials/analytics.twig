@@ -59,7 +59,8 @@
 
                 {% include 'lindemannrock-base/_components/cards/unified-card' with {
                     value: analytics.averageClicksPerDay|number_format(2),
-                    description: 'Avg. Clicks/Day'|t('smartlink-manager'),
+                    valueIsFormatted: true,
+                    description: 'Avg. Interactions/Day'|t('smartlink-manager'),
                     align: 'center',
                 } only %}
             </div>
@@ -70,11 +71,11 @@
                 <div class="lr-chart-container">
                     <h3>{{ "Device Breakdown"|t('smartlink-manager') }}</h3>
                     {% if deviceStats|length %}
-                        <div style="height: 250px;">
+                        <div class="lr-chart-height-250 lr-chart-center">
                             <canvas id="device-breakdown-chart"></canvas>
                         </div>
                     {% else %}
-                        <p class="light" style="text-align: center; padding: 40px 0;">{{ "Device information not available"|t('smartlink-manager') }}</p>
+                        <div class="lr-chart-empty">{{ "Device information not available"|t('smartlink-manager') }}</div>
                     {% endif %}
                 </div>
 
@@ -82,11 +83,11 @@
                 <div class="lr-chart-container">
                     <h3>{{ "Operating System"|t('smartlink-manager') }}</h3>
                     {% if platformStats|length %}
-                        <div style="height: 250px;">
+                        <div class="lr-chart-height-250 lr-chart-center">
                             <canvas id="os-breakdown-chart"></canvas>
                         </div>
                     {% else %}
-                        <p class="light" style="text-align: center; padding: 40px 0;">{{ "OS information not available"|t('smartlink-manager') }}</p>
+                        <div class="lr-chart-empty">{{ "OS information not available"|t('smartlink-manager') }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -94,7 +95,7 @@
             {# Recent Clicks #}
             {% set recentClicks = analyticsService.getRecentClicks(smartLink.id, 20, dateRange) %}
             {% if recentClicks|length %}
-                <div class="lr-chart-container" style="margin-top: 24px;">
+                <div class="lr-chart-container lr-mt-24">
                     <h3>{{ "Interactions (Last 20)"|t('smartlink-manager') }}</h3>
                     <div class="lr-table-scroll">
                         <table class="data fullwidth">

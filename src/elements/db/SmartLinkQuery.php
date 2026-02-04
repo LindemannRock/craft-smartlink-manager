@@ -54,6 +54,8 @@ class SmartLinkQuery extends ElementQuery
      * NOTE: We store slug in a private property to prevent Craft from
      * adding elements_sites.slug to the query. SmartLinks store slug in
      * the smartlinks table, not elements_sites.
+     *
+     * @since 1.0.0
      */
     public function slug($value): static
     {
@@ -65,6 +67,8 @@ class SmartLinkQuery extends ElementQuery
 
     /**
      * Narrows the query results based on whether the smart links track analytics.
+     *
+     * @since 1.0.0
      */
     public function trackAnalytics($value = true): static
     {
@@ -74,6 +78,8 @@ class SmartLinkQuery extends ElementQuery
 
     /**
      * Narrows the query results based on whether the smart links have QR codes enabled.
+     *
+     * @since 1.0.0
      */
     public function qrCodeEnabled($value = true): static
     {

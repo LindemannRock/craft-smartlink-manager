@@ -226,6 +226,7 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
      * Validates that the number of selected elements doesn't exceed the limit
      *
      * @param ElementInterface $element
+     * @since 1.0.0
      */
     public function validateLimit(ElementInterface $element): void
     {

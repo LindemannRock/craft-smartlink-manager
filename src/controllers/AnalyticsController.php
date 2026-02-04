@@ -42,6 +42,7 @@ class AnalyticsController extends Controller
      * Analytics dashboard
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -85,6 +86,7 @@ class AnalyticsController extends Controller
      * Get analytics data via AJAX
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionGetData(): Response
     {
@@ -168,6 +170,7 @@ class AnalyticsController extends Controller
      * Get analytics data for AJAX requests
      *
      * @return Response
+     * @since 1.0.0
      */
     public function actionGetAnalyticsData(): Response
     {
@@ -268,6 +271,10 @@ class AnalyticsController extends Controller
         $format = $request->getQueryParam('format', 'csv');
         $siteId = $request->getQueryParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
+
+        if (!ExportHelper::isFormatEnabled($format, SmartLinkManager::$plugin->id)) {
+            throw new \yii\web\BadRequestHttpException("Export format '{$format}' is not enabled.");
+        }
 
         // If exporting for a specific SmartLink, check if it has analytics enabled
         if ($smartLinkId) {

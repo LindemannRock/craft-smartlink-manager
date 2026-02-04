@@ -41,6 +41,7 @@ class DeviceDetectionService extends Component
      *
      * @param string|null $userAgent
      * @return DeviceInfo
+     * @since 1.0.0
      */
     public function detectDevice(?string $userAgent = null): DeviceInfo
     {
@@ -80,6 +81,7 @@ class DeviceDetectionService extends Component
      * @param DeviceInfo $deviceInfo
      * @param string|null $language
      * @return string
+     * @since 1.0.0
      */
     public function getRedirectUrl(SmartLink $smartLink, DeviceInfo $deviceInfo, ?string $language = null): string
     {
@@ -107,6 +109,7 @@ class DeviceDetectionService extends Component
      * Detect language from request
      *
      * @return string
+     * @since 1.0.0
      */
     public function detectLanguage(): string
     {
@@ -118,6 +121,7 @@ class DeviceDetectionService extends Component
      *
      * @param DeviceInfo $deviceInfo
      * @return bool
+     * @since 1.0.0
      */
     public function isMobileDevice(DeviceInfo $deviceInfo): bool
     {
@@ -129,6 +133,7 @@ class DeviceDetectionService extends Component
      *
      * @param string $platform
      * @return string
+     * @since 1.0.0
      */
     public function getAppStoreName(string $platform): string
     {

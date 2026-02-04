@@ -60,6 +60,7 @@ class SmartLinksService extends Component
      *
      * @param array $config
      * @return SmartLink
+     * @since 1.0.0
      */
     public function createSmartLink(array $config): SmartLink
     {
@@ -81,6 +82,7 @@ class SmartLinksService extends Component
      * @param SmartLink $smartLink
      * @param bool $runValidation
      * @return bool
+     * @since 1.0.0
      */
     public function saveSmartLink(SmartLink $smartLink, bool $runValidation = true): bool
     {
@@ -120,6 +122,7 @@ class SmartLinksService extends Component
      * @param SmartLink $smartLink
      * @param array $config
      * @return bool
+     * @since 1.0.0
      */
     public function updateSmartLink(SmartLink $smartLink, array $config): bool
     {
@@ -138,6 +141,7 @@ class SmartLinksService extends Component
      *
      * @param SmartLink $smartLink
      * @return bool
+     * @since 1.0.0
      */
     public function deleteSmartLink(SmartLink $smartLink): bool
     {
@@ -150,6 +154,7 @@ class SmartLinksService extends Component
      * @param int $id
      * @param int|null $siteId
      * @return SmartLink|null
+     * @since 1.0.0
      */
     public function getSmartLinkById(int $id, ?int $siteId = null): ?SmartLink
     {
@@ -166,6 +171,7 @@ class SmartLinksService extends Component
      * @param string $slug
      * @param int|null $siteId
      * @return SmartLink|null
+     * @since 1.0.0
      */
     public function getSmartLinkBySlug(string $slug, ?int $siteId = null): ?SmartLink
     {
@@ -181,6 +187,7 @@ class SmartLinksService extends Component
      *
      * @param int|null $siteId
      * @return SmartLink[]
+     * @since 1.0.0
      */
     public function getActiveSmartLinks(?int $siteId = null): array
     {
@@ -196,6 +203,7 @@ class SmartLinksService extends Component
      * @param SmartLink $smartLink
      * @param array $options
      * @return string
+     * @since 1.0.0
      */
     public function generateQrCode(SmartLink $smartLink, array $options = []): string
     {
@@ -211,6 +219,7 @@ class SmartLinksService extends Component
      * @param SmartLink $smartLink
      * @param array $options
      * @return string
+     * @since 1.0.0
      */
     public function generateQrCodeDataUrl(SmartLink $smartLink, array $options = []): string
     {
@@ -225,6 +234,7 @@ class SmartLinksService extends Component
      *
      * @param array $links
      * @return array Results with 'success' and 'errors' keys
+     * @since 1.0.0
      */
     public function importSmartLinks(array $links): array
     {
@@ -261,6 +271,7 @@ class SmartLinksService extends Component
      *
      * @param SmartLink[] $smartLinks
      * @return array
+     * @since 1.0.0
      */
     public function exportSmartLinks(array $smartLinks): array
     {
@@ -299,6 +310,7 @@ class SmartLinksService extends Component
      * @param DeviceInfo $device
      * @param string $redirectUrl
      * @return string The redirect URL (possibly modified by event handlers)
+     * @since 1.0.0
      */
     public function triggerBeforeRedirect(SmartLink $smartLink, DeviceInfo $device, string $redirectUrl): string
     {
@@ -319,6 +331,7 @@ class SmartLinksService extends Component
      * @param SmartLink $smartLink
      * @param DeviceInfo $device
      * @param array $metadata
+     * @since 1.0.0
      */
     public function triggerAfterTrackAnalytics(SmartLink $smartLink, DeviceInfo $device, array $metadata): void
     {

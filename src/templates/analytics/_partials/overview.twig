@@ -26,7 +26,7 @@
     } only %}
 </div>
 
-<h2 style="margin: 30px 0 20px;">{{ "Traffic Overview"|t('smartlink-manager') }}</h2>
+<h2 class="lr-section-heading">{{ "Traffic Overview"|t('smartlink-manager') }}</h2>
 
 <div class="lr-analytics-charts">
     <div class="lr-chart-container full-width">
@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<h2 style="margin: 30px 0 20px;">{{ "Top {pluginName} (Top 20)"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}) }}</h2>
+<h2 class="lr-section-heading">{{ "Top {pluginName} (Top 20)"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}) }}</h2>
 
 <div class="lr-analytics-charts">
     <div class="lr-chart-container full-width">
@@ -79,7 +79,7 @@
                         {% endif %}
                     {% else %}
                         <tr>
-                            <td colspan="8" class="thin light">{{ "No data for selected period"|t('smartlink-manager') }}</td>
+                            <td colspan="8" class="thin light lr-text-center">{{ "No data for selected period"|t('smartlink-manager') }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<h2 style="margin: 30px 0 20px;">{{ "Latest Interactions (Top 20)"|t('smartlink-manager') }}</h2>
+<h2 class="lr-section-heading">{{ "Latest Interactions (Top 20)"|t('smartlink-manager') }}</h2>
 
 <div class="lr-analytics-charts">
     <div class="lr-chart-container full-width">
@@ -187,7 +187,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="{{ settings.enableGeoDetection ? 12 : 11 }}" class="thin light">{{ "No interactions recorded yet"|t('smartlink-manager') }}</td>
+                            <td colspan="{{ settings.enableGeoDetection ? 12 : 11 }}" class="thin light lr-text-center">{{ "No interactions recorded yet"|t('smartlink-manager') }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -59,6 +59,7 @@ class SmartLinkRecord extends ActiveRecord
      * Returns the smart link's element.
      *
      * @return ActiveQueryInterface
+     * @since 1.0.0
      */
     public function getElement(): ActiveQueryInterface
     {

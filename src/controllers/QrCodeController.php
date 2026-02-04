@@ -45,6 +45,7 @@ class QrCodeController extends Controller
      * @param string $slug
      * @return Response
      * @throws NotFoundHttpException
+     * @since 1.0.0
      */
     public function actionDisplay(string $slug): Response
     {
@@ -156,6 +157,7 @@ class QrCodeController extends Controller
      * @param string|null $slug
      * @return Response
      * @throws NotFoundHttpException
+     * @since 1.0.0
      */
     public function actionGenerate(?string $slug = null): Response
     {
