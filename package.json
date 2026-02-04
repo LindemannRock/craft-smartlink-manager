@@ -6,6 +6,7 @@
 		"minify": "npm run minify:analytics",
 		"minify:analytics": "terser src/web/assets/analytics/analytics.js -o src/web/assets/analytics/analytics.min.js -c -m"
 	},
-	"author": "LindemannRock",
-	"license": "UNLICENSED"
+	"devDependencies": {
+		"terser": "^5.31.6"
+	}
 }
