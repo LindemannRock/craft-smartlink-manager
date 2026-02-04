@@ -1,10 +1,11 @@
 {
-  "name": "smartlink-manager",
-  "version": "1.0.0",
-  "description": "SmartLink Manager plugin for Craft CMS",
-  "scripts": {
-    "minify": "npx terser src/web/assets/redirect/redirect-tracking.js -c -m -o src/web/assets/redirect/redirect-tracking.min.js"
-  },
-  "author": "LindemannRock",
-  "license": "UNLICENSED"
+	"name": "smartlink-manager",
+	"version": "1.0.0",
+	"description": "SmartLink Manager plugin for Craft CMS",
+	"scripts": {
+		"minify": "npm run minify:analytics",
+		"minify:analytics": "terser src/web/assets/analytics/analytics.js -o src/web/assets/analytics/analytics.min.js -c -m"
+	},
+	"author": "LindemannRock",
+	"license": "UNLICENSED"
 }
