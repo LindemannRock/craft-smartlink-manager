@@ -494,11 +494,11 @@
             {% endif %}
             <div class="data">
                 <dt class="heading">{{ "Created at"|t('app') }}</dt>
-                <dd class="value">{{ smartLink.dateCreated|datetime('short') }}</dd>
+                <dd class="value">{{ smartLink.dateCreated|lrDatetime('short') }}</dd>
             </div>
             <div class="data">
                 <dt class="heading">{{ "Updated at"|t('app') }}</dt>
-                <dd class="value">{{ smartLink.dateUpdated|datetime('short') }}</dd>
+                <dd class="value">{{ smartLink.dateUpdated|lrDatetime('short') }}</dd>
             </div>
         </dl>
     {% endif %}
