@@ -8,13 +8,12 @@
  # - analyticsService: The analytics service
  #}
 
-{# Get date range from URL #}
-{% set dateRange = craft.app.request.getQueryParam('range') ?? lrDefaultDateRange() %}
-
 {# Get analytics data for this smartlink #}
 {% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
 {% set settings = plugin.settings %}
 {% set analyticsService = plugin.analytics %}
+{% set pluginHandle = pluginHandle ?? plugin.id %}
+{% set dateRange = craft.app.request.getQueryParam('range') ?? lrDefaultDateRange(pluginHandle) %}
 {% set analytics = analyticsService.getSmartLinkAnalytics(smartLink.id, dateRange) ?? {totalClicks: 0} %}
 
 {# Extract analytics breakdown data #}
@@ -23,6 +22,7 @@
 
 {% embed 'lindemannrock-base/_partials/analytics-panel' with {
     config: {
+        pluginHandle: pluginHandle,
         dateRange: {
             enabled: true,
             current: dateRange,
@@ -207,13 +207,53 @@
 {# Chart initialization - uses lrCreateChart from AnalyticsAsset #}
 {% if analytics.totalClicks > 0 %}
 <script>
+(function() {
+    if (window.lrSmartlinkPanelChartsBound) {
+        return;
+    }
+    window.lrSmartlinkPanelChartsBound = true;
+
 document.addEventListener('lr:panelChartsReady', function() {
     var chartColors = window.lrChartColors || ['#0EA5E9', '#8B5CF6', '#F59E0B', '#10B981', '#EF4444', '#6B7280'];
+    var chartPrefix = (window.lrAnalyticsConfig && window.lrAnalyticsConfig.prefix) ? window.lrAnalyticsConfig.prefix : 'analytics';
+
+    function destroyChart(canvasId) {
+        var chartKey = canvasId.replace(/-/g, '_');
+        if (window.lrChartInstances && window.lrChartInstances[chartPrefix] && window.lrChartInstances[chartPrefix][chartKey]) {
+            window.lrChartInstances[chartPrefix][chartKey].destroy();
+            delete window.lrChartInstances[chartPrefix][chartKey];
+        }
+    }
+
+    function resetChartState(canvas) {
+        if (!canvas) return;
+        canvas.style.display = '';
+        var parent = canvas.parentElement || canvas.parentNode;
+        if (!parent) return;
+        parent.querySelectorAll('.zilch').forEach(function(el) { el.remove(); });
+    }
+
+    function renderEmptyState(canvasId, message) {
+        var ctx = document.getElementById(canvasId);
+        if (!ctx) return;
+        resetChartState(ctx);
+        destroyChart(canvasId);
+        ctx.style.display = 'none';
+        var parent = ctx.parentElement || ctx.parentNode;
+        if (!parent) return;
+        var emptyMsg = document.createElement('div');
+        emptyMsg.className = 'zilch';
+        emptyMsg.style.padding = '48px 24px';
+        emptyMsg.style.textAlign = 'center';
+        emptyMsg.innerHTML = '<p>' + message + '</p>';
+        parent.appendChild(emptyMsg);
+    }
 
     // Device Breakdown Chart
     {% if deviceStats|length %}
     var deviceCtx = document.getElementById('device-breakdown-chart');
     if (deviceCtx) {
+        resetChartState(deviceCtx);
         window.lrCreateChart('device-breakdown-chart', 'doughnut', {
             labels: {{ deviceStats|keys|json_encode|raw }},
             datasets: [{
@@ -224,12 +264,15 @@ document.addEventListener('lr:panelChartsReady', function() {
             plugins: { legend: { position: 'bottom' } }
         });
     }
+    {% else %}
+    renderEmptyState('device-breakdown-chart', '{{ "No device data available for the selected filters."|t('smartlink-manager')|e('js') }}');
     {% endif %}
 
     // OS Breakdown Chart
     {% if platformStats|length %}
     var osCtx = document.getElementById('os-breakdown-chart');
     if (osCtx) {
+        resetChartState(osCtx);
         window.lrCreateChart('os-breakdown-chart', 'doughnut', {
             labels: {{ platformStats|keys|json_encode|raw }},
             datasets: [{
@@ -240,7 +283,10 @@ document.addEventListener('lr:panelChartsReady', function() {
             plugins: { legend: { position: 'bottom' } }
         });
     }
+    {% else %}
+    renderEmptyState('os-breakdown-chart', '{{ "No OS data available for the selected filters."|t('smartlink-manager')|e('js') }}');
     {% endif %}
 });
+})();
 </script>
 {% endif %}

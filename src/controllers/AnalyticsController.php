@@ -76,6 +76,7 @@ class AnalyticsController extends Controller
 
         // Pass settings to template
         $variables['settings'] = $settings;
+        $variables['pluginHandle'] = SmartLinkManager::$plugin->id;
 
         return $this->renderTemplate('smartlink-manager/analytics/index', $variables);
     }
@@ -307,7 +308,7 @@ class AnalyticsController extends Controller
 
         // Build filename parts
         $dateRangeLabel = $dateRange === 'all' ? 'alltime' : $dateRange;
-        $filenameParts = ['analytics', $dateRangeLabel];
+        $filenameParts = ['analytics'];
 
         // Add slug to filename if specific smart link
         if ($smartLinkId) {
@@ -316,7 +317,7 @@ class AnalyticsController extends Controller
                 ->one();
             if ($smartLink) {
                 $cleanSlug = preg_replace('/[^a-zA-Z0-9-_]/', '', $smartLink->slug);
-                array_unshift($filenameParts, $cleanSlug);
+                $filenameParts[] = $cleanSlug;
             }
         }
 
@@ -327,6 +328,8 @@ class AnalyticsController extends Controller
                 $filenameParts[] = strtolower(preg_replace('/[^a-zA-Z0-9-_]/', '', str_replace(' ', '-', $site->name)));
             }
         }
+
+        $filenameParts[] = $dateRangeLabel;
 
         // Build headers for CSV/Excel
         $headers = [
