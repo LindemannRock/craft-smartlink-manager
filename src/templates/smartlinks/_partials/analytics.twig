@@ -119,8 +119,8 @@
                                     {% set metadata = click.metadata ? click.metadata|json_decode : {} %}
                                     {% set clickType = metadata.clickType ?? 'redirect' %}
                                     <tr>
-                                        <td>{{ click.dateCreated|date('short') }}</td>
-                                        <td>{{ click.dateCreated|time('short') }}</td>
+                                        <td>{{ click.dateCreated|lrDate('short') }}</td>
+                                        <td>{{ click.dateCreated|lrTime('short') }}</td>
                                         <td>
                                             {% if click.siteId %}
                                                 {% set site = craft.app.sites.getSiteById(click.siteId) %}
