@@ -2,7 +2,7 @@
     "name": "lindemannrock/craft-smartlink-manager",
     "description": "Intelligent device detection and app store routing for Craft CMS",
     "type": "craft-plugin",
-    "version": "5.19.0",
+    "version": "5.20.0",
     "keywords": [
         "craft",
         "cms",
