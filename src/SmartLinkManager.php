@@ -119,15 +119,6 @@ class SmartLinkManager extends Plugin
         // Register project config event handlers
         $this->registerProjectConfigEventHandlers();
 
-        // Register translations
-        Craft::$app->i18n->translations['smartlink-manager'] = [
-            'class' => \craft\i18n\PhpMessageSource::class,
-            'sourceLanguage' => 'en',
-            'basePath' => __DIR__ . '/translations',
-            'forceTranslation' => true,
-            'allowOverrides' => true,
-        ];
-
         // Register template roots
         Event::on(
             View::class,
