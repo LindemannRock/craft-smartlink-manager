@@ -1,5 +1,23 @@
 # Changelog
 
+## [5.20.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.19.0...v5.20.0) (2026-02-05)
+
+
+### Features
+
+* **analytics:** enhance analytics functionality and UI ([571b50e](https://github.com/LindemannRock/craft-smartlink-manager/commit/571b50e7fbe1e0b4d0a83fe91f26fa85f4b96b40))
+
+
+### Bug Fixes
+
+* **SmartLinkManager:** update [@since](https://github.com/since) version in getCpSections method to 5.20.0 ([9914e5f](https://github.com/LindemannRock/craft-smartlink-manager/commit/9914e5f0008cbaaaa6910e1bc874921fa74fe889))
+
+
+### Miscellaneous Chores
+
+* **dependencies:** Remove matomo/device-detector from composer.json ([6c1d244](https://github.com/LindemannRock/craft-smartlink-manager/commit/6c1d24465999c5c2c7b48203d3ea7f9680fa26fb))
+* update package-lock.json and package.json for dependency management ([af7f66f](https://github.com/LindemannRock/craft-smartlink-manager/commit/af7f66f870ca8dcc0af628083cc36d78248121bf))
+
 ## [5.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.18.0...v5.19.0) (2026-01-26)
 
 
