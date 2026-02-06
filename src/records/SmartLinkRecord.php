@@ -16,32 +16,25 @@ use yii\db\ActiveQueryInterface;
  * Smart Link Record
  *
  * @property int $id
- * @property string $name
+ * @property string $title
  * @property string $slug
- * @property string|null $description
- * @property string|null $iosUrl
- * @property string|null $androidUrl
- * @property string|null $huaweiUrl
- * @property string|null $amazonUrl
- * @property string|null $windowsUrl
- * @property string|null $macUrl
- * @property string $fallbackUrl
  * @property bool $trackAnalytics
  * @property bool $qrCodeEnabled
- * @property int $qrCodeSize
+ * @property int|null $qrCodeSize
  * @property string|null $qrCodeColor
  * @property string|null $qrCodeBgColor
- * @property array|null $languageDetection
- * @property array|null $localizedUrls
+ * @property string|null $qrCodeEyeColor
+ * @property string|null $qrCodeFormat
+ * @property int|null $qrLogoId
+ * @property bool $hideTitle
+ * @property bool|null $languageDetection
  * @property string|null $metadata
- * @property string|null $title
  * @property int|null $authorId
  * @property string|null $postDate
  * @property string|null $dateExpired
- * @property bool $hideTitle
- * @property string|null $qrCodeFormat
- * @property string|null $qrCodeEyeColor
- * @property int|null $qrLogoId
+ * @property string $dateCreated
+ * @property string $dateUpdated
+ * @property string $uid
  * @property Element $element
  * @since 1.0.0
  */

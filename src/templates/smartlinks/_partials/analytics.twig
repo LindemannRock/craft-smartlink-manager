@@ -246,7 +246,9 @@ document.addEventListener('lr:panelChartsReady', function() {
         emptyMsg.className = 'zilch';
         emptyMsg.style.padding = '48px 24px';
         emptyMsg.style.textAlign = 'center';
-        emptyMsg.innerHTML = '<p>' + message + '</p>';
+        var p = document.createElement('p');
+        p.textContent = message;
+        emptyMsg.appendChild(p);
         parent.appendChild(emptyMsg);
     }
 

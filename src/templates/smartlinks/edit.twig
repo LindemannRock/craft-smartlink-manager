@@ -894,9 +894,9 @@
     $('#copy-url-btn').on('click', function() {
         const urlInput = document.getElementById('smartlink-url');
         if (urlInput) {
-            urlInput.select();
-            document.execCommand('copy');
-            Craft.cp.displayNotice('{{ "URL copied to clipboard"|t('smartlink-manager')|e('js') }}');
+            navigator.clipboard.writeText(urlInput.value).then(function() {
+                Craft.cp.displayNotice('{{ "URL copied to clipboard"|t('smartlink-manager')|e('js') }}');
+            });
         }
     });
 

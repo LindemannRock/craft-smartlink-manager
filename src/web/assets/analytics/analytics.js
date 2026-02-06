@@ -54,14 +54,16 @@
             emptyMsg.className = 'zilch';
             emptyMsg.style.padding = '48px 24px';
             emptyMsg.style.textAlign = 'center';
-            emptyMsg.innerHTML = '<p>' + message + '</p>';
+            const p = document.createElement('p');
+            p.textContent = message;
+            emptyMsg.appendChild(p);
             parent.appendChild(emptyMsg);
         }
 
         function setPeakInfo(text) {
             const el = document.getElementById('peak-hour-info');
             if (el) {
-                el.innerHTML = text || '';
+                el.textContent = text || '';
             }
         }
 

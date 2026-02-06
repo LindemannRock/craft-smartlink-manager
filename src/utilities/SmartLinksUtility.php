@@ -11,6 +11,7 @@ namespace lindemannrock\smartlinkmanager\utilities;
 use Craft;
 use craft\base\Utility;
 use craft\db\Query;
+use lindemannrock\base\helpers\DbHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 
@@ -70,24 +71,24 @@ class SmartLinksUtility extends Utility
         // Get QR code stats
         $qrScans = (int) (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
-            ->where("JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.source')) = 'qr'")
+            ->where([DbHelper::jsonExtract('metadata', 'source') => 'qr'])
             ->count();
 
         // Get auto redirects (clickType = redirect)
         $autoRedirects = (int) (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
-            ->where("JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.clickType')) = 'redirect'")
+            ->where([DbHelper::jsonExtract('metadata', 'clickType') => 'redirect'])
             ->count();
 
         // Get button clicks (clickType = button)
         $buttonClicks = (int) (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
-            ->where("JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.clickType')) = 'button'")
+            ->where([DbHelper::jsonExtract('metadata', 'clickType') => 'button'])
             ->count();
 
         // Get platform breakdown from JSON metadata
         $platformStats = (new Query())
-            ->select(["JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.platform')) as platform", 'COUNT(*) as count'])
+            ->select([DbHelper::jsonExtract('metadata', 'platform') . ' as platform', 'COUNT(*) as count'])
             ->from('{{%smartlinkmanager_analytics}}')
             ->groupBy('platform')
             ->orderBy(['count' => SORT_DESC])
@@ -95,7 +96,7 @@ class SmartLinksUtility extends Utility
 
         // Get click type breakdown from JSON metadata
         $clickTypes = (new Query())
-            ->select(["JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.clickType')) as clickType", 'COUNT(*) as count'])
+            ->select([DbHelper::jsonExtract('metadata', 'clickType') . ' as clickType', 'COUNT(*) as count'])
             ->from('{{%smartlinkmanager_analytics}}')
             ->groupBy('clickType')
             ->all();

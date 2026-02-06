@@ -134,7 +134,7 @@ class Install extends Migration
             ]);
 
             // Create indexes for performance
-            $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['linkId']);
+            $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['linkId', 'dateCreated']);
             $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['siteId']);
             $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['deviceType']);
             $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['country']);

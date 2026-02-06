@@ -21,6 +21,7 @@ use craft\helpers\Html;
 use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
 use craft\validators\UniqueValidator;
+use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\db\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\records\SmartLinkContentRecord;
@@ -182,6 +183,16 @@ class SmartLink extends Element
      * @var int|null Total clicks (cached value)
      */
     private ?int $_clicks = null;
+
+    /**
+     * @var User|false|null Cached author (false = looked up but null)
+     */
+    private User|false|null $_author = null;
+
+    /**
+     * @var \craft\elements\Asset|false|null Cached image (false = looked up but null)
+     */
+    private \craft\elements\Asset|false|null $_image = null;
 
     // Public Methods
     // =========================================================================
@@ -543,14 +554,17 @@ class SmartLink extends Element
     }
     
     /**
-     * Set clicks value (for caching purposes)
+     * Set clicks value (for caching/pre-fetch purposes).
      *
-     * @param int $clicks
+     * Also called by Yii during element population from the SmartLinkQuery
+     * click count subquery.
+     *
+     * @param int|string $clicks
      * @since 1.0.0
      */
-    public function setClicks(int $clicks): void
+    public function setClicks(int|string $clicks): void
     {
-        $this->_clicks = $clicks;
+        $this->_clicks = (int) $clicks;
     }
 
     /**
@@ -561,10 +575,13 @@ class SmartLink extends Element
      */
     public function getAuthor(): ?User
     {
-        if ($this->authorId) {
-            return User::find()->id($this->authorId)->one();
+        if ($this->_author === null) {
+            $this->_author = $this->authorId
+                ? (User::find()->id($this->authorId)->one() ?? false)
+                : false;
         }
-        return null;
+
+        return $this->_author ?: null;
     }
     
     /**
@@ -575,10 +592,13 @@ class SmartLink extends Element
      */
     public function getImage(): ?\craft\elements\Asset
     {
-        if ($this->imageId) {
-            return \craft\elements\Asset::find()->id($this->imageId)->one();
+        if ($this->_image === null) {
+            $this->_image = $this->imageId
+                ? (\craft\elements\Asset::find()->id($this->imageId)->one() ?? false)
+                : false;
         }
-        return null;
+
+        return $this->_image ?: null;
     }
 
     /**
@@ -1107,17 +1127,17 @@ class SmartLink extends Element
                 return $count > 0 ? number_format($count) : '—';
             
             case 'postDate':
-                return $this->postDate ? Html::tag('span', $this->postDate->format('M j, Y'), [
-                    'title' => $this->postDate->format('D, M j, Y g:i A'),
+                return $this->postDate ? Html::tag('span', DateFormatHelper::formatDate($this->postDate, 'medium'), [
+                    'title' => DateFormatHelper::formatDatetime($this->postDate, 'long'),
                 ]) : '—';
-            
+
             case 'dateExpired':
                 if (!$this->dateExpired) {
                     return '—';
                 }
                 $isPast = $this->dateExpired < new \DateTime();
-                return Html::tag('span', $this->dateExpired->format('M j, Y'), [
-                    'title' => $this->dateExpired->format('D, M j, Y g:i A'),
+                return Html::tag('span', DateFormatHelper::formatDate($this->dateExpired, 'medium'), [
+                    'title' => DateFormatHelper::formatDatetime($this->dateExpired, 'long'),
                     'class' => $isPast ? 'error' : '',
                 ]);
         }
@@ -1359,7 +1379,7 @@ class SmartLink extends Element
             $record->qrCodeFormat = $this->qrCodeFormat;
             $record->qrCodeEyeColor = $this->qrCodeEyeColor;
             $record->qrLogoId = $this->qrLogoId;
-            $record->languageDetection = $this->languageDetection ? [] : null;
+            $record->languageDetection = $this->languageDetection;
             $record->metadata = $this->_metadata ? json_encode($this->_metadata) : null;
 
             $record->save(false);

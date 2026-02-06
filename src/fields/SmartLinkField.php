@@ -276,7 +276,7 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
 
         $html = '<div class="element small">';
         foreach ($smartLinks as $smartLink) {
-            $html .= '<div class="chip"><span class="label">' . $smartLink->name . '</span></div>';
+            $html .= '<div class="chip"><span class="label">' . htmlspecialchars($smartLink->title ?? '', ENT_QUOTES, 'UTF-8') . '</span></div>';
         }
 
         $total = $value->count();

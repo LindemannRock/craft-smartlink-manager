@@ -453,7 +453,7 @@ class SmartlinksController extends Controller
     public function actionGetDetails(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('accessPlugin-smartlink-manager');
+        $this->requirePermission('smartLinkManager:viewLinks');
 
         $smartLinkId = Craft::$app->getRequest()->getRequiredParam('id');
         $smartLink = SmartLinkManager::$plugin->smartLinks->getSmartLinkById($smartLinkId);
@@ -487,7 +487,7 @@ class SmartlinksController extends Controller
     public function actionGenerateQrCode(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('accessPlugin-smartlink-manager');
+        $this->requirePermission('smartLinkManager:editLinks');
 
         $smartLinkId = Craft::$app->getRequest()->getRequiredParam('id');
         $smartLink = SmartLinkManager::$plugin->smartLinks->getSmartLinkById($smartLinkId);

@@ -79,31 +79,6 @@ class SettingsController extends Controller
     }
 
     /**
-     * Debug settings loading
-     *
-     * @return Response
-     * @since 1.0.0
-     */
-    public function actionDebug(): Response
-    {
-        $this->requirePermission('smartLinkManager:manageSettings');
-
-        // Test database query directly
-        $row = (new \craft\db\Query())
-            ->from('{{%smartlinkmanager_settings}}')
-            ->where(['id' => 1])
-            ->one();
-
-        $settings = Settings::loadFromDatabase();
-
-        return $this->asJson([
-            'database_row' => $row,
-            'loaded_settings' => $settings->getAttributes(),
-            'settings_class' => get_class($settings),
-        ]);
-    }
-
-    /**
      * General settings
      *
      * @return Response
@@ -381,9 +356,6 @@ class SettingsController extends Controller
      */
     public function actionSave(): ?Response
     {
-        // Basic debug - write to file
-        file_put_contents('/tmp/smartlink-manager-debug.log', date('Y-m-d H:i:s') . " - Save action called\n", FILE_APPEND);
-
         $this->requirePostRequest();
 
         // Check permission first
@@ -485,12 +457,10 @@ class SettingsController extends Controller
             // Standard Craft way: Pass errors back to template
             Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Couldn\'t save settings.'));
 
-            // Re-render the template with errors
-            // Get the section from the request to render the correct template
-            $section = Craft::$app->getRequest()->getBodyParam('section', 'general');
-            $template = "smartlink-manager/settings/{$section}";
+            // Re-render the correct settings tab with errors
+            $section = $this->_validSettingsSection();
 
-            return $this->renderTemplate($template, [
+            return $this->renderTemplate("smartlink-manager/settings/$section", [
                 'settings' => $settings,
             ]);
         }
@@ -508,11 +478,10 @@ class SettingsController extends Controller
         } else {
             Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Couldn\'t save settings.'));
 
-            // Get the section to re-render the correct template with errors
-            $section = $this->request->getBodyParam('section', 'general');
-            $template = "smartlink-manager/settings/{$section}";
+            // Re-render the correct settings tab with errors
+            $section = $this->_validSettingsSection();
 
-            return $this->renderTemplate($template, [
+            return $this->renderTemplate("smartlink-manager/settings/$section", [
                 'settings' => $settings,
                 'readOnly' => $this->readOnly,
             ]);
@@ -532,11 +501,7 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
-
-        // Check admin permissions
-        if (!Craft::$app->getUser()->getIsAdmin()) {
-            throw new ForbiddenHttpException('User is not an admin');
-        }
+        $this->requirePermission('smartLinkManager:clearAnalytics');
 
         try {
             // Queue the cleanup job
@@ -818,14 +783,7 @@ class SettingsController extends Controller
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
-
-        // Require admin permission
-        if (!Craft::$app->getUser()->getIsAdmin()) {
-            return $this->asJson([
-                'success' => false,
-                'error' => Craft::t('smartlink-manager', 'Only administrators can clean up analytics data.'),
-            ]);
-        }
+        $this->requirePermission('smartLinkManager:manageSettings');
 
         try {
             $updated = SmartLinkManager::$plugin->analytics->cleanupPlatformValues();
@@ -840,5 +798,31 @@ class SettingsController extends Controller
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Get a validated settings section name from the request.
+     *
+     * Prevents path traversal by validating against known settings templates.
+     *
+     * @return string
+     */
+    private function _validSettingsSection(): string
+    {
+        $allowed = [
+            'general',
+            'analytics',
+            'qr-code',
+            'behavior',
+            'interface',
+            'export',
+            'cache',
+            'integrations',
+            'field-layout',
+        ];
+
+        $section = Craft::$app->getRequest()->getBodyParam('section', 'general');
+
+        return in_array($section, $allowed, true) ? $section : 'general';
     }
 }

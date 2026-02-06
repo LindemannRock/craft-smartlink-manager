@@ -16,7 +16,9 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
+use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\DateRangeHelper;
+use lindemannrock\base\helpers\DbHelper;
 use lindemannrock\base\helpers\GeoHelper;
 use lindemannrock\base\traits\GeoLookupTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -352,15 +354,12 @@ class AnalyticsService extends Component
      */
     public function getClicksData(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
     {
-        // Get Craft's timezone offset for MySQL CONVERT_TZ
-        $timezone = \Craft::$app->getTimeZone();
-        $dateTime = new \DateTime('now', new \DateTimeZone($timezone));
-        $offset = $dateTime->format('P'); // e.g., +03:00
+        $localDate = DateFormatHelper::localDateExpression('dateCreated');
 
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
-            ->select(["DATE(CONVERT_TZ(dateCreated, '+00:00', '{$offset}')) as date", 'COUNT(*) as count'])
-            ->groupBy(["DATE(CONVERT_TZ(dateCreated, '+00:00', '{$offset}'))"])
+            ->select(['date' => $localDate, 'COUNT(*) as count'])
+            ->groupBy($localDate)
             ->orderBy(['date' => SORT_ASC]);
 
         // Apply date range filter
@@ -662,13 +661,15 @@ class AnalyticsService extends Component
      */
     public function getHourlyAnalytics(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
     {
+        $localHour = DateFormatHelper::localHourExpression('dateCreated');
+
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
             ->select([
-                'HOUR(dateCreated) as hour',
+                'hour' => $localHour,
                 'COUNT(*) as clicks',
             ])
-            ->groupBy(['hour'])
+            ->groupBy($localHour)
             ->orderBy(['hour' => SORT_ASC]);
 
         // Apply date range filter
@@ -1203,14 +1204,19 @@ class AnalyticsService extends Component
         $settings = SmartLinkManager::$plugin->getSettings();
         $geoEnabled = $settings->enableGeoDetection ?? true;
 
+        // Pre-fetch all referenced SmartLinks in one query to avoid N+1
+        $linkIds = array_unique(array_column($results, 'linkId'));
+        $smartLinks = [];
+        if (!empty($linkIds)) {
+            foreach (SmartLink::find()->id($linkIds)->status(null)->all() as $link) {
+                $smartLinks[$link->id] = $link;
+            }
+        }
+
         // Format data for export
         $exportData = [];
         foreach ($results as $row) {
-            // Get the link
-            $smartLink = SmartLink::find()
-                ->id($row['linkId'])
-                ->status(null)
-                ->one();
+            $smartLink = $smartLinks[$row['linkId']] ?? null;
 
             if (!$smartLink) {
                 continue;
@@ -1312,211 +1318,6 @@ class AnalyticsService extends Component
     }
 
     /**
-     * Export analytics data
-     *
-     * @since 1.0.0
-     */
-    public function exportAnalytics(?int $smartLinkId, string $dateRange, string $format, ?int $siteId = null): string
-    {
-        $query = (new Query())
-            ->from('{{%smartlinkmanager_analytics}}')
-            ->select([
-                'dateCreated',
-                'linkId',
-                'siteId',
-                'deviceType',
-                'deviceBrand',
-                'deviceModel',
-                'osName',
-                'osVersion',
-                'browser',
-                'browserVersion',
-                'country',
-                'city',
-                'language',
-                'referrer',
-                'metadata',
-                'ip',
-                'userAgent',
-            ])
-            ->orderBy(['dateCreated' => SORT_DESC]);
-
-        // Apply date range filter
-        $this->applyDateRangeFilter($query, $dateRange);
-
-        // Filter by smart link if specified
-        if ($smartLinkId) {
-            $query->andWhere(['linkId' => $smartLinkId]);
-        }
-
-        // Filter by site if specified
-        if ($siteId) {
-            $query->andWhere(['siteId' => $siteId]);
-        }
-
-        $results = $query->all();
-
-        // Check if there's any data to export
-        if (empty($results)) {
-            throw new \Exception('No data to export for the selected period.');
-        }
-
-        // Get plugin name for CSV headers
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $displayName = $settings->getDisplayName();
-
-        // Check if geo detection is enabled
-        $geoEnabled = $settings->enableGeoDetection ?? true;
-
-        // Handle JSON format
-        if ($format === 'json') {
-            return $this->_exportAsJson($results, $geoEnabled);
-        }
-
-        // CSV format - conditionally include geo columns
-        if ($geoEnabled) {
-            $csv = "Date,Time,{$displayName} Title,{$displayName} Status,{$displayName} URL,Site,Type,Button,Source,Destination URL,Referrer,User Device Type,User Device Brand,User Device Model,User OS,User OS Version,User Browser,User Browser Version,User Country,User City,User Language,User Agent\n";
-        } else {
-            $csv = "Date,Time,{$displayName} Title,{$displayName} Status,{$displayName} URL,Site,Type,Button,Source,Destination URL,Referrer,User Device Type,User Device Brand,User Device Model,User OS,User OS Version,User Browser,User Browser Version,User Language,User Agent\n";
-        }
-
-        foreach ($results as $row) {
-            // Check settings to determine if we should include disabled/expired links
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $includeDisabled = $settings->includeDisabledInExport ?? false;
-            $includeExpired = $settings->includeExpiredInExport ?? false;
-
-            // Always get the link with all statuses to check if it exists and its status
-            // Don't filter by siteId here - just find the element by ID
-            $smartLink = SmartLink::find()
-                    ->id($row['linkId'])
-                    ->status(null)
-                    ->one();
-
-            if (!$smartLink) {
-                continue;
-            }
-
-            // Get the actual status
-            $status = $smartLink->getStatus();
-
-            // Skip based on settings
-            if (!$includeDisabled && $status === SmartLink::STATUS_DISABLED) {
-                continue;
-            }
-
-            if (!$includeExpired && $status === SmartLink::STATUS_EXPIRED) {
-                continue;
-            }
-
-            $linkName = $smartLink->title;
-            $linkStatus = match ($status) {
-                SmartLink::STATUS_ENABLED => 'Active',
-                    SmartLink::STATUS_DISABLED => 'Disabled',
-                    SmartLink::STATUS_PENDING => 'Pending',
-                    SmartLink::STATUS_EXPIRED => 'Expired',
-                    default => 'Unknown'
-            };
-            $linkUrl = '';
-
-            // Get site name and build the smart link URL
-            $siteName = '';
-            if (!empty($row['siteId'])) {
-                $site = Craft::$app->getSites()->getSiteById($row['siteId']);
-                $siteName = $site ? $site->name : '';
-                // Generate the URL for the specific site
-                $linkUrl = UrlHelper::siteUrl("go/{$smartLink->slug}", null, null, $row['siteId']);
-            }
-
-            $date = DateTimeHelper::toDateTime($row['dateCreated']);
-            $dateStr = $date ? $date->format('Y-m-d') : '';
-            $timeStr = $date ? $date->format('H:i:s') : '';
-
-            // Parse metadata
-            $metadata = $row['metadata'] ? Json::decode($row['metadata']) : [];
-            $source = $metadata['source'] ?? 'direct';
-            $clickType = $metadata['clickType'] ?? 'redirect';
-            $buttonPlatform = '';
-            $targetUrl = '';
-
-            // Get the URL that was used
-            if ($clickType === 'button') {
-                // For button clicks, show which button URL was clicked
-                $targetUrl = $metadata['buttonUrl'] ?? '';
-                if (isset($metadata['platform'])) {
-                    $buttonPlatform = ucfirst($metadata['platform']);
-                }
-            } else {
-                // For redirects, show which URL they were sent to (check both old and new formats)
-                $targetUrl = $metadata['redirectUrl'] ?? $metadata['buttonUrl'] ?? '';
-            }
-
-            // Keep the actual referrer URL
-            $referrerDisplay = $row['referrer'] ?? '';
-
-            // Convert source to display format
-            $sourceDisplay = match ($source) {
-                'qr' => 'QR',
-                    'landing' => 'Landing',
-                    default => 'Direct'
-            };
-
-            if ($geoEnabled) {
-                $csv .= sprintf(
-                        '"%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
-                        $dateStr,
-                        $timeStr,
-                        $linkName,
-                        $linkStatus,
-                        $linkUrl,
-                        $siteName,
-                        ucfirst($clickType),
-                        $buttonPlatform,
-                        $sourceDisplay,
-                        $targetUrl,
-                        $referrerDisplay,
-                        $row['deviceType'] ?? '',
-                        $row['deviceBrand'] ?? '',
-                        $row['deviceModel'] ?? '',
-                        $row['osName'] ?? '',
-                        $row['osVersion'] ?? '',
-                        $row['browser'] ?? '',
-                        $row['browserVersion'] ?? '',
-                        GeoHelper::getCountryName($row['country'] ?? ''),
-                        $row['city'] ?? '',
-                        $row['language'] ?? '',
-                        $row['userAgent'] ?? ''
-                    );
-            } else {
-                $csv .= sprintf(
-                        '"%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
-                        $dateStr,
-                        $timeStr,
-                        $linkName,
-                        $linkStatus,
-                        $linkUrl,
-                        $siteName,
-                        ucfirst($clickType),
-                        $buttonPlatform,
-                        $sourceDisplay,
-                        $targetUrl,
-                        $referrerDisplay,
-                        $row['deviceType'] ?? '',
-                        $row['deviceBrand'] ?? '',
-                        $row['deviceModel'] ?? '',
-                        $row['osName'] ?? '',
-                        $row['osVersion'] ?? '',
-                        $row['browser'] ?? '',
-                        $row['browserVersion'] ?? '',
-                        $row['language'] ?? '',
-                        $row['userAgent'] ?? ''
-                    );
-            }
-        }
-
-        return $csv;
-    }
-    /**
      * Get top smart links by clicks
      *
      * @param string $dateRange
@@ -1533,8 +1334,8 @@ class AnalyticsService extends Component
                 'a.siteId',
                 'COUNT(*) as clicks',
                 'MAX(a.dateCreated) as lastClick',
-                'SUM(CASE WHEN JSON_EXTRACT(a.metadata, \'$.source\') = \'qr\' THEN 1 ELSE 0 END) as qrScans',
-                'SUM(CASE WHEN JSON_EXTRACT(a.metadata, \'$.source\') != \'qr\' OR JSON_EXTRACT(a.metadata, \'$.source\') IS NULL THEN 1 ELSE 0 END) as directVisits',
+                'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' = \'qr\' THEN 1 ELSE 0 END) as qrScans',
+                'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' != \'qr\' OR ' . DbHelper::jsonExtract('a.metadata', 'source') . ' IS NULL THEN 1 ELSE 0 END) as directVisits',
             ])
             ->groupBy(['a.linkId', 'a.siteId'])
             ->orderBy(['clicks' => SORT_DESC])
@@ -1551,12 +1352,17 @@ class AnalyticsService extends Component
         $results = $query->all();
         $topLinks = [];
 
+        // Pre-fetch all referenced SmartLinks in one query to avoid N+1
+        $linkIds = array_unique(array_column($results, 'linkId'));
+        $smartLinksMap = [];
+        if (!empty($linkIds)) {
+            foreach (SmartLink::find()->id($linkIds)->status(null)->all() as $link) {
+                $smartLinksMap[$link->id] = $link;
+            }
+        }
+
         foreach ($results as $row) {
-            $smartLink = SmartLink::find()
-                ->id($row['linkId'])
-                ->siteId($row['siteId'])
-                ->status(null)
-                ->one();
+            $smartLink = $smartLinksMap[$row['linkId']] ?? null;
 
             if ($smartLink && $smartLink->getStatus() === SmartLink::STATUS_ENABLED) { // Only include active links
                 // Get the last interaction details
@@ -1926,11 +1732,11 @@ class AnalyticsService extends Component
 
         // Date range filter
         if (isset($criteria['from'])) {
-            $query->andWhere(['>=', 'timestamp', Db::prepareDateForDb($criteria['from'])]);
+            $query->andWhere(['>=', 'dateCreated', Db::prepareDateForDb($criteria['from'])]);
         }
 
         if (isset($criteria['to'])) {
-            $query->andWhere(['<=', 'timestamp', Db::prepareDateForDb($criteria['to'])]);
+            $query->andWhere(['<=', 'dateCreated', Db::prepareDateForDb($criteria['to'])]);
         }
 
         // OS filter (replacing platform)
@@ -1943,18 +1749,19 @@ class AnalyticsService extends Component
 
         // Get device breakdown
         $devices = (clone $query)
-            ->select(['devicePlatform', 'COUNT(*) as count'])
-            ->groupBy(['devicePlatform'])
-            ->indexBy('devicePlatform')
+            ->select(['deviceType', 'COUNT(*) as count'])
+            ->groupBy(['deviceType'])
+            ->indexBy('deviceType')
             ->column();
 
         // Get daily breakdown for last 30 days
         $daily = [];
         if (!isset($criteria['skipDaily']) || !$criteria['skipDaily']) {
+            $thirtyDaysAgo = (new \DateTime())->modify('-30 days');
             $dailyQuery = (clone $query)
-                ->select(['DATE(timestamp) as date', 'COUNT(*) as count'])
-                ->andWhere(['>=', 'timestamp', DateTimeHelper::currentTimeStamp() - (30 * 24 * 60 * 60)])
-                ->groupBy(['DATE(timestamp)'])
+                ->select(['DATE(dateCreated) as date', 'COUNT(*) as count'])
+                ->andWhere(['>=', 'dateCreated', Db::prepareDateForDb($thirtyDaysAgo)])
+                ->groupBy(['DATE(dateCreated)'])
                 ->orderBy(['date' => SORT_ASC]);
 
             foreach ($dailyQuery->all() as $row) {
@@ -2009,7 +1816,8 @@ class AnalyticsService extends Component
         // Apply period filter
         $seconds = $this->_periodToSeconds($period);
         if ($seconds > 0) {
-            $query->andWhere(['>=', 'timestamp', DateTimeHelper::currentTimeStamp() - $seconds]);
+            $cutoff = (new \DateTime())->modify("-{$seconds} seconds");
+            $query->andWhere(['>=', 'dateCreated', Db::prepareDateForDb($cutoff)]);
         }
 
         // Get stats
@@ -2019,9 +1827,9 @@ class AnalyticsService extends Component
             $stats[$linkId] = [
                 'total' => (int)$linkQuery->count(),
                 'devices' => $linkQuery
-                    ->select(['devicePlatform', 'COUNT(*) as count'])
-                    ->groupBy(['devicePlatform'])
-                    ->indexBy('devicePlatform')
+                    ->select(['deviceType', 'COUNT(*) as count'])
+                    ->groupBy(['deviceType'])
+                    ->indexBy('deviceType')
                     ->column(),
             ];
         }
@@ -2040,22 +1848,6 @@ class AnalyticsService extends Component
     {
         return Craft::$app->db->createCommand()
             ->delete('{{%smartlinkmanager_analytics}}', ['linkId' => $smartLink->id])
-            ->execute();
-    }
-
-    /**
-     * Clean old analytics data
-     *
-     * @param int $days
-     * @return int Number of records deleted
-     * @since 1.0.0
-     */
-    public function cleanOldAnalytics(int $days): int
-    {
-        $cutoffDate = DateTimeHelper::currentTimeStamp() - ($days * 24 * 60 * 60);
-
-        return Craft::$app->db->createCommand()
-            ->delete('{{%smartlinkmanager_analytics}}', ['<', 'timestamp', $cutoffDate])
             ->execute();
     }
 
@@ -2390,116 +2182,5 @@ class AnalyticsService extends Component
         }
 
         return $updated;
-    }
-
-    /**
-     * Export analytics data as JSON
-     *
-     * @param array $results Raw query results
-     * @param bool $geoEnabled Whether geo detection is enabled
-     * @return string JSON string
-     */
-    private function _exportAsJson(array $results, bool $geoEnabled): string
-    {
-        $data = [];
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $includeDisabled = $settings->includeDisabledInExport ?? false;
-        $includeExpired = $settings->includeExpiredInExport ?? false;
-
-        foreach ($results as $row) {
-            // Get the link
-            $smartLink = SmartLink::find()
-                ->id($row['linkId'])
-                ->status(null)
-                ->one();
-
-            if (!$smartLink) {
-                continue;
-            }
-
-            // Get the actual status
-            $status = $smartLink->getStatus();
-
-            // Skip based on settings
-            if (!$includeDisabled && $status === SmartLink::STATUS_DISABLED) {
-                continue;
-            }
-
-            if (!$includeExpired && $status === SmartLink::STATUS_EXPIRED) {
-                continue;
-            }
-
-            $date = DateTimeHelper::toDateTime($row['dateCreated']);
-
-            // Get site name
-            $siteName = null;
-            if (!empty($row['siteId'])) {
-                $site = Craft::$app->getSites()->getSiteById($row['siteId']);
-                $siteName = $site ? $site->name : null;
-            }
-
-            // Parse metadata
-            $metadata = $row['metadata'] ? Json::decode($row['metadata']) : [];
-            $source = $metadata['source'] ?? 'direct';
-            $clickType = $metadata['clickType'] ?? 'redirect';
-            $buttonPlatform = $metadata['platform'] ?? null;
-            $targetUrl = '';
-
-            if ($clickType === 'button') {
-                $targetUrl = $metadata['buttonUrl'] ?? '';
-            } else {
-                $targetUrl = $metadata['redirectUrl'] ?? $metadata['buttonUrl'] ?? '';
-            }
-
-            $item = [
-                'date' => $date ? $date->format('Y-m-d') : null,
-                'time' => $date ? $date->format('H:i:s') : null,
-                'datetime' => $date ? $date->format('c') : null,
-                'smartLink' => [
-                    'id' => $smartLink->id,
-                    'title' => $smartLink->title,
-                    'slug' => $smartLink->slug,
-                    'status' => $status,
-                ],
-                'siteId' => $row['siteId'] ? (int)$row['siteId'] : null,
-                'siteName' => $siteName,
-                'type' => $clickType,
-                'buttonPlatform' => $buttonPlatform,
-                'source' => $source,
-                'destinationUrl' => $targetUrl,
-                'referrer' => $row['referrer'] ?? null,
-                'device' => [
-                    'type' => $row['deviceType'] ?? null,
-                    'brand' => $row['deviceBrand'] ?? null,
-                    'model' => $row['deviceModel'] ?? null,
-                ],
-                'os' => [
-                    'name' => $row['osName'] ?? null,
-                    'version' => $row['osVersion'] ?? null,
-                ],
-                'browser' => [
-                    'name' => $row['browser'] ?? null,
-                    'version' => $row['browserVersion'] ?? null,
-                ],
-                'language' => $row['language'] ?? null,
-                'userAgent' => $row['userAgent'] ?? null,
-            ];
-
-            // Add geo data if enabled
-            if ($geoEnabled) {
-                $item['location'] = [
-                    'country' => $row['country'] ?? null,
-                    'city' => $row['city'] ?? null,
-                ];
-            }
-
-            $data[] = $item;
-        }
-
-        return json_encode([
-            'exported' => date('c'),
-            'count' => count($data),
-            'data' => $data,
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 }

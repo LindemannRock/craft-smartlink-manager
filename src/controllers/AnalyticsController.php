@@ -174,6 +174,7 @@ class AnalyticsController extends Controller
      */
     public function actionGetAnalyticsData(): Response
     {
+        $this->requirePostRequest();
         $this->requireLogin();
         $this->requirePermission('smartLinkManager:viewAnalytics');
         $this->requireAcceptsJson();
