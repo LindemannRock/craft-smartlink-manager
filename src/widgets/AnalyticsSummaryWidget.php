@@ -47,6 +47,15 @@ class AnalyticsSummaryWidget extends Widget
     /**
      * @inheritdoc
      */
+    public static function isSelectable(): bool
+    {
+        return parent::isSelectable() &&
+            Craft::$app->getUser()->checkPermission('smartLinkManager:viewAnalytics');
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function icon(): ?string
     {
         return '@app/icons/chart-line.svg';
@@ -101,6 +110,11 @@ class AnalyticsSummaryWidget extends Widget
      */
     public function getBodyHtml(): ?string
     {
+        // Check permission
+        if (!Craft::$app->getUser()->checkPermission('smartLinkManager:viewAnalytics')) {
+            return '<p class="light">' . Craft::t('smartlink-manager', 'You don\u2019t have permission to view analytics.') . '</p>';
+        }
+
         // Check if analytics are enabled
         if (!SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
             return '<p class="light">' . Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.') . '</p>';

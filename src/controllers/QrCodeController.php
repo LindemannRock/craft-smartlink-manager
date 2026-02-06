@@ -168,8 +168,9 @@ class QrCodeController extends Controller
         $url = $request->getQueryParam('url');
         
         if ($isPreview && $url) {
-            // Preview mode - generate QR code for any URL (requires login)
+            // Preview mode - generate QR code for any URL (requires login and edit permission)
             $this->requireLogin();
+            $this->requirePermission('smartLinkManager:editLinks');
             $fullUrl = $url;
             $smartLink = null;
         } else {
@@ -289,6 +290,8 @@ class QrCodeController extends Controller
                     '{size}' => $options['size'] ?? $settings->defaultQrSize,
                     '{format}' => $format,
                 ]);
+                // Sanitize filename to prevent header injection
+                $filename = preg_replace('/[^a-zA-Z0-9_\-.]/', '-', $filename);
                 $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '.' . $format . '"');
             }
             

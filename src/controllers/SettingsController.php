@@ -9,7 +9,6 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
-use craft\helpers\Json;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -369,20 +368,6 @@ class SettingsController extends Controller
 
         $settingsData = Craft::$app->getRequest()->getBodyParam('settings');
 
-        // Debug: Log what we received
-        $this->logDebug('Settings data received', ['settingsData' => $settingsData]);
-
-        // Debug: Specifically check imageVolumeUid
-        if (isset($settingsData['imageVolumeUid'])) {
-            $this->logDebug('imageVolumeUid debug', [
-                'type' => gettype($settingsData['imageVolumeUid']),
-                'value' => $settingsData['imageVolumeUid'],
-            ]);
-        }
-
-        // Debug: Log all POST data
-        $this->logDebug('All POST data', ['bodyParams' => Craft::$app->getRequest()->getBodyParams()]);
-
         // Handle enabledSites checkbox group
         if (isset($settingsData['enabledSites'])) {
             if (is_array($settingsData['enabledSites'])) {
@@ -512,9 +497,12 @@ class SettingsController extends Controller
                 'message' => Craft::t('smartlink-manager', 'Analytics cleanup job has been queued. It will run in the background.'),
             ]);
         } catch (\Exception $e) {
+            $this->logError($e->getMessage());
             return $this->asJson([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
             ]);
         }
     }
@@ -574,9 +562,12 @@ class SettingsController extends Controller
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
+            $this->logError($e->getMessage());
             return $this->asJson([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
             ]);
         }
     }
@@ -636,9 +627,12 @@ class SettingsController extends Controller
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
+            $this->logError($e->getMessage());
             return $this->asJson([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
             ]);
         }
     }
@@ -718,9 +712,12 @@ class SettingsController extends Controller
                 'message' => $message,
             ]);
         } catch (\Exception $e) {
+            $this->logError($e->getMessage());
             return $this->asJson([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
             ]);
         }
     }
@@ -748,54 +745,22 @@ class SettingsController extends Controller
                 ->delete('{{%smartlinkmanager_analytics}}')
                 ->execute();
 
-            // Reset click counts in metadata on all smart links
-            $smartLinks = SmartLink::find()->all();
-            foreach ($smartLinks as $smartLink) {
-                $metadata = $smartLink->metadata ?? [];
-                $metadata['clicks'] = 0;
-                $metadata['lastClick'] = null;
-                Craft::$app->db->createCommand()
-                    ->update('{{%smartlinkmanager}}', [
-                        'metadata' => Json::encode($metadata),
-                    ], ['id' => $smartLink->id])
-                    ->execute();
-            }
+            // Reset hit counts on all links
+            Craft::$app->db->createCommand()
+                ->update('{{%smartlinkmanager}}', ['hits' => 0])
+                ->execute();
 
             return $this->asJson([
                 'success' => true,
                 'message' => Craft::t('smartlink-manager', 'Cleared {count} analytics records and reset all click counts.', ['count' => $count]),
             ]);
         } catch (\Exception $e) {
+            $this->logError($e->getMessage());
             return $this->asJson([
                 'success' => false,
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    /**
-     * Clean up invalid platform values in analytics data
-     *
-     * @return Response
-     * @since 1.18.0
-     */
-    public function actionCleanupPlatformValues(): Response
-    {
-        $this->requirePostRequest();
-        $this->requireAcceptsJson();
-        $this->requirePermission('smartLinkManager:manageSettings');
-
-        try {
-            $updated = SmartLinkManager::$plugin->analytics->cleanupPlatformValues();
-
-            return $this->asJson([
-                'success' => true,
-                'message' => Craft::t('smartlink-manager', 'Cleaned up {count} analytics records with invalid platform values.', ['count' => $updated]),
-            ]);
-        } catch (\Exception $e) {
-            return $this->asJson([
-                'success' => false,
-                'error' => $e->getMessage(),
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
             ]);
         }
     }

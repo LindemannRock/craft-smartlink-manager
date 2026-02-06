@@ -66,17 +66,27 @@ class SmartlinksController extends Controller
         $siteHandle = $this->request->getParam('site');
         $currentSite = $siteHandle
             ? Craft::$app->getSites()->getSiteByHandle($siteHandle)
-            : Craft::$app->getSites()->getCurrentSite();
+            : null;
 
-        // If current site is not enabled, redirect to first enabled site
-        if (!$settings->isSiteEnabled($currentSite->id)) {
-            $enabledSiteIds = $settings->getEnabledSiteIds();
-            if (!empty($enabledSiteIds)) {
-                $firstEnabledSite = Craft::$app->getSites()->getSiteById($enabledSiteIds[0]);
-                if ($firstEnabledSite) {
-                    return $this->redirect('smartlink-manager?site=' . $firstEnabledSite->handle);
-                }
+        // Fallback to current site if handle is invalid
+        if (!$currentSite) {
+            $currentSite = Craft::$app->getSites()->getCurrentSite();
+        }
+
+        // If current site is not enabled or user can't edit it, redirect to first accessible site
+        $enabledSites = SmartLinkManager::$plugin->getEnabledSites();
+        $enabledSiteIds = array_map(fn($s) => $s->id, $enabledSites);
+
+        if (!in_array($currentSite->id, $enabledSiteIds)) {
+            $firstSite = reset($enabledSites);
+            if ($firstSite) {
+                return $this->redirect('smartlink-manager?site=' . $firstSite->handle);
             }
+        }
+
+        // Enforce site edit permission (multi-site only)
+        if (Craft::$app->getIsMultiSite()) {
+            $this->requirePermission('editSite:' . $currentSite->uid);
         }
 
         return $this->renderTemplate('smartlink-manager/smartlinks/index');
@@ -100,11 +110,11 @@ class SmartlinksController extends Controller
         ];
 
         // Get the site
-        $site = Craft::$app->getRequest()->getQueryParam('site');
-        if ($site) {
-            $site = is_numeric($site) ? Craft::$app->getSites()->getSiteById($site) : Craft::$app->getSites()->getSiteByHandle($site);
+        $siteParam = Craft::$app->getRequest()->getQueryParam('site');
+        if ($siteParam) {
+            $site = is_numeric($siteParam) ? Craft::$app->getSites()->getSiteById($siteParam) : Craft::$app->getSites()->getSiteByHandle($siteParam);
             if (!$site) {
-                throw new \yii\web\BadRequestHttpException('Invalid site handle: ' . $site);
+                throw new \yii\web\BadRequestHttpException('Invalid site.');
             }
         } else {
             $site = Craft::$app->getSites()->getCurrentSite();
@@ -114,6 +124,11 @@ class SmartlinksController extends Controller
         $settings = SmartLinkManager::getInstance()->getSettings();
         if (!$settings->isSiteEnabled($site->id)) {
             throw new \yii\web\ForbiddenHttpException('SmartLink Manager is not enabled for this site.');
+        }
+
+        // Enforce site edit permission (multi-site only)
+        if (Craft::$app->getIsMultiSite()) {
+            $this->requirePermission('editSite:' . $site->uid);
         }
 
         // Get the smart link
@@ -203,7 +218,24 @@ class SmartlinksController extends Controller
 
 
             $smartLinkId = $request->getBodyParam('smartLinkId');
-            $siteId = $request->getBodyParam('siteId');
+            $siteId = (int)($request->getBodyParam('siteId') ?: Craft::$app->getSites()->getPrimarySite()->id);
+
+            // Validate site exists
+            $site = Craft::$app->getSites()->getSiteById($siteId);
+            if (!$site) {
+                throw new \yii\web\BadRequestHttpException('Invalid site ID.');
+            }
+
+            // Validate site is enabled for this plugin
+            $settings = SmartLinkManager::$plugin->getSettings();
+            if (!$settings->isSiteEnabled($siteId)) {
+                throw new \yii\web\ForbiddenHttpException('SmartLink Manager is not enabled for this site.');
+            }
+
+            // Enforce site edit permission (multi-site only)
+            if (Craft::$app->getIsMultiSite()) {
+                $this->requirePermission('editSite:' . $site->uid);
+            }
 
             // Get the smart link
             if ($smartLinkId) {
@@ -217,7 +249,7 @@ class SmartlinksController extends Controller
             } else {
                 $this->requirePermission('smartLinkManager:createLinks');
                 $smartLink = new SmartLink();
-                $smartLink->siteId = $siteId ?? Craft::$app->getSites()->getPrimarySite()->id;
+                $smartLink->siteId = $siteId;
             }
 
             // Set non-translatable attributes (main table)
@@ -339,7 +371,10 @@ class SmartlinksController extends Controller
             $this->logError('Smart link save error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
 
             // Return error response
-            Craft::$app->getSession()->setError('Error saving smart link: ' . $e->getMessage());
+            $errorMsg = Craft::$app->getConfig()->getGeneral()->devMode
+                ? Craft::t('smartlink-manager', 'Error saving smart link: {error}', ['error' => $e->getMessage()])
+                : Craft::t('smartlink-manager', 'Could not save smart link.');
+            Craft::$app->getSession()->setError($errorMsg);
 
             $plugin = SmartLinkManager::getInstance();
 
@@ -368,6 +403,14 @@ class SmartlinksController extends Controller
 
         if (!$smartLink) {
             throw new \yii\web\NotFoundHttpException('Smart link not found');
+        }
+
+        // Enforce site edit permission (multi-site only)
+        if (Craft::$app->getIsMultiSite()) {
+            $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+            if ($site) {
+                $this->requirePermission('editSite:' . $site->uid);
+            }
         }
 
         if (!SmartLinkManager::$plugin->smartLinks->deleteSmartLink($smartLink)) {
@@ -403,6 +446,14 @@ class SmartlinksController extends Controller
             throw new \yii\web\NotFoundHttpException('Smart link not found');
         }
 
+        // Enforce site edit permission (multi-site only)
+        if (Craft::$app->getIsMultiSite()) {
+            $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+            if ($site) {
+                $this->requirePermission('editSite:' . $site->uid);
+            }
+        }
+
         // Restore the element
         if (!Craft::$app->elements->restoreElement($smartLink)) {
             return $this->asFailure(Craft::t('smartlink-manager', 'Couldn\'t restore smart link.'));
@@ -434,6 +485,14 @@ class SmartlinksController extends Controller
 
         if (!$smartLink) {
             throw new \yii\web\NotFoundHttpException('Smart link not found');
+        }
+
+        // Enforce site edit permission (multi-site only)
+        if (Craft::$app->getIsMultiSite()) {
+            $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+            if ($site) {
+                $this->requirePermission('editSite:' . $site->uid);
+            }
         }
 
         // Permanently delete the element
@@ -509,7 +568,12 @@ class SmartlinksController extends Controller
                 'qrCode' => $qrCodeDataUrl,
             ]);
         } catch (\Exception $e) {
-            return $this->asFailure($e->getMessage());
+            $this->logError('QR code generation failed', ['error' => $e->getMessage()]);
+            return $this->asFailure(
+                Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'Failed to generate QR code.')
+            );
         }
     }
 
@@ -525,11 +589,11 @@ class SmartlinksController extends Controller
         $this->requirePermission('smartLinkManager:viewLinks');
 
         // Get the site
-        $site = Craft::$app->getRequest()->getQueryParam('site');
-        if ($site) {
-            $site = is_numeric($site) ? Craft::$app->getSites()->getSiteById($site) : Craft::$app->getSites()->getSiteByHandle($site);
+        $siteParam = Craft::$app->getRequest()->getQueryParam('site');
+        if ($siteParam) {
+            $site = is_numeric($siteParam) ? Craft::$app->getSites()->getSiteById($siteParam) : Craft::$app->getSites()->getSiteByHandle($siteParam);
             if (!$site) {
-                throw new \yii\web\BadRequestHttpException('Invalid site handle: ' . $site);
+                throw new \yii\web\BadRequestHttpException('Invalid site.');
             }
         } else {
             $site = Craft::$app->getSites()->getCurrentSite();

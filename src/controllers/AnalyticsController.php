@@ -62,18 +62,17 @@ class AnalyticsController extends Controller
         $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
+        $resolvedSiteId = $this->_resolveSiteId($siteId);
 
         $variables['dateRange'] = $dateRange;
         $variables['siteId'] = $siteId;
 
-        // Get enabled sites for site selector (respects enabledSites setting)
+        // Get enabled sites for site selector (respects enabledSites + user permissions)
         $settings = SmartLinkManager::$plugin->getSettings();
-        $enabledSiteIds = $settings->getEnabledSiteIds();
-        $allSites = Craft::$app->getSites()->getAllSites();
-        $variables['sites'] = array_filter($allSites, fn($site) => in_array($site->id, $enabledSiteIds));
+        $variables['sites'] = SmartLinkManager::$plugin->getEnabledSites();
 
-        // Get analytics data
-        $variables['analyticsData'] = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, null, $siteId);
+        // Get analytics data (scoped to user's allowed sites)
+        $variables['analyticsData'] = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, null, $resolvedSiteId);
 
         // Pass settings to template
         $variables['settings'] = $settings;
@@ -109,9 +108,7 @@ class AnalyticsController extends Controller
         $type = $request->getParam('type', 'summary');
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
-
-        // Log the request for debugging
-        $this->logInfo('Analytics getData called', ['type' => $type, 'dateRange' => $dateRange, 'smartLinkId' => $smartLinkId ?? null, 'siteId' => $siteId]);
+        $resolvedSiteId = $this->_resolveSiteId($siteId);
 
         // If requesting data for a specific SmartLink, check if it has analytics enabled
         if ($smartLinkId) {
@@ -137,20 +134,20 @@ class AnalyticsController extends Controller
 
         try {
             $data = match ($type) {
-                'clicks' => SmartLinkManager::$plugin->analytics->getClicksData($smartLinkId, $dateRange, $siteId),
-                'devices' => SmartLinkManager::$plugin->analytics->getDeviceBreakdown($smartLinkId, $dateRange, $siteId),
-                'device-types' => SmartLinkManager::$plugin->analytics->getDeviceTypeBreakdown($smartLinkId, $dateRange, $siteId),
-                'device-brands' => SmartLinkManager::$plugin->analytics->getDeviceBrandBreakdown($smartLinkId, $dateRange, $siteId),
-                'platforms' => SmartLinkManager::$plugin->analytics->getPlatformBreakdown($smartLinkId, $dateRange, $siteId),
-                'os-breakdown' => SmartLinkManager::$plugin->analytics->getOsBreakdown($smartLinkId, $dateRange, $siteId),
-                'browsers' => SmartLinkManager::$plugin->analytics->getBrowserBreakdown($smartLinkId, $dateRange, $siteId),
-                'countries' => SmartLinkManager::$plugin->analytics->getTopCountries($smartLinkId, $dateRange, 15, $siteId),
-                'all-countries' => SmartLinkManager::$plugin->analytics->getAllCountries($smartLinkId, $dateRange, $siteId),
-                'all-cities' => SmartLinkManager::$plugin->analytics->getTopCities($smartLinkId, $dateRange, 50, $siteId),
-                'languages' => SmartLinkManager::$plugin->analytics->getLanguageBreakdown($smartLinkId, $dateRange, $siteId),
-                'hourly' => SmartLinkManager::$plugin->analytics->getHourlyAnalytics($smartLinkId, $dateRange, $siteId),
-                'insights' => SmartLinkManager::$plugin->analytics->getInsights($dateRange, $siteId),
-                default => SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, $smartLinkId, $siteId),
+                'clicks' => SmartLinkManager::$plugin->analytics->getClicksData($smartLinkId, $dateRange, $resolvedSiteId),
+                'devices' => SmartLinkManager::$plugin->analytics->getDeviceBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'device-types' => SmartLinkManager::$plugin->analytics->getDeviceTypeBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'device-brands' => SmartLinkManager::$plugin->analytics->getDeviceBrandBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'platforms' => SmartLinkManager::$plugin->analytics->getPlatformBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'os-breakdown' => SmartLinkManager::$plugin->analytics->getOsBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'browsers' => SmartLinkManager::$plugin->analytics->getBrowserBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'countries' => SmartLinkManager::$plugin->analytics->getTopCountries($smartLinkId, $dateRange, 15, $resolvedSiteId),
+                'all-countries' => SmartLinkManager::$plugin->analytics->getAllCountries($smartLinkId, $dateRange, $resolvedSiteId),
+                'all-cities' => SmartLinkManager::$plugin->analytics->getTopCities($smartLinkId, $dateRange, 50, $resolvedSiteId),
+                'languages' => SmartLinkManager::$plugin->analytics->getLanguageBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'hourly' => SmartLinkManager::$plugin->analytics->getHourlyAnalytics($smartLinkId, $dateRange, $resolvedSiteId),
+                'insights' => SmartLinkManager::$plugin->analytics->getInsights($dateRange, $resolvedSiteId),
+                default => SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, $smartLinkId, $resolvedSiteId),
             };
 
             return $this->asJson([
@@ -161,88 +158,9 @@ class AnalyticsController extends Controller
             $this->logError('Analytics getData error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return $this->asJson([
                 'success' => false,
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    /**
-     * Get analytics data for AJAX requests
-     *
-     * @return Response
-     * @since 1.0.0
-     */
-    public function actionGetAnalyticsData(): Response
-    {
-        $this->requirePostRequest();
-        $this->requireLogin();
-        $this->requirePermission('smartLinkManager:viewAnalytics');
-        $this->requireAcceptsJson();
-
-        // Check if analytics are globally enabled
-        if (!SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
-            return $this->asJson([
-                'success' => false,
-                'error' => 'Analytics are disabled in plugin settings.',
-            ]);
-        }
-
-        $smartLinkId = Craft::$app->getRequest()->getParam('smartLinkId');
-        $range = Craft::$app->getRequest()->getParam('range', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
-
-        if (!$smartLinkId) {
-            return $this->asJson([
-                'success' => false,
-                'error' => 'Smart link ID is required',
-            ]);
-        }
-
-        try {
-            // Get the smart link (including disabled ones)
-            $smartLink = \lindemannrock\smartlinkmanager\elements\SmartLink::find()
-                ->id($smartLinkId)
-                ->status(null)
-                ->one();
-
-            if (!$smartLink) {
-                return $this->asJson([
-                    'success' => false,
-                    'error' => 'Smart link not found',
-                ]);
-            }
-
-            // Check if analytics tracking is enabled for this smart link
-            if (!($smartLink->trackAnalytics ?? true)) {
-                return $this->asJson([
-                    'success' => false,
-                    'error' => 'Analytics tracking is disabled for this smart link',
-                ]);
-            }
-
-            // Get analytics service
-            $analyticsService = SmartLinkManager::$plugin->analytics;
-
-            // Set the range parameter in the request so the template can access it
-            $_GET['range'] = $range;
-            Craft::$app->getRequest()->setQueryParams(array_merge(Craft::$app->getRequest()->getQueryParams(), ['range' => $range]));
-            
-            // Render only the content part for AJAX
-            $html = Craft::$app->getView()->renderTemplate('smartlink-manager/smartlinks/_partials/analytics-content', [
-                'smartLink' => $smartLink,
-                'analyticsService' => $analyticsService,
-                'dateRange' => $range,  // Pass the range directly
-                'settings' => SmartLinkManager::$plugin->getSettings(),
-            ]);
-
-            return $this->asJson([
-                'success' => true,
-                'html' => $html,
-            ]);
-        } catch (\Exception $e) {
-            $this->logError('Failed to get analytics data', ['error' => $e->getMessage()]);
-            return $this->asJson([
-                'success' => false,
-                'error' => $e->getMessage(),
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
             ]);
         }
     }
@@ -272,6 +190,7 @@ class AnalyticsController extends Controller
         $format = $request->getQueryParam('format', 'csv');
         $siteId = $request->getQueryParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
+        $resolvedSiteId = $this->_resolveSiteId($siteId);
 
         if (!ExportHelper::isFormatEnabled($format, SmartLinkManager::$plugin->id)) {
             throw new \yii\web\BadRequestHttpException("Export format '{$format}' is not enabled.");
@@ -295,11 +214,11 @@ class AnalyticsController extends Controller
             }
         }
 
-        // Get export data
+        // Get export data (scoped to user's allowed sites)
         $exportData = SmartLinkManager::$plugin->analytics->getExportData(
             $smartLinkId ? (int)$smartLinkId : null,
             $dateRange,
-            $siteId
+            $resolvedSiteId
         );
 
         // Check for empty data
@@ -382,5 +301,40 @@ class AnalyticsController extends Controller
             ]),
             default => ExportHelper::toCsv($exportData, $headers, $filename, $dateColumns),
         };
+    }
+
+    /**
+     * Get site IDs the current user is allowed to view analytics for
+     *
+     * Returns the intersection of plugin-enabled sites and user-editable sites.
+     *
+     * @return int[]
+     */
+    private function _getAllowedSiteIds(): array
+    {
+        return array_map(
+            fn($site) => $site->id,
+            SmartLinkManager::$plugin->getEnabledSites()
+        );
+    }
+
+    /**
+     * Resolve site ID parameter for analytics queries
+     *
+     * If a specific site ID is provided and the user has access, returns that int.
+     * Otherwise returns the array of all allowed site IDs to scope the query.
+     *
+     * @param int|null $siteId
+     * @return int|int[]
+     */
+    private function _resolveSiteId(?int $siteId): int|array
+    {
+        $allowedSiteIds = $this->_getAllowedSiteIds();
+
+        if ($siteId !== null && in_array($siteId, $allowedSiteIds)) {
+            return $siteId;
+        }
+
+        return $allowedSiteIds;
     }
 }

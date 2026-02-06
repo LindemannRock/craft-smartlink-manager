@@ -51,11 +51,11 @@ class AnalyticsService extends Component
      *
      * @param string $dateRange
      * @param int|null $smartLinkId
-     * @param int|null $siteId
+     * @param int|int[]|null $siteId
      * @return array
      * @since 1.0.0
      */
-    public function getAnalyticsSummary(string $dateRange = 'last7days', ?int $smartLinkId = null, ?int $siteId = null): array
+    public function getAnalyticsSummary(string $dateRange = 'last7days', ?int $smartLinkId = null, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}');
@@ -129,14 +129,20 @@ class AnalyticsService extends Component
      *
      * @param int $smartLinkId
      * @param string $dateRange
+     * @param int|int[]|null $siteId
      * @return array
      * @since 1.0.0
      */
-    public function getSmartLinkAnalytics(int $smartLinkId, string $dateRange = 'last7days'): array
+    public function getSmartLinkAnalytics(int $smartLinkId, string $dateRange = 'last7days', int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
             ->where(['linkId' => $smartLinkId]);
+
+        // Filter by site(s) if specified
+        if ($siteId) {
+            $query->andWhere(['siteId' => $siteId]);
+        }
 
         // Apply date range filter
         $this->applyDateRangeFilter($query, $dateRange);
@@ -172,7 +178,7 @@ class AnalyticsService extends Component
         }
 
         // Get button clicks breakdown
-        $buttonClicks = $this->getButtonClicks($smartLinkId, $dateRange);
+        $buttonClicks = $this->getButtonClicks($smartLinkId, $dateRange, $siteId);
 
         // Calculate average clicks per day
         $days = 1;
@@ -234,15 +240,21 @@ class AnalyticsService extends Component
      *
      * @param int $smartLinkId
      * @param string $dateRange
+     * @param int|int[]|null $siteId
      * @return array
      * @since 1.0.0
      */
-    public function getButtonClicks(int $smartLinkId, string $dateRange = 'last7days'): array
+    public function getButtonClicks(int $smartLinkId, string $dateRange = 'last7days', int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
             ->where(['linkId' => $smartLinkId])
-            ->andWhere(['like', 'metadata', '"clickType":"button"']);
+            ->andWhere([DbHelper::jsonExtract('metadata', 'clickType') => 'button']);
+
+        // Filter by site(s) if specified
+        if ($siteId) {
+            $query->andWhere(['siteId' => $siteId]);
+        }
 
         // Apply date range filter
         $this->applyDateRangeFilter($query, $dateRange);
@@ -353,7 +365,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getClicksData(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getClicksData(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $localDate = DateFormatHelper::localDateExpression('dateCreated');
 
@@ -451,7 +463,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getDeviceBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getDeviceBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -500,7 +512,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getPlatformBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getPlatformBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -561,7 +573,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getTopCountries(?int $smartLinkId, string $dateRange, int $limit = 15, ?int $siteId = null): array
+    public function getTopCountries(?int $smartLinkId, string $dateRange, int $limit = 15, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -605,7 +617,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getAllCountries(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getAllCountries(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         return $this->getTopCountries($smartLinkId, $dateRange, 9999, $siteId);
     }
@@ -615,7 +627,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getTopCities(?int $smartLinkId, string $dateRange, int $limit = 15, ?int $siteId = null): array
+    public function getTopCities(?int $smartLinkId, string $dateRange, int $limit = 15, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -660,7 +672,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getHourlyAnalytics(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getHourlyAnalytics(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $localHour = DateFormatHelper::localHourExpression('dateCreated');
 
@@ -710,7 +722,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getInsights(string $dateRange, ?int $siteId = null): array
+    public function getInsights(string $dateRange, int|array|null $siteId = null): array
     {
         $insights = [];
 
@@ -719,7 +731,7 @@ class AnalyticsService extends Component
             ->from('{{%smartlinkmanager_analytics}}')
             ->select([
                 'city',
-                'SUM(CASE WHEN osName IN ("iOS", "Android") THEN 1 ELSE 0 END) as mobile_clicks',
+                "SUM(CASE WHEN osName IN ('iOS', 'Android') THEN 1 ELSE 0 END) as mobile_clicks",
                 'COUNT(*) as total_clicks',
             ])
             ->where(['not', ['city' => null]])
@@ -818,7 +830,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getLanguageBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getLanguageBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         return [
             'labels' => [],
@@ -831,7 +843,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getDeviceBrandBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getDeviceBrandBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -884,7 +896,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getOsBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getOsBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -970,7 +982,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getBrowserBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getBrowserBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -1073,7 +1085,7 @@ class AnalyticsService extends Component
      *
      * @since 1.0.0
      */
-    public function getDeviceTypeBreakdown(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getDeviceTypeBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -1158,11 +1170,11 @@ class AnalyticsService extends Component
      *
      * @param int|null $smartLinkId Optional link ID to filter by
      * @param string $dateRange Date range to filter
-     * @param int|null $siteId Optional site ID to filter by
+     * @param int|int[]|null $siteId Optional site ID to filter by
      * @return array Array of formatted export data
      * @since 5.5.0
      */
-    public function getExportData(?int $smartLinkId, string $dateRange, ?int $siteId = null): array
+    public function getExportData(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
@@ -1326,7 +1338,7 @@ class AnalyticsService extends Component
      * @return array
      * @since 1.0.0
      */
-    public function getTopLinks(string $dateRange = 'last7days', int $limit = 5, ?int $siteId = null): array
+    public function getTopLinks(string $dateRange = 'last7days', int $limit = 5, int|array|null $siteId = null): array
     {
         $query = (new Query())
             ->from(['a' => '{{%smartlinkmanager_analytics}}'])
@@ -1362,20 +1374,39 @@ class AnalyticsService extends Component
             }
         }
 
+        // Pre-fetch last interaction per link (avoids N+1 query per top link)
+        $lastInteractionsMap = [];
+        if (!empty($linkIds)) {
+            // Get the max dateCreated per linkId
+            $maxDatesQuery = (new Query())
+                ->from('{{%smartlinkmanager_analytics}}')
+                ->select(['linkId', 'MAX(dateCreated) as maxDate'])
+                ->where(['linkId' => $linkIds])
+                ->groupBy(['linkId']);
+            $this->applyDateRangeFilter($maxDatesQuery, $dateRange);
+
+            // Join back to get the full row for each max date
+            $lastInteractions = (new Query())
+                ->from(['a' => '{{%smartlinkmanager_analytics}}'])
+                ->innerJoin(
+                    ['m' => $maxDatesQuery],
+                    '[[a.linkId]] = [[m.linkId]] AND [[a.dateCreated]] = [[m.maxDate]]'
+                )
+                ->all();
+
+            foreach ($lastInteractions as $interaction) {
+                // Keep first match per linkId (in case of exact timestamp ties)
+                if (!isset($lastInteractionsMap[$interaction['linkId']])) {
+                    $lastInteractionsMap[$interaction['linkId']] = $interaction;
+                }
+            }
+        }
+
         foreach ($results as $row) {
             $smartLink = $smartLinksMap[$row['linkId']] ?? null;
 
             if ($smartLink && $smartLink->getStatus() === SmartLink::STATUS_ENABLED) { // Only include active links
-                // Get the last interaction details
-                $lastInteractionQuery = (new Query())
-                    ->from('{{%smartlinkmanager_analytics}}')
-                    ->where(['linkId' => $row['linkId']])
-                    ->orderBy(['dateCreated' => SORT_DESC]);
-
-                // Apply same date range filter
-                $this->applyDateRangeFilter($lastInteractionQuery, $dateRange);
-
-                $lastInteraction = $lastInteractionQuery->one();
+                $lastInteraction = $lastInteractionsMap[$row['linkId']] ?? null;
 
                 $lastInteractionType = 'Unknown';
                 $lastDestinationUrl = '';
@@ -1389,10 +1420,8 @@ class AnalyticsService extends Component
                     } elseif (isset($metadata['clickType'])) {
                         $lastInteractionType = $metadata['clickType'] === 'button' ? 'Button' : 'Redirect';
                     } elseif (isset($metadata['redirectUrl'])) {
-                        // If there's a redirectUrl but no clickType, it's an automatic redirect
                         $lastInteractionType = 'Redirect';
                     } elseif (isset($metadata['buttonUrl'])) {
-                        // If there's a buttonUrl but no clickType, it's a button click
                         $lastInteractionType = 'Button';
                     }
 
@@ -1446,7 +1475,7 @@ class AnalyticsService extends Component
      * @return array
      * @since 1.0.0
      */
-    public function getAllRecentClicks(string $dateRange = 'last7days', int $limit = 20, ?int $siteId = null): array
+    public function getAllRecentClicks(string $dateRange = 'last7days', int $limit = 20, int|array|null $siteId = null): array
     {
         // Join with the site where the click happened (a.siteId), not the current CP site
         // This way Arabic clicks show Arabic title, English clicks show English title
@@ -2022,162 +2051,5 @@ class AnalyticsService extends Component
     {
         $location = $this->getLocationFromIp($ip);
         return $location ? $location['countryCode'] : null;
-    }
-
-    /**
-     * Clean up invalid platform values in analytics metadata
-     *
-     * @return int Number of records updated
-     * @since 1.18.0
-     */
-    public function cleanupPlatformValues(): int
-    {
-        $db = Craft::$app->getDb();
-        $updated = 0;
-
-        // Get all analytics records
-        $records = (new Query())
-            ->from('{{%smartlinkmanager_analytics}}')
-            ->select(['id', 'metadata', 'osName'])
-            ->all();
-
-        foreach ($records as $record) {
-            $metadata = Json::decodeIfJson($record['metadata']);
-            if (!$metadata) {
-                continue;
-            }
-
-            $oldPlatform = $metadata['platform'] ?? null;
-            $clickType = $metadata['clickType'] ?? null;
-            $buttonUrl = $metadata['buttonUrl'] ?? null;
-            $newPlatform = null;
-            $shouldUpdate = false;
-
-            // Case 1: Landing page views (clickType: "landing") - remove platform
-            if ($clickType === 'landing' && $oldPlatform !== null) {
-                unset($metadata['platform']);
-                $shouldUpdate = true;
-            }
-            // Case 2: Button clicks with wrong platform (translated labels, "continue-to-website", or old label formats)
-            elseif ($clickType === 'button' && $oldPlatform) {
-                // Direct label-to-platform mapping for known old values
-                $labelToPlatform = [
-                    'app-store' => 'ios',
-                    'google-play' => 'android',
-                    'appgallery' => 'huawei',
-                    'continue-to-website' => null, // Will derive from buttonUrl
-                    'fallback' => null, // Will derive from buttonUrl
-                ];
-
-                // Check if it's a known old label or contains problematic text
-                if (isset($labelToPlatform[$oldPlatform]) ||
-                    str_contains($oldPlatform, 'متجر') ||
-                    str_contains($oldPlatform, 'AppGallery') ||
-                    str_contains($oldPlatform, 'App Store') ||
-                    str_contains($oldPlatform, 'Google Play') ||
-                    str_contains($oldPlatform, 'Windows Store') ||
-                    str_contains($oldPlatform, 'Mac App Store')) {
-
-                    // If we have a direct mapping, use it
-                    if (isset($labelToPlatform[$oldPlatform]) && $labelToPlatform[$oldPlatform] !== null) {
-                        $newPlatform = $labelToPlatform[$oldPlatform];
-                    }
-                    // Otherwise derive from buttonUrl
-                    elseif ($buttonUrl) {
-                        if (str_contains($buttonUrl, 'apps.apple.com')) {
-                            $newPlatform = 'ios';
-                        } elseif (str_contains($buttonUrl, 'play.google.com')) {
-                            $newPlatform = 'android';
-                        } elseif (str_contains($buttonUrl, 'appgallery.huawei')) {
-                            $newPlatform = 'huawei';
-                        } elseif (str_contains($buttonUrl, 'amazon.com') || str_contains($buttonUrl, 'amzn')) {
-                            $newPlatform = 'amazon';
-                        } elseif (str_contains($buttonUrl, 'microsoft.com/store')) {
-                            $newPlatform = 'windows';
-                        } else {
-                            $newPlatform = 'other';
-                        }
-                    } else {
-                        $newPlatform = 'other';
-                    }
-
-                    $metadata['platform'] = $newPlatform;
-                    $shouldUpdate = true;
-                }
-            }
-            // Case 3: Redirects with platform: "redirect" - derive from buttonUrl or osName
-            elseif ($clickType === 'redirect' && $oldPlatform === 'redirect') {
-                // Try to derive from buttonUrl first
-                if ($buttonUrl) {
-                    if (str_contains($buttonUrl, 'apps.apple.com')) {
-                        $newPlatform = 'ios';
-                    } elseif (str_contains($buttonUrl, 'play.google.com')) {
-                        $newPlatform = 'android';
-                    } elseif (str_contains($buttonUrl, 'appgallery.huawei')) {
-                        $newPlatform = 'huawei';
-                    } elseif (str_contains($buttonUrl, 'amazon.com') || str_contains($buttonUrl, 'amzn')) {
-                        $newPlatform = 'amazon';
-                    } else {
-                        $newPlatform = 'other';
-                    }
-                }
-                // Fallback to osName
-                elseif ($record['osName']) {
-                    $osNameLower = strtolower($record['osName']);
-                    if (str_contains($osNameLower, 'ios')) {
-                        $newPlatform = 'ios';
-                    } elseif (str_contains($osNameLower, 'android')) {
-                        $newPlatform = 'android';
-                    } elseif (str_contains($osNameLower, 'windows')) {
-                        $newPlatform = 'windows';
-                    } elseif (str_contains($osNameLower, 'mac')) {
-                        $newPlatform = 'macos';
-                    } else {
-                        $newPlatform = 'other';
-                    }
-                } else {
-                    $newPlatform = 'other';
-                }
-
-                $metadata['platform'] = $newPlatform;
-                $shouldUpdate = true;
-            }
-            // Case 4: Fix capitalization
-            elseif ($oldPlatform) {
-                $platformMap = [
-                    'iOS' => 'ios',
-                    'Ios' => 'ios',
-                    'IOS' => 'ios',
-                    'Android' => 'android',
-                    'ANDROID' => 'android',
-                    'Windows' => 'windows',
-                    'WINDOWS' => 'windows',
-                    'macOS' => 'macos',
-                    'MacOS' => 'macos',
-                    'Mac' => 'macos',
-                    'MAC' => 'macos',
-                ];
-
-                if (isset($platformMap[$oldPlatform])) {
-                    $metadata['platform'] = $platformMap[$oldPlatform];
-                    $shouldUpdate = true;
-                }
-            }
-
-            // Update if needed
-            if ($shouldUpdate) {
-                $db->createCommand()
-                    ->update(
-                        '{{%smartlinkmanager_analytics}}',
-                        ['metadata' => Json::encode($metadata)],
-                        ['id' => $record['id']]
-                    )
-                    ->execute();
-
-                $updated++;
-            }
-        }
-
-        return $updated;
     }
 }

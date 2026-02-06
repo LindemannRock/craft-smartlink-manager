@@ -14,7 +14,8 @@
 {% set analyticsService = plugin.analytics %}
 {% set pluginHandle = pluginHandle ?? plugin.id %}
 {% set dateRange = craft.app.request.getQueryParam('range') ?? lrDefaultDateRange(pluginHandle) %}
-{% set analytics = analyticsService.getSmartLinkAnalytics(smartLink.id, dateRange) ?? {totalClicks: 0} %}
+{% set allowedSiteIds = plugin.getEnabledSites()|map(s => s.id) %}
+{% set analytics = analyticsService.getSmartLinkAnalytics(smartLink.id, dateRange, allowedSiteIds) ?? {totalClicks: 0} %}
 
 {# Extract analytics breakdown data #}
 {% set deviceStats = analytics.deviceBreakdown ?? {} %}
