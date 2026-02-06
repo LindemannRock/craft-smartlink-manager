@@ -282,273 +282,9 @@ class SeomaticIntegration extends BaseIntegration
                         continue;
                     }
 
-                    // Check Google Tag Manager
-                    $gtmScript = $scriptService->get('googleTagManager');
-
-                    // Only include if GTM is enabled AND has an actual GTM ID configured
-                    if ($gtmScript && $gtmScript->include) {
-                        // Try both possible keys for GTM ID
-                        $gtmId = $gtmScript->vars['googleTagManagerId']['value'] ??
-                                $gtmScript->vars['googleTagManagerContainerId']['value'] ??
-                                null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($gtmId)) {
-                            // Only parse if it's an environment variable reference
-                            if (strpos($gtmId, '$') !== false) {
-                                $gtmId = App::env($gtmId);
-                            }
-                            $gtmId = trim($gtmId);
-                        }
-
-                        // Only add if there's an actual GTM ID (not empty)
-                        if (!empty($gtmId)) {
-                            if (!isset($scriptsFound['googleTagManager'])) {
-                                $scriptsFound['googleTagManager'] = [
-                                    'active' => true,
-                                    'name' => 'Google Tag Manager',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['googleTagManager']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $gtmId,
-                            ];
-                        }
-                    }
-
-                    // Check Google Analytics (gtag.js)
-                    $gtagScript = $scriptService->get('gtag');
-
-                    // Check if the script is actually configured for THIS specific site
-                    $shouldInclude = false;
-                    $measurementId = null;
-
-                    if ($gtagScript && $gtagScript->include) {
-                        // Correct key is 'googleAnalyticsId', not 'googleAnalyticsMeasurementId'
-                        $measurementId = $gtagScript->vars['googleAnalyticsId']['value'] ?? null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($measurementId)) {
-                            if (strpos($measurementId, '$') !== false) {
-                                $measurementId = App::env($measurementId);
-                            }
-                            $measurementId = trim($measurementId);
-                        }
-
-                        // Only include if there's an actual measurement ID configured (not empty)
-                        $shouldInclude = !empty($measurementId);
-                    }
-
-                    if ($shouldInclude) {
-                        if (!isset($scriptsFound['gtag'])) {
-                            $scriptsFound['gtag'] = [
-                                'active' => true,
-                                'name' => 'Google Analytics 4',
-                                'sites' => [],
-                            ];
-                        }
-                        $scriptsFound['gtag']['sites'][] = [
-                            'handle' => $site->handle,
-                            'name' => $site->name,
-                            'id' => $measurementId,
-                        ];
-                    }
-
-                    // Check Facebook Pixel
-                    $fbScript = $scriptService->get('facebookPixel');
-                    if ($fbScript && $fbScript->include) {
-                        $fbId = $fbScript->vars['facebookPixelId']['value'] ?? null;
-
-                        // Only add if there's an actual Facebook Pixel ID
-                        if (!empty($fbId)) {
-                            if (!isset($scriptsFound['facebookPixel'])) {
-                                $scriptsFound['facebookPixel'] = [
-                                    'active' => true,
-                                    'name' => 'Facebook Pixel',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['facebookPixel']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $fbId,
-                            ];
-                        }
-                    }
-
-                    // Check LinkedIn Insight
-                    $linkedInScript = $scriptService->get('linkedInInsight');
-                    if ($linkedInScript && $linkedInScript->include) {
-                        // Correct key is 'dataPartnerId'
-                        $partnerId = $linkedInScript->vars['dataPartnerId']['value'] ?? null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($partnerId)) {
-                            if (strpos($partnerId, '$') !== false) {
-                                $partnerId = App::env($partnerId);
-                            }
-                            $partnerId = trim($partnerId);
-                        }
-
-                        // Only add if there's an actual partner ID configured
-                        if (!empty($partnerId)) {
-                            if (!isset($scriptsFound['linkedInInsight'])) {
-                                $scriptsFound['linkedInInsight'] = [
-                                    'active' => true,
-                                    'name' => 'LinkedIn Insight Tag',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['linkedInInsight']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $partnerId,
-                            ];
-                        }
-                    }
-
-                    // Check HubSpot
-                    $hubSpotScript = $scriptService->get('hubSpot');
-                    if ($hubSpotScript && $hubSpotScript->include) {
-                        $hubSpotId = $hubSpotScript->vars['hubSpotId']['value'] ?? null;
-
-                        if (!empty($hubSpotId)) {
-                            if (!isset($scriptsFound['hubSpot'])) {
-                                $scriptsFound['hubSpot'] = [
-                                    'active' => true,
-                                    'name' => 'HubSpot',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['hubSpot']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $hubSpotId,
-                            ];
-                        }
-                    }
-
-                    // Check Pinterest Tag
-                    // Correct handle is 'pinterestTag'
-                    $pinterestScript = $scriptService->get('pinterestTag');
-                    if ($pinterestScript && $pinterestScript->include) {
-                        // Correct key is 'pinterestTagId'
-                        $pinterestId = $pinterestScript->vars['pinterestTagId']['value'] ?? null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($pinterestId)) {
-                            if (strpos($pinterestId, '$') !== false) {
-                                $pinterestId = App::env($pinterestId);
-                            }
-                            $pinterestId = trim($pinterestId);
-                        }
-
-                        if (!empty($pinterestId)) {
-                            if (!isset($scriptsFound['pinterest'])) {
-                                $scriptsFound['pinterest'] = [
-                                    'active' => true,
-                                    'name' => 'Pinterest Tag',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['pinterest']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $pinterestId,
-                            ];
-                        }
-                    }
-
-                    // Check Fathom Analytics
-                    $fathomScript = $scriptService->get('fathom');
-                    if ($fathomScript && $fathomScript->include) {
-                        // Correct key is 'siteId'
-                        $fathomSiteId = $fathomScript->vars['siteId']['value'] ?? null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($fathomSiteId)) {
-                            if (strpos($fathomSiteId, '$') !== false) {
-                                $fathomSiteId = App::env($fathomSiteId);
-                            }
-                            $fathomSiteId = trim($fathomSiteId);
-                        }
-
-                        if (!empty($fathomSiteId)) {
-                            if (!isset($scriptsFound['fathom'])) {
-                                $scriptsFound['fathom'] = [
-                                    'active' => true,
-                                    'name' => 'Fathom Analytics',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['fathom']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $fathomSiteId,
-                            ];
-                        }
-                    }
-
-                    // Check Matomo
-                    $matomoScript = $scriptService->get('matomo');
-                    if ($matomoScript && $matomoScript->include) {
-                        // Correct key is 'siteId'
-                        $matomoSiteId = $matomoScript->vars['siteId']['value'] ?? null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($matomoSiteId)) {
-                            if (strpos($matomoSiteId, '$') !== false) {
-                                $matomoSiteId = App::env($matomoSiteId);
-                            }
-                            $matomoSiteId = trim($matomoSiteId);
-                        }
-
-                        if (!empty($matomoSiteId)) {
-                            if (!isset($scriptsFound['matomo'])) {
-                                $scriptsFound['matomo'] = [
-                                    'active' => true,
-                                    'name' => 'Matomo Analytics',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['matomo']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $matomoSiteId,
-                            ];
-                        }
-                    }
-
-                    // Check Plausible
-                    $plausibleScript = $scriptService->get('plausible');
-                    if ($plausibleScript && $plausibleScript->include) {
-                        // Correct key is 'siteDomain'
-                        $plausibleDomain = $plausibleScript->vars['siteDomain']['value'] ?? null;
-
-                        // Parse environment variables only if it looks like an env var (starts with $)
-                        if (is_string($plausibleDomain)) {
-                            if (strpos($plausibleDomain, '$') !== false) {
-                                $plausibleDomain = App::env($plausibleDomain);
-                            }
-                            $plausibleDomain = trim($plausibleDomain);
-                        }
-
-                        if (!empty($plausibleDomain)) {
-                            if (!isset($scriptsFound['plausible'])) {
-                                $scriptsFound['plausible'] = [
-                                    'active' => true,
-                                    'name' => 'Plausible Analytics',
-                                    'sites' => [],
-                                ];
-                            }
-                            $scriptsFound['plausible']['sites'][] = [
-                                'handle' => $site->handle,
-                                'name' => $site->name,
-                                'id' => $plausibleDomain,
-                            ];
-                        }
+                    // Check all known tracking scripts for this site
+                    foreach ($this->_getScriptDefinitions() as $def) {
+                        $this->_checkScript($scriptService, $site, $def, $scriptsFound);
                     }
                 }
 
@@ -609,5 +345,76 @@ class SeomaticIntegration extends BaseIntegration
     {
         $scripts = $this->getAvailableScripts();
         return isset($scripts['gtag']) && $scripts['gtag']['active'];
+    }
+
+    /**
+     * Get tracking script definitions
+     *
+     * Each definition maps a SEOmatic script handle to:
+     * - key: The key used in the scriptsFound array
+     * - name: Display name for the script
+     * - idKeys: Ordered list of var keys to check for the script's ID value
+     *
+     * @return array<array{handle: string, key: string, name: string, idKeys: string[]}>
+     */
+    private function _getScriptDefinitions(): array
+    {
+        return [
+            ['handle' => 'googleTagManager', 'key' => 'googleTagManager', 'name' => 'Google Tag Manager', 'idKeys' => ['googleTagManagerId', 'googleTagManagerContainerId']],
+            ['handle' => 'gtag', 'key' => 'gtag', 'name' => 'Google Analytics 4', 'idKeys' => ['googleAnalyticsId']],
+        ];
+    }
+
+    /**
+     * Check a single SEOmatic tracking script and add to results if configured
+     *
+     * @param mixed $scriptService SEOmatic script service
+     * @param \craft\models\Site $site Current site being checked
+     * @param array{handle: string, key: string, name: string, idKeys: string[]} $def Script definition
+     * @param array &$scriptsFound Accumulated results (modified by reference)
+     */
+    private function _checkScript(mixed $scriptService, \craft\models\Site $site, array $def, array &$scriptsFound): void
+    {
+        $script = $scriptService->get($def['handle']);
+        if (!$script || !$script->include) {
+            return;
+        }
+
+        // Try each ID key in order until we find a value
+        $id = null;
+        foreach ($def['idKeys'] as $idKey) {
+            $id = $script->vars[$idKey]['value'] ?? null;
+            if ($id !== null) {
+                break;
+            }
+        }
+
+        // Resolve environment variables
+        if (is_string($id)) {
+            if (str_contains($id, '$')) {
+                $id = App::env($id);
+            }
+            if (is_string($id)) {
+                $id = trim($id);
+            }
+        }
+
+        if (empty($id)) {
+            return;
+        }
+
+        $key = $def['key'];
+        if (!isset($scriptsFound[$key])) {
+            $scriptsFound[$key] = [
+                'active' => true,
+                'name' => $def['name'],
+                'sites' => [],
+            ];
+        }
+        $scriptsFound[$key]['sites'][] = [
+            'handle' => $site->handle,
+            'name' => $site->name,
+            'id' => $id,
+        ];
     }
 }

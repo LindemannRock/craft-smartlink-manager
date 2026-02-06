@@ -8,33 +8,37 @@
         {% if eventType == 'qr_scan' %}
         (function() {
             var eventData = {
-                event: '{{ craft.app.plugins.getPlugin('smartlink-manager').settings.seomaticEventPrefix ?? 'smart_links' }}_qr_scan',
+                event: '{{ (craft.app.plugins.getPlugin('smartlink-manager').settings.seomaticEventPrefix ?? 'smart_links')|e('js') }}_qr_scan',
                 smart_link: {
-                    slug: '{{ smartLink.slug }}',
-                    title: '{{ smartLink.title }}',
+                    slug: '{{ smartLink.slug|e('js') }}',
+                    title: '{{ smartLink.title|e('js') }}',
                     source: 'qr',
                     click_type: 'qr_scan'
                 }
             };
             window.dataLayer.push(eventData);
+            {% if craft.app.config.general.devMode %}
             console.log('SmartLink Manager QR scan event pushed:', eventData);
+            {% endif %}
         })();
         {% else %}
         function pushSmartLinkEvent(eventType, platform, source) {
             var eventData = {
-                event: '{{ craft.app.plugins.getPlugin('smartlink-manager').settings.seomaticEventPrefix ?? 'smart_links' }}_' + eventType,
+                event: '{{ (craft.app.plugins.getPlugin('smartlink-manager').settings.seomaticEventPrefix ?? 'smart_links')|e('js') }}_' + eventType,
                 smart_link: {
-                    slug: '{{ smartLink.slug }}',
-                    title: '{{ smartLink.title }}',
+                    slug: '{{ smartLink.slug|e('js') }}',
+                    title: '{{ smartLink.title|e('js') }}',
                     platform: platform,
                     source: source || 'direct',
                     click_type: eventType
                 }
             };
             window.dataLayer.push(eventData);
-            console.log('✅ SmartLink Manager event pushed to dataLayer:', eventData);
-            console.log('📊 Current dataLayer length:', window.dataLayer.length);
-            console.log('🔍 Last 3 dataLayer events:', window.dataLayer.slice(-3));
+            {% if craft.app.config.general.devMode %}
+            console.log('SmartLink Manager event pushed to dataLayer:', eventData);
+            console.log('Current dataLayer length:', window.dataLayer.length);
+            console.log('Last 3 dataLayer events:', window.dataLayer.slice(-3));
+            {% endif %}
         }
 
         (function() {
