@@ -42,8 +42,8 @@ use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
 use lindemannrock\smartlinkmanager\services\IntegrationService;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\services\SmartLinksService;
-use lindemannrock\smartlinkmanager\utilities\SmartLinksUtility;
-use lindemannrock\smartlinkmanager\variables\SmartLinksVariable;
+use lindemannrock\smartlinkmanager\utilities\SmartLinkManagerUtility;
+use lindemannrock\smartlinkmanager\variables\SmartLinkManagerVariable;
 use lindemannrock\smartlinkmanager\widgets\AnalyticsSummaryWidget;
 use lindemannrock\smartlinkmanager\widgets\TopLinksWidget;
 use yii\base\Event;
@@ -180,7 +180,7 @@ class SmartLinkManager extends Plugin
             function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('smartLinks', SmartLinksVariable::class);
+                $variable->set('smartLinks', SmartLinkManagerVariable::class);
             }
         );
 
@@ -201,7 +201,7 @@ class SmartLinkManager extends Plugin
             Utilities::class,
             Utilities::EVENT_REGISTER_UTILITIES,
             function(RegisterComponentTypesEvent $event) {
-                $event->types[] = SmartLinksUtility::class;
+                $event->types[] = SmartLinkManagerUtility::class;
             }
         );
 

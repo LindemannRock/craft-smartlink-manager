@@ -20,7 +20,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
  * @package   SmartLinkManager
  * @since     1.0.0
  */
-class SmartLinksVariable
+class SmartLinkManagerVariable
 {
     /**
      * Returns a new SmartLinkQuery instance.

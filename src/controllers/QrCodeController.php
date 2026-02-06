@@ -171,6 +171,13 @@ class QrCodeController extends Controller
             // Preview mode - generate QR code for any URL (requires login and edit permission)
             $this->requireLogin();
             $this->requirePermission('smartLinkManager:editLinks');
+
+            // Validate URL scheme (prevent javascript:, data:, etc.)
+            $scheme = parse_url($url, PHP_URL_SCHEME);
+            if (!in_array(strtolower($scheme ?? ''), ['http', 'https'], true)) {
+                throw new \yii\web\BadRequestHttpException('Only http and https URLs are allowed.');
+            }
+
             $fullUrl = $url;
             $smartLink = null;
         } else {
@@ -250,6 +257,24 @@ class QrCodeController extends Controller
             }
         } else {
             // Preview mode (requires login) - accept all params from query
+            $logoId = $request->getQueryParam('logo');
+
+            // Validate logo belongs to an allowed volume and user has access
+            if ($logoId) {
+                $logoAsset = \craft\elements\Asset::find()->id($logoId)->one();
+                $allowedVolumeUids = array_filter([
+                    $settings->qrLogoVolumeUid,
+                    $settings->imageVolumeUid,
+                ]);
+                $volumeUid = $logoAsset?->getVolume()->uid;
+                if (!$logoAsset
+                    || ($allowedVolumeUids && !in_array($volumeUid, $allowedVolumeUids, true))
+                    || !Craft::$app->getUser()->checkPermission('viewAssets:' . $volumeUid)
+                ) {
+                    $logoId = null;
+                }
+            }
+
             $options = [
                 'size' => $request->getQueryParam('size'),
                 'color' => $request->getQueryParam('color'),
@@ -259,7 +284,7 @@ class QrCodeController extends Controller
                 'moduleStyle' => $request->getQueryParam('moduleStyle'),
                 'eyeStyle' => $request->getQueryParam('eyeStyle'),
                 'eyeColor' => $request->getQueryParam('eyeColor'),
-                'logo' => $request->getQueryParam('logo'),
+                'logo' => $logoId,
                 'logoSize' => $request->getQueryParam('logoSize'),
                 'errorCorrection' => $request->getQueryParam('errorCorrection'),
             ];
@@ -272,8 +297,10 @@ class QrCodeController extends Controller
         try {
             $qrCode = SmartLinkManager::$plugin->qrCode->generateQrCode($fullUrl, $options);
 
-            // Determine content type
-            $format = $options['format'] ?? SmartLinkManager::$plugin->getSettings()->defaultQrFormat;
+            // Determine content type (validate format to known values)
+            $format = in_array($options['format'] ?? '', ['png', 'svg'], true)
+                ? $options['format']
+                : SmartLinkManager::$plugin->getSettings()->defaultQrFormat;
             $contentType = $format === 'svg' ? 'image/svg+xml' : 'image/png';
 
             // Return response
@@ -283,8 +310,7 @@ class QrCodeController extends Controller
             $response->headers->set('Cache-Control', 'public, max-age=86400'); // Cache for 1 day - tracking happens via redirect with ?src=qr
             
             // Handle download request
-            if ($request->getQueryParam('download') && $smartLink) {
-                $settings = SmartLinkManager::$plugin->getSettings();
+            if ($request->getQueryParam('download') && $smartLink && $settings->enableQrDownload) {
                 $filename = strtr($settings->qrDownloadFilename, [
                     '{slug}' => $smartLink->slug,
                     '{size}' => $options['size'] ?? $settings->defaultQrSize,

@@ -549,35 +549,6 @@ document.querySelector('form').addEventListener('submit', function(e) {
     });
 })();
 
-// Update required status of logo field when toggle changes
-(function() {
-    const enableToggle = document.getElementById('enableQrLogo');
-    const logoField = document.getElementById('defaultQrLogoId-field');
-
-    if (enableToggle && logoField) {
-        // Get the label
-        const label = logoField.querySelector('label');
-
-        // Function to update required status
-        function updateRequiredStatus() {
-            if (enableToggle.checked || enableToggle.classList.contains('on')) {
-                label.classList.add('required');
-            } else {
-                label.classList.remove('required');
-            }
-        }
-
-        // Initial state
-        updateRequiredStatus();
-
-        // Listen for changes
-        const lightswitch = enableToggle.closest('.lightswitch');
-        if (lightswitch && lightswitch.lsInstance) {
-            lightswitch.lsInstance.on('change', updateRequiredStatus);
-        }
-    }
-})();
-
 // Handle preview collapse/expand
 (function() {
     const previewContainer = document.querySelector('.qr-preview-floating');

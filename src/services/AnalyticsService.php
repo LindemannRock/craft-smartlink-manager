@@ -1788,10 +1788,12 @@ class AnalyticsService extends Component
         $daily = [];
         if (!isset($criteria['skipDaily']) || !$criteria['skipDaily']) {
             $thirtyDaysAgo = (new \DateTime())->modify('-30 days');
+            $localDate = DateFormatHelper::localDateExpression('dateCreated');
+
             $dailyQuery = (clone $query)
-                ->select(['DATE(dateCreated) as date', 'COUNT(*) as count'])
+                ->select(['date' => $localDate, 'COUNT(*) as count'])
                 ->andWhere(['>=', 'dateCreated', Db::prepareDateForDb($thirtyDaysAgo)])
-                ->groupBy(['DATE(dateCreated)'])
+                ->groupBy([$localDate])
                 ->orderBy(['date' => SORT_ASC]);
 
             foreach ($dailyQuery->all() as $row) {

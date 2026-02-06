@@ -52,7 +52,11 @@ class SettingsController extends Controller
      */
     public function beforeAction($action): bool
     {
-        $this->requirePermission('smartLinkManager:manageSettings');
+        // Cache/analytics clearing actions use their own granular permissions
+        $selfPermittedActions = ['clear-all-caches', 'clear-all-analytics', 'clear-qr-cache', 'clear-device-cache', 'cleanup-analytics'];
+        if (!in_array($action->id, $selfPermittedActions, true)) {
+            $this->requirePermission('smartLinkManager:manageSettings');
+        }
 
         // Only field layouts respect allowAdminChanges (system config)
         // All other settings are operational and should always be editable
