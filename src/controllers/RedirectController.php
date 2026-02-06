@@ -300,11 +300,11 @@ class RedirectController extends Controller
 
         // Redirect to destination
         if ($destinationUrl) {
-            return $this->redirect($destinationUrl, 302);
+            return $this->redirect($this->_sanitizeUrl($destinationUrl), 302);
         }
 
         // No destination URL available, redirect to fallback
-        return $this->redirect($smartLink->fallbackUrl, 302);
+        return $this->redirect($this->_sanitizeUrl($smartLink->fallbackUrl), 302);
     }
 
     /**
@@ -364,5 +364,33 @@ class RedirectController extends Controller
             ]);
             return null;
         }
+    }
+
+    /**
+     * Sanitize a URL to prevent XSS via dangerous schemes.
+     *
+     * Only allows http://, https://, and relative paths (starting with /).
+     * Rejects javascript:, data:, vbscript:, and other dangerous schemes.
+     *
+     * @param string $url
+     * @return string Sanitized URL, or '/' if scheme is disallowed
+     */
+    private function _sanitizeUrl(string $url): string
+    {
+        $url = trim($url);
+
+        // Allow relative URLs
+        if (str_starts_with($url, '/')) {
+            return $url;
+        }
+
+        // Allow http and https
+        if (preg_match('#^https?://#i', $url)) {
+            return $url;
+        }
+
+        // Reject everything else (javascript:, data:, vbscript:, etc.)
+        $this->logWarning('Blocked unsafe URL scheme', ['url' => $url]);
+        return '/';
     }
 }

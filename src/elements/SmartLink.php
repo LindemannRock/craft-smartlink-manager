@@ -176,6 +176,7 @@ class SmartLink extends Element
 
     /**
      * @var int Total click/hit count (stored in DB column)
+     * @since 5.21.0
      */
     public int $hits = 0;
 
