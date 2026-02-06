@@ -8,7 +8,6 @@
 
 namespace lindemannrock\smartlinkmanager\elements\db;
 
-use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -149,19 +148,10 @@ class SmartLinkQuery extends ElementQuery
             'smartlinkmanager.qrCodeEyeColor',
             'smartlinkmanager.qrLogoId',
             'smartlinkmanager.languageDetection',
+            'smartlinkmanager.hits',
             'smartlinkmanager.metadata',
             // Ensure we get the enabled status from elements_sites
             'elements_sites.enabled',
-        ]);
-
-        // Pre-fetch click counts to avoid N+1 on element index.
-        // Alias 'clicks' maps to SmartLink::setClicks() via Yii's __set().
-        $clickCountQuery = (new Query())
-            ->select(['COUNT(*)'])
-            ->from('{{%smartlinkmanager_analytics}}')
-            ->where('[[smartlinkmanager_analytics.linkId]] = [[smartlinkmanager.id]]');
-        $this->query->addSelect([
-            'clicks' => $clickCountQuery,
         ]);
 
         if ($this->_smartLinkSlug !== null) {

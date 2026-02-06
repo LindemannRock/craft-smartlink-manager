@@ -33,6 +33,7 @@ class Install extends Migration
                 'title' => $this->string()->notNull(),
                 'slug' => $this->string()->notNull(),
                 'trackAnalytics' => $this->boolean()->defaultValue(true),
+                'hits' => $this->integer()->unsigned()->notNull()->defaultValue(0),
                 'qrCodeEnabled' => $this->boolean()->defaultValue(true),
                 'qrCodeSize' => $this->integer()->defaultValue(200),
                 'qrCodeColor' => $this->string(7)->null(),

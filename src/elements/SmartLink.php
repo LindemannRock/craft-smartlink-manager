@@ -175,14 +175,14 @@ class SmartLink extends Element
     public ?array $localizedUrls = null;
 
     /**
+     * @var int Total click/hit count (stored in DB column)
+     */
+    public int $hits = 0;
+
+    /**
      * @var array|null Metadata
      */
     private ?array $_metadata = null;
-
-    /**
-     * @var int|null Total clicks (cached value)
-     */
-    private ?int $_clicks = null;
 
     /**
      * @var User|false|null Cached author (false = looked up but null)
@@ -536,35 +536,25 @@ class SmartLink extends Element
     // =========================================================================
 
     /**
-     * Get total clicks count
+     * Get total clicks/hits count
      *
      * @return int
      * @since 1.0.0
      */
     public function getClicks(): int
     {
-        if ($this->_clicks === null) {
-            $this->_clicks = (int) (new \craft\db\Query())
-                ->from('{{%smartlinkmanager_analytics}}')
-                ->where(['linkId' => $this->id])
-                ->count();
-        }
-        
-        return $this->_clicks;
+        return $this->hits;
     }
-    
+
     /**
-     * Set clicks value (for caching/pre-fetch purposes).
-     *
-     * Also called by Yii during element population from the SmartLinkQuery
-     * click count subquery.
+     * Set clicks value.
      *
      * @param int|string $clicks
      * @since 1.0.0
      */
     public function setClicks(int|string $clicks): void
     {
-        $this->_clicks = (int) $clicks;
+        $this->hits = (int) $clicks;
     }
 
     /**

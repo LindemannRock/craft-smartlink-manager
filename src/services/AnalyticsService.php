@@ -25,6 +25,7 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\models\DeviceInfo;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
+use yii\db\Expression;
 
 /**
  * Analytics Service
@@ -1859,19 +1860,15 @@ class AnalyticsService extends Component
      */
     private function _incrementClickCount(SmartLink $smartLink): void
     {
-        $metadata = $smartLink->metadata ?? [];
-        $metadata['clicks'] = ($metadata['clicks'] ?? 0) + 1;
-        $metadata['lastClick'] = DateTimeHelper::currentTimeStamp();
-
-        $smartLink->metadata = $metadata;
-        $smartLink->clicks = $metadata['clicks'];
-
-        // Update directly in database to avoid triggering events
+        // Atomic increment to prevent race conditions under concurrent requests
         Craft::$app->db->createCommand()
             ->update('{{%smartlinkmanager}}', [
-                'metadata' => Json::encode($metadata),
+                'hits' => new Expression('[[hits]] + 1'),
             ], ['id' => $smartLink->id])
             ->execute();
+
+        // Update in-memory model
+        $smartLink->hits++;
     }
 
     /**
