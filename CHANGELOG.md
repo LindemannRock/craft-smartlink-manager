@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.21.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.20.0...v5.21.0) (2026-02-07)
+
+
+### Features
+
+* enhance QR code generation and analytics features ([a905848](https://github.com/LindemannRock/craft-smartlink-manager/commit/a905848d1e809b53f2d56b518ec3ec108511e3a7))
+
+
+### Bug Fixes
+
+* **templates:** improve message display in analytics partials ([a29d2b6](https://github.com/LindemannRock/craft-smartlink-manager/commit/a29d2b6c528d04c09f01c1f35731d29e54cbe6b0))
+
 ## [5.20.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.19.0...v5.20.0) (2026-02-05)
 
 
