@@ -87,9 +87,10 @@ php craft smartlink-manager/security/generate-salt
 ```
 
 **What happens if you skip this:**
-- ❌ Analytics tracking will fail with error: `IP hash salt not configured`
-- ❌ Smart links will still redirect, but won't track clicks
-- ✅ You can generate the salt later, but no analytics will be collected until you do
+- ⚠️ Analytics will still track clicks (query, device, referrer, etc.) but **without IP hash or geo-location data**
+- ⚠️ An error will be logged: `IP hash salt not configured`
+- ✅ Smart links will still redirect normally
+- ✅ You can generate the salt later — full IP/geo tracking resumes immediately
 
 **Quick Start:**
 ```bash
