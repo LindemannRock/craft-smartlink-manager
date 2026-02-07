@@ -56,7 +56,7 @@ class SmartLinkManagerUtility extends Utility
         $settings = $smartLinks->getSettings();
         $pluginName = $settings->getFullName();
         $singularName = $settings->getDisplayName();
-        $currentUser = Craft::$app->getUser()->getIdentity();
+        $user = Craft::$app->getUser();
 
         // Get link stats only if user can view links
         $totalLinks = 0;
@@ -65,7 +65,7 @@ class SmartLinkManagerUtility extends Utility
         $expiredLinks = 0;
         $disabledLinks = 0;
 
-        if ($currentUser && $currentUser->can('smartLinkManager:viewLinks')) {
+        if ($user->getIdentity() && $user->checkPermission('smartLinkManager:viewLinks')) {
             $allowedSiteIds = array_map(fn($s) => $s->id, SmartLinkManager::$plugin->getEnabledSites());
 
             $totalLinks = \lindemannrock\smartlinkmanager\elements\SmartLink::find()->siteId($allowedSiteIds)->status(null)->count();
@@ -85,7 +85,7 @@ class SmartLinkManagerUtility extends Utility
         $dailyClicks = [];
         $recentAnalytics = [];
 
-        if ($settings->enableAnalytics && $currentUser && $currentUser->can('smartLinkManager:viewAnalytics')) {
+        if ($settings->enableAnalytics && $user->getIdentity() && $user->checkPermission('smartLinkManager:viewAnalytics')) {
             $allowedSiteIds = array_map(fn($s) => $s->id, SmartLinkManager::$plugin->getEnabledSites());
             $siteCondition = ['siteId' => $allowedSiteIds];
 
@@ -148,7 +148,7 @@ class SmartLinkManagerUtility extends Utility
         $qrCacheFiles = 0;
         $deviceCacheFiles = 0;
 
-        if ($currentUser && $currentUser->can('smartLinkManager:clearCache') && $settings->cacheStorageMethod === 'file') {
+        if ($user->getIdentity() && $user->checkPermission('smartLinkManager:clearCache') && $settings->cacheStorageMethod === 'file') {
             $qrCachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'qr');
             $deviceCachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device');
 

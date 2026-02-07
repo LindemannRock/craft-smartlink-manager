@@ -1616,7 +1616,8 @@ class AnalyticsService extends Component
                     $ipHash = $this->_hashIpWithSalt($metadata['ip']);
                 } catch (\Exception $e) {
                     $this->logError('Failed to hash IP address', ['error' => $e->getMessage()]);
-                    $ipHash = null;  // Continue without IP
+                    $ipHash = null;
+                    unset($metadata['ip']); // Prevent geo lookup with raw IP
                 }
             }
 
