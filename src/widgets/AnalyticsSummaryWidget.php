@@ -112,7 +112,7 @@ class AnalyticsSummaryWidget extends Widget
     {
         // Check permission
         if (!Craft::$app->getUser()->checkPermission('smartLinkManager:viewAnalytics')) {
-            return '<p class="light">' . Craft::t('smartlink-manager', 'You don\u2019t have permission to view analytics.') . '</p>';
+            return '<p class="light">' . Craft::t('smartlink-manager', 'You don\'t have permission to view analytics.') . '</p>';
         }
 
         // Check if analytics are enabled
@@ -120,8 +120,9 @@ class AnalyticsSummaryWidget extends Widget
             return '<p class="light">' . Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.') . '</p>';
         }
 
-        // Get analytics data
-        $analyticsData = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange);
+        // Get analytics data scoped to user's editable sites
+        $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
+        $analyticsData = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $editableSiteIds);
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/widgets/analytics-summary/body', [
             'widget' => $this,
