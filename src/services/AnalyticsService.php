@@ -11,6 +11,7 @@ namespace lindemannrock\smartlinkmanager\services;
 use Craft;
 use craft\base\Component;
 use craft\db\Query;
+use craft\helpers\App;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
@@ -1984,8 +1985,8 @@ class AnalyticsService extends Component
     private function getDefaultLocation(): array
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $defaultCountry = $settings->defaultCountry ?: (getenv('SMARTLINK_MANAGER_DEFAULT_COUNTRY') ?: 'AE');
-        $defaultCity = $settings->defaultCity ?: (getenv('SMARTLINK_MANAGER_DEFAULT_CITY') ?: 'Dubai');
+        $defaultCountry = $settings->defaultCountry ?: (App::env('SMARTLINK_MANAGER_DEFAULT_COUNTRY') ?: 'AE');
+        $defaultCity = $settings->defaultCity ?: (App::env('SMARTLINK_MANAGER_DEFAULT_CITY') ?: 'Dubai');
 
         // Predefined locations for common cities worldwide
         $locations = [

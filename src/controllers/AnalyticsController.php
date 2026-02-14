@@ -106,6 +106,12 @@ class AnalyticsController extends Controller
         $smartLinkId = $request->getParam('smartLinkId');
         $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $type = $request->getParam('type', 'summary');
+
+        $validTypes = ['summary', 'clicks', 'devices', 'device-types', 'device-brands', 'platforms', 'os-breakdown', 'browsers', 'countries', 'all-countries', 'all-cities', 'languages', 'hourly', 'insights'];
+        if (!in_array($type, $validTypes, true)) {
+            throw new \yii\web\BadRequestHttpException('Invalid data type.');
+        }
+
         $siteId = $request->getParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
         $resolvedSiteId = $this->_resolveSiteId($siteId);
@@ -147,7 +153,7 @@ class AnalyticsController extends Controller
                 'languages' => SmartLinkManager::$plugin->analytics->getLanguageBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
                 'hourly' => SmartLinkManager::$plugin->analytics->getHourlyAnalytics($smartLinkId, $dateRange, $resolvedSiteId),
                 'insights' => SmartLinkManager::$plugin->analytics->getInsights($dateRange, $resolvedSiteId),
-                default => SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, $smartLinkId, $resolvedSiteId),
+                default => SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, $smartLinkId, $resolvedSiteId), // 'summary'
             };
 
             return $this->asJson([
