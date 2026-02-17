@@ -93,9 +93,6 @@ class AnalyticsSummaryService
             'linksUsed' => $linksWithClicks,
             'linksUsedPercentage' => $linksUsedPercentage,
             'topLinks' => $this->getTopLinks($dateRange, 20, $siteId),
-            'topCountries' => $this->getTopCountries(null, $dateRange, 15, $siteId),
-            'topCities' => $this->getTopCities(null, $dateRange, 15, $siteId),
-            'recentClicks' => $this->getAllRecentClicks($dateRange, 20, $siteId),
         ];
     }
 

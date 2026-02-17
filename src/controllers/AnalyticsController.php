@@ -10,6 +10,7 @@ namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
 use craft\web\Controller;
+use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\DateRangeHelper;
 use lindemannrock\base\helpers\ExportHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -107,7 +108,7 @@ class AnalyticsController extends Controller
         $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $type = $request->getParam('type', 'summary');
 
-        $validTypes = ['summary', 'clicks', 'devices', 'device-types', 'device-brands', 'platforms', 'os-breakdown', 'browsers', 'countries', 'all-countries', 'all-cities', 'languages', 'hourly', 'insights'];
+        $validTypes = ['summary', 'clicks', 'devices', 'device-types', 'device-brands', 'platforms', 'os-breakdown', 'browsers', 'countries', 'all-countries', 'all-cities', 'languages', 'hourly', 'insights', 'recent-clicks'];
         if (!in_array($type, $validTypes, true)) {
             throw new \yii\web\BadRequestHttpException('Invalid data type.');
         }
@@ -153,6 +154,9 @@ class AnalyticsController extends Controller
                 'languages' => SmartLinkManager::$plugin->analytics->getLanguageBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
                 'hourly' => SmartLinkManager::$plugin->analytics->getHourlyAnalytics($smartLinkId, $dateRange, $resolvedSiteId),
                 'insights' => SmartLinkManager::$plugin->analytics->getInsights($dateRange, $resolvedSiteId),
+                'recent-clicks' => $this->_formatRecentClicks(
+                    SmartLinkManager::$plugin->analytics->getAllRecentClicks($dateRange, 20, $resolvedSiteId)
+                ),
                 default => SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, $smartLinkId, $resolvedSiteId), // 'summary'
             };
 
@@ -181,6 +185,7 @@ class AnalyticsController extends Controller
      */
     public function actionExport(): Response
     {
+        $this->requirePostRequest();
         $this->requirePermission('smartLinkManager:exportAnalytics');
 
         // Check if analytics are globally enabled
@@ -190,11 +195,11 @@ class AnalyticsController extends Controller
         }
 
         $request = Craft::$app->getRequest();
-        $smartLinkId = $request->getQueryParam('smartLinkId');
+        $smartLinkId = $request->getBodyParam('smartLinkId');
         // Accept both 'range' and 'dateRange' parameter names
-        $dateRange = $request->getQueryParam('range') ?? $request->getQueryParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
-        $format = $request->getQueryParam('format', 'csv');
-        $siteId = $request->getQueryParam('siteId');
+        $dateRange = $request->getBodyParam('range') ?? $request->getBodyParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
+        $format = $request->getBodyParam('format', 'csv');
+        $siteId = $request->getBodyParam('siteId');
         $siteId = $siteId ? (int)$siteId : null;
         $resolvedSiteId = $this->_resolveSiteId($siteId);
 
@@ -342,5 +347,83 @@ class AnalyticsController extends Controller
         }
 
         return $allowedSiteIds;
+    }
+
+    /**
+     * Format recent clicks for AJAX response with server-side date/time formatting
+     *
+     * @param array $clicks Raw clicks from getAllRecentClicks()
+     * @return array Formatted clicks with dateFormatted/timeFormatted strings
+     * @since 5.23.0
+     */
+    private function _formatRecentClicks(array $clicks): array
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $geoEnabled = $settings->enableGeoDetection ?? true;
+
+        $platformLabels = [
+            'ios' => 'iOS',
+            'android' => 'Android',
+            'macos' => 'macOS',
+            'windows' => 'Windows',
+            'linux' => 'Linux',
+            'huawei' => 'Huawei',
+            'amazon' => 'Amazon',
+            'other' => 'Other',
+        ];
+
+        $formatted = [];
+        foreach ($clicks as $click) {
+            $dateFormatted = '';
+            $timeFormatted = '';
+            if (!empty($click['dateCreated'])) {
+                // dateCreated is already converted to local timezone by getAllRecentClicks()
+                $dateFormatted = DateFormatHelper::formatDate($click['dateCreated'], 'short', true, false) ?? '';
+                $timeFormatted = DateFormatHelper::formatTime($click['dateCreated'], 'short', null, false) ?? '';
+            }
+
+            $platformLabel = '';
+            if (($click['clickType'] ?? '') === 'button' && !empty($click['platform'])) {
+                $platformLabel = $platformLabels[$click['platform']] ?? ucfirst($click['platform']);
+            }
+
+            $sourceLabel = match ($click['source'] ?? 'direct') {
+                'qr' => Craft::t('smartlink-manager', 'QR'),
+                'landing' => Craft::t('smartlink-manager', 'Landing'),
+                default => Craft::t('smartlink-manager', 'Direct'),
+            };
+
+            $clickTypeLabel = ($click['clickType'] ?? 'redirect') === 'button'
+                ? Craft::t('smartlink-manager', 'Button')
+                : Craft::t('smartlink-manager', 'Redirect');
+
+            $location = '';
+            if ($geoEnabled) {
+                if (!empty($click['city']) && !empty($click['country'])) {
+                    $location = $click['city'] . ', ' . $click['country'];
+                } elseif (!empty($click['country'])) {
+                    $location = $click['country'];
+                }
+            }
+
+            $formatted[] = [
+                'dateFormatted' => $dateFormatted,
+                'timeFormatted' => $timeFormatted,
+                'linkId' => $click['linkId'] ?? '',
+                'smartLinkTitle' => $click['smartLinkTitle'] ?? '',
+                'siteName' => $click['siteName'] ?? '',
+                'clickTypeLabel' => $clickTypeLabel,
+                'platformLabel' => $platformLabel,
+                'sourceLabel' => $sourceLabel,
+                'destinationUrl' => $click['destinationUrl'] ?? '',
+                'deviceType' => !empty($click['deviceType']) ? ucfirst($click['deviceType']) : '',
+                'browser' => $click['browser'] ?? '',
+                'osName' => $click['osName'] ?? '',
+                'location' => $location,
+                'geoEnabled' => $geoEnabled,
+            ];
+        }
+
+        return $formatted;
     }
 }
