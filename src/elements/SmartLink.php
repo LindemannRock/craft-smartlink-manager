@@ -774,7 +774,7 @@ class SmartLink extends Element
      */
     public function canView(User $user): bool
     {
-        return $user->can('smartLinkManager:viewLinks');
+        return $user->can('smartLinkManager:manageLinks');
     }
 
     /**

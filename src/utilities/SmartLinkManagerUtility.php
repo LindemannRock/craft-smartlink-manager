@@ -65,7 +65,7 @@ class SmartLinkManagerUtility extends Utility
         $expiredLinks = 0;
         $disabledLinks = 0;
 
-        if ($user->getIdentity() && $user->checkPermission('smartLinkManager:viewLinks')) {
+        if ($user->getIdentity() && $user->checkPermission('smartLinkManager:manageLinks')) {
             $allowedSiteIds = array_map(fn($s) => $s->id, SmartLinkManager::$plugin->getEnabledSites());
 
             $totalLinks = \lindemannrock\smartlinkmanager\elements\SmartLink::find()->siteId($allowedSiteIds)->status(null)->count();

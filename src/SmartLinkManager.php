@@ -189,8 +189,9 @@ class SmartLinkManager extends Plugin
             UserPermissions::class,
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
             function(RegisterUserPermissionsEvent $event) {
+                $settings = $this->getSettings();
                 $event->permissions[] = [
-                    'heading' => Craft::t('smartlink-manager', 'SmartLink Manager'),
+                    'heading' => $settings->getFullName(),
                     'permissions' => $this->getPluginPermissions(),
                 ];
             }
@@ -377,7 +378,7 @@ class SmartLinkManager extends Plugin
                 'key' => 'links',
                 'label' => Craft::t('smartlink-manager', 'Links'),
                 'url' => 'smartlink-manager',
-                'permissionsAll' => ['smartLinkManager:viewLinks'],
+                'permissionsAll' => ['smartLinkManager:manageLinks'],
             ];
         }
 
@@ -541,9 +542,6 @@ class SmartLinkManager extends Plugin
             'smartLinkManager:manageLinks' => [
                 'label' => Craft::t('smartlink-manager', 'Manage {plural}', ['plural' => $plural]),
                 'nested' => [
-                    'smartLinkManager:viewLinks' => [
-                        'label' => Craft::t('smartlink-manager', 'View {plural}', ['plural' => $plural]),
-                    ],
                     'smartLinkManager:createLinks' => [
                         'label' => Craft::t('smartlink-manager', 'Create {plural}', ['plural' => $plural]),
                     ],

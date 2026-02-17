@@ -51,15 +51,15 @@ class SmartlinksController extends Controller
         $user = Craft::$app->getUser();
         $settings = SmartLinkManager::$plugin->getSettings();
 
-        // If user doesn't have viewLinks permission, redirect to first accessible section
-        if (!$user->checkPermission('smartLinkManager:viewLinks')) {
+        // If user doesn't have manageLinks permission, redirect to first accessible section
+        if (!$user->checkPermission('smartLinkManager:manageLinks')) {
             $sections = SmartLinkManager::$plugin->getCpSections($settings, false, true);
             $route = CpNavHelper::firstAccessibleRoute($user, $settings, $sections);
             if ($route) {
                 return $this->redirect($route);
             }
             // No access at all
-            $this->requirePermission('smartLinkManager:viewLinks');
+            $this->requirePermission('smartLinkManager:manageLinks');
         }
 
         // Get current site from request or Craft's current site
@@ -102,7 +102,7 @@ class SmartlinksController extends Controller
      */
     public function actionEdit(?int $smartLinkId = null, ?SmartLink $smartLink = null): Response
     {
-        $this->requirePermission('smartLinkManager:viewLinks');
+        $this->requirePermission('smartLinkManager:manageLinks');
 
         $variables = [
             'smartLinkId' => $smartLinkId,
@@ -512,7 +512,7 @@ class SmartlinksController extends Controller
     public function actionGetDetails(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('smartLinkManager:viewLinks');
+        $this->requirePermission('smartLinkManager:manageLinks');
 
         $smartLinkId = Craft::$app->getRequest()->getRequiredParam('id');
         $smartLink = SmartLinkManager::$plugin->smartLinks->getSmartLinkById($smartLinkId);
@@ -586,7 +586,7 @@ class SmartlinksController extends Controller
      */
     public function actionRevisions(int $smartLinkId): Response
     {
-        $this->requirePermission('smartLinkManager:viewLinks');
+        $this->requirePermission('smartLinkManager:manageLinks');
 
         // Get the site
         $siteParam = Craft::$app->getRequest()->getQueryParam('site');
