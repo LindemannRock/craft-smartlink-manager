@@ -112,84 +112,12 @@
                         {% endif %}
                     </tr>
                 </thead>
-                <tbody>
-                    {% for click in analyticsData.recentClicks ?? [] %}
-                        <tr>
-                            <td>{{ click.dateCreated|lrDate('short') }}</td>
-                            <td>{{ click.dateCreated|lrTime('short') }}</td>
-                            <td>
-                                <a href="{{ cpUrl('smartlink-manager/' ~ click.linkId) }}">{{ click.smartLinkTitle }}</a>
-                            </td>
-                            <td>
-                                {% if click.siteId %}
-                                    {% set site = craft.app.sites.getSiteById(click.siteId) %}
-                                    {{ site ? site.name : '—' }}
-                                {% else %}
-                                    —
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if click.clickType == 'button' %}
-                                    {{ "Button"|t('smartlink-manager') }}
-                                {% else %}
-                                    {{ "Redirect"|t('smartlink-manager') }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if click.clickType == 'button' and click.platform %}
-                                    {% set platformDisplay = {
-                                        'ios': 'iOS',
-                                        'android': 'Android',
-                                        'macos': 'macOS',
-                                        'windows': 'Windows',
-                                        'linux': 'Linux',
-                                        'huawei': 'Huawei',
-                                        'amazon': 'Amazon',
-                                        'other': 'Other'
-                                    } %}
-                                    {{ platformDisplay[click.platform] ?? click.platform|capitalize }}
-                                {% else %}
-                                    —
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if click.source == 'qr' %}
-                                    {{ "QR"|t('smartlink-manager') }}
-                                {% elseif click.source == 'landing' %}
-                                    {{ "Landing"|t('smartlink-manager') }}
-                                {% else %}
-                                    {{ "Direct"|t('smartlink-manager') }}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if click.destinationUrl %}
-                                    <span title="{{ click.destinationUrl }}">
-                                        {{ click.destinationUrl|length > 25 ? click.destinationUrl|slice(0, 25) ~ '...' : click.destinationUrl }}
-                                    </span>
-                                {% else %}
-                                    —
-                                {% endif %}
-                            </td>
-                            <td>{{ click.deviceType ? click.deviceType|capitalize : '—' }}</td>
-                            <td>{{ click.browser ?? '—' }}</td>
-                            <td>{{ click.osName ? click.osName : '—' }}</td>
-                            {% if settings.enableGeoDetection %}
-                                <td>
-                                    {% if click.city and click.country %}
-                                        {{ click.city }}, {{ click.country }}
-                                    {% elseif click.country %}
-                                        {{ click.country }}
-                                    {% else %}
-                                        —
-                                    {% endif %}
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="{{ settings.enableGeoDetection ? 12 : 11 }}" class="thin light lr-text-center">{{ "No interactions recorded yet"|t('smartlink-manager') }}</td>
-                        </tr>
-                    {% endfor %}
+                <tbody id="recent-clicks-body">
+                    <tr>
+                        <td colspan="{{ settings.enableGeoDetection ? 12 : 11 }}" class="light lr-text-center">
+                            <div class="spinner"></div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

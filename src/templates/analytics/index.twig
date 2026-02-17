@@ -85,6 +85,9 @@
     noHourly: "No hourly data available for the selected filters."|t('smartlink-manager'),
     clicksLabel: "Clicks"|t('smartlink-manager'),
     peakUsageAt: "Peak usage at"|t('smartlink-manager'),
+    noCountryData: "No country data available"|t('smartlink-manager'),
+    noCityData: "No city data available"|t('smartlink-manager'),
+    noRecentClicks: "No interactions recorded yet"|t('smartlink-manager'),
 } %}
 
 {% set smartlinkAnalyticsConfig = {
@@ -95,6 +98,8 @@
     csrfToken: craft.app.request.csrfToken,
     dataEndpoint: analyticsConfig.charts.dataEndpoint,
     strings: smartlinkStrings,
+    geoEnabled: settings.enableGeoDetection ? true : false,
+    recentClicksColSpan: settings.enableGeoDetection ? 12 : 11,
 } %}
 
 {% js %}
