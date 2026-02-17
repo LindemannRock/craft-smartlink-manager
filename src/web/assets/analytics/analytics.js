@@ -22,12 +22,31 @@
         ];
 
         const strings = config.strings || {};
+        const geoEnabled = config.geoEnabled || false;
+        const recentClicksColSpan = config.recentClicksColSpan || 11;
         const dataEndpoint = (window.Craft && Craft.getActionUrl && config.dataEndpoint)
             ? Craft.getActionUrl(config.dataEndpoint)
             : config.dataEndpoint;
 
+        // Guard flags for lazy-loaded tabs
+        var geoLoaded = false;
+        var recentClicksLoaded = false;
+
+        function esc(str) {
+            if (typeof Craft !== 'undefined' && Craft.escapeHtml) {
+                return Craft.escapeHtml(str);
+            }
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function fmtNum(n) {
+            return Number(n).toLocaleString();
+        }
+
         function destroyChart(canvasId, prefix) {
-            const chartKey = canvasId.replace(/-/g, '_');
+            var chartKey = canvasId.replace(/-/g, '_');
             if (window.lrChartInstances && window.lrChartInstances[prefix] && window.lrChartInstances[prefix][chartKey]) {
                 window.lrChartInstances[prefix][chartKey].destroy();
                 delete window.lrChartInstances[prefix][chartKey];
@@ -37,31 +56,37 @@
         function resetChartState(canvas) {
             if (!canvas) return;
             canvas.style.display = '';
-            const parent = canvas.parentElement || canvas.parentNode;
+            var parent = canvas.parentElement || canvas.parentNode;
             if (!parent) return;
-            parent.querySelectorAll('.zilch').forEach(el => el.remove());
+            parent.querySelectorAll('.zilch').forEach(function(el) { el.remove(); });
         }
 
         function renderEmptyState(canvasId, message, prefix) {
-            const ctx = document.getElementById(canvasId);
+            var ctx = document.getElementById(canvasId);
             if (!ctx) return;
             resetChartState(ctx);
             destroyChart(canvasId, prefix);
             ctx.style.display = 'none';
-            const parent = ctx.parentElement || ctx.parentNode;
+            var parent = ctx.parentElement || ctx.parentNode;
             if (!parent) return;
-            const emptyMsg = document.createElement('div');
+            var emptyMsg = document.createElement('div');
             emptyMsg.className = 'zilch';
             emptyMsg.style.padding = '48px 24px';
             emptyMsg.style.textAlign = 'center';
-            const p = document.createElement('p');
+            var p = document.createElement('p');
             p.textContent = message;
             emptyMsg.appendChild(p);
             parent.appendChild(emptyMsg);
         }
 
+        function renderEmptyRow(tbodyId, colSpan, message) {
+            var tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="' + colSpan + '" class="thin light lr-text-center">' + esc(message) + '</td></tr>';
+        }
+
         function setPeakInfo(text) {
-            const el = document.getElementById('peak-hour-info');
+            var el = document.getElementById('peak-hour-info');
             if (el) {
                 el.textContent = text || '';
             }
@@ -73,7 +98,7 @@
                 return;
             }
 
-            const data = Object.assign({ type: type }, params || {});
+            var data = Object.assign({ type: type }, params || {});
 
             if (config.csrfName && config.csrfToken) {
                 data[config.csrfName] = config.csrfToken;
@@ -99,7 +124,7 @@
                 return;
             }
 
-            const formData = new FormData();
+            var formData = new FormData();
             Object.keys(data).forEach(function(key) {
                 formData.append(key, data[key]);
             });
@@ -121,20 +146,57 @@
             });
         }
 
+        function getActiveTabId() {
+            var hash = window.location.hash ? window.location.hash.substring(1) : '';
+            if (hash && document.getElementById(hash)) {
+                return hash;
+            }
+            var visible = document.querySelector('.lr-tab-content:not(.hidden)');
+            return visible ? visible.id : 'overview';
+        }
+
         document.addEventListener('lr:analyticsInit', function(e) {
-            const eventConfig = e.detail && e.detail.config ? e.detail.config : (window.lrAnalyticsConfig || {});
-            const prefix = eventConfig.prefix || 'analytics';
-            const dateRange = eventConfig.dateRange || config.dateRange || 'last7days';
-            const siteId = eventConfig.siteId || config.siteId || '';
+            var eventConfig = e.detail && e.detail.config ? e.detail.config : (window.lrAnalyticsConfig || {});
+            var prefix = eventConfig.prefix || 'analytics';
+            var dateRange = eventConfig.dateRange || config.dateRange || 'last7days';
+            var siteId = eventConfig.siteId || config.siteId || '';
+
+            // Reset guard flags on re-init (date/site change)
+            geoLoaded = false;
+            recentClicksLoaded = false;
 
             loadAllCharts(dateRange, siteId, prefix);
+
+            // Reload the currently active tab (e.g. geographic) if not overview
+            var activeTab = getActiveTabId();
+            if (activeTab === 'geographic' && geoEnabled) {
+                geoLoaded = true;
+                loadGeographic({ dateRange: dateRange, siteId: siteId });
+            }
+        });
+
+        document.addEventListener('lr:tabChanged', function(e) {
+            var tabId = e.detail && e.detail.tabId ? e.detail.tabId : '';
+            var currentConfig = window.lrAnalyticsConfig || {};
+            var dateRange = currentConfig.dateRange || config.dateRange || 'last7days';
+            var siteId = currentConfig.siteId || config.siteId || '';
+            var baseParams = { dateRange: dateRange, siteId: siteId };
+
+            if (tabId === 'geographic' && !geoLoaded && geoEnabled) {
+                geoLoaded = true;
+                loadGeographic(baseParams);
+            }
         });
 
         function loadAllCharts(dateRange, siteId, prefix) {
-            const baseParams = { dateRange: dateRange, siteId: siteId };
+            var baseParams = { dateRange: dateRange, siteId: siteId };
+
+            // Load recent clicks for overview tab
+            recentClicksLoaded = true;
+            loadRecentClicks(baseParams);
 
             requestData('clicks', baseParams, function(data) {
-                const hasClicks = Array.isArray(data.values) && data.values.some(value => Number(value) > 0);
+                var hasClicks = Array.isArray(data.values) && data.values.some(function(value) { return Number(value) > 0; });
                 if (data.labels && data.labels.length > 0 && hasClicks) {
                     renderClicksChart(data);
                 } else {
@@ -145,7 +207,7 @@
             });
 
             requestData('device-types', baseParams, function(data) {
-                const hasData = Array.isArray(data.values) && data.values.some(value => Number(value) > 0);
+                var hasData = Array.isArray(data.values) && data.values.some(function(value) { return Number(value) > 0; });
                 if (data.labels && data.labels.length > 0 && hasData) {
                     renderDeviceChart(data);
                 } else {
@@ -156,7 +218,7 @@
             });
 
             requestData('device-brands', baseParams, function(data) {
-                const hasData = Array.isArray(data.values) && data.values.some(value => Number(value) > 0);
+                var hasData = Array.isArray(data.values) && data.values.some(function(value) { return Number(value) > 0; });
                 if (data.labels && data.labels.length > 0 && hasData) {
                     renderBrandChart(data);
                 } else {
@@ -167,7 +229,7 @@
             });
 
             requestData('os-breakdown', baseParams, function(data) {
-                const hasData = Array.isArray(data.values) && data.values.some(value => Number(value) > 0);
+                var hasData = Array.isArray(data.values) && data.values.some(function(value) { return Number(value) > 0; });
                 if (data.labels && data.labels.length > 0 && hasData) {
                     renderOsChart(data);
                 } else {
@@ -178,7 +240,7 @@
             });
 
             requestData('browsers', baseParams, function(data) {
-                const hasData = Array.isArray(data.values) && data.values.some(value => Number(value) > 0);
+                var hasData = Array.isArray(data.values) && data.values.some(function(value) { return Number(value) > 0; });
                 if (data.labels && data.labels.length > 0 && hasData) {
                     renderBrowserChart(data);
                 } else {
@@ -189,7 +251,7 @@
             });
 
             requestData('hourly', baseParams, function(data) {
-                const hasHourly = Array.isArray(data.data) && data.data.some(value => Number(value) > 0);
+                var hasHourly = Array.isArray(data.data) && data.data.some(function(value) { return Number(value) > 0; });
                 if (data.data && data.data.length > 0 && hasHourly) {
                     renderHourlyChart(data);
                 } else {
@@ -202,8 +264,113 @@
             });
         }
 
+        function loadRecentClicks(baseParams) {
+            requestData('recent-clicks', baseParams, function(data) {
+                renderRecentClicksTable(Array.isArray(data) ? data : []);
+            }, function() {
+                renderEmptyRow('recent-clicks-body', recentClicksColSpan, strings.noRecentClicks || 'No interactions recorded yet');
+            });
+        }
+
+        function loadGeographic(baseParams) {
+            requestData('countries', baseParams, function(data) {
+                renderCountriesTable(Array.isArray(data) ? data : []);
+            }, function() {
+                renderEmptyRow('geo-countries-body', 3, strings.noCountryData || 'No country data available');
+            });
+
+            requestData('all-cities', baseParams, function(data) {
+                renderCitiesTable(Array.isArray(data) ? data : []);
+            }, function() {
+                renderEmptyRow('geo-cities-body', 4, strings.noCityData || 'No city data available');
+            });
+        }
+
+        function renderCountriesTable(countries) {
+            var tbody = document.getElementById('geo-countries-body');
+            if (!tbody) return;
+
+            if (!countries.length) {
+                renderEmptyRow('geo-countries-body', 3, strings.noCountryData || 'No country data available');
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < countries.length; i++) {
+                var c = countries[i];
+                html += '<tr>' +
+                    '<td>' + esc(c.name || '') + '</td>' +
+                    '<td>' + fmtNum(c.clicks || 0) + '</td>' +
+                    '<td>' + esc(String(c.percentage || 0)) + '%</td>' +
+                    '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function renderCitiesTable(cities) {
+            var tbody = document.getElementById('geo-cities-body');
+            if (!tbody) return;
+
+            if (!cities.length) {
+                renderEmptyRow('geo-cities-body', 4, strings.noCityData || 'No city data available');
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < cities.length; i++) {
+                var c = cities[i];
+                html += '<tr>' +
+                    '<td>' + esc(c.city || '') + '</td>' +
+                    '<td>' + esc(c.countryName || '') + '</td>' +
+                    '<td>' + fmtNum(c.clicks || 0) + '</td>' +
+                    '<td>' + esc(String(c.percentage || 0)) + '%</td>' +
+                    '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function renderRecentClicksTable(clicks) {
+            var tbody = document.getElementById('recent-clicks-body');
+            if (!tbody) return;
+
+            if (!clicks.length) {
+                renderEmptyRow('recent-clicks-body', recentClicksColSpan, strings.noRecentClicks || 'No interactions recorded yet');
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < clicks.length; i++) {
+                var click = clicks[i];
+                var destUrl = click.destinationUrl || '';
+                var destDisplay = destUrl.length > 25 ? destUrl.substring(0, 25) + '...' : destUrl;
+                var linkUrl = (typeof Craft !== 'undefined' && Craft.getCpUrl)
+                    ? Craft.getCpUrl('smartlink-manager/' + click.linkId)
+                    : 'smartlink-manager/' + click.linkId;
+
+                html += '<tr>' +
+                    '<td>' + esc(click.dateFormatted || '') + '</td>' +
+                    '<td>' + esc(click.timeFormatted || '') + '</td>' +
+                    '<td><a href="' + esc(linkUrl) + '">' + esc(click.smartLinkTitle || '') + '</a></td>' +
+                    '<td>' + esc(click.siteName || '\u2014') + '</td>' +
+                    '<td>' + esc(click.clickTypeLabel || '') + '</td>' +
+                    '<td>' + esc(click.platformLabel || '\u2014') + '</td>' +
+                    '<td>' + esc(click.sourceLabel || '') + '</td>' +
+                    '<td>' + (destUrl ? '<span title="' + esc(destUrl) + '">' + esc(destDisplay) + '</span>' : '\u2014') + '</td>' +
+                    '<td>' + esc(click.deviceType || '\u2014') + '</td>' +
+                    '<td>' + esc(click.browser || '\u2014') + '</td>' +
+                    '<td>' + esc(click.osName || '\u2014') + '</td>';
+
+                if (click.geoEnabled) {
+                    html += '<td>' + esc(click.location || '\u2014') + '</td>';
+                }
+
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
         function renderClicksChart(data) {
-            const ctx = document.getElementById('clicks-chart');
+            var ctx = document.getElementById('clicks-chart');
             if (!ctx) return;
             resetChartState(ctx);
             window.lrCreateChart('clicks-chart', 'line', {
@@ -223,7 +390,7 @@
         }
 
         function renderDeviceChart(data) {
-            const ctx = document.getElementById('device-chart');
+            var ctx = document.getElementById('device-chart');
             if (!ctx) return;
             resetChartState(ctx);
             window.lrCreateChart('device-chart', 'doughnut', {
@@ -235,7 +402,7 @@
         }
 
         function renderBrandChart(data) {
-            const ctx = document.getElementById('brand-chart');
+            var ctx = document.getElementById('brand-chart');
             if (!ctx) return;
             resetChartState(ctx);
 
@@ -255,7 +422,7 @@
         }
 
         function renderOsChart(data) {
-            const ctx = document.getElementById('os-chart');
+            var ctx = document.getElementById('os-chart');
             if (!ctx) return;
             resetChartState(ctx);
             window.lrCreateChart('os-chart', 'doughnut', {
@@ -267,7 +434,7 @@
         }
 
         function renderBrowserChart(data) {
-            const ctx = document.getElementById('browser-chart');
+            var ctx = document.getElementById('browser-chart');
             if (!ctx) return;
             resetChartState(ctx);
             window.lrCreateChart('browser-chart', 'doughnut', {
@@ -279,12 +446,12 @@
         }
 
         function renderHourlyChart(data) {
-            const ctx = document.getElementById('hourly-chart');
+            var ctx = document.getElementById('hourly-chart');
             if (!ctx) return;
             resetChartState(ctx);
 
             window.lrCreateChart('hourly-chart', 'bar', {
-                labels: Array.from({ length: 24 }, (_, i) => i + ':00'),
+                labels: Array.from({ length: 24 }, function(_, i) { return i + ':00'; }),
                 datasets: [{
                     label: strings.clicksLabel || 'Clicks',
                     data: data.data,
