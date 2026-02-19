@@ -155,14 +155,19 @@
 
         <h2>{{ "Template Settings"|t('smartlink-manager') }}</h2>
 
+        {% include 'lindemannrock-base/_components/info-box' with {
+            type: 'info',
+            message: "These templates must exist in your site's <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed."|t('smartlink-manager')
+        } %}
+
         {{ forms.textField({
             label: "Redirect Template"|t('smartlink-manager'),
-            instructions: "Path to your Redirect template in your templates/ folder (e.g., smartlink-manager/redirect)"|t('smartlink-manager'),
+            instructions: "Template path in your templates/ folder. Leave empty to use the default path."|t('smartlink-manager'),
             id: 'redirectTemplate',
             name: 'settings[redirectTemplate]',
             value: settings.redirectTemplate ?? '',
             placeholder: 'smartlink-manager/redirect',
-            tip: "Copy reference template from <code>plugins/smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>"|t('smartlink-manager')|raw,
+            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>"|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('redirectTemplate'),
             warning: settings.isOverriddenByConfig('redirectTemplate') ?
                 "This is being overridden by the <code>redirectTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -170,12 +175,12 @@
 
         {{ forms.textField({
             label: "QR Code Template"|t('smartlink-manager'),
-            instructions: "Path to your QR Code template in your templates/ folder (e.g., smartlink-manager/qr)"|t('smartlink-manager'),
+            instructions: "Template path in your templates/ folder. Leave empty to use the default path."|t('smartlink-manager'),
             id: 'qrTemplate',
             name: 'settings[qrTemplate]',
             value: settings.qrTemplate ?? '',
             placeholder: 'smartlink-manager/qr',
-            tip: "Copy reference template from <code>plugins/smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>"|t('smartlink-manager')|raw,
+            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>"|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('qrTemplate'),
             warning: settings.isOverriddenByConfig('qrTemplate') ?
                 "This is being overridden by the <code>qrTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,

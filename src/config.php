@@ -38,8 +38,12 @@ return [
         'qrPrefix' => 'go/qr',             // URL prefix for QR code pages (e.g., 'go/qr' creates /go/qr/your-link)
 
         // Template Settings
-        'redirectTemplate' => null,        // Custom redirect landing page template path
-        'qrTemplate' => null,              // Custom QR code display page template path
+        // These templates MUST exist in your site's templates/ folder.
+        // Copy from: vendor/lindemannrock/craft-smartlink-manager/src/templates/{name}.twig
+        //       to:  templates/smartlink-manager/{name}.twig
+        // Then customize as needed. Leaving null uses the default path 'smartlink-manager/{name}'.
+        'redirectTemplate' => null,        // Default path: smartlink-manager/redirect
+        'qrTemplate' => null,              // Default path: smartlink-manager/qr
 
         // Site Settings
         'enabledSites' => [],              // Array of site IDs where SmartLink Manager should be enabled (empty = all sites)
