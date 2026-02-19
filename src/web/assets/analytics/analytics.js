@@ -348,8 +348,8 @@
                     : 'smartlink-manager/' + click.linkId;
 
                 html += '<tr>' +
-                    '<td>' + esc(click.dateFormatted || '') + '</td>' +
-                    '<td>' + esc(click.timeFormatted || '') + '</td>' +
+                    '<td style="white-space:nowrap">' + esc(click.dateFormatted || '') + '</td>' +
+                    '<td style="white-space:nowrap">' + esc(click.timeFormatted || '') + '</td>' +
                     '<td><a href="' + esc(linkUrl) + '">' + esc(click.smartLinkTitle || '') + '</a></td>' +
                     '<td>' + esc(click.siteName || '\u2014') + '</td>' +
                     '<td>' + esc(click.clickTypeLabel || '') + '</td>' +
@@ -361,7 +361,7 @@
                     '<td>' + esc(click.osName || '\u2014') + '</td>';
 
                 if (click.geoEnabled) {
-                    html += '<td>' + esc(click.location || '\u2014') + '</td>';
+                    html += '<td style="white-space:nowrap">' + esc(click.location || '\u2014') + '</td>';
                 }
 
                 html += '</tr>';

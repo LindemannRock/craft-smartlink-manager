@@ -121,8 +121,8 @@
                                     {% set metadata = click.metadata ? click.metadata|json_decode : {} %}
                                     {% set clickType = metadata.clickType ?? 'redirect' %}
                                     <tr>
-                                        <td>{{ click.dateCreated|lrDate('short') }}</td>
-                                        <td>{{ click.dateCreated|lrTime('short') }}</td>
+                                        <td style="white-space: nowrap;">{{ click.dateCreated|lrDate('short') }}</td>
+                                        <td style="white-space: nowrap;">{{ click.dateCreated|lrTime('short') }}</td>
                                         <td>
                                             {% if click.siteId %}
                                                 {% set site = craft.app.sites.getSiteById(click.siteId) %}
@@ -185,7 +185,7 @@
                                         <td>{{ click.deviceType ? click.deviceType|capitalize : '—' }}</td>
                                         <td>{{ click.osName ?? '—' }}</td>
                                         {% if settings.enableGeoDetection %}
-                                            <td>
+                                            <td style="white-space: nowrap;">
                                                 {% if click.city and click.country %}
                                                     {{ click.city }}, {{ click.country }}
                                                 {% elseif click.country %}
