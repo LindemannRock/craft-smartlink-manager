@@ -11,7 +11,6 @@ namespace lindemannrock\smartlinkmanager\services\analytics;
 use Craft;
 use craft\db\Query;
 use craft\helpers\Json;
-use craft\helpers\UrlHelper;
 use lindemannrock\base\helpers\GeoHelper;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -76,6 +75,7 @@ class AnalyticsExportService
 
         $settings = SmartLinkManager::$plugin->getSettings();
         $geoEnabled = $settings->enableGeoDetection ?? true;
+        $slugPrefix = $settings->slugPrefix ?? 'go';
 
         $linkIds = array_unique(array_column($results, 'linkId'));
         $smartLinks = [];
@@ -107,7 +107,7 @@ class AnalyticsExportService
             if (!empty($row['siteId'])) {
                 $site = Craft::$app->getSites()->getSiteById($row['siteId']);
                 $siteName = $site ? $site->name : '';
-                $smartLinkUrl = UrlHelper::siteUrl("go/{$smartLink->slug}", null, null, $row['siteId']);
+                $smartLinkUrl = $settings->buildPublicUrl("{$slugPrefix}/{$smartLink->slug}", (int) $row['siteId']);
             }
 
             $metadata = !empty($row['metadata']) ? Json::decode($row['metadata']) : [];

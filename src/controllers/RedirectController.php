@@ -9,6 +9,7 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
+use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -47,24 +48,26 @@ class RedirectController extends Controller
      * @return Response
      * @since 1.0.0
      */
-    public function actionIndex(string $slug): Response
+    public function actionIndex(string $slug, ?string $siteHandle = null): Response
     {
-        // Get current site for multi-site support
-        $currentSite = Craft::$app->getSites()->getCurrentSite();
+        $site = $this->resolveSite($siteHandle);
+        if (!$site) {
+            $this->logWarning('Invalid site handle for smart link request', ['slug' => $slug, 'siteHandle' => $siteHandle]);
+            return $this->redirectToNotFound();
+        }
 
         // Check if SmartLink Manager is enabled for the current site
         $settings = SmartLinkManager::$plugin->getSettings();
-        if (!$settings->isSiteEnabled($currentSite->id)) {
-            $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $currentSite->id, 'slug' => $slug]);
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-            return $this->redirect($redirectUrl);
+        if (!$settings->isSiteEnabled($site->id)) {
+            $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $site->id, 'slug' => $slug]);
+            return $this->redirectToNotFound();
         }
 
         // Get the smart link for the current site
         // Get any status to check expired/disabled/pending separately
         $smartLink = SmartLink::find()
             ->slug($slug)
-            ->siteId($currentSite->id)
+            ->siteId($site->id)
             ->status(null)
             ->one();
 
@@ -88,42 +91,25 @@ class RedirectController extends Controller
             }
 
             // Fallback to configured URL
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-
-            // Handle relative URLs
-            if (strpos($redirectUrl, '://') === false && strpos($redirectUrl, '/') !== 0) {
-                $redirectUrl = '/' . $redirectUrl;
-            }
-
-            return $this->redirect($redirectUrl);
+            return $this->redirectToNotFound();
         }
 
         // Check if smart link is disabled
         if ($smartLink->getStatus() === SmartLink::STATUS_DISABLED) {
             $this->logInfo('Smart link disabled', ['slug' => $slug]);
-            // Redirect to not found
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-            return $this->redirect($redirectUrl);
+            return $this->redirectToNotFound();
         }
 
         // Check if smart link is expired
         if ($smartLink->getStatus() === SmartLink::STATUS_EXPIRED) {
             $this->logInfo('Smart link expired', ['slug' => $slug]);
-            // Redirect to not found
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-            return $this->redirect($redirectUrl);
+            return $this->redirectToNotFound();
         }
 
         // Check if smart link is pending
         if ($smartLink->getStatus() === SmartLink::STATUS_PENDING) {
             $this->logInfo('Smart link pending', ['slug' => $slug]);
-            // Redirect to not found
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-            return $this->redirect($redirectUrl);
+            return $this->redirectToNotFound();
         }
 
         // Get device info and language for template display
@@ -154,7 +140,7 @@ class RedirectController extends Controller
      * @return Response
      * @since 1.0.0
      */
-    public function actionGo(string $slug, string $platform = 'auto'): Response
+    public function actionGo(string $slug, string $platform = 'auto', ?string $siteHandle = null): Response
     {
         // Normalize platform parameter to lowercase first
         $platform = strtolower($platform);
@@ -166,14 +152,18 @@ class RedirectController extends Controller
             $platform = 'auto';
         }
 
-        // Get site from param or fall back to current site
-        $siteParam = Craft::$app->getRequest()->getParam('site');
-        if ($siteParam) {
-            $site = Craft::$app->getSites()->getSiteByHandle($siteParam);
-            $siteId = $site ? $site->id : Craft::$app->getSites()->getCurrentSite()->id;
-        } else {
-            $siteId = Craft::$app->getSites()->getCurrentSite()->id;
+        // Resolve site from route first, then from query param, then fallback to current
+        $site = $this->resolveSite($siteHandle);
+        if (!$site) {
+            $siteParam = Craft::$app->getRequest()->getParam('site');
+            if ($siteParam) {
+                $site = Craft::$app->getSites()->getSiteByHandle((string) $siteParam);
+            }
         }
+        if (!$site) {
+            $site = Craft::$app->getSites()->getCurrentSite();
+        }
+        $siteId = $site->id;
 
         // Check if SmartLink Manager is enabled for the site
         $settings = SmartLinkManager::$plugin->getSettings();
@@ -305,6 +295,33 @@ class RedirectController extends Controller
 
         // No destination URL available, redirect to fallback
         return $this->redirect($this->_sanitizeUrl($smartLink->fallbackUrl), 302);
+    }
+
+    /**
+     * Resolve request site from route handle (if provided), otherwise use current site.
+     */
+    private function resolveSite(?string $siteHandle): ?Site
+    {
+        if ($siteHandle) {
+            return Craft::$app->getSites()->getSiteByHandle($siteHandle);
+        }
+
+        return Craft::$app->getSites()->getCurrentSite();
+    }
+
+    /**
+     * Redirect to configured not-found destination.
+     */
+    private function redirectToNotFound(): Response
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+
+        if (strpos($redirectUrl, '://') === false && strpos($redirectUrl, '/') !== 0) {
+            $redirectUrl = '/' . $redirectUrl;
+        }
+
+        return $this->redirect($redirectUrl);
     }
 
     /**

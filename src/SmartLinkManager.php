@@ -520,11 +520,16 @@ class SmartLinkManager extends Plugin
         $settings = $this->getSettings();
         $slugPrefix = $settings->slugPrefix ?? 'go';
         $qrPrefix = $settings->qrPrefix ?? 'qr';
+        $siteHandles = array_map(static fn($site) => preg_quote($site->handle, '/'), Craft::$app->getSites()->getAllSites());
+        $siteHandlePattern = !empty($siteHandles) ? implode('|', $siteHandles) : '[a-zA-Z0-9_-]+';
 
         return [
             $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/index',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
+            '<siteHandle:' . $siteHandlePattern . '>/' . $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/index',
+            '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
+            '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
             'smartlink-manager/qr-code/generate' => 'smartlink-manager/qr-code/generate',
         ];
     }

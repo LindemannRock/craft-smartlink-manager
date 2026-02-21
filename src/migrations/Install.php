@@ -163,6 +163,8 @@ class Install extends Migration
                 // URL settings
                 'slugPrefix' => $this->string(50)->notNull()->defaultValue('go'),
                 'qrPrefix' => $this->string(50)->notNull()->defaultValue('go/qr'),
+                'shortlinkBaseUrl' => $this->string(500)->null()->comment('Optional absolute base URL override for generated smart links'),
+                'shortlinkBaseUrlPattern' => $this->string(500)->null()->comment('Optional absolute pattern with site tokens ({siteHandle}, {siteId}, {siteUid})'),
                 // QR Code settings
                 'defaultQrSize' => $this->integer()->notNull()->defaultValue(256),
                 'defaultQrColor' => $this->string(7)->notNull()->defaultValue('#000000'),

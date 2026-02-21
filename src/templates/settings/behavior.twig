@@ -51,14 +51,15 @@
                 "This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
 
-        {{ forms.textField({
+        {{ forms.autosuggestField({
             label: "404 Redirect URL"|t('smartlink-manager'),
             instructions: "Where to redirect when a {singularName} is not found or disabled"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
             id: 'notFoundRedirectUrl',
             name: 'settings[notFoundRedirectUrl]',
             value: settings.notFoundRedirectUrl ?? '/',
             placeholder: '/',
-            tip: 'Can be a relative path (/) or full URL (https://example.com)'|t('smartlink-manager'),
+            suggestEnvVars: true,
+            tip: 'Can be a relative path (/) or full URL (https://example.com)<br>This can begin with an environment variable. <a href="https://craftcms.com/docs/5.x/configure.html#env" target="_blank" rel="noopener">Learn more</a>'|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('notFoundRedirectUrl'),
             warning: settings.isOverriddenByConfig('notFoundRedirectUrl') ?
                 "This is being overridden by the <code>notFoundRedirectUrl</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,

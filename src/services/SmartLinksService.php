@@ -10,7 +10,6 @@ namespace lindemannrock\smartlinkmanager\services;
 
 use Craft;
 use craft\base\Component;
-use craft\helpers\UrlHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -207,10 +206,7 @@ class SmartLinksService extends Component
      */
     public function generateQrCode(SmartLink $smartLink, array $options = []): string
     {
-        $url = $smartLink->getRedirectUrl();
-        $fullUrl = UrlHelper::siteUrl($url);
-        
-        return SmartLinkManager::$plugin->qrCode->generateQrCode($fullUrl, $options);
+        return SmartLinkManager::$plugin->qrCode->generateQrCode($smartLink->getRedirectUrl(), $options);
     }
 
     /**
@@ -223,10 +219,7 @@ class SmartLinksService extends Component
      */
     public function generateQrCodeDataUrl(SmartLink $smartLink, array $options = []): string
     {
-        $url = $smartLink->getRedirectUrl();
-        $fullUrl = UrlHelper::siteUrl($url);
-        
-        return SmartLinkManager::$plugin->qrCode->generateQrCodeDataUrl($fullUrl, $options);
+        return SmartLinkManager::$plugin->qrCode->generateQrCodeDataUrl($smartLink->getRedirectUrl(), $options);
     }
 
     /**

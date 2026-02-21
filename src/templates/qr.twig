@@ -12,7 +12,7 @@
 				{% do seomatic.meta.seoTitle(seoData.seoTitle ?: (smartLink.title ~ ' - QR Code')) %}
 				{% do seomatic.meta.seoDescription(seoData.seoDescription ?: smartLink.description) %}
 				{% if seoData.seoKeywords %}{% do seomatic.meta.seoKeywords(seoData.seoKeywords) %}{% endif %}
-				{% do seomatic.meta.canonicalUrl(seoData.canonicalUrl ?: siteUrl('qr/' ~ smartLink.slug ~ '/view')) %}
+				{% do seomatic.meta.canonicalUrl(seoData.canonicalUrl ?: smartLink.getQrCodeDisplayUrl()) %}
 				{% if seoData.robots %}{% do seomatic.meta.robots(seoData.robots) %}{% endif %}
 				{% if seoData.seoImage %}{% do seomatic.meta.seoImage(seoData.seoImage) %}{% endif %}
 				{% if seoData.ogType %}{% do seomatic.meta.ogType(seoData.ogType) %}{% endif %}
@@ -27,13 +27,13 @@
 				{# Fallback to Smart Link data #}
 				{% do seomatic.meta.seoTitle(smartLink.title ~ ' - QR Code') %}
 				{% do seomatic.meta.seoDescription(smartLink.description) %}
-				{% do seomatic.meta.canonicalUrl(siteUrl('qr/' ~ smartLink.slug ~ '/view')) %}
+				{% do seomatic.meta.canonicalUrl(smartLink.getQrCodeDisplayUrl()) %}
 			{% endif %}
 		{% else %}
 			{# Fallback meta tags if SEOmatic is not installed #}
 			<title>{{ smartLink.title }} - QR Code - {{ siteName }}</title>
 			{% if smartLink.description %}<meta name="description" content="{{ smartLink.description }}">{% endif %}
-			<link rel="canonical" href="{{ siteUrl('qr/' ~ smartLink.slug ~ '/view') }}">
+			<link rel="canonical" href="{{ smartLink.getQrCodeDisplayUrl() }}">
 		{% endif %}
 
 		<script src="https://cdn.tailwindcss.com"></script>

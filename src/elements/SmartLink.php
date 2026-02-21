@@ -18,7 +18,6 @@ use craft\elements\db\ElementQueryInterface;
 use craft\elements\User;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
-use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
 use craft\validators\UniqueValidator;
 use lindemannrock\base\helpers\DateFormatHelper;
@@ -850,14 +849,9 @@ class SmartLink extends Element
      */
     public function getRedirectUrl(): string
     {
-        // Get the slug prefix from settings
         $settings = SmartLinkManager::$plugin->getSettings();
         $slugPrefix = $settings->slugPrefix ?? 'go';
-
-        // Generate URL for the element's site (respects CP site switcher)
-        $url = UrlHelper::siteUrl("{$slugPrefix}/{$this->slug}", null, null, $this->siteId);
-
-        return $url;
+        return $settings->buildPublicUrl("{$slugPrefix}/{$this->slug}", $this->siteId);
     }
     
     /**
@@ -904,10 +898,8 @@ class SmartLink extends Element
             }
         }
 
-        // Get the QR prefix from settings
         $qrPrefix = $settings->qrPrefix ?? 'qr';
-
-        return UrlHelper::siteUrl("{$qrPrefix}/{$this->slug}", $params);
+        return $settings->buildPublicUrl("{$qrPrefix}/{$this->slug}", $this->siteId, $params);
     }
     
     /**
@@ -931,10 +923,8 @@ class SmartLink extends Element
         // Remove null values
         $params = array_filter($params, fn($value) => $value !== null);
 
-        // Get the QR prefix from settings
         $qrPrefix = $settings->qrPrefix ?? 'qr';
-
-        return UrlHelper::siteUrl("{$qrPrefix}/{$this->slug}/view", $params);
+        return $settings->buildPublicUrl("{$qrPrefix}/{$this->slug}/view", $this->siteId, $params);
     }
 
     /**

@@ -9,6 +9,7 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
+use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -47,11 +48,17 @@ class QrCodeController extends Controller
      * @throws NotFoundHttpException
      * @since 1.0.0
      */
-    public function actionDisplay(string $slug): Response
+    public function actionDisplay(string $slug, ?string $siteHandle = null): Response
     {
+        $site = $this->resolveSite($siteHandle);
+        if (!$site) {
+            throw new NotFoundHttpException('QR code not found.');
+        }
+
         // Get the smart link
         $smartLink = SmartLink::find()
             ->slug($slug)
+            ->siteId($site->id)
             ->status(null) // Allow any status
             ->one();
 
@@ -68,15 +75,12 @@ class QrCodeController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
         if (!$settings->isSiteEnabled($smartLink->siteId)) {
             $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-            return $this->redirect($redirectUrl);
+            return $this->redirectToNotFound();
         }
 
         // If QR is disabled, redirect to 404 redirect URL (consistent with smart link behavior)
         if (!$smartLink->qrCodeEnabled) {
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-            return $this->redirect($redirectUrl);
+            return $this->redirectToNotFound();
         }
 
         // Get parameters
@@ -159,7 +163,7 @@ class QrCodeController extends Controller
      * @throws NotFoundHttpException
      * @since 1.0.0
      */
-    public function actionGenerate(?string $slug = null): Response
+    public function actionGenerate(?string $slug = null, ?string $siteHandle = null): Response
     {
         $request = Craft::$app->request;
         
@@ -186,9 +190,15 @@ class QrCodeController extends Controller
                 throw new NotFoundHttpException('Smart link not specified.');
             }
             
+            $site = $this->resolveSite($siteHandle);
+            if (!$site) {
+                throw new NotFoundHttpException('QR code not found.');
+            }
+
             // Get the smart link - allow all statuses except trashed
             $smartLink = SmartLink::find()
                 ->slug($slug)
+                ->siteId($site->id)
                 ->status(null) // Allow any status
                 ->one();
 
@@ -205,14 +215,12 @@ class QrCodeController extends Controller
             $settings = SmartLinkManager::$plugin->getSettings();
             if (!$settings->isSiteEnabled($smartLink->siteId)) {
                 $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
-                $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-                return $this->redirect($redirectUrl);
+                return $this->redirectToNotFound();
             }
 
             // If QR is disabled, redirect to 404 redirect URL (consistent with smart link behavior)
             if (!$smartLink->qrCodeEnabled) {
-                $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
-                return $this->redirect($redirectUrl);
+                return $this->redirectToNotFound();
             }
 
             // Generate full URL for the smart link with QR tracking parameter
@@ -328,5 +336,32 @@ class QrCodeController extends Controller
             $this->logError('Failed to generate QR code', ['error' => $e->getMessage()]);
             throw new NotFoundHttpException('Failed to generate QR code.');
         }
+    }
+
+    /**
+     * Resolve request site from route handle (if provided), otherwise use current site.
+     */
+    private function resolveSite(?string $siteHandle): ?Site
+    {
+        if ($siteHandle) {
+            return Craft::$app->getSites()->getSiteByHandle($siteHandle);
+        }
+
+        return Craft::$app->getSites()->getCurrentSite();
+    }
+
+    /**
+     * Redirect to configured not-found destination.
+     */
+    private function redirectToNotFound(): Response
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+
+        if (strpos($redirectUrl, '://') === false && strpos($redirectUrl, '/') !== 0) {
+            $redirectUrl = '/' . $redirectUrl;
+        }
+
+        return $this->redirect($redirectUrl);
     }
 }

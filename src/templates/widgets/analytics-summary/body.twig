@@ -1,3 +1,5 @@
+{% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
+
 <div class="smartlink-manager-widget">
     <div class="widget-stats">
         <div class="stat-item">
@@ -31,7 +33,7 @@
                     </a>
                     <div class="link-meta">
                         {% if topLink.enabled is defined and topLink.enabled %}
-                            <a href="{{ siteUrl(craft.app.plugins.getPlugin('smartlink-manager').settings.slugPrefix ~ '/' ~ topLink.slug) }}" target="_blank" class="slug-link">/{{ topLink.slug }}</a>
+                            <a href="{{ plugin.settings.buildPublicUrl((plugin.settings.slugPrefix ?? 'go') ~ '/' ~ topLink.slug, topLink.siteId ?? null) }}" target="_blank" class="slug-link">/{{ topLink.slug }}</a>
                         {% else %}
                             <span class="slug-disabled">/{{ topLink.slug }}</span>
                         {% endif %}

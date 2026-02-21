@@ -19,7 +19,7 @@
                                 </a>
                                 <div class="link-slug">
                                     {% if link.enabled %}
-                                        <a href="{{ siteUrl(craft.app.plugins.getPlugin('smartlink-manager').settings.slugPrefix ~ '/' ~ link.slug) }}" target="_blank">/{{ link.slug }}</a>
+                                        <a href="{{ plugin.settings.buildPublicUrl((plugin.settings.slugPrefix ?? 'go') ~ '/' ~ link.slug, link.siteId ?? null) }}" target="_blank">/{{ link.slug }}</a>
                                     {% else %}
                                         <span class="disabled">/{{ link.slug }}</span>
                                     {% endif %}

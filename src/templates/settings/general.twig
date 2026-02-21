@@ -151,6 +151,44 @@
                 "This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
 
+        {{ forms.autosuggestField({
+            label: "Shortlink Base URL"|t('smartlink-manager'),
+            instructions: "Optional absolute URL used for generated smart links and QR URLs. Leave empty to use each site's base URL."|t('smartlink-manager'),
+            id: 'shortlinkBaseUrl',
+            name: 'settings[shortlinkBaseUrl]',
+            value: settings.shortlinkBaseUrl ?? '',
+            errors: settings.getErrors('shortlinkBaseUrl'),
+            placeholder: 'https://short.example.com',
+            suggestEnvVars: true,
+            tip: 'This can begin with an environment variable. <a href="https://craftcms.com/docs/5.x/configure.html#env" target="_blank" rel="noopener">Learn more</a>'|t('base')|raw,
+            disabled: settings.isOverriddenByConfig('shortlinkBaseUrl'),
+            warning: settings.isOverriddenByConfig('shortlinkBaseUrl') ?
+                "This is being overridden by the <code>shortlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
+        }) }}
+
+        {{ forms.autosuggestField({
+            label: "Shortlink Base URL Pattern"|t('smartlink-manager'),
+            instructions: "Optional absolute URL pattern for multisite short domains. Supported tokens: {siteHandle}, {siteId}, {siteUid}."|t('smartlink-manager'),
+            id: 'shortlinkBaseUrlPattern',
+            name: 'settings[shortlinkBaseUrlPattern]',
+            value: settings.shortlinkBaseUrlPattern ?? '',
+            errors: settings.getErrors('shortlinkBaseUrlPattern'),
+            placeholder: 'https://short.example.com/{siteHandle}',
+            suggestEnvVars: true,
+            tip: 'This can begin with an environment variable. <a href="https://craftcms.com/docs/5.x/configure.html#env" target="_blank" rel="noopener">Learn more</a>'|t('base')|raw,
+            disabled: settings.isOverriddenByConfig('shortlinkBaseUrlPattern'),
+            warning: settings.isOverriddenByConfig('shortlinkBaseUrlPattern') ?
+                "This is being overridden by the <code>shortlinkBaseUrlPattern</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
+        }) }}
+
+        {% set hasMultipleSites = craft.app.sites.getAllSites()|length > 1 %}
+        {% if hasMultipleSites and (settings.shortlinkBaseUrl ?? '') is not empty and (settings.shortlinkBaseUrlPattern ?? '') is empty %}
+            {% include 'lindemannrock-base/_components/info-box' with {
+                type: 'warning',
+                message: "Multisite detected: when <code>Shortlink Base URL</code> is set without <code>Shortlink Base URL Pattern</code>, generated URLs may resolve to only one site. Set a pattern like <code>https://short.example.com/{siteHandle}</code> to preserve site-specific routing."|t('smartlink-manager')|raw
+            } %}
+        {% endif %}
+
         <hr>
 
         <h2>{{ "Template Settings"|t('smartlink-manager') }}</h2>
@@ -160,27 +198,29 @@
             message: "These templates must exist in your site's <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed."|t('smartlink-manager')
         } %}
 
-        {{ forms.textField({
+        {{ forms.autosuggestField({
             label: "Redirect Template"|t('smartlink-manager'),
             instructions: "Template path in your templates/ folder. Leave empty to use the default path."|t('smartlink-manager'),
             id: 'redirectTemplate',
             name: 'settings[redirectTemplate]',
             value: settings.redirectTemplate ?? '',
             placeholder: 'smartlink-manager/redirect',
-            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>"|t('smartlink-manager')|raw,
+            suggestEnvVars: true,
+            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code><br>This can begin with an environment variable. <a href=\"https://craftcms.com/docs/5.x/configure.html#env\" target=\"_blank\" rel=\"noopener\">Learn more</a>"|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('redirectTemplate'),
             warning: settings.isOverriddenByConfig('redirectTemplate') ?
                 "This is being overridden by the <code>redirectTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
 
-        {{ forms.textField({
+        {{ forms.autosuggestField({
             label: "QR Code Template"|t('smartlink-manager'),
             instructions: "Template path in your templates/ folder. Leave empty to use the default path."|t('smartlink-manager'),
             id: 'qrTemplate',
             name: 'settings[qrTemplate]',
             value: settings.qrTemplate ?? '',
             placeholder: 'smartlink-manager/qr',
-            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>"|t('smartlink-manager')|raw,
+            suggestEnvVars: true,
+            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code><br>This can begin with an environment variable. <a href=\"https://craftcms.com/docs/5.x/configure.html#env\" target=\"_blank\" rel=\"noopener\">Learn more</a>"|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('qrTemplate'),
             warning: settings.isOverriddenByConfig('qrTemplate') ?
                 "This is being overridden by the <code>qrTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,

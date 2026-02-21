@@ -12,6 +12,7 @@ use Craft;
 use craft\base\Model;
 use craft\behaviors\EnvAttributeParserBehavior;
 use craft\helpers\App;
+use craft\helpers\UrlHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\traits\SettingsConfigTrait;
 use lindemannrock\base\traits\SettingsDisplayNameTrait;
@@ -225,6 +226,21 @@ class Settings extends Model
      */
     public string $qrPrefix = 'qr';
 
+    /**
+     * @var string|null Optional absolute base URL for generated smart links and QR URLs
+     * (e.g., https://short.example.com). Empty = use site base URL.
+     * @since 5.22.0
+     */
+    public ?string $shortlinkBaseUrl = null;
+
+    /**
+     * @var string|null Optional absolute base URL pattern with site tokens.
+     * Supported tokens: {siteHandle}, {siteId}, {siteUid}
+     * Example: https://short.example.com/{siteHandle}
+     * @since 5.22.0
+     */
+    public ?string $shortlinkBaseUrlPattern = null;
+
 
     /**
      * @var string URL to redirect to when smart link is not found (404)
@@ -369,8 +385,11 @@ class Settings extends Model
             'parser' => [
                 'class' => EnvAttributeParserBehavior::class,
                 'attributes' => [
+                    'notFoundRedirectUrl',
                     'redirectTemplate',
                     'qrTemplate',
+                    'shortlinkBaseUrl',
+                    'shortlinkBaseUrlPattern',
                     'imageVolumeUid',
                     'qrLogoVolumeUid',
                     'ipHashSalt',
@@ -388,6 +407,9 @@ class Settings extends Model
             [['pluginName', 'slugPrefix', 'qrPrefix'], 'required'],
             [['pluginName'], 'string', 'max' => 255],
             [['slugPrefix', 'qrPrefix'], 'string', 'max' => 50],
+            [['shortlinkBaseUrl', 'shortlinkBaseUrlPattern'], 'string', 'max' => 500],
+            [['shortlinkBaseUrl'], 'url', 'defaultScheme' => 'https', 'skipOnEmpty' => true],
+            [['shortlinkBaseUrlPattern'], 'validateShortlinkBaseUrlPattern'],
             [['slugPrefix'], 'match', 'pattern' => '/^[a-zA-Z0-9\-\_]+$/', 'message' => Craft::t('smartlink-manager', 'Only letters, numbers, hyphens, and underscores are allowed.')],
             [['qrPrefix'], 'match', 'pattern' => '/^[a-zA-Z0-9\-\_\/]+$/', 'message' => Craft::t('smartlink-manager', 'Only letters, numbers, hyphens, underscores, and slashes are allowed.')],
             [['slugPrefix'], 'validateSlugPrefix'],
@@ -638,6 +660,74 @@ class Settings extends Model
     }
 
     /**
+     * Validate shortlink base URL pattern format.
+     *
+     * @since 5.22.0
+     */
+    public function validateShortlinkBaseUrlPattern(string $attribute, mixed $params, mixed $validator): void
+    {
+        $pattern = trim((string) App::parseEnv($this->$attribute));
+        if ($pattern === '') {
+            return;
+        }
+
+        if (!preg_match('/^https?:\/\//i', $pattern)) {
+            $this->addError($attribute, Craft::t('smartlink-manager', 'Shortlink base URL pattern must start with http:// or https://'));
+            return;
+        }
+
+        if (strpos($pattern, '{') !== false && !preg_match('/\{siteHandle\}|\{siteId\}|\{siteUid\}/', $pattern)) {
+            $this->addError($attribute, Craft::t('smartlink-manager', 'Unsupported token in shortlink base URL pattern. Supported tokens: {siteHandle}, {siteId}, {siteUid}.'));
+        }
+    }
+
+    /**
+     * Build a public smart link URL with optional base URL overrides.
+     *
+     * @param string $path Relative path (without leading slash preferred)
+     * @param int|null $siteId Site ID for token expansion and site fallback URLs
+     * @param array $params Query parameters
+     * @since 5.22.0
+     */
+    public function buildPublicUrl(string $path, ?int $siteId = null, array $params = []): string
+    {
+        $relativePath = ltrim($path, '/');
+        $siteId = $siteId ?: Craft::$app->getSites()->getCurrentSite()->id;
+
+        $pattern = trim((string) App::parseEnv($this->shortlinkBaseUrlPattern ?? ''));
+        if ($pattern !== '') {
+            $base = $this->expandShortlinkBasePattern($pattern, $siteId);
+            if ($base !== '') {
+                return UrlHelper::urlWithParams(rtrim($base, '/') . '/' . $relativePath, $params);
+            }
+        }
+
+        $baseUrl = trim((string) App::parseEnv($this->shortlinkBaseUrl ?? ''));
+        if ($baseUrl !== '') {
+            return UrlHelper::urlWithParams(rtrim($baseUrl, '/') . '/' . $relativePath, $params);
+        }
+
+        return UrlHelper::siteUrl($relativePath, $params, null, $siteId);
+    }
+
+    /**
+     * Expand supported site tokens in shortlink base pattern.
+     */
+    private function expandShortlinkBasePattern(string $pattern, int $siteId): string
+    {
+        $site = Craft::$app->getSites()->getSiteById($siteId);
+        if (!$site) {
+            return $pattern;
+        }
+
+        return strtr($pattern, [
+            '{siteHandle}' => $site->handle,
+            '{siteId}' => (string) $site->id,
+            '{siteUid}' => $site->uid,
+        ]);
+    }
+
+    /**
      * Check if a site is enabled for SmartLink Manager
      *
      * @param int $siteId
@@ -683,6 +773,8 @@ class Settings extends Model
             'pluginName' => Craft::t('smartlink-manager', 'Plugin Name'),
             'slugPrefix' => Craft::t('smartlink-manager', 'Smart Link URL Prefix'),
             'qrPrefix' => Craft::t('smartlink-manager', 'QR Code URL Prefix'),
+            'shortlinkBaseUrl' => Craft::t('smartlink-manager', 'Shortlink Base URL'),
+            'shortlinkBaseUrlPattern' => Craft::t('smartlink-manager', 'Shortlink Base URL Pattern'),
             'enableAnalytics' => Craft::t('smartlink-manager', 'Enable Analytics'),
             'analyticsRetention' => Craft::t('smartlink-manager', 'Analytics Retention (days)'),
             'includeDisabledInExport' => Craft::t('smartlink-manager', 'Include Disabled Links in Export'),
