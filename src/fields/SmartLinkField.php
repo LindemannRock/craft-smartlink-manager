@@ -27,21 +27,25 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
 {
     /**
      * @var string|null The source keys that the field should be restricted to
+     * @since 5.0.0
      */
     public ?string $sources = '*';
 
     /**
      * @var int|null The maximum number of relations this field can have
+     * @since 5.0.0
      */
     public ?int $limit = null;
 
     /**
      * @var string Selection label shown in the element picker
+     * @since 5.0.0
      */
     public string $selectionLabel = 'Add a smart link';
 
     /**
      * @var bool Whether to allow multiple selections
+     * @since 5.0.0
      */
     public bool $allowMultiple = false;
 

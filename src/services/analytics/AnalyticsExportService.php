@@ -35,7 +35,7 @@ class AnalyticsExportService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.5.0
+     * @since 5.22.0
      */
     public function getExportData(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -184,7 +184,7 @@ class AnalyticsExportService
      *
      * @param SmartLink $smartLink
      * @return int Number of records deleted
-     * @since 1.0.0
+     * @since 5.22.0
      */
     public function deleteAnalyticsForLink(SmartLink $smartLink): int
     {

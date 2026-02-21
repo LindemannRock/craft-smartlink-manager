@@ -33,6 +33,8 @@ class IntegrationService extends Component
 
     /**
      * Initialize all available integrations
+     *
+     * @since 5.0.0
      */
     public function init(): void
     {

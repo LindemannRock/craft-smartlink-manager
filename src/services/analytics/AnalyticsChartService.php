@@ -33,7 +33,7 @@ class AnalyticsChartService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 1.0.0
+     * @since 5.22.0
      */
     public function getClicksData(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -115,7 +115,7 @@ class AnalyticsChartService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 1.0.0
+     * @since 5.22.0
      */
     public function getHourlyAnalytics(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -163,7 +163,7 @@ class AnalyticsChartService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 1.0.0
+     * @since 5.22.0
      */
     public function getInsights(string $dateRange, int|array|null $siteId = null): array
     {

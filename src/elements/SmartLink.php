@@ -49,127 +49,152 @@ class SmartLink extends Element
 
     /**
      * @var string|null Slug
+     * @since 1.0.0
      */
     public ?string $slug = null;
 
     /**
      * @var string|null Description (translatable)
+     * @since 1.0.0
      */
     public ?string $description = null;
 
     /**
      * @var string|null iOS URL
+     * @since 1.0.0
      */
     public ?string $iosUrl = null;
 
     /**
      * @var string|null Android URL
+     * @since 1.0.0
      */
     public ?string $androidUrl = null;
 
     /**
      * @var string|null Huawei URL
+     * @since 1.0.0
      */
     public ?string $huaweiUrl = null;
 
     /**
      * @var string|null Amazon URL
+     * @since 1.0.0
      */
     public ?string $amazonUrl = null;
 
     /**
      * @var string|null Windows URL
+     * @since 1.0.0
      */
     public ?string $windowsUrl = null;
 
     /**
      * @var string|null Mac URL
+     * @since 1.0.0
      */
     public ?string $macUrl = null;
 
     /**
      * @var string|null Fallback URL
+     * @since 1.0.0
      */
     public ?string $fallbackUrl = null;
 
     /**
      * @var int|null Image asset ID
+     * @since 1.0.0
      */
     public ?int $imageId = null;
     
     /**
      * @var string Image size
+     * @since 1.0.0
      */
     public string $imageSize = 'xl';
 
     /**
      * @var int|null Author ID
+     * @since 1.0.0
      */
     public ?int $authorId = null;
 
     /**
      * @var \DateTime|null Post date
+     * @since 1.0.0
      */
     public ?\DateTime $postDate = null;
 
     /**
      * @var \DateTime|null Expiry date
+     * @since 1.0.0
      */
     public ?\DateTime $dateExpired = null;
 
     /**
      * @var bool Track analytics
+     * @since 1.0.0
      */
     public bool $trackAnalytics = true;
     
     /**
      * @var bool Hide title on landing page
+     * @since 1.0.0
      */
     public bool $hideTitle = false;
 
 
     /**
      * @var bool QR code enabled
+     * @since 1.0.0
      */
     public bool $qrCodeEnabled = true;
 
     /**
      * @var int QR code size
+     * @since 1.0.0
      */
     public int $qrCodeSize = 256;
 
     /**
      * @var string|null QR code color
+     * @since 1.0.0
      */
     public ?string $qrCodeColor = null;
 
     /**
      * @var string|null QR code background color
+     * @since 1.0.0
      */
     public ?string $qrCodeBgColor = null;
 
     /**
      * @var string|null QR code format override
+     * @since 1.0.0
      */
     public ?string $qrCodeFormat = null;
     
     /**
      * @var string|null QR code eye color
+     * @since 1.0.0
      */
     public ?string $qrCodeEyeColor = null;
     
     /**
      * @var int|null QR code logo asset ID (overrides default)
+     * @since 1.0.0
      */
     public ?int $qrLogoId = null;
 
     /**
      * @var bool Language detection enabled
+     * @since 1.0.0
      */
     public bool $languageDetection = false;
 
     /**
      * @var array|null Localized URLs
+     * @since 1.0.0
      */
     public ?array $localizedUrls = null;
 
@@ -213,6 +238,11 @@ class SmartLink extends Element
     }
 
     // Magic property getter/setter for metadata
+
+    /**
+     * @inheritdoc
+     * @since 5.0.0
+     */
     public function __get($name)
     {
         if ($name === 'metadata') {
@@ -221,6 +251,10 @@ class SmartLink extends Element
         return parent::__get($name);
     }
 
+    /**
+     * @inheritdoc
+     * @since 5.0.0
+     */
     public function __set($name, $value)
     {
         if ($name === 'metadata') {
@@ -335,11 +369,13 @@ class SmartLink extends Element
 
     /**
      * @var string Status expired
+     * @since 1.0.0
      */
     public const STATUS_EXPIRED = 'expired';
-    
+
     /**
      * @var string Status pending
+     * @since 1.0.0
      */
     public const STATUS_PENDING = 'pending';
 

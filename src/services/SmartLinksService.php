@@ -43,11 +43,13 @@ class SmartLinksService extends Component
 
     /**
      * @event SmartLinkEvent The event that is triggered before a smart link redirect.
+     * @since 1.0.0
      */
     public const EVENT_BEFORE_REDIRECT = 'beforeRedirect';
 
     /**
      * @event SmartLinkEvent The event that is triggered after analytics are tracked.
+     * @since 1.0.0
      */
     public const EVENT_AFTER_TRACK_ANALYTICS = 'afterTrackAnalytics';
 

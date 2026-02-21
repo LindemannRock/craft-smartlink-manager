@@ -30,21 +30,25 @@ class SmartLinkQuery extends ElementQuery
 
     /**
      * @var mixed|null Whether to filter by analytics tracking state
+     * @since 5.0.0
      */
     public mixed $trackAnalytics = null;
 
     /**
      * @var mixed|null Whether to filter by QR code enabled state
+     * @since 5.0.0
      */
     public mixed $qrCodeEnabled = null;
 
     /**
      * @var int|null Field ID for relational queries
+     * @since 5.0.0
      */
     public ?int $fieldId = null;
 
     /**
      * @var int|null Owner element ID for relational queries
+     * @since 5.0.0
      */
     public ?int $ownerId = null;
 

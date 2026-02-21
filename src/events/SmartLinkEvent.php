@@ -25,21 +25,25 @@ class SmartLinkEvent extends Event
 {
     /**
      * @var SmartLink The smart link element
+     * @since 5.0.0
      */
     public SmartLink $smartLink;
 
     /**
      * @var DeviceInfo The device information
+     * @since 5.0.0
      */
     public DeviceInfo $device;
 
     /**
      * @var string The redirect URL
+     * @since 5.0.0
      */
     public string $redirectUrl = '';
 
     /**
      * @var array Additional metadata
+     * @since 5.0.0
      */
     public array $metadata = [];
 }

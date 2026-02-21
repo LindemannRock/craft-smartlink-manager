@@ -354,7 +354,6 @@ class AnalyticsController extends Controller
      *
      * @param array $clicks Raw clicks from getAllRecentClicks()
      * @return array Formatted clicks with dateFormatted/timeFormatted strings
-     * @since 5.23.0
      */
     private function _formatRecentClicks(array $clicks): array
     {

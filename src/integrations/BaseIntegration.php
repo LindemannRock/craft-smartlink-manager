@@ -47,6 +47,7 @@ abstract class BaseIntegration implements IntegrationInterface
      * Get the integration handle
      *
      * @return string
+     * @since 1.1.0
      */
     public function getHandle(): string
     {
@@ -57,6 +58,7 @@ abstract class BaseIntegration implements IntegrationInterface
      * Get the integration name
      *
      * @return string
+     * @since 1.1.0
      */
     public function getName(): string
     {
@@ -67,6 +69,7 @@ abstract class BaseIntegration implements IntegrationInterface
      * Check if the integration is enabled in settings
      *
      * @return bool
+     * @since 1.1.0
      */
     public function isEnabled(): bool
     {
@@ -88,6 +91,7 @@ abstract class BaseIntegration implements IntegrationInterface
      * @param string $eventType
      * @param array $data
      * @return bool
+     * @since 1.1.0
      */
     public function validateEventData(string $eventType, array $data): bool
     {
@@ -204,7 +208,18 @@ abstract class BaseIntegration implements IntegrationInterface
 
     // Abstract methods that must be implemented by child classes
 
+    /**
+     * @since 1.1.0
+     */
     abstract public function isAvailable(): bool;
+
+    /**
+     * @since 1.1.0
+     */
     abstract public function pushEvent(string $eventType, array $data): bool;
+
+    /**
+     * @since 1.1.0
+     */
     abstract public function getStatus(): array;
 }
