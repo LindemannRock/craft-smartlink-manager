@@ -36,8 +36,8 @@ return [
         // URL Settings
         'slugPrefix' => 'go',              // URL prefix for smart links (e.g., 'go' creates /go/your-link)
         'qrPrefix' => 'go/qr',             // URL prefix for QR code pages (e.g., 'go/qr' creates /go/qr/your-link)
-        'shortlinkBaseUrl' => null,        // Optional absolute URL for generated smart links/QR URLs (e.g., App::env('SMARTLINK_BASE_URL'))
-        'shortlinkBaseUrlPattern' => null, // Optional multisite pattern with {siteHandle}, {siteId}, {siteUid}
+        'smartlinkBaseUrl' => null,        // Optional absolute URL for generated smart links/QR URLs (e.g., App::env('SMARTLINK_BASE_URL'))
+        'smartlinkBaseUrlPattern' => null, // Optional multisite pattern with {siteHandle}, {siteId}, {siteUid}
 
         // Template Settings
         // These templates MUST exist in your site's templates/ folder.
