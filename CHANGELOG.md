@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.22.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.0...v5.22.1) (2026-02-22)
+
+
+### Bug Fixes
+
+* **config, migrations, models, templates:** rename shortlink to smartlink in settings ([be12d16](https://github.com/LindemannRock/craft-smartlink-manager/commit/be12d16d2abbd92025331cbcb77dbc78f381031e))
+
 ## [5.22.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.21.0...v5.22.0) (2026-02-22)
 
 
