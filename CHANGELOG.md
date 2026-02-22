@@ -1,5 +1,23 @@
 # Changelog
 
+## [5.22.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.21.0...v5.22.0) (2026-02-22)
+
+
+### Features
+
+* **settings:** add shortlink base URL and pattern for smart links ([793fe64](https://github.com/LindemannRock/craft-smartlink-manager/commit/793fe64943591bb08f7affcb5cef1cc78a181d0b))
+
+
+### Bug Fixes
+
+* validate analytics type parameter and replace getenv() ([eca7ef9](https://github.com/LindemannRock/craft-smartlink-manager/commit/eca7ef91287475884662d8f965ff388aa76ef9a6))
+
+
+### Miscellaneous Chores
+
+* add .gitattributes with export-ignore for Packagist distribution ([c5dd3c3](https://github.com/LindemannRock/craft-smartlink-manager/commit/c5dd3c38664a4bed87a5900c021b0fff85001415))
+* switch to Craft License for commercial release ([1d3c676](https://github.com/LindemannRock/craft-smartlink-manager/commit/1d3c6760ab764d828c0eb12ed7e5d180058bb4c6))
+
 ## [5.21.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.20.0...v5.21.0) (2026-02-07)
 
 
