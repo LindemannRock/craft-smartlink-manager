@@ -1,19 +1,18 @@
 # Requirements
 
-## Craft CMS
+## System Requirements
 
-SmartLink Manager requires Craft CMS 5.0 or greater.
-
-## PHP
-
-SmartLink Manager requires PHP 8.2 or greater.
+| Requirement | Version |
+|-------------|---------|
+| Craft CMS | 5.0+ |
+| PHP | 8.2+ |
 
 ## Dependencies
 
-The following packages are installed automatically via Composer:
+Composer pulls these packages automatically. Craft plugin dependencies also need to be installed in the Control Panel.
 
-| Package | Purpose |
-|---------|---------|
-| `lindemannrock/craft-plugin-base` ^5.0 | Shared base plugin utilities (helpers, traits, layouts) |
-| `lindemannrock/craft-logging-library` ^5.0 | Plugin logging and log viewer |
-| `bacon/bacon-qr-code` ^2.0 | QR code generation |
+| Package | Version | Purpose |
+|---------|---------|---------|
+| [lindemannrock/craft-plugin-base](https://github.com/LindemannRock/craft-plugin-base) | ^5.0 | Shared base plugin utilities (helpers, traits, layouts) |
+| [lindemannrock/craft-logging-library](https://github.com/LindemannRock/craft-logging-library) | ^5.0 | Optional — install in CP for log viewing |
+| [bacon/bacon-qr-code](https://github.com/Bacon/BaconQrCode) | ^2.0 | QR code generation |

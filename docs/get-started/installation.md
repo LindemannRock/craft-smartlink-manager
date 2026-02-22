@@ -21,3 +21,15 @@ composer require lindemannrock/craft-smartlink-manager && php craft plugin/insta
 ```bash title="DDEV"
 ddev composer require lindemannrock/craft-smartlink-manager && ddev craft plugin/install smartlink-manager
 ```
+
+3. **Optional** — Install [Logging Library](https://github.com/LindemannRock/craft-logging-library) for log viewing:
+
+```bash title="Composer"
+php craft plugin/install logging-library
+```
+
+```bash title="DDEV"
+ddev craft plugin/install logging-library
+```
+
+Or via the Control Panel: **Settings → Plugins → Logging Library → Install**
