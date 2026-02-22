@@ -70,26 +70,26 @@ return [
 
 ### Custom Base URL @since(5.22.0)
 
-By default, smart links use your site's base URL. For short-link domains or custom routing, override the base URL with `shortlinkBaseUrl` or `shortlinkBaseUrlPattern`.
+By default, smart links use your site's base URL. For custom domains or routing, override the base URL with `smartlinkBaseUrl` or `smartlinkBaseUrlPattern`.
 
 | Setting | Type | Use when |
 |---------|------|----------|
-| `shortlinkBaseUrl` @since(5.22.0) | `string` | Single-site or all sites use the same short domain |
-| `shortlinkBaseUrlPattern` @since(5.22.0) | `string` | Multi-site — use `{siteHandle}` token for per-site domains |
+| `smartlinkBaseUrl` @since(5.22.0) | `string` | Single-site or all sites use the same domain |
+| `smartlinkBaseUrlPattern` @since(5.22.0) | `string` | Multi-site — use `{siteHandle}` token for per-site domains |
 
 ```php
 // config/smartlink-manager.php
 return [
     // Single-site: all links use this domain
-    'shortlinkBaseUrl' => 'https://go.myapp.com',
+    'smartlinkBaseUrl' => 'https://go.myapp.com',
 
     // Multi-site: {siteHandle} is replaced with the site handle
-    'shortlinkBaseUrlPattern' => 'https://{siteHandle}.myapp.com',
+    'smartlinkBaseUrlPattern' => 'https://{siteHandle}.myapp.com',
 ];
 ```
 
 > [!TIP]
-> Rule of thumb: Single-site → `shortlinkBaseUrl`. Multi-site with per-site short domains → `shortlinkBaseUrlPattern`.
+> Rule of thumb: Single-site → `smartlinkBaseUrl`. Multi-site with per-site domains → `smartlinkBaseUrlPattern`.
 
 ## Element Statuses
 
