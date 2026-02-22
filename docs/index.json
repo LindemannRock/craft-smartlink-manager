@@ -1,0 +1,7 @@
+{
+    "plugin": {
+        "name": "SmartLink Manager",
+        "handle": "smartlink-manager",
+        "description": "Intelligent device detection and app store routing for Craft CMS."
+    }
+}

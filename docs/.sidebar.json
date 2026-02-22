@@ -1,0 +1,50 @@
+[
+    {
+        "title": "Get Started",
+        "collapsable": false,
+        "children": [
+            "get-started/requirements",
+            "get-started/installation",
+            "get-started/quickstart",
+            "get-started/configuration"
+        ]
+    },
+    {
+        "title": "Feature Tour",
+        "collapsable": true,
+        "open": true,
+        "children": [
+            "feature-tour/overview",
+            "feature-tour/smart-links",
+            "feature-tour/qr-codes",
+            "feature-tour/analytics",
+            "feature-tour/device-detection",
+            "feature-tour/integrations-overview",
+            "feature-tour/widgets"
+        ]
+    },
+    {
+        "title": "Developers",
+        "collapsable": true,
+        "open": false,
+        "children": [
+            "developers/element-queries",
+            "developers/fields",
+            "developers/template-variables",
+            "developers/permissions",
+            "developers/console-commands",
+            "developers/events",
+            "developers/integrations",
+            "developers/twig-globals",
+            "developers/shared-features"
+        ]
+    },
+    {
+        "title": "Resources",
+        "collapsable": true,
+        "open": false,
+        "children": [
+            "resources/troubleshooting"
+        ]
+    }
+]
