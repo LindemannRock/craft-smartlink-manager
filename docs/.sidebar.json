@@ -16,11 +16,13 @@
         "children": [
             "feature-tour/overview",
             "feature-tour/smart-links",
+            "feature-tour/custom-domain",
             "feature-tour/qr-codes",
             "feature-tour/analytics",
             "feature-tour/device-detection",
-            "feature-tour/integrations-overview",
-            "feature-tour/widgets"
+            "feature-tour/smartlink-field",
+            "feature-tour/dashboard-widgets",
+            "feature-tour/integrations"
         ]
     },
     {

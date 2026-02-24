@@ -13,7 +13,7 @@ All events below use the `SmartLinkEvent` class with these properties:
 | `redirectUrl` | `string` | The redirect URL (modifiable in `beforeRedirect`) |
 | `metadata` | `array` | Additional metadata (language, referrer, source, IP) |
 
-## `EVENT_BEFORE_REDIRECT`
+## `EVENT_BEFORE_REDIRECT` @since(1.0.0)
 
 Triggered before a smart link redirects the visitor. Modify `$event->redirectUrl` to change the redirect destination.
 
@@ -34,7 +34,7 @@ Event::on(
 );
 ```
 
-## `EVENT_AFTER_TRACK_ANALYTICS`
+## `EVENT_AFTER_TRACK_ANALYTICS` @since(1.0.0)
 
 Triggered after analytics are recorded for a redirect. Use this to send data to external services or trigger custom logic.
 
@@ -57,7 +57,7 @@ Event::on(
 );
 ```
 
-## `EVENT_AFTER_SAVE_SETTINGS`
+## `EVENT_AFTER_SAVE_SETTINGS` @since(5.0.0)
 
 Triggered after plugin settings are saved. Defined on the `Settings` model.
 

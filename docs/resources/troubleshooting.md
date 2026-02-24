@@ -82,7 +82,7 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 4. **Is the queue running?** Analytics writes may be processed via the Craft queue. Check **Utilities → Queue** for stuck or failed jobs.
 
-5. **Check the logs** for database write errors that might indicate a missing `smartlinkmanager_clicks` table or permission issue.
+5. **Check the logs** for database write errors that might indicate a missing `smartlinkmanager_analytics` table or permission issue.
 
 ---
 

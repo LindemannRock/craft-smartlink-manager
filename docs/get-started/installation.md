@@ -1,6 +1,7 @@
 # Installation & Setup
 
-> **Pre-Release:** SmartLink Manager is in active development and not yet available on the Craft Plugin Store. Install via Composer for now.
+> [!NOTE]
+> SmartLink Manager is in active development and not yet available on the Craft Plugin Store. Install via Composer for now.
 
 ## Composer
 
@@ -24,7 +25,7 @@ ddev composer require lindemannrock/craft-smartlink-manager && ddev craft plugin
 
 3. **Optional** — Install [Logging Library](https://github.com/LindemannRock/craft-logging-library) for log viewing:
 
-```bash title="Composer"
+```bash title="PHP"
 php craft plugin/install logging-library
 ```
 

@@ -23,7 +23,7 @@ Click the widget's settings icon to configure:
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| **Date Range** | `string` | `'last7days'` | Time period to summarize: `'today'`, `'last7Days'`, `'last7days'`, `'last90Days'`, `'thisYear'` |
+| **Date Range** | `string` | `'last7days'` | Time period to summarize: `'today'`, `'yesterday'`, `'last7days'`, `'last30days'`, `'last90days'`, `'all'` |
 
 ### Multi-Site
 
@@ -45,8 +45,8 @@ Click the widget's settings icon to configure:
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| **Date Range** | `string` | `'last7days'` | Time period: `'today'`, `'last7Days'`, `'last7days'`, `'last90Days'`, `'thisYear'` |
-| **Limit** | `int` | `5` | Maximum number of links to display |
+| **Date Range** | `string` | `'last7days'` | Time period: `'today'`, `'yesterday'`, `'last7days'`, `'last30days'`, `'last90days'`, `'all'` |
+| **Limit** | `int` | `5` | Maximum number of links to display (1–20) |
 
 ### Multi-Site
 

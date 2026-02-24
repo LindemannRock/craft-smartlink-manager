@@ -23,6 +23,3 @@ SmartLink Manager provides the following global variables in your Twig templates
 {{ smartlinkHelper.lowerDisplayName }}
 {{ smartlinkHelper.pluralLowerDisplayName }}
 ```
-
----
-

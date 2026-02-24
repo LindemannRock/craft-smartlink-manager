@@ -68,28 +68,9 @@ return [
 ];
 ```
 
-### Custom Base URL @since(5.22.0)
+### Custom Domain @since(5.22.0)
 
-By default, smart links use your site's base URL. For custom domains or routing, override the base URL with `smartlinkBaseUrl` or `smartlinkBaseUrlPattern`.
-
-| Setting | Type | Use when |
-|---------|------|----------|
-| `smartlinkBaseUrl` @since(5.22.0) | `string` | Single-site or all sites use the same domain |
-| `smartlinkBaseUrlPattern` @since(5.22.0) | `string` | Multi-site — use `{siteHandle}` token for per-site domains |
-
-```php
-// config/smartlink-manager.php
-return [
-    // Single-site: all links use this domain
-    'smartlinkBaseUrl' => 'https://go.myapp.com',
-
-    // Multi-site: {siteHandle} is replaced with the site handle
-    'smartlinkBaseUrlPattern' => 'https://{siteHandle}.myapp.com',
-];
-```
-
-> [!TIP]
-> Rule of thumb: Single-site → `smartlinkBaseUrl`. Multi-site with per-site domains → `smartlinkBaseUrlPattern`.
+You can serve smart links from a dedicated custom domain like `go.myapp.com`. See [Custom Domain](custom-domain.md) for single-site and multisite configuration.
 
 ## Element Statuses
 
@@ -134,7 +115,6 @@ The following variables are available in the redirect template:
 |----------|------|-------------|
 | `smartLink` | `SmartLink` | The smart link element |
 | `device` | `DeviceInfo` | Detected device information |
-| `redirectUrl` | `string` | The resolved destination URL |
 | `language` | `string\|null` | Detected language code |
 
 ## Querying Smart Links in Templates

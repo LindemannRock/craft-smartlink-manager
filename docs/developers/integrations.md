@@ -1,6 +1,6 @@
-# Integrations API @since(5.0.0)
+# Integrations API @since(1.1.0)
 
-SmartLink Manager provides a plugin integration system for third-party services. For a user-facing overview of built-in integrations, see [Integrations](../feature-tour/integrations-overview.md).
+SmartLink Manager provides a plugin integration system for third-party services. For a user-facing overview of built-in integrations, see [Integrations](../feature-tour/integrations.md).
 
 ## Built-in Integrations
 

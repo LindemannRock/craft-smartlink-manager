@@ -39,7 +39,7 @@ return [
 
 ## IP Anonymization
 
-SmartLink Manager never stores raw IP addresses. Instead, it stores a one-way HMAC hash of the IP address using the salt from `SMARTLINK_MANAGER_IP_SALT`. This means:
+SmartLink Manager never stores raw IP addresses. Instead, it stores a one-way SHA-256 hash of the IP address combined with the salt from `SMARTLINK_MANAGER_IP_SALT`. This means:
 
 - The same visitor generates the same hash → unique visitor counting works
 - The hash cannot be reversed to recover the IP address → GDPR-friendly
@@ -85,7 +85,7 @@ SMARTLINK_MANAGER_DEFAULT_CITY=New York
 
 ## Data Retention
 
-By default, click data is kept indefinitely. Configure a retention period in **Settings → Analytics → Retention**:
+By default, click data is retained for 90 days. Configure a different retention period in **Settings → Analytics → Retention** (set to `0` for unlimited):
 
 ```php
 // config/smartlink-manager.php

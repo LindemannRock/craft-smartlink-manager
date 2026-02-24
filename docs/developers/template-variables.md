@@ -1,4 +1,4 @@
-# Template Variables @since(5.0.0)
+# Template Variables @since(1.0.0)
 
 SmartLink Manager provides the `craft.smartLinks` Twig variable for querying smart links and analytics in your templates.
 

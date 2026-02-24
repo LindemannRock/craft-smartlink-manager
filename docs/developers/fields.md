@@ -87,24 +87,6 @@ This is separate from the SmartLinkField — it allows editors to pick a smart l
 <a href="{{ entry.ctaLink.url }}">{{ entry.ctaLink.text }}</a>
 ```
 
-See [Integrations](../feature-tour/integrations-overview.md) for setup details.
-
-## Querying by Field
-
-In PHP, you can query smart links that are attached to a specific field or element:
-
-```php
-use lindemannrock\smartlinkmanager\elements\SmartLink;
-
-// All smart links attached to a specific field
-$links = SmartLink::find()
-    ->fieldId($fieldId)
-    ->all();
-
-// Smart links owned by a specific entry
-$links = SmartLink::find()
-    ->ownerId($entry->id)
-    ->all();
-```
+See [Integrations](../feature-tour/integrations.md) for setup details.
 
 See [Element Queries](element-queries.md) for the full query API.

@@ -37,8 +37,6 @@ These parameters are in addition to all standard Craft element query parameters 
 | `slug` | `string\|string[]` | Filter by smart link slug |
 | `trackAnalytics` | `bool\|null` | Filter by whether analytics tracking is enabled |
 | `qrCodeEnabled` | `bool\|null` | Filter by whether QR code generation is enabled |
-| `fieldId` | `int\|int[]` | Filter smart links attached to a specific field |
-| `ownerId` | `int\|int[]` | Filter smart links owned by a specific element |
 
 > [!NOTE]
 > Smart links use a private `_smartLinkSlug` column in the plugin's own table, not the standard `elements_sites.slug` column. The `slug` parameter on the query correctly targets this internal column. Do not attempt to query by `elements_sites.slug` directly.
@@ -94,16 +92,6 @@ The `active()` shortcut on the Twig variable returns only enabled links:
 
 ```twig
 {% set trackedLinks = craft.smartLinks.trackAnalytics(true).orderBy('title').all() %}
-```
-
-### Get Links Owned by a Specific Entry
-
-```php
-use lindemannrock\smartlinkmanager\elements\SmartLink;
-
-$links = SmartLink::find()
-    ->ownerId($entry->id)
-    ->all();
 ```
 
 ### Count Total Smart Links

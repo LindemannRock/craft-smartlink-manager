@@ -23,13 +23,21 @@ Each event pushes the following payload:
 ```json
 {
     "event": "smart_links_redirect",
-    "smart_link_id": 42,
-    "smart_link_slug": "my-app",
-    "smart_link_title": "My App",
-    "device_type": "phone",
-    "device_os": "iOS",
-    "platform": "ios",
-    "language": "en"
+    "smart_link": {
+        "slug": "my-app",
+        "title": "My App",
+        "destination_url": "https://apps.apple.com/app/my-app",
+        "platform": "ios",
+        "source": "redirect",
+        "device_type": "smartphone",
+        "os": "iOS",
+        "os_version": "17.0",
+        "browser": "Safari",
+        "browser_version": "17.0",
+        "is_mobile": true,
+        "country": "US",
+        "city": "New York"
+    }
 }
 ```
 
