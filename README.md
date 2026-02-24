@@ -24,6 +24,7 @@ This plugin is in active development and not yet available on the Craft Plugin S
 - **Analytics** — Click tracking with device, browser, country, city, language, referrer, and source breakdown
 - **Integrations** — SEOmatic (GTM/GA4 events), Redirect Manager (auto-301), Craft Link Field
 - **Smart Link Field** — Element picker field for entries and other elements
+- **Custom Domain** — Serve smart links from a branded domain like `go.myapp.com` with single-site and multisite support
 - **Multi-Site** — Per-site destination URLs with a single shared slug
 - **Dashboard Widgets** — Analytics Summary and Top Links widgets
 
