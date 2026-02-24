@@ -19,121 +19,101 @@ class DeviceInfo extends Model
 {
     /**
      * @var string Detected platform (ios, android, huawei, windows, macos, linux, other)
-     * @since 1.0.0
      */
     public string $platform = 'other';
 
     /**
      * @var bool Is mobile device
-     * @since 1.0.0
      */
     public bool $isMobile = false;
 
     /**
      * @var bool Is tablet
-     * @since 1.0.0
      */
     public bool $isTablet = false;
 
     /**
      * @var bool Is desktop
-     * @since 1.0.0
      */
     public bool $isDesktop = false;
 
     /**
      * @var string User agent string
-     * @since 1.0.0
      */
     public string $userAgent = '';
 
     /**
      * @var string|null Device vendor (Apple, Samsung, Huawei, etc.)
-     * @since 1.0.0
      */
     public ?string $vendor = null;
 
     /**
      * @var string|null OS version
-     * @since 1.0.0
      */
     public ?string $osVersion = null;
 
     /**
      * @var string|null Browser name
-     * @since 1.0.0
      */
     public ?string $browser = null;
 
     /**
      * @var string|null Browser version
-     * @since 1.0.0
      */
     public ?string $browserVersion = null;
 
     /**
      * @var string|null Detected language
-     * @since 1.0.0
      */
     public ?string $language = null;
 
     /**
      * @var string|null Country code
-     * @since 1.0.0
      */
     public ?string $country = null;
 
     /**
      * @var string|null Device model
-     * @since 1.0.0
      */
     public ?string $model = null;
 
     /**
      * @var string|null Device brand name
-     * @since 1.0.0
      */
     public ?string $brand = null;
 
     /**
      * @var string|null Device type (smartphone, tablet, desktop, tv, console, etc.)
-     * @since 1.0.0
      */
     public ?string $deviceType = null;
 
     /**
      * @var bool Is bot/crawler
-     * @since 1.0.0
      */
     public bool $isBot = false;
 
     /**
      * @var string|null Bot name if detected
-     * @since 1.0.0
      */
     public ?string $botName = null;
 
     /**
      * @var string|null Operating system name
-     * @since 1.0.0
      */
     public ?string $osName = null;
 
     /**
      * @var string|null Browser engine
-     * @since 1.0.0
      */
     public ?string $browserEngine = null;
 
     /**
      * @var bool Is mobile app
-     * @since 1.0.0
      */
     public bool $isMobileApp = false;
 
     /**
      * @var string|null Client type (browser, mobile app, feed reader, etc.)
-     * @since 1.0.0
      */
     public ?string $clientType = null;
 

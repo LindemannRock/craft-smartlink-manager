@@ -44,7 +44,6 @@ class SmartlinksController extends Controller
      * List all links (element index)
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -98,7 +97,6 @@ class SmartlinksController extends Controller
      * @param int|null $smartLinkId
      * @param SmartLink|null $smartLink
      * @return Response
-     * @since 1.0.0
      */
     public function actionEdit(?int $smartLinkId = null, ?SmartLink $smartLink = null): Response
     {
@@ -207,7 +205,6 @@ class SmartlinksController extends Controller
      * Save a smart link
      *
      * @return Response|null
-     * @since 1.0.0
      */
     public function actionSave(): ?Response
     {
@@ -391,7 +388,6 @@ class SmartlinksController extends Controller
      * Delete a smart link
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionDelete(): Response
     {
@@ -425,7 +421,6 @@ class SmartlinksController extends Controller
      * Restore a soft-deleted smart link
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionRestore(): Response
     {
@@ -466,7 +461,6 @@ class SmartlinksController extends Controller
      * Permanently delete a smart link
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionHardDelete(): Response
     {
@@ -507,7 +501,6 @@ class SmartlinksController extends Controller
      * Get smart link details
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionGetDetails(): Response
     {
@@ -541,7 +534,6 @@ class SmartlinksController extends Controller
      * Generate QR code
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionGenerateQrCode(): Response
     {
@@ -582,7 +574,6 @@ class SmartlinksController extends Controller
      *
      * @param int $smartLinkId
      * @return Response
-     * @since 1.0.0
      */
     public function actionRevisions(int $smartLinkId): Response
     {

@@ -43,7 +43,6 @@ class AnalyticsController extends Controller
      * Analytics dashboard
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -86,7 +85,6 @@ class AnalyticsController extends Controller
      * Get analytics data via AJAX
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionGetData(): Response
     {
@@ -181,7 +179,6 @@ class AnalyticsController extends Controller
      * Supports CSV, JSON, and Excel formats using ExportHelper.
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionExport(): Response
     {

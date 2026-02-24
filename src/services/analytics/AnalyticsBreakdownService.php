@@ -30,7 +30,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getDeviceBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -79,7 +78,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getDeviceTypeBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -161,7 +159,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getDeviceBrandBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -215,7 +212,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getPlatformBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -275,7 +271,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getOsBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -360,7 +355,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getBrowserBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -460,7 +454,6 @@ class AnalyticsBreakdownService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getLanguageBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {

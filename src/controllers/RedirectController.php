@@ -46,7 +46,6 @@ class RedirectController extends Controller
      *
      * @param string $slug
      * @return Response
-     * @since 1.0.0
      */
     public function actionIndex(string $slug, ?string $siteHandle = null): Response
     {
@@ -138,7 +137,6 @@ class RedirectController extends Controller
      * @param string $slug
      * @param string $platform Platform identifier (ios, android, huawei, amazon, windows, mac, fallback, auto)
      * @return Response
-     * @since 1.0.0
      */
     public function actionGo(string $slug, string $platform = 'auto', ?string $siteHandle = null): Response
     {

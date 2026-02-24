@@ -27,13 +27,11 @@ class CleanupAnalyticsJob extends BaseJob
 
     /**
      * @var bool Whether to reschedule after completion
-     * @since 1.0.0
      */
     public bool $reschedule = false;
 
     /**
      * @var string|null Next run time display string
-     * @since 1.0.0
      */
     public ?string $nextRunTime = null;
 

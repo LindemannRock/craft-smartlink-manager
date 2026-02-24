@@ -60,7 +60,6 @@ class AnalyticsRecord extends ActiveRecord
      * Returns the analytics record's smart link.
      *
      * @return ActiveQueryInterface
-     * @since 1.0.0
      */
     public function getSmartLink(): ActiveQueryInterface
     {

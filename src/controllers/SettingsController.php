@@ -74,7 +74,6 @@ class SettingsController extends Controller
      * Settings index - redirect to general
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -85,7 +84,6 @@ class SettingsController extends Controller
      * General settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionGeneral(): Response
     {
@@ -114,7 +112,6 @@ class SettingsController extends Controller
      * Analytics settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionAnalytics(): Response
     {
@@ -150,7 +147,6 @@ class SettingsController extends Controller
      * Export settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionExport(): Response
     {
@@ -168,7 +164,6 @@ class SettingsController extends Controller
      * QR Code settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionQrCode(): Response
     {
@@ -186,7 +181,6 @@ class SettingsController extends Controller
      * Behavior settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionBehavior(): Response
     {
@@ -204,7 +198,6 @@ class SettingsController extends Controller
      * Interface settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionInterface(): Response
     {
@@ -355,7 +348,6 @@ class SettingsController extends Controller
      * Save settings
      *
      * @return Response|null
-     * @since 1.0.0
      */
     public function actionSave(): ?Response
     {
@@ -484,7 +476,6 @@ class SettingsController extends Controller
      *
      * @return Response
      * @throws ForbiddenHttpException
-     * @since 1.0.0
      */
     public function actionCleanupAnalytics(): Response
     {
@@ -730,7 +721,6 @@ class SettingsController extends Controller
      * Clear all analytics data
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionClearAllAnalytics(): Response
     {

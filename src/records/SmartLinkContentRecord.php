@@ -47,7 +47,6 @@ class SmartLinkContentRecord extends ActiveRecord
      * Returns the smart link.
      *
      * @return ActiveQueryInterface
-     * @since 1.0.0
      */
     public function getSmartLink(): ActiveQueryInterface
     {
@@ -58,7 +57,6 @@ class SmartLinkContentRecord extends ActiveRecord
      * Returns the site.
      *
      * @return ActiveQueryInterface
-     * @since 1.0.0
      */
     public function getSite(): ActiveQueryInterface
     {

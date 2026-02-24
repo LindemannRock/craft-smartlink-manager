@@ -33,235 +33,196 @@ class Settings extends Model
 
     /**
      * @event Event The event that is triggered after settings are saved
-     * @since 5.0.0
      */
     public const EVENT_AFTER_SAVE_SETTINGS = 'afterSaveSettings';
 
     /**
      * @var string Plugin display name
-     * @since 5.0.0
      */
     public string $pluginName = 'SmartLink Manager';
-    
+
     /**
      * @var bool Enable analytics tracking
-     * @since 5.0.0
      */
     public bool $enableAnalytics = true;
 
     /**
      * @var int Analytics data retention in days
-     * @since 5.0.0
      */
     public int $analyticsRetention = 90;
 
     /**
      * @var bool Include disabled smart links in analytics exports
-     * @since 5.0.0
      */
     public bool $includeDisabledInExport = false;
 
     /**
      * @var bool Include expired smart links in analytics exports
-     * @since 5.0.0
      */
     public bool $includeExpiredInExport = false;
 
     /**
      * @var bool Anonymize IP addresses before storing (masks last octet for IPv4, last 80 bits for IPv6)
-     * @since 5.0.0
      */
     public bool $anonymizeIpAddress = false;
 
     /**
      * @var int Default QR code size
-     * @since 5.0.0
      */
     public int $defaultQrSize = 256;
 
     /**
      * @var string Default QR code color
-     * @since 5.0.0
      */
     public string $defaultQrColor = '#000000';
 
     /**
      * @var string Default QR code background color
-     * @since 5.0.0
      */
     public string $defaultQrBgColor = '#FFFFFF';
 
     /**
      * @var string Default QR code format (png or svg)
-     * @since 5.0.0
      */
     public string $defaultQrFormat = 'png';
 
     /**
      * @var bool Enable QR code caching
-     * @since 5.0.0
      */
     public bool $enableQrCodeCache = true;
 
     /**
      * @var int QR code cache duration in seconds (24 hours)
-     * @since 5.0.0
      */
     public int $qrCodeCacheDuration = 86400;
 
     /**
      * @var string Cache storage method (file or redis)
-     * @since 5.0.0
      */
     public string $cacheStorageMethod = 'file';
 
     /**
      * @var string Default QR code error correction level (L, M, Q, H)
-     * @since 5.0.0
      */
     public string $defaultQrErrorCorrection = 'M';
-    
+
     /**
      * @var int Default QR code margin/quiet zone (0-10)
-     * @since 5.0.0
      */
     public int $defaultQrMargin = 4;
-    
+
     /**
      * @var string QR code module style (square, rounded, dots)
-     * @since 5.0.0
      */
     public string $qrModuleStyle = 'square';
-    
+
     /**
      * @var string QR code eye style (square, rounded, leaf)
-     * @since 5.0.0
      */
     public string $qrEyeStyle = 'square';
-    
+
     /**
      * @var string|null QR code eye color (null = same as module color)
-     * @since 5.0.0
      */
     public ?string $qrEyeColor = null;
-    
+
     /**
      * @var bool Enable QR code logo overlay
-     * @since 5.0.0
      */
     public bool $enableQrLogo = false;
-    
+
     /**
      * @var string|null Asset volume UID for logo selection (null = all volumes)
-     * @since 5.0.0
      */
     public ?string $qrLogoVolumeUid = null;
-    
+
     /**
      * @var string|null Asset volume UID for smart link image selection (null = all volumes)
-     * @since 5.0.0
      */
     public ?string $imageVolumeUid = null;
-    
+
     /**
      * @var int|null Default QR code logo asset ID
-     * @since 5.0.0
      */
     public ?int $defaultQrLogoId = null;
-    
+
     /**
      * @var int QR code logo size as percentage (10-30)
-     * @since 5.0.0
      */
     public int $qrLogoSize = 20;
-    
+
     /**
      * @var bool Enable QR code downloads
-     * @since 5.0.0
      */
     public bool $enableQrDownload = true;
-    
+
     /**
      * @var string QR code download filename pattern
-     * @since 5.0.0
      */
     public string $qrDownloadFilename = '{slug}-qr-{size}';
 
     /**
      * @var string|null Custom redirect template path
-     * @since 5.0.0
      */
     public ?string $redirectTemplate = null;
 
     /**
      * @var string|null Custom QR code display template path
-     * @since 5.0.0
      */
     public ?string $qrTemplate = null;
 
     /**
      * @var bool Enable geographic detection
-     * @since 5.0.0
      */
     public bool $enableGeoDetection = false;
 
     /**
      * @var string Geo IP lookup provider (ip-api.com, ipapi.co, ipinfo.io)
-     * @since 5.0.0
      */
     public string $geoProvider = 'ip-api.com';
 
     /**
      * @var string|null API key for paid provider tiers (enables HTTPS for ip-api.com)
-     * @since 5.0.0
      */
     public ?string $geoApiKey = null;
 
     /**
      * @var string|null Default country for local development (when IP is private)
-     * @since 5.0.0
      */
     public ?string $defaultCountry = null;
 
     /**
      * @var string|null Default city for local development (when IP is private)
-     * @since 5.0.0
      */
     public ?string $defaultCity = null;
 
     /**
      * @var bool Cache device detection results
-     * @since 5.0.0
      */
     public bool $cacheDeviceDetection = true;
 
     /**
      * @var int Device detection cache duration in seconds (1 hour)
-     * @since 5.0.0
      */
     public int $deviceDetectionCacheDuration = 3600;
 
     /**
      * @var string Default language detection method (browser, ip, or both)
-     * @since 5.0.0
      */
     public string $languageDetectionMethod = 'browser';
 
     /**
      * @var int Items per page in element index
-     * @since 5.0.0
      */
     public int $itemsPerPage = 100;
 
     /**
      * @var string URL prefix for smart links (default: 'go')
-     * @since 5.0.0
      */
     public string $slugPrefix = 'go';
 
     /**
      * @var string URL prefix for QR codes (default: 'qr')
-     * @since 5.0.0
      */
     public string $qrPrefix = 'qr';
 
@@ -283,49 +244,41 @@ class Settings extends Model
 
     /**
      * @var string URL to redirect to when smart link is not found (404)
-     * @since 5.0.0
      */
     public string $notFoundRedirectUrl = '/';
 
     /**
      * @var array Site IDs where SmartLink Manager should be enabled
-     * @since 5.0.0
      */
     public array $enabledSites = [];
 
     /**
      * @var string Log level (error, warning, info, debug)
-     * @since 5.0.0
      */
     public string $logLevel = 'error';
 
     /**
      * @var array Enabled integration handles (e.g., ['seomatic'])
-     * @since 5.0.0
      */
     public array $enabledIntegrations = [];
 
     /**
      * @var array Event types to track in integrations
-     * @since 5.0.0
      */
     public array $seomaticTrackingEvents = ['redirect', 'button_click', 'qr_scan'];
 
     /**
      * @var array Event types that create redirects in Redirect Manager
-     * @since 5.0.0
      */
     public array $redirectManagerEvents = ['slug-change', 'delete'];
 
     /**
      * @var string Event prefix for GTM/GA events
-     * @since 5.0.0
      */
     public string $seomaticEventPrefix = 'smart_links';
 
     /**
      * @var string|null IP hash salt for privacy protection
-     * @since 5.0.0
      */
     public ?string $ipHashSalt = null;
 
@@ -501,7 +454,6 @@ class Settings extends Model
      * Set enabled integrations from string (for form submission)
      *
      * @param string|array $value
-     * @since 5.0.0
      */
     public function setEnabledIntegrations($value): void
     {
@@ -524,7 +476,6 @@ class Settings extends Model
      * Set default QR logo ID from asset field (handles array/string input)
      *
      * @param int|array|string|null $value
-     * @since 5.0.0
      */
     public function setDefaultQrLogoId(int|array|string|null $value): void
     {
@@ -539,8 +490,6 @@ class Settings extends Model
 
     /**
      * Validate log level - debug requires devMode
-     *
-     * @since 5.0.0
      */
     public function validateLogLevel($attribute, $params, $validator)
     {
@@ -577,8 +526,6 @@ class Settings extends Model
 
     /**
      * Validate slug prefix to prevent conflicts
-     *
-     * @since 5.0.0
      */
     public function validateSlugPrefix($attribute, $params, $validator)
     {
@@ -629,8 +576,6 @@ class Settings extends Model
 
     /**
      * Validate QR prefix to prevent conflicts
-     *
-     * @since 5.0.0
      */
     public function validateQrPrefix($attribute, $params, $validator)
     {
@@ -779,7 +724,6 @@ class Settings extends Model
      *
      * @param int $siteId
      * @return bool
-     * @since 5.0.0
      */
     public function isSiteEnabled(int $siteId): bool
     {
@@ -795,7 +739,6 @@ class Settings extends Model
      * Get enabled site IDs, defaulting to all sites if none specified
      *
      * @return array
-     * @since 5.0.0
      */
     public function getEnabledSiteIds(): array
     {
@@ -813,7 +756,6 @@ class Settings extends Model
      * Get attribute labels
      *
      * @return array
-     * @since 5.0.0
      */
     public function attributeLabels(): array
     {

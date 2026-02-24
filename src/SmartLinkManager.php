@@ -69,25 +69,21 @@ class SmartLinkManager extends Plugin
 
     /**
      * @var SmartLinkManager|null Singleton plugin instance
-     * @since 1.0.0
      */
     public static ?SmartLinkManager $plugin = null;
 
     /**
      * @var string Plugin schema version for migrations
-     * @since 1.0.0
      */
     public string $schemaVersion = '1.0.0';
 
     /**
      * @var bool Whether the plugin exposes a control panel settings page
-     * @since 1.0.0
      */
     public bool $hasCpSettings = true;
 
     /**
      * @var bool Whether the plugin registers a control panel section
-     * @since 1.0.0
      */
     public bool $hasCpSection = true;
 

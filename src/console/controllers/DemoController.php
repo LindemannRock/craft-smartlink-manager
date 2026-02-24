@@ -25,7 +25,6 @@ class DemoController extends Controller
      *
      * @param int|null $id Smart link ID
      * @return int
-     * @since 1.0.0
      */
     public function actionAddQrClick($id = null): int
     {

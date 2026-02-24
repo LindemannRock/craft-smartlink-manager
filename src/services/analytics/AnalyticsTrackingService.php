@@ -34,9 +34,6 @@ class AnalyticsTrackingService
     use LoggingTrait;
     use GeoLookupTrait;
 
-    /**
-     * @since 5.22.0
-     */
     public function __construct()
     {
         $this->setLoggingHandle(SmartLinkManager::$plugin->id);
@@ -48,7 +45,6 @@ class AnalyticsTrackingService
      * @param SmartLink $smartLink
      * @param DeviceInfo $deviceInfo
      * @param array $metadata
-     * @since 5.22.0
      */
     public function trackClick(SmartLink $smartLink, DeviceInfo $deviceInfo, array $metadata = []): void
     {
@@ -74,7 +70,6 @@ class AnalyticsTrackingService
      * @param array $deviceInfo
      * @param array $metadata
      * @return bool
-     * @since 5.22.0
      */
     public function saveAnalytics(int $linkId, array $deviceInfo, array $metadata = []): bool
     {
@@ -158,7 +153,6 @@ class AnalyticsTrackingService
      *
      * @param string $ip
      * @return array|null
-     * @since 5.22.0
      */
     public function getLocationFromIp(string $ip): ?array
     {
@@ -188,7 +182,6 @@ class AnalyticsTrackingService
      *
      * @param string $ip
      * @return string|null
-     * @since 5.22.0
      */
     public function getCountryFromIp(string $ip): ?string
     {

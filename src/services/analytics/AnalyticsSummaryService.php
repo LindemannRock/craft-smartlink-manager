@@ -38,7 +38,6 @@ class AnalyticsSummaryService
      * @param int|null $smartLinkId
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getAnalyticsSummary(string $dateRange = 'last7days', ?int $smartLinkId = null, int|array|null $siteId = null): array
     {
@@ -103,7 +102,6 @@ class AnalyticsSummaryService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getSmartLinkAnalytics(int $smartLinkId, string $dateRange = 'last7days', int|array|null $siteId = null): array
     {
@@ -172,7 +170,6 @@ class AnalyticsSummaryService
      * @param SmartLink $smartLink
      * @param array $criteria
      * @return array
-     * @since 5.22.0
      */
     public function getAnalytics(SmartLink $smartLink, array $criteria = []): array
     {
@@ -250,7 +247,6 @@ class AnalyticsSummaryService
      * @param array $linkIds
      * @param string $period
      * @return array
-     * @since 5.22.0
      */
     public function getAggregatedStats(array $linkIds, string $period = '30d'): array
     {
@@ -287,7 +283,6 @@ class AnalyticsSummaryService
      * @param int $limit
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getTopLinks(string $dateRange = 'last7days', int $limit = 5, int|array|null $siteId = null): array
     {
@@ -415,7 +410,6 @@ class AnalyticsSummaryService
      * @param int $limit
      * @param string $dateRange
      * @return array
-     * @since 5.22.0
      */
     public function getRecentClicks(int $smartLinkId, int $limit = 20, string $dateRange = 'last7days'): array
     {
@@ -447,7 +441,6 @@ class AnalyticsSummaryService
      * @param int $limit
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getAllRecentClicks(string $dateRange = 'last7days', int $limit = 20, int|array|null $siteId = null): array
     {
@@ -531,7 +524,6 @@ class AnalyticsSummaryService
      * @param int $limit
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getTopCountries(?int $smartLinkId, string $dateRange, int $limit = 15, int|array|null $siteId = null): array
     {
@@ -577,7 +569,6 @@ class AnalyticsSummaryService
      * @param int $limit
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getTopCities(?int $smartLinkId, string $dateRange, int $limit = 15, int|array|null $siteId = null): array
     {
@@ -623,7 +614,6 @@ class AnalyticsSummaryService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getAllCountries(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
@@ -637,7 +627,6 @@ class AnalyticsSummaryService
      * @param string $dateRange
      * @param int|int[]|null $siteId
      * @return array
-     * @since 5.22.0
      */
     public function getButtonClicks(int $smartLinkId, string $dateRange = 'last7days', int|array|null $siteId = null): array
     {
