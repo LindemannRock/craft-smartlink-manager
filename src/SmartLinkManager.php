@@ -526,8 +526,10 @@ class SmartLinkManager extends Plugin
     private function getSiteUrlRules(): array
     {
         $settings = $this->getSettings();
-        $slugPrefix = $settings->slugPrefix ?? 'go';
-        $qrPrefix = $settings->qrPrefix ?? 'qr';
+        $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
+        $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
+        $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
+        $qrPrefix = $qrPrefix !== '' ? $qrPrefix : 'qr';
         $siteHandles = array_map(static fn($site) => preg_quote($site->handle, '/'), Craft::$app->getSites()->getAllSites());
         $siteHandlePattern = !empty($siteHandles) ? implode('|', $siteHandles) : '[a-zA-Z0-9_-]+';
 

@@ -847,8 +847,11 @@ class SmartLink extends Element
     public function getRedirectUrl(): string
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $slugPrefix = $settings->slugPrefix ?? 'go';
-        return $settings->buildPublicUrl("{$slugPrefix}/{$this->slug}", $this->siteId);
+        $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
+        $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
+        $slug = ltrim((string) $this->slug, '/');
+
+        return $settings->buildPublicUrl("{$slugPrefix}/{$slug}", $this->siteId);
     }
     
     /**
@@ -893,8 +896,11 @@ class SmartLink extends Element
             }
         }
 
-        $qrPrefix = $settings->qrPrefix ?? 'qr';
-        return $settings->buildPublicUrl("{$qrPrefix}/{$this->slug}", $this->siteId, $params);
+        $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
+        $qrPrefix = $qrPrefix !== '' ? $qrPrefix : 'qr';
+        $slug = ltrim((string) $this->slug, '/');
+
+        return $settings->buildPublicUrl("{$qrPrefix}/{$slug}", $this->siteId, $params);
     }
     
     /**
@@ -916,8 +922,11 @@ class SmartLink extends Element
         // Remove null values
         $params = array_filter($params, fn($value) => $value !== null);
 
-        $qrPrefix = $settings->qrPrefix ?? 'qr';
-        return $settings->buildPublicUrl("{$qrPrefix}/{$this->slug}/view", $this->siteId, $params);
+        $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
+        $qrPrefix = $qrPrefix !== '' ? $qrPrefix : 'qr';
+        $slug = ltrim((string) $this->slug, '/');
+
+        return $settings->buildPublicUrl("{$qrPrefix}/{$slug}/view", $this->siteId, $params);
     }
 
     /**

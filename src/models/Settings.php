@@ -683,20 +683,32 @@ class Settings extends Model
      */
     public function buildPublicUrl(string $path, ?int $siteId = null, array $params = []): string
     {
-        $relativePath = ltrim($path, '/');
+        $relativePath = trim((string) $path);
+        $relativePath = preg_replace('#/+#', '/', $relativePath) ?? $relativePath;
+        $relativePath = trim($relativePath, '/');
         $siteId = $siteId ?: Craft::$app->getSites()->getCurrentSite()->id;
 
         $pattern = trim((string) App::parseEnv($this->smartlinkBaseUrlPattern ?? ''));
         if ($pattern !== '') {
             $base = $this->expandSmartlinkBasePattern($pattern, $siteId);
             if ($base !== '') {
-                return UrlHelper::urlWithParams(rtrim($base, '/') . '/' . $relativePath, $params);
+                $url = rtrim($base, '/');
+                if ($relativePath !== '') {
+                    $url .= '/' . $relativePath;
+                }
+
+                return UrlHelper::urlWithParams($url, $params);
             }
         }
 
         $baseUrl = trim((string) App::parseEnv($this->smartlinkBaseUrl ?? ''));
         if ($baseUrl !== '') {
-            return UrlHelper::urlWithParams(rtrim($baseUrl, '/') . '/' . $relativePath, $params);
+            $url = rtrim($baseUrl, '/');
+            if ($relativePath !== '') {
+                $url .= '/' . $relativePath;
+            }
+
+            return UrlHelper::urlWithParams($url, $params);
         }
 
         return UrlHelper::siteUrl($relativePath, $params, null, $siteId);
