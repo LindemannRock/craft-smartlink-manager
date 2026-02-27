@@ -20,7 +20,7 @@ return [
 
     'SmartLink Manager' => 'SmartLink Manager',
     '{name} plugin loaded' => '{name} Plugin geladen',
-    '{displayName} caches' => '{displayName}-Caches',
+    '{displayName} caches' => '{displayName} Caches',
 
     // =========================================================================
     // Element-Namen
@@ -57,7 +57,7 @@ return [
     'Logs' => 'Protokolle',
     'Settings' => 'Einstellungen',
     'General' => 'Allgemein',
-    'QR Code' => 'QR-Code',
+    'QR Code' => 'QR Code',
     'Redirect' => 'Weiterleitung',
     'Export' => 'Export',
     'Advanced' => 'Erweitert',
@@ -99,11 +99,11 @@ return [
 
     'URL Settings' => 'URL-Einstellungen',
     'Smart Link URL Prefix' => 'Smart Link URL-Präfix',
-    '{singularName} URL Prefix' => '{singularName}-URL-Präfix',
-    'QR Code URL Prefix' => 'QR-Code-URL-Präfix',
+    '{singularName} URL Prefix' => '{singularName} URL-Präfix',
+    'QR Code URL Prefix' => 'QR Code URL-Präfix',
     'The URL prefix for smart links (e.g., \'go\' creates /go/your-link)' => 'Das URL-Präfix für Smart Links (z. B. erzeugt \'go\' /go/your-link)',
     'The URL prefix for {pluginName} (e.g., \'go\' creates /go/your-link)' => 'Das URL-Präfix für {pluginName} (z. B. erzeugt \'go\' /go/your-link). Routen-Cache nach der Änderung leeren (php craft clear-caches/compiled-templates).',
-    'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)' => 'Das URL-Präfix für QR-Code-Seiten (z. B. erzeugt \'qr\' /qr/your-link/view oder \'go/qr\' erzeugt /go/qr/your-link/view)',
+    'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)' => 'Das URL-Präfix für QR Code Seiten (z. B. erzeugt \'qr\' /qr/your-link/view oder \'go/qr\' erzeugt /go/qr/your-link/view)',
     'Clear routes cache after changing this (php craft clear-caches/compiled-templates).' => 'Routen-Cache nach dieser Änderung leeren (php craft clear-caches/compiled-templates).',
     'Smart Link Base URL' => 'Smart Link Basis-URL',
     'Optional absolute URL used for generated smart links and QR URLs. Leave empty to use each site\'s base URL.' => 'Optionale absolute URL für generierte Smart Links und QR-URLs. Leer lassen, um die Basis-URL jeder Website zu verwenden.',
@@ -121,8 +121,8 @@ return [
     'Custom Redirect Template' => 'Benutzerdefiniertes Weiterleitungs-Template',
     'Template path in your templates/ folder. Leave empty to use the default path.' => 'Template-Pfad in Ihrem templates/-Ordner. Leer lassen, um den Standardpfad zu verwenden.',
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/redirect)' => 'Pfad zum benutzerdefinierten Template in Ihrem templates/-Ordner (z. B. smartlink-manager/redirect)',
-    'QR Code Template' => 'QR-Code-Template',
-    'Custom QR Code Template' => 'Benutzerdefiniertes QR-Code-Template',
+    'QR Code Template' => 'QR Code Template',
+    'Custom QR Code Template' => 'Benutzerdefiniertes QR Code Template',
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/qr)' => 'Pfad zum benutzerdefinierten Template in Ihrem templates/-Ordner (z. B. smartlink-manager/qr)',
     'These templates must exist in your site\'s <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed.' => 'Diese Templates müssen im <code>templates/</code>-Ordner Ihrer Website existieren. Kopieren Sie die Referenz-Templates von <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> nach <code>templates/smartlink-manager/</code> und passen Sie sie nach Bedarf an.',
 
@@ -133,27 +133,27 @@ return [
     'Asset Settings' => 'Asset-Einstellungen',
     'Image Volume' => 'Bild-Volume',
     'Smart Link Image Volume' => 'Smart Link Bild-Volume',
-    '{singularName} Image Volume' => '{singularName}-Bild-Volume',
+    '{singularName} Image Volume' => '{singularName} Bild-Volume',
     'Which asset volume should be used for SmartLink Manager images' => 'Welches Asset-Volume für SmartLink Manager Bilder verwendet werden soll',
-    'Which asset volume should be used for {singularName} images' => 'Welches Asset-Volume für {singularName}-Bilder verwendet werden soll',
+    'Which asset volume should be used for {singularName} images' => 'Welches Asset-Volume für {singularName} Bilder verwendet werden soll',
     'All asset volumes' => 'Alle Asset-Volumes',
 
     // =========================================================================
-    // QR-Code-Einstellungen – Erscheinungsbild
+    // QR Code Einstellungen – Erscheinungsbild
     // =========================================================================
 
-    'QR Code Settings' => 'QR-Code-Einstellungen',
+    'QR Code Settings' => 'QR Code Einstellungen',
     'Appearance & Style' => 'Erscheinungsbild & Stil',
-    'Enable QR Code' => 'QR-Code aktivieren',
-    'Default QR Code Size' => 'Standard-QR-Code-Größe',
-    'Default size in pixels for generated QR codes' => 'Standardgröße in Pixel für generierte QR-Codes',
-    'QR Code Color' => 'QR-Code-Farbe',
-    'Default QR Code Color' => 'Standard-QR-Code-Farbe',
-    'Default QR Background Color' => 'Standard-QR-Hintergrundfarbe',
+    'Enable QR Code' => 'QR Code aktivieren',
+    'Default QR Code Size' => 'Standard QR Code Größe',
+    'Default size in pixels for generated QR codes' => 'Standardgröße in Pixel für generierte QR Codes',
+    'QR Code Color' => 'QR Code Farbe',
+    'Default QR Code Color' => 'Standard QR Code Farbe',
+    'Default QR Background Color' => 'Standard QR Hintergrundfarbe',
     'Background Color' => 'Hintergrundfarbe',
-    'Default QR Code Format' => 'Standard-QR-Code-Format',
-    'Default format for generated QR codes' => 'Standardformat für generierte QR-Codes',
-    'Override the default QR code format' => 'Standard-QR-Code-Format überschreiben',
+    'Default QR Code Format' => 'Standard QR Code Format',
+    'Default format for generated QR codes' => 'Standardformat für generierte QR Codes',
+    'Override the default QR code format' => 'Standard QR Code Format überschreiben',
     'Format' => 'Format',
     'Use Default ({format|upper})' => 'Standard verwenden ({format|upper})',
     'Color' => 'Farbe',
@@ -163,24 +163,24 @@ return [
     'Size' => 'Größe',
 
     // =========================================================================
-    // QR-Code-Einstellungen – Logo
+    // QR Code Einstellungen – Logo
     // =========================================================================
 
     'Logo Settings' => 'Logo-Einstellungen',
-    'Enable QR Code Logo' => 'QR-Code-Logo aktivieren',
+    'Enable QR Code Logo' => 'QR Code Logo aktivieren',
     'Enable Logo Overlay' => 'Logo-Einblendung aktivieren',
-    'Add a logo in the center of QR codes' => 'Ein Logo in der Mitte von QR-Codes einfügen',
+    'Add a logo in the center of QR codes' => 'Ein Logo in der Mitte von QR Codes einfügen',
     'Logo Volume' => 'Logo-Volume',
     'Logo Asset Volume' => 'Logo-Asset-Volume',
-    'Which asset volume contains QR code logos. Save settings after changing this to update the logo selection below.' => 'Welches Asset-Volume QR-Code-Logos enthält. Einstellungen nach der Änderung speichern, um die Logo-Auswahl unten zu aktualisieren.',
+    'Which asset volume contains QR code logos. Save settings after changing this to update the logo selection below.' => 'Welches Asset-Volume QR Code Logos enthält. Einstellungen nach der Änderung speichern, um die Logo-Auswahl unten zu aktualisieren.',
     'Default Logo' => 'Standard-Logo',
-    'Default logo to use for QR codes (can be overridden per smart link)' => 'Standard-Logo für QR-Codes (kann pro Smart Link überschrieben werden)',
+    'Default logo to use for QR codes (can be overridden per smart link)' => 'Standard-Logo für QR Codes (kann pro Smart Link überschrieben werden)',
     'Default logo is required when logo overlay is enabled.' => 'Ein Standard-Logo ist erforderlich, wenn die Logo-Einblendung aktiviert ist.',
     'Logo Size (%)' => 'Logo-Größe (%)',
     'Logo Size' => 'Logo-Größe',
-    'Logo size as percentage of QR code (10-30%)' => 'Logo-Größe als Prozentsatz des QR-Codes (10–30 %)',
+    'Logo size as percentage of QR code (10-30%)' => 'Logo-Größe als Prozentsatz des QR Codes (10–30 %)',
     'Logo' => 'Logo',
-    'Override the default QR code logo' => 'Standard-QR-Code-Logo überschreiben',
+    'Override the default QR code logo' => 'Standard QR Code Logo überschreiben',
     'Using default logo from settings (click to override)' => 'Standard-Logo aus den Einstellungen wird verwendet (klicken zum Überschreiben)',
     'Logo overlay only works with PNG format. SVG format does not support logos.' => 'Die Logo-Einblendung funktioniert nur mit dem PNG-Format. Das SVG-Format unterstützt keine Logos.',
     'Logo requires PNG format' => 'Logo erfordert PNG-Format',
@@ -188,30 +188,30 @@ return [
     'Please save to apply the volume change' => 'Bitte speichern, um die Volume-Änderung anzuwenden',
 
     // =========================================================================
-    // QR-Code-Einstellungen – Technisch
+    // QR Code Einstellungen – Technisch
     // =========================================================================
 
     'Technical Options' => 'Technische Optionen',
     'Error Correction Level' => 'Fehlerkorrektur-Level',
-    'Higher levels work better if QR code is damaged but create denser patterns' => 'Höhere Stufen funktionieren besser, wenn der QR-Code beschädigt ist, erzeugen aber dichtere Muster',
-    'QR Code Margin' => 'QR-Code-Rand',
+    'Higher levels work better if QR code is damaged but create denser patterns' => 'Höhere Stufen funktionieren besser, wenn der QR Code beschädigt ist, erzeugen aber dichtere Muster',
+    'QR Code Margin' => 'QR Code Rand',
     'Margin Size' => 'Randgröße',
-    'White space around QR code (0-10 modules)' => 'Leerraum um den QR-Code (0–10 Module)',
+    'White space around QR code (0-10 modules)' => 'Leerraum um den QR Code (0–10 Module)',
     'Module Style' => 'Modul-Stil',
-    'Shape of the QR code modules' => 'Form der QR-Code-Module',
+    'Shape of the QR code modules' => 'Form der QR Code Module',
     'Eye Style' => 'Augen-Stil',
     'Shape of the position markers (corners)' => 'Form der Positionsmarkierungen (Ecken)',
 
     // =========================================================================
-    // QR-Code-Einstellungen – Downloads
+    // QR Code Einstellungen – Downloads
     // =========================================================================
 
     'Download Settings' => 'Download-Einstellungen',
-    'Enable QR Code Downloads' => 'QR-Code-Downloads aktivieren',
-    'Allow users to download QR codes' => 'Benutzern das Herunterladen von QR-Codes erlauben',
+    'Enable QR Code Downloads' => 'QR Code Downloads aktivieren',
+    'Allow users to download QR codes' => 'Benutzern das Herunterladen von QR Codes erlauben',
     'Download Filename Pattern' => 'Download-Dateinamenmuster',
     'Available variables: {slug}, {size}, {format}' => 'Verfügbare Variablen: {slug}, {size}, {format}',
-    'Download QR Code' => 'QR-Code herunterladen',
+    'Download QR Code' => 'QR Code herunterladen',
     'Small (256px)' => 'Klein (256 px)',
     'Medium (512px)' => 'Mittel (512 px)',
     'Large (1024px)' => 'Groß (1.024 px)',
@@ -219,22 +219,22 @@ return [
     'Custom Size...' => 'Benutzerdefinierte Größe …',
 
     // =========================================================================
-    // QR-Code-Einstellungen – Aktionen & Vorschau
+    // QR Code Einstellungen – Aktionen & Vorschau
     // =========================================================================
 
-    'QR Code Actions' => 'QR-Code-Aktionen',
-    'View QR Code' => 'QR-Code anzeigen',
-    'QR Code Image' => 'QR-Code-Bild',
-    'QR Code Page' => 'QR-Code-Seite',
+    'QR Code Actions' => 'QR Code Aktionen',
+    'View QR Code' => 'QR Code anzeigen',
+    'QR Code Image' => 'QR Code Bild',
+    'QR Code Page' => 'QR Code Seite',
     'Reset to Defaults' => 'Auf Standardwerte zurücksetzen',
     'Live Preview' => 'Live-Vorschau',
     'Preview' => 'Vorschau',
-    'Click to view QR code image' => 'Klicken, um das QR-Code-Bild anzuzeigen',
-    'Click to view QR code page' => 'Klicken, um die QR-Code-Seite anzuzeigen',
+    'Click to view QR code image' => 'Klicken, um das QR Code Bild anzuzeigen',
+    'Click to view QR code page' => 'Klicken, um die QR Code Seite anzuzeigen',
     'Toggle preview' => 'Vorschau umschalten',
-    'QR code settings reset to defaults' => 'QR-Code-Einstellungen auf Standardwerte zurückgesetzt',
+    'QR code settings reset to defaults' => 'QR Code Einstellungen auf Standardwerte zurückgesetzt',
     'Performance & Caching' => 'Leistung & Caching',
-    'Configure QR code caching to improve performance and reduce server load.' => 'QR-Code-Caching konfigurieren, um die Leistung zu verbessern und die Serverlast zu reduzieren.',
+    'Configure QR code caching to improve performance and reduce server load.' => 'QR Code Caching konfigurieren, um die Leistung zu verbessern und die Serverlast zu reduzieren.',
     'Go to Cache Settings' => 'Zu den Cache-Einstellungen',
 
     // =========================================================================
@@ -360,12 +360,12 @@ return [
     'How to store cache data. Use Redis/Database for load-balanced or multi-server environments.' => 'Wie Cache-Daten gespeichert werden sollen. Redis/Datenbank für lastverteilte oder Multi-Server-Umgebungen verwenden.',
     'File System (default, single server)' => 'Dateisystem (Standard, Einzelserver)',
     'Redis/Database (load-balanced, multi-server, cloud hosting)' => 'Redis/Datenbank (lastverteilt, Multi-Server, Cloud-Hosting)',
-    'QR Code Caching' => 'QR-Code-Caching',
-    'Enable QR Code Cache' => 'QR-Code-Cache aktivieren',
-    'Cache generated QR codes for better performance' => 'Generierte QR-Codes für bessere Leistung cachen',
-    'QR Code Cache Duration (seconds)' => 'QR-Code-Cache-Dauer (Sekunden)',
-    'QR Code Cache Duration' => 'QR-Code-Cache-Dauer',
-    'How long to cache generated QR codes (in seconds)' => 'Wie lange generierte QR-Codes gecacht werden sollen (in Sekunden)',
+    'QR Code Caching' => 'QR Code Caching',
+    'Enable QR Code Cache' => 'QR Code Cache aktivieren',
+    'Cache generated QR codes for better performance' => 'Generierte QR Codes für bessere Leistung cachen',
+    'QR Code Cache Duration (seconds)' => 'QR Code Cache-Dauer (Sekunden)',
+    'QR Code Cache Duration' => 'QR Code Cache-Dauer',
+    'How long to cache generated QR codes (in seconds)' => 'Wie lange generierte QR Codes gecacht werden sollen (in Sekunden)',
     'Cache duration in seconds' => 'Cache-Dauer in Sekunden',
     'Min: 60 (1 minute), Max: 604800 (7 days)' => 'Min: 60 (1 Minute), Max: 604.800 (7 Tage)',
     'Caching' => 'Caching',
@@ -413,14 +413,14 @@ return [
     'Third-Party Integrations' => 'Drittanbieter-Integrationen',
     'Integrations Settings' => 'Integrations-Einstellungen',
     'Integrate {pluginName} with third-party analytics and tracking services to push click events to Google Tag Manager, Google Analytics, and other platforms.' => '{pluginName} mit Drittanbieter-Analyse- und Tracking-Diensten integrieren, um Klick-Events an Google Tag Manager, Google Analytics und andere Plattformen zu senden.',
-    '{pluginName} Integration' => '{pluginName}-Integration',
+    '{pluginName} Integration' => '{pluginName} Integration',
     'Installed & Active' => 'Installiert & aktiv',
     'Installed but Disabled' => 'Installiert, aber deaktiviert',
     'Not Installed' => 'Nicht installiert',
     'Install Plugin' => 'Plugin installieren',
-    'Push {smartLinksName} click events to Google Tag Manager and analytics platforms for tracking redirects, button clicks, and QR code scans.' => '{smartLinksName}-Klick-Events an Google Tag Manager und Analyse-Plattformen senden, um Weiterleitungen, Button-Klicks und QR-Code-Scans zu verfolgen.',
+    'Push {smartLinksName} click events to Google Tag Manager and analytics platforms for tracking redirects, button clicks, and QR code scans.' => '{smartLinksName} Klick-Events an Google Tag Manager und Analyse-Plattformen senden, um Weiterleitungen, Button-Klicks und QR Code Scans zu verfolgen.',
     'Active Tracking Scripts' => 'Aktive Tracking-Skripte',
-    'Scripts receiving {pluginName} events' => 'Skripte, die {pluginName}-Events empfangen',
+    'Scripts receiving {pluginName} events' => 'Skripte, die {pluginName} Events empfangen',
     'Note' => 'Hinweis',
     'No tracking scripts are currently configured in {pluginName}. Events will be queued but not sent until you configure GTM or Google Analytics in {pluginName}.' => 'In {pluginName} sind derzeit keine Tracking-Skripte konfiguriert. Events werden in die Warteschlange gestellt, aber erst gesendet, wenn Sie GTM oder Google Analytics in {pluginName} konfigurieren.',
     'Configuration' => 'Konfiguration',
@@ -430,8 +430,8 @@ return [
     'Mobile users automatically redirected' => 'Mobile Benutzer werden automatisch weitergeleitet',
     'Button Clicks' => 'Button-Klicks',
     'Manual platform selection on landing page' => 'Manuelle Plattformauswahl auf der Landingpage',
-    'QR Code Scans' => 'QR-Code-Scans',
-    'QR code accessed via ?src=qr parameter' => 'QR-Code über den Parameter ?src=qr aufgerufen',
+    'QR Code Scans' => 'QR Code Scans',
+    'QR code accessed via ?src=qr parameter' => 'QR Code über den Parameter ?src=qr aufgerufen',
     'Event Prefix' => 'Event-Präfix',
     'Prefix for event names (e.g., \'smart_links_redirect\')' => 'Präfix für Event-Namen (z. B. \'smart_links_redirect\')',
     'Event Data Structure' => 'Event-Datenstruktur',
@@ -440,15 +440,15 @@ return [
     '{pluginName} pushes events to GTM or GA4 dataLayer only' => '{pluginName} sendet Events nur an den GTM- oder GA4-DataLayer',
     'Only Google Tag Manager and Google Analytics 4 support the dataLayer format in SEOmatic' => 'Nur Google Tag Manager und Google Analytics 4 unterstützen das DataLayer-Format in SEOmatic',
     'Use GTM to forward to other platforms' => 'GTM verwenden, um an andere Plattformen weiterzuleiten',
-    'Configure GTM triggers and tags to forward {pluginName} events to Facebook Pixel, LinkedIn, HubSpot, etc.' => 'GTM-Trigger und -Tags konfigurieren, um {pluginName}-Events an Facebook Pixel, LinkedIn, HubSpot usw. weiterzuleiten.',
+    'Configure GTM triggers and tags to forward {pluginName} events to Facebook Pixel, LinkedIn, HubSpot, etc.' => 'GTM-Trigger und -Tags konfigurieren, um {pluginName} Events an Facebook Pixel, LinkedIn, HubSpot usw. weiterzuleiten.',
     'Events are only sent when analytics tracking is enabled both globally and per-link' => 'Events werden nur gesendet, wenn das Analyse-Tracking sowohl global als auch pro Link aktiviert ist',
     'Architecture' => 'Architektur',
-    'Push {pluginName} events to SEOmatic\'s Google Tag Manager data layer for tracking in GTM and Google Analytics.' => '{pluginName}-Events in den Google Tag Manager DataLayer von SEOmatic senden, um sie in GTM und Google Analytics zu verfolgen.',
-    'Select which {pluginName} events to send to SEOmatic' => 'Wählen Sie, welche {pluginName}-Events an SEOmatic gesendet werden sollen',
+    'Push {pluginName} events to SEOmatic\'s Google Tag Manager data layer for tracking in GTM and Google Analytics.' => '{pluginName} Events in den Google Tag Manager DataLayer von SEOmatic senden, um sie in GTM und Google Analytics zu verfolgen.',
+    'Select which {pluginName} events to send to SEOmatic' => 'Wählen Sie, welche {pluginName} Events an SEOmatic gesendet werden sollen',
     'Fathom, Matomo, and Plausible are shown above but do not receive events directly from {pluginName}' => 'Fathom, Matomo und Plausible werden oben angezeigt, empfangen aber keine Events direkt von {pluginName}',
     // Redirect Manager Integration
-    'Create permanent redirect records when {pluginName} slugs change. Provides centralized redirect management and analytics tracking.' => 'Permanente Weiterleitungseinträge erstellen, wenn sich {pluginName}-Slugs ändern. Bietet zentralisiertes Weiterleitungsmanagement und Analyse-Tracking.',
-    'Creates permanent redirects when {pluginName} slugs change or links are deleted' => 'Erstellt permanente Weiterleitungen, wenn sich {pluginName}-Slugs ändern oder Links gelöscht werden',
+    'Create permanent redirect records when {pluginName} slugs change. Provides centralized redirect management and analytics tracking.' => 'Permanente Weiterleitungseinträge erstellen, wenn sich {pluginName} Slugs ändern. Bietet zentralisiertes Weiterleitungsmanagement und Analyse-Tracking.',
+    'Creates permanent redirects when {pluginName} slugs change or links are deleted' => 'Erstellt permanente Weiterleitungen, wenn sich {pluginName} Slugs ändern oder Links gelöscht werden',
     'Automatic Redirect Creation' => 'Automatische Weiterleitungserstellung',
     'Select which events should create permanent redirects in {pluginName}' => 'Wählen Sie, welche Events permanente Weiterleitungen in {pluginName} erstellen sollen',
     'Slug Changes' => 'Slug-Änderungen',
@@ -465,7 +465,7 @@ return [
     'Enabled Integrations' => 'Aktivierte Integrationen',
     // SmartLinkType (Link field integration)
     '{pluginName} is not enabled for site "{site}". Enable it in plugin settings to use {pluginNameLower} here.' => '{pluginName} ist für die Website „{site}" nicht aktiviert. Aktivieren Sie es in den Plugin-Einstellungen, um {pluginNameLower} hier zu verwenden.',
-    'Invalid {pluginName} format.' => 'Ungültiges {pluginName}-Format.',
+    'Invalid {pluginName} format.' => 'Ungültiges {pluginName} Format.',
     '{pluginName} not found.' => '{pluginName} nicht gefunden.',
 
     // =========================================================================
@@ -486,10 +486,10 @@ return [
     'Select an image for this {singularName}' => 'Ein Bild für diesen {singularName} auswählen',
     'Image Size' => 'Bildgröße',
     'Select the size for the smart link image' => 'Die Größe für das Smart Link Bild auswählen',
-    'Select the size for the {singularName} image' => 'Die Größe für das {singularName}-Bild auswählen',
+    'Select the size for the {singularName} image' => 'Die Größe für das {singularName} Bild auswählen',
     'Hide Title on Landing Pages' => 'Titel auf Landingpages ausblenden',
-    'Hide the smart link title on both redirect and QR code landing pages' => 'Den Smart Link Titel sowohl auf Weiterleitungs- als auch auf QR-Code-Landingpages ausblenden',
-    'Hide the {singularName} title on both redirect and QR code landing pages' => 'Den {singularName}-Titel sowohl auf Weiterleitungs- als auch auf QR-Code-Landingpages ausblenden',
+    'Hide the smart link title on both redirect and QR code landing pages' => 'Den Smart Link Titel sowohl auf Weiterleitungs- als auch auf QR Code Landingpages ausblenden',
+    'Hide the {singularName} title on both redirect and QR code landing pages' => 'Den {singularName} Titel sowohl auf Weiterleitungs- als auch auf QR Code Landingpages ausblenden',
     'Display Settings' => 'Anzeigeeinstellungen',
     'Advanced Settings' => 'Erweiterte Einstellungen',
     'Destination URL' => 'Ziel-URL',
@@ -510,7 +510,7 @@ return [
     'Mac App Store URL' => 'Mac App Store URL',
     'App Store URLs' => 'App Store URLs',
     'Enter the store URLs for each platform. The system will automatically redirect users to the appropriate store based on their device.' => 'Die Store-URLs für jede Plattform eingeben. Das System leitet Benutzer automatisch zum passenden Store basierend auf ihrem Gerät weiter.',
-    '{pluginName} URL' => '{pluginName}-URL',
+    '{pluginName} URL' => '{pluginName} URL',
     'URL copied to clipboard' => 'URL in die Zwischenablage kopiert',
     'New {singularName}' => 'Neuer {singularName}',
 
@@ -518,7 +518,7 @@ return [
     // Feldlayout
     // =========================================================================
 
-    'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => 'Benutzerdefinierte Felder zu {singularName}-Elementen hinzufügen. Alle hier hinzugefügten Felder erscheinen im {singularName}-Bearbeitungsbildschirm.',
+    'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => 'Benutzerdefinierte Felder zu {singularName} Elementen hinzufügen. Alle hier hinzugefügten Felder erscheinen im {singularName} Bearbeitungsbildschirm.',
     'No field layout available.' => 'Kein Feldlayout verfügbar.',
 
     // =========================================================================
@@ -679,14 +679,14 @@ return [
     // Dienstprogramme
     // =========================================================================
 
-    'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Link-Performance überwachen, Analysen erfassen und Cache für Ihre {singularName}-Weiterleitungen und QR-Codes verwalten.',
+    'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Link-Performance überwachen, Analysen erfassen und Cache für Ihre {singularName} Weiterleitungen und QR Codes verwalten.',
     'Active {pluginName}' => 'Aktive {pluginName}',
     'Links Status' => 'Links-Status',
     'Total {pluginName}' => '{pluginName} gesamt',
     'Performance' => 'Leistung',
     'Total interactions tracked' => 'Interaktionen gesamt erfasst',
     'Redirects' => 'Weiterleitungen',
-    'QR Codes' => 'QR-Codes',
+    'QR Codes' => 'QR Codes',
     'Devices' => 'Geräte',
     'Cache Status' => 'Cache-Status',
     'Total cached entries' => 'Gecachte Einträge gesamt',
@@ -699,7 +699,7 @@ return [
     'Manage {pluginName}' => '{pluginName} verwalten',
     'View Settings' => 'Einstellungen anzeigen',
     'Cache Management' => 'Cache-Verwaltung',
-    'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Gecachte Daten löschen, um eine Neugenerierung zu erzwingen. Nützlich nach dem Ändern von QR-Code-Einstellungen oder bei der Fehlerbehebung.',
+    'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Gecachte Daten löschen, um eine Neugenerierung zu erzwingen. Nützlich nach dem Ändern von QR Code Einstellungen oder bei der Fehlerbehebung.',
     'Clear QR Cache' => 'QR-Cache leeren',
     'Clear Device Cache' => 'Geräte-Cache leeren',
     'Clear All Caches' => 'Alle Caches leeren',
@@ -749,7 +749,7 @@ return [
     'Continue to Website' => 'Zur Website weiter',
 
     // =========================================================================
-    // Öffentliche Templates – QR-Code-Seite (qr.twig)
+    // Öffentliche Templates – QR Code Seite (qr.twig)
     // =========================================================================
 
     'Scan with your phone\'s camera to download' => 'Mit der Handykamera scannen zum Herunterladen',
@@ -771,15 +771,15 @@ return [
     'Couldn\'t delete smart link permanently.' => 'Smart Link konnte nicht dauerhaft gelöscht werden.',
     'Smart link not found' => 'Smart Link nicht gefunden',
     'Cannot edit trashed smart links.' => 'Gelöschte Smart Links können nicht bearbeitet werden.',
-    'Failed to generate QR code.' => 'QR-Code konnte nicht generiert werden.',
+    'Failed to generate QR code.' => 'QR Code konnte nicht generiert werden.',
     // SettingsController
     'Settings saved.' => 'Einstellungen gespeichert.',
     'Couldn\'t save settings.' => 'Einstellungen konnten nicht gespeichert werden.',
     'Field layout saved.' => 'Feldlayout gespeichert.',
     'Couldn\'t save field layout.' => 'Feldlayout konnte nicht gespeichert werden.',
     'Analytics cleanup job has been queued. It will run in the background.' => 'Der Bereinigungs-Job wurde in die Warteschlange gestellt. Er wird im Hintergrund ausgeführt.',
-    'QR code cache cleared successfully.' => 'QR-Code-Cache erfolgreich geleert.',
-    'Cleared {count} QR code caches.' => '{count} QR-Code-Caches geleert.',
+    'QR code cache cleared successfully.' => 'QR Code Cache erfolgreich geleert.',
+    'Cleared {count} QR code caches.' => '{count} QR Code Caches geleert.',
     'Device cache cleared successfully.' => 'Geräte-Cache erfolgreich geleert.',
     'Cleared {count} device detection caches.' => '{count} Geräteerkennungs-Caches geleert.',
     'All caches cleared successfully.' => 'Alle Caches erfolgreich geleert.',
@@ -791,7 +791,7 @@ return [
     // JS notices
     'Enter custom size (100-4096 pixels):' => 'Benutzerdefinierte Größe eingeben (100–4.096 Pixel):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Bitte geben Sie eine gültige Größe zwischen 100 und 4.096 Pixel ein',
-    'Reset QR code settings to plugin defaults?' => 'QR-Code-Einstellungen auf Plugin-Standardwerte zurücksetzen?',
+    'Reset QR code settings to plugin defaults?' => 'QR Code Einstellungen auf Plugin-Standardwerte zurücksetzen?',
 
     // =========================================================================
     // Job-Meldungen
@@ -888,7 +888,7 @@ return [
     'Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns. Checked for conflicts with ShortLink Manager.' => 'Unterstützt eigenständige (z. B. „qr") oder verschachtelte (z. B. „go/qr") Muster. Wird auf Konflikte mit ShortLink Manager geprüft.',
 
     // =========================================================================
-    // QR-Code-Einstellungen — Auswahloptionen
+    // QR Code Einstellungen — Auswahloptionen
     // =========================================================================
 
     'Square' => 'Quadratisch',
