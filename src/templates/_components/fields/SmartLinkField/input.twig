@@ -48,7 +48,7 @@
                         var tooltip = '<div class="smart-link-preview">' +
                             '<strong>' + smartLink.name + '</strong><br>' +
                             '<span class="light">' + smartLink.redirectUrl + '</span><br>' +
-                            '<span class="light">Clicks: ' + smartLink.clicks + '</span>' +
+                            '<span class="light">' + {{ "Clicks:"|t('smartlink-manager')|json_encode|raw }} + ' ' + smartLink.clicks + '</span>' +
                             '</div>';
                         
                         $element.attr('title', '').data('preview-loaded', true);

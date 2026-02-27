@@ -21,42 +21,6 @@
 {% import "_includes/forms" as forms %}
 
 {% block content %}
-    {% include 'lindemannrock-base/_components/ip-salt-error' with {
-        pluginHandle: 'smartlink-manager',
-        envVarName: 'SMARTLINK_MANAGER_IP_SALT'
-    } %}
-
-    {% if settings is defined and settings.hasErrors() %}
-        {% set errors = settings.getErrors() %}
-        {% set errorCount = 0 %}
-        {% for fieldErrors in errors %}
-            {% set errorCount = errorCount + fieldErrors|length %}
-        {% endfor %}
-
-        <div class="error-summary" tabindex="-1">
-            <div>
-                <span class="notification-icon" data-icon="alert" aria-label="error" role="img"></span>
-                <h2>
-                    {% if errorCount == 1 %}
-                        {{ "Found 1 error"|t('app') }}
-                    {% else %}
-                        {{ "Found {count} errors"|t('app', {count: errorCount}) }}
-                    {% endif %}
-                </h2>
-            </div>
-            <ul class="errors">
-                {% for field, fieldErrors in errors %}
-                    {% for error in fieldErrors %}
-                        <li>
-                            <a href="#{{ field }}-field" data-field-error-key="{{ field }}">
-                                {{ error }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
 
     <div class="qr-preview-floating">
         <div class="qr-preview-header">
@@ -102,6 +66,7 @@
             type: 'number',
             min: 100,
             max: 1000,
+            errors: settings.getErrors('defaultQrSize'),
             disabled: settings.isOverriddenByConfig('defaultQrSize'),
             warning: settings.isOverriddenByConfig('defaultQrSize') ?
                 "This is being overridden by the <code>defaultQrSize</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -127,6 +92,7 @@
             id: 'defaultQrCodeColor',
             name: 'settings[defaultQrColor]',
             value: settings.defaultQrColor ?? '#000000',
+            errors: settings.getErrors('defaultQrColor'),
             disabled: settings.isOverriddenByConfig('defaultQrColor'),
             warning: settings.isOverriddenByConfig('defaultQrColor') ?
                 "This is being overridden by the <code>defaultQrColor</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -137,6 +103,7 @@
             id: 'defaultQrCodeBgColor',
             name: 'settings[defaultQrBgColor]',
             value: settings.defaultQrBgColor ?? '#FFFFFF',
+            errors: settings.getErrors('defaultQrBgColor'),
             disabled: settings.isOverriddenByConfig('defaultQrBgColor'),
             warning: settings.isOverriddenByConfig('defaultQrBgColor') ?
                 "This is being overridden by the <code>defaultQrBgColor</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -151,6 +118,7 @@
             type: 'number',
             min: 0,
             max: 10,
+            errors: settings.getErrors('defaultQrMargin'),
             disabled: settings.isOverriddenByConfig('defaultQrMargin'),
             warning: settings.isOverriddenByConfig('defaultQrMargin') ?
                 "This is being overridden by the <code>defaultQrMargin</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -163,9 +131,9 @@
             name: 'settings[qrModuleStyle]',
             value: settings.qrModuleStyle ?? 'square',
             options: [
-                {label: 'Square', value: 'square'},
-                {label: 'Rounded', value: 'rounded'},
-                {label: 'Dots', value: 'dots'},
+                {label: 'Square'|t('smartlink-manager'), value: 'square'},
+                {label: 'Rounded'|t('smartlink-manager'), value: 'rounded'},
+                {label: 'Dots'|t('smartlink-manager'), value: 'dots'},
             ],
             disabled: settings.isOverriddenByConfig('qrModuleStyle'),
             warning: settings.isOverriddenByConfig('qrModuleStyle') ?
@@ -179,9 +147,9 @@
             name: 'settings[qrEyeStyle]',
             value: settings.qrEyeStyle ?? 'square',
             options: [
-                {label: 'Square', value: 'square'},
-                {label: 'Rounded', value: 'rounded'},
-                {label: 'Leaf', value: 'leaf'},
+                {label: 'Square'|t('smartlink-manager'), value: 'square'},
+                {label: 'Rounded'|t('smartlink-manager'), value: 'rounded'},
+                {label: 'Leaf'|t('smartlink-manager'), value: 'leaf'},
             ],
             disabled: settings.isOverriddenByConfig('qrEyeStyle'),
             warning: settings.isOverriddenByConfig('qrEyeStyle') ?
@@ -194,6 +162,7 @@
             id: 'qrEyeColor',
             name: 'settings[qrEyeColor]',
             value: settings.qrEyeColor ?? '',
+            errors: settings.getErrors('qrEyeColor'),
             disabled: settings.isOverriddenByConfig('qrEyeColor'),
             warning: settings.isOverriddenByConfig('qrEyeColor') ?
                 "This is being overridden by the <code>qrEyeColor</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -216,7 +185,8 @@
                 "Logo overlay only works with PNG format. SVG format does not support logos."|t('smartlink-manager'),
         }) }}
 
-        <div id="logo-settings" class="{{ not (settings.enableQrLogo ?? false) ? 'hidden' }}">
+        {% set hasLogoErrors = settings.getErrors('defaultQrLogoId') or settings.getErrors('qrLogoSize') %}
+        <div id="logo-settings" class="{{ (not (settings.enableQrLogo ?? false) and not hasLogoErrors) ? 'hidden' }}">
             {# Asset volume selection dropdown #}
             {% set volumeOptions = [{label: 'All asset volumes'|t('smartlink-manager'), value: ''}] %}
             {% for volume in craft.app.volumes.getAllVolumes() %}
@@ -267,6 +237,7 @@
                 type: 'number',
                 min: 10,
                 max: 30,
+                errors: settings.getErrors('qrLogoSize'),
                 disabled: settings.isOverriddenByConfig('qrLogoSize'),
                 warning: settings.isOverriddenByConfig('qrLogoSize') ?
                     "This is being overridden by the <code>qrLogoSize</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -284,10 +255,10 @@
             name: 'settings[defaultQrErrorCorrection]',
             value: settings.defaultQrErrorCorrection ?? 'M',
             options: [
-                {label: 'Low (~7% correction)', value: 'L'},
-                {label: 'Medium (~15% correction)', value: 'M'},
-                {label: 'Quartile (~25% correction)', value: 'Q'},
-                {label: 'High (~30% correction)', value: 'H'},
+                {label: 'Low (~7% correction)'|t('smartlink-manager'), value: 'L'},
+                {label: 'Medium (~15% correction)'|t('smartlink-manager'), value: 'M'},
+                {label: 'Quartile (~25% correction)'|t('smartlink-manager'), value: 'Q'},
+                {label: 'High (~30% correction)'|t('smartlink-manager'), value: 'H'},
             ],
             disabled: settings.isOverriddenByConfig('defaultQrErrorCorrection'),
             warning: settings.isOverriddenByConfig('defaultQrErrorCorrection') ?
@@ -310,7 +281,7 @@
                 "This is being overridden by the <code>enableQrDownload</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
 
-        <div id="download-settings" class="{{ not (settings.enableQrDownload ?? true) ? 'hidden' }}">
+        <div id="download-settings" class="{{ (not (settings.enableQrDownload ?? true) and not settings.getErrors('qrDownloadFilename')) ? 'hidden' }}">
             {{ forms.textField({
                 label: "Download Filename Pattern"|t('smartlink-manager'),
                 instructions: "Available variables: {slug}, {size}, {format}"|t('smartlink-manager'),
@@ -318,6 +289,7 @@
                 name: 'settings[qrDownloadFilename]',
                 value: settings.qrDownloadFilename ?? '{slug}-qr-{size}',
                 placeholder: '{slug}-qr-{size}',
+                errors: settings.getErrors('qrDownloadFilename'),
                 disabled: settings.isOverriddenByConfig('qrDownloadFilename'),
                 warning: settings.isOverriddenByConfig('qrDownloadFilename') ?
                     "This is being overridden by the <code>qrDownloadFilename</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -692,7 +664,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
             previewImg.style.opacity = '1';
             loadingDiv.style.display = 'none';
             errorDiv.style.display = 'block';
-            errorDiv.textContent = 'Failed to generate preview';
+            errorDiv.textContent = {{ "Failed to generate preview"|t('smartlink-manager')|json_encode|raw }};
 
             // Reset generating flag
             isGenerating = false;

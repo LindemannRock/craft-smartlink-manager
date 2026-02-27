@@ -22,11 +22,6 @@
 
 {% block content %}
 
-    {% include 'lindemannrock-base/_components/ip-salt-error' with {
-        pluginHandle: 'smartlink-manager',
-        envVarName: 'SMARTLINK_MANAGER_IP_SALT'
-    } %}
-
     <form method="post" accept-charset="UTF-8">
         {{ actionInput('smartlink-manager/settings/save') }}
         {{ csrfInput() }}
@@ -81,7 +76,7 @@
         {% set redirectPluginName = redirectPlugin ? (redirectPlugin.settings.pluginName ?? 'Redirect Manager') : 'Redirect Manager' %}
 
         {% set slugTip = redirectActive
-            ? "Changing will break existing URLs. To migrate, create wildcard redirect in " ~ redirectPluginName ~ ": Source '/old/*' → Destination '/new/$1' (Match Type: Wildcard)"
+            ? "Changing will break existing URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source '/old/*' → Destination '/new/$1' (Match Type: Wildcard)"|t('smartlink-manager', {redirectPluginName: redirectPluginName})
             : "Changing the URL prefix will break all existing {pluginName}. Only change this before creating your first {singularName}."|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName, singularName: smartlinkHelper.lowerDisplayName})
         %}
 
@@ -94,15 +89,15 @@
             errors: settings.getErrors('slugPrefix'),
             placeholder: 'go',
             required: true,
-            tip: slugTip|t('smartlink-manager'),
+            tip: slugTip,
             disabled: settings.isOverriddenByConfig('slugPrefix'),
             warning: settings.isOverriddenByConfig('slugPrefix') ?
                 "This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
 
         {% set qrTip = redirectActive
-            ? "Changing will break existing QR URLs. To migrate, create wildcard redirect in " ~ redirectPluginName ~ ": Source '/old/*' → Destination '/new/$1' (Match Type: Wildcard). Supports standalone (e.g., 'qr') or nested (e.g., 'go/qr') patterns."
-            : "Supports standalone (e.g., 'qr') or nested (e.g., 'go/qr') patterns. Checked for conflicts with ShortLink Manager."
+            ? "Changing will break existing QR URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source '/old/*' → Destination '/new/$1' (Match Type: Wildcard). Supports standalone (e.g., 'qr') or nested (e.g., 'go/qr') patterns."|t('smartlink-manager', {redirectPluginName: redirectPluginName})
+            : "Supports standalone (e.g., 'qr') or nested (e.g., 'go/qr') patterns. Checked for conflicts with ShortLink Manager."|t('smartlink-manager')
         %}
 
         {# Calculate smart default for qrPrefix if empty #}
@@ -145,7 +140,7 @@
             errors: settings.getErrors('qrPrefix'),
             placeholder: settings.slugPrefix ~ '/qr',
             required: true,
-            tip: qrTip|t('smartlink-manager'),
+            tip: qrTip,
             disabled: settings.isOverriddenByConfig('qrPrefix'),
             warning: settings.isOverriddenByConfig('qrPrefix') ?
                 "This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -160,7 +155,6 @@
             errors: settings.getErrors('smartlinkBaseUrl'),
             placeholder: 'https://go.example.com',
             suggestEnvVars: true,
-            tip: 'This can begin with an environment variable. <a href="https://craftcms.com/docs/5.x/configure.html#env" target="_blank" rel="noopener">Learn more</a>'|t('base')|raw,
             disabled: settings.isOverriddenByConfig('smartlinkBaseUrl'),
             warning: settings.isOverriddenByConfig('smartlinkBaseUrl') ?
                 "This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -175,7 +169,6 @@
             errors: settings.getErrors('smartlinkBaseUrlPattern'),
             placeholder: 'https://go.example.com/{siteHandle}',
             suggestEnvVars: true,
-            tip: 'This can begin with an environment variable. <a href="https://craftcms.com/docs/5.x/configure.html#env" target="_blank" rel="noopener">Learn more</a>'|t('base')|raw,
             disabled: settings.isOverriddenByConfig('smartlinkBaseUrlPattern'),
             warning: settings.isOverriddenByConfig('smartlinkBaseUrlPattern') ?
                 "This is being overridden by the <code>smartlinkBaseUrlPattern</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
@@ -206,11 +199,15 @@
             value: settings.redirectTemplate ?? '',
             placeholder: 'smartlink-manager/redirect',
             suggestEnvVars: true,
-            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code><br>This can begin with an environment variable. <a href=\"https://craftcms.com/docs/5.x/configure.html#env\" target=\"_blank\" rel=\"noopener\">Learn more</a>"|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('redirectTemplate'),
             warning: settings.isOverriddenByConfig('redirectTemplate') ?
                 "This is being overridden by the <code>redirectTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
+            errors: settings.getErrors('redirectTemplate')
         }) }}
+
+        <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
+            {{ "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>"|t('smartlink-manager')|raw }}
+        </p>
 
         {{ forms.autosuggestField({
             label: "QR Code Template"|t('smartlink-manager'),
@@ -220,11 +217,15 @@
             value: settings.qrTemplate ?? '',
             placeholder: 'smartlink-manager/qr',
             suggestEnvVars: true,
-            tip: "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code><br>This can begin with an environment variable. <a href=\"https://craftcms.com/docs/5.x/configure.html#env\" target=\"_blank\" rel=\"noopener\">Learn more</a>"|t('smartlink-manager')|raw,
             disabled: settings.isOverriddenByConfig('qrTemplate'),
             warning: settings.isOverriddenByConfig('qrTemplate') ?
                 "This is being overridden by the <code>qrTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
+            errors: settings.getErrors('qrTemplate')
         }) }}
+
+        <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
+            {{ "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>"|t('smartlink-manager')|raw }}
+        </p>
 
         <hr>
 

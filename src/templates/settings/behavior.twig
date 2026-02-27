@@ -22,11 +22,6 @@
 
 {% block content %}
 
-    {% include 'lindemannrock-base/_components/ip-salt-error' with {
-        pluginHandle: 'smartlink-manager',
-        envVarName: 'SMARTLINK_MANAGER_IP_SALT'
-    } %}
-
     <form method="post" accept-charset="UTF-8">
         {{ actionInput('smartlink-manager/settings/save') }}
         {{ csrfInput() }}
@@ -42,9 +37,9 @@
             name: 'settings[languageDetectionMethod]',
             value: settings.languageDetectionMethod ?? 'browser',
             options: [
-                {label: 'Browser preference', value: 'browser'},
-                {label: 'IP geolocation', value: 'ip'},
-                {label: 'Both', value: 'both'},
+                {label: 'Browser preference'|t('smartlink-manager'), value: 'browser'},
+                {label: 'IP geolocation'|t('smartlink-manager'), value: 'ip'},
+                {label: 'Both'|t('smartlink-manager'), value: 'both'},
             ],
             disabled: settings.isOverriddenByConfig('languageDetectionMethod'),
             warning: settings.isOverriddenByConfig('languageDetectionMethod') ?
@@ -59,11 +54,15 @@
             value: settings.notFoundRedirectUrl ?? '/',
             placeholder: '/',
             suggestEnvVars: true,
-            tip: 'Can be a relative path (/) or full URL (https://example.com)<br>This can begin with an environment variable. <a href="https://craftcms.com/docs/5.x/configure.html#env" target="_blank" rel="noopener">Learn more</a>'|t('smartlink-manager')|raw,
+            errors: settings.getErrors('notFoundRedirectUrl'),
             disabled: settings.isOverriddenByConfig('notFoundRedirectUrl'),
             warning: settings.isOverriddenByConfig('notFoundRedirectUrl') ?
                 "This is being overridden by the <code>notFoundRedirectUrl</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
+
+        <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
+            {{ "Can be a relative path (/) or full URL (https://example.com)"|t('smartlink-manager') }}
+        </p>
 
         <div class="buttons">
             <button type="submit" class="btn submit">{{ "Save Settings"|t('smartlink-manager') }}</button>

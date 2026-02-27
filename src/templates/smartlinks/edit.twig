@@ -14,6 +14,8 @@
         url: '#fields',
     },
 } %}
+{% set smartLinkSite = craft.app.sites.getSiteById(smartLink.siteId) %}
+{% set smartLinkSiteHandle = smartLinkSite ? smartLinkSite.handle : null %}
 
 {# Add tabs from field layout #}
 {% set fieldLayout = smartLink.getFieldLayout() %}
@@ -149,30 +151,12 @@
 
 {# Display validation errors summary before content #}
 {% if smartLink is defined and smartLink.hasErrors() %}
-    {% set errorList = [] %}
-    {% for attribute, errors in smartLink.getErrors() %}
-        {% for error in errors %}
-            {% set errorList = errorList|merge([{
-                attribute: attribute,
-                message: error
-            }]) %}
-        {% endfor %}
-    {% endfor %}
-
     {% set errorSummary %}
-        <div class="error-summary" tabindex="-1">
-            <div>
-                <span class="notification-icon" data-icon="alert" aria-label="error" role="img"></span>
-                <h2>{{ 'Found {count, number} {count, plural, =1{error} other{errors}}'|t('app', {count: errorList|length}) }}</h2>
-            </div>
-            <ul class="errors">
-                {% for error in errorList %}
-                    <li>
-                        <a href="#" data-field-error-key="{{ error.attribute }}">{{ error.message }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+        {% include 'lindemannrock-base/_partials/error-summary' with {
+            errors: smartLink.getErrors(),
+            linkMode: 'data-key',
+            translationCategory: 'smartlink-manager'
+        } %}
     {% endset %}
 {% endif %}
 
@@ -316,7 +300,11 @@
         }) }}
     </div>
 
-    <fieldset id="qr-settings" class="{{ not (smartLink.qrCodeEnabled ?? true) ? 'hidden' }}">
+    {% set hasQrFieldErrors = smartLink.getErrors('qrCodeSize')
+        or smartLink.getErrors('qrCodeColor')
+        or smartLink.getErrors('qrCodeBgColor')
+        or smartLink.getErrors('qrCodeEyeColor') %}
+    <fieldset id="qr-settings" class="{{ (not (smartLink.qrCodeEnabled ?? true) and not hasQrFieldErrors) ? 'hidden' }}">
         <legend class="h6">{{ "QR Code"|t('smartlink-manager') }}</legend>
 
         <div class="meta">
@@ -328,7 +316,7 @@
                     <div class="input" style="text-align: center;">
                         <a href="{{ smartLink.getQrCodeUrl() }}" target="_blank" title="{{ 'Click to view QR code image'|t('smartlink-manager') }}">
                             <img id="qr-preview"
-                                 src="{{ smartLink.getQrCodeUrl({ size: 150 }) }}"
+                                 src="{{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle, size: 150 }) }}"
                                  alt="QR Code Preview"
                                  style="max-width: 150px; height: auto; border: 1px solid #e3e5e8; background: {{ smartLink.qrCodeBgColor ?? '#FFFFFF' }}; cursor: pointer;">
                         </a>
@@ -344,6 +332,7 @@
                 type: 'number',
                 min: 100,
                 max: 1000,
+                errors: smartLink.getErrors('qrCodeSize'),
                 size: 5,
                 fieldClass: ''
             }) }}
@@ -353,6 +342,7 @@
                 id: 'qrCodeColor',
                 name: 'qrCodeColor',
                 value: smartLink.qrCodeColor ?: craft.smartLinks.settings.defaultQrColor,
+                errors: smartLink.getErrors('qrCodeColor'),
                 fieldClass: ''
             }) }}
 
@@ -361,6 +351,7 @@
                 id: 'qrCodeBgColor',
                 name: 'qrCodeBgColor',
                 value: smartLink.qrCodeBgColor ?: craft.smartLinks.settings.defaultQrBgColor,
+                errors: smartLink.getErrors('qrCodeBgColor'),
                 fieldClass: ''
             }) }}
 
@@ -370,6 +361,7 @@
                 id: 'qrCodeEyeColor',
                 name: 'qrCodeEyeColor',
                 value: smartLink.qrCodeEyeColor ?: (craft.smartLinks.settings.qrEyeColor ?? ''),
+                errors: smartLink.getErrors('qrCodeEyeColor'),
                 fieldClass: ''
             }) }}
 
@@ -553,7 +545,8 @@
             const eyeColorInput = document.getElementById('qrCodeEyeColor');
             const sizeInput = document.getElementById('qrCodeSize');
             const formatSelect = document.getElementById('qrCodeFormat');
-            const baseUrl = '{{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId) }}';
+            const previewBaseUrl = '{{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle }) }}';
+            const publicBaseUrl = '{{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId) }}';
             let updateTimeout;
 
             function updateQrCode() {
@@ -620,7 +613,7 @@
                     {% endif %}
 
                     // Update QR code image
-                    const newSrc = `${baseUrl}?${params}&t=${Date.now()}`;
+                    const newSrc = `${previewBaseUrl}?${params}&t=${Date.now()}`;
                     newImg.src = newSrc;
 
                     // Update preview background immediately
@@ -628,7 +621,7 @@
 
                     // Update link to full size
                     if (qrLink) {
-                        qrLink.href = `${baseUrl}?${fullSizeParams}`;
+                        qrLink.href = `${publicBaseUrl}?${fullSizeParams}`;
                     }
                 }, 150); // Debounce delay
             }

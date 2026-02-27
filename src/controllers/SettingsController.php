@@ -430,8 +430,15 @@ class SettingsController extends Controller
         // Debug: Log what's in settings after updates
         $this->logDebug('Settings after updates', ['enabledSites' => $settings->enabledSites]);
 
-        // Validate (includes conflict checking via validateSlugPrefix and validateQrPrefix)
-        if (!$settings->validate()) {
+        // Validate only fields belonging to the current settings section.
+        // This prevents unrelated tabs from blocking save with non-inline errors.
+        $section = $this->_validSettingsSection();
+        $attributesToValidate = $this->_validationAttributesForSection($section);
+        $attributesToValidate = array_values(array_filter(
+            $attributesToValidate,
+            fn(string $attribute): bool => !$settings->isOverriddenByConfig($attribute),
+        ));
+        if (!$settings->validate($attributesToValidate)) {
             // Log validation errors for debugging
             $this->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
 
@@ -439,15 +446,13 @@ class SettingsController extends Controller
             Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Couldn\'t save settings.'));
 
             // Re-render the correct settings tab with errors
-            $section = $this->_validSettingsSection();
-
             return $this->renderTemplate("smartlink-manager/settings/$section", [
                 'settings' => $settings,
             ]);
         }
 
         // Save settings to database
-        if ($settings->saveToDatabase()) {
+        if ($settings->saveToDatabase($attributesToValidate)) {
             // Update the plugin's cached settings if plugin is available
             $plugin = SmartLinkManager::getInstance();
             if ($plugin) {
@@ -783,5 +788,76 @@ class SettingsController extends Controller
         $section = Craft::$app->getRequest()->getBodyParam('section', 'general');
 
         return in_array($section, $allowed, true) ? $section : 'general';
+    }
+
+    /**
+     * Get validation attributes for a settings section.
+     */
+    private function _validationAttributesForSection(string $section): array
+    {
+        return match ($section) {
+            'general' => [
+                'pluginName',
+                'enabledSites',
+                'slugPrefix',
+                'qrPrefix',
+                'smartlinkBaseUrl',
+                'smartlinkBaseUrlPattern',
+                'redirectTemplate',
+                'qrTemplate',
+                'imageVolumeUid',
+                'logLevel',
+            ],
+            'analytics' => [
+                'enableAnalytics',
+                'enableGeoDetection',
+                'geoProvider',
+                'geoApiKey',
+                'anonymizeIpAddress',
+                'analyticsRetention',
+            ],
+            'integrations' => [
+                'enabledIntegrations',
+                'seomaticTrackingEvents',
+                'seomaticEventPrefix',
+                'redirectManagerEvents',
+            ],
+            'export' => [
+                'includeDisabledInExport',
+                'includeExpiredInExport',
+            ],
+            'qr-code' => [
+                'defaultQrSize',
+                'defaultQrFormat',
+                'defaultQrColor',
+                'defaultQrBgColor',
+                'defaultQrMargin',
+                'qrModuleStyle',
+                'qrEyeStyle',
+                'qrEyeColor',
+                'enableQrLogo',
+                'qrLogoVolumeUid',
+                'defaultQrLogoId',
+                'qrLogoSize',
+                'defaultQrErrorCorrection',
+                'enableQrDownload',
+                'qrDownloadFilename',
+            ],
+            'behavior' => [
+                'languageDetectionMethod',
+                'notFoundRedirectUrl',
+            ],
+            'interface' => [
+                'itemsPerPage',
+            ],
+            'cache' => [
+                'cacheStorageMethod',
+                'enableQrCodeCache',
+                'qrCodeCacheDuration',
+                'cacheDeviceDetection',
+                'deviceDetectionCacheDuration',
+            ],
+            default => [],
+        };
     }
 }

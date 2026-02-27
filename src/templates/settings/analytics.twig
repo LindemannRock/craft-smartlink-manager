@@ -22,11 +22,6 @@
 
 {% block content %}
 
-    {% include 'lindemannrock-base/_components/ip-salt-error' with {
-        pluginHandle: 'smartlink-manager',
-        envVarName: 'SMARTLINK_MANAGER_IP_SALT'
-    } %}
-
     <form method="post" accept-charset="UTF-8">
         {{ actionInput('smartlink-manager/settings/save') }}
         {{ csrfInput() }}
@@ -71,7 +66,7 @@
             <div id="geo-provider-settings" class="{{ not (settings.enableGeoDetection ?? false) ? 'hidden' }}" style="margin-top: 24px;">
                 {% include 'lindemannrock-base/_partials/geo-settings' with {
                     settings: settings,
-                    pluginHandle: 'smartlink-manager'
+                    translationCategory: 'smartlink-manager'
                 } %}
             </div>
 
@@ -90,13 +85,12 @@
                     "This is being overridden by the <code>anonymizeIpAddress</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
             }) }}
 
-            <div class="field">
-                <p class="light">
-                    <strong>Privacy Levels:</strong><br>
-                    • <strong>Disabled</strong> (default): Full IP hashed with salt (accurate unique visitors)<br>
-                    • <strong>Enabled</strong>: Subnet masked + hashed with salt (maximum privacy, less accurate)
-                </p>
-            </div>
+            {% include 'lindemannrock-base/_components/info-box' with {
+                type: 'info',
+                message: '<strong>' ~ 'Privacy Levels'|t('smartlink-manager') ~ ':</strong><br>'
+                    ~ '• <strong>' ~ 'Disabled'|t('smartlink-manager') ~ '</strong> (' ~ 'default'|t('smartlink-manager') ~ '): ' ~ 'Full IP hashed with salt (accurate unique visitors)'|t('smartlink-manager') ~ '<br>'
+                    ~ '• <strong>' ~ 'Enabled'|t('smartlink-manager') ~ '</strong>: ' ~ 'Subnet masked + hashed with salt (maximum privacy, less accurate)'|t('smartlink-manager')
+            } %}
 
             <hr>
 

@@ -17,6 +17,9 @@ use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\traits\SettingsConfigTrait;
 use lindemannrock\base\traits\SettingsDisplayNameTrait;
 use lindemannrock\base\traits\SettingsPersistenceTrait;
+use lindemannrock\base\validators\RoutePrefixValidator;
+use lindemannrock\base\validators\TemplatePathValidator;
+use lindemannrock\base\validators\UrlOrPathValidator;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
@@ -412,12 +415,14 @@ class Settings extends Model
             [['smartlinkBaseUrlPattern'], 'validateSmartlinkBaseUrlPattern'],
             [['slugPrefix'], 'match', 'pattern' => '/^[a-zA-Z0-9\-\_]+$/', 'message' => Craft::t('smartlink-manager', 'Only letters, numbers, hyphens, and underscores are allowed.')],
             [['qrPrefix'], 'match', 'pattern' => '/^[a-zA-Z0-9\-\_\/]+$/', 'message' => Craft::t('smartlink-manager', 'Only letters, numbers, hyphens, underscores, and slashes are allowed.')],
+            [['qrPrefix'], RoutePrefixValidator::class, 'translationCategory' => 'smartlink-manager'],
             [['slugPrefix'], 'validateSlugPrefix'],
             [['qrPrefix'], 'validateQrPrefix'],
             [['enableAnalytics', 'enableGeoDetection', 'cacheDeviceDetection', 'includeDisabledInExport', 'includeExpiredInExport', 'anonymizeIpAddress'], 'boolean'],
             [['analyticsRetention', 'defaultQrSize', 'qrCodeCacheDuration', 'deviceDetectionCacheDuration', 'itemsPerPage'], 'integer'],
             [['analyticsRetention'], 'integer', 'min' => 0, 'max' => 3650], // 0 for unlimited, up to 10 years
             [['defaultQrSize'], 'integer', 'min' => 100, 'max' => 1000],
+            [['qrCodeCacheDuration', 'deviceDetectionCacheDuration'], 'integer', 'min' => 60, 'max' => 604800],
             [['itemsPerPage'], 'integer', 'min' => 10, 'max' => 500],
             [['defaultQrColor', 'defaultQrBgColor', 'qrEyeColor'], 'string'],
             [['defaultQrColor', 'defaultQrBgColor'], 'match', 'pattern' => '/^#[0-9A-F]{6}$/i'],
@@ -432,6 +437,7 @@ class Settings extends Model
             [['qrLogoSize'], 'integer', 'min' => 10, 'max' => 30],
             [['defaultQrMargin'], 'integer', 'min' => 0, 'max' => 10],
             [['qrDownloadFilename'], 'string'],
+            [['qrDownloadFilename'], 'validateQrDownloadFilename'],
             [['enableQrLogo', 'enableQrDownload'], 'boolean'],
             [['qrLogoVolumeUid', 'imageVolumeUid'], 'string'],
             [['defaultQrLogoId'], 'integer'],
@@ -440,6 +446,8 @@ class Settings extends Model
                 return $model->enableQrLogo;
             }, 'message' => Craft::t('smartlink-manager', 'Default logo is required when logo overlay is enabled.')],
             [['redirectTemplate', 'qrTemplate', 'notFoundRedirectUrl'], 'string'],
+            [['notFoundRedirectUrl'], UrlOrPathValidator::class, 'translationCategory' => 'smartlink-manager'],
+            [['redirectTemplate', 'qrTemplate'], TemplatePathValidator::class, 'translationCategory' => 'smartlink-manager', 'checkTemplateExists' => true],
             [['languageDetectionMethod'], 'in', 'range' => ['browser', 'ip', 'both']],
             [['enabledSites'], 'each', 'rule' => ['integer']],
             [['logLevel'], 'in', 'range' => ['debug', 'info', 'warning', 'error']],
@@ -579,7 +587,7 @@ class Settings extends Model
      */
     public function validateQrPrefix($attribute, $params, $validator)
     {
-        $qrPrefix = $this->$attribute;
+        $qrPrefix = trim((string) $this->$attribute, '/');
 
         if (empty($qrPrefix)) {
             return;
@@ -648,6 +656,52 @@ class Settings extends Model
                 'conflicts' => implode(', ', $conflicts),
                 'suggestions' => implode(', ', $suggestions),
             ]));
+        }
+    }
+
+    /**
+     * Validate QR download filename pattern.
+     *
+     * Allowed tokens: {slug}, {size}, {format}
+     * Allowed characters outside tokens: letters, numbers, dash, underscore, dot
+     * Spaces are not allowed.
+     */
+    public function validateQrDownloadFilename(string $attribute, mixed $params, mixed $validator): void
+    {
+        $pattern = (string) ($this->$attribute ?? '');
+        if ($pattern === '') {
+            return;
+        }
+
+        if (preg_match('/\s/', $pattern) === 1) {
+            $this->addError($attribute, Craft::t('smartlink-manager', 'Download filename pattern cannot contain spaces.'));
+            return;
+        }
+
+        preg_match_all('/\{[^}]+\}/', $pattern, $matches);
+        $tokens = $matches[0];
+        $allowedTokens = ['{slug}', '{size}', '{format}'];
+
+        foreach ($tokens as $token) {
+            if (!in_array($token, $allowedTokens, true)) {
+                $this->addError(
+                    $attribute,
+                    Craft::t(
+                        'smartlink-manager',
+                        'Unsupported token "{token}". Allowed tokens: {allowed}.',
+                        ['token' => $token, 'allowed' => implode(', ', $allowedTokens)]
+                    )
+                );
+                return;
+            }
+        }
+
+        $staticPart = preg_replace('/\{[^}]+\}/', '', $pattern) ?? '';
+        if ($staticPart !== '' && preg_match('/^[A-Za-z0-9._-]+$/', $staticPart) !== 1) {
+            $this->addError(
+                $attribute,
+                Craft::t('smartlink-manager', 'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.')
+            );
         }
     }
 

@@ -65,10 +65,10 @@
     name: 'imageSize',
     value: smartLink.imageSize ?? 'xl',
     options: [
-        { label: 'Extra Large', value: 'xl' },
-        { label: 'Large', value: 'lg' },
-        { label: 'Medium', value: 'md' },
-        { label: 'Small', value: 'sm' }
+        { label: 'Extra Large'|t('smartlink-manager'), value: 'xl' },
+        { label: 'Large'|t('smartlink-manager'), value: 'lg' },
+        { label: 'Medium'|t('smartlink-manager'), value: 'md' },
+        { label: 'Small'|t('smartlink-manager'), value: 'sm' }
     ],
     errors: smartLink.getErrors('imageSize'),
     translatable: craft.app.sites.getTotalEditableSites() > 1,
