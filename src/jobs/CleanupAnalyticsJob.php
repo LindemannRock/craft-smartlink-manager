@@ -13,16 +13,19 @@ use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\queue\BaseJob;
+use lindemannrock\base\traits\QueueTtrTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
+use yii\queue\RetryableJobInterface;
 
 /**
  * Cleanup old analytics data based on retention settings
  *
  * @since 1.0.0
  */
-class CleanupAnalyticsJob extends BaseJob
+class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
 {
+    use QueueTtrTrait;
     use LoggingTrait;
 
     /**
@@ -34,6 +37,14 @@ class CleanupAnalyticsJob extends BaseJob
      * @var string|null Next run time display string
      */
     public ?string $nextRunTime = null;
+
+    /**
+     * @inheritdoc
+     */
+    public function canRetry($attempt, $error): bool
+    {
+        return false;
+    }
 
     /**
      * @inheritdoc
