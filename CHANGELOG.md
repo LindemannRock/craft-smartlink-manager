@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.23.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.1...v5.23.0) (2026-03-04)
+
+
+### Features
+
+* add complete EN/DE translation ([6e9314c](https://github.com/LindemannRock/craft-smartlink-manager/commit/6e9314cdec82583fdb4e4d5221653c986890dc57))
+
+
+### Bug Fixes
+
+* **jobs:** implement RetryableJobInterface in CleanupAnalyticsJob ([1b3da9b](https://github.com/LindemannRock/craft-smartlink-manager/commit/1b3da9bfcb7f704f5be672999c543524e7fd39ad))
+* **settings:** improve error handling and translations in settings templates ([f02389a](https://github.com/LindemannRock/craft-smartlink-manager/commit/f02389a4102c1e024703deaf848a153e3c4e018a))
+* **settings:** URL building logic in buildPublicUrl method ([ada47bf](https://github.com/LindemannRock/craft-smartlink-manager/commit/ada47bff8da67153cfef513253d6a49e0a70bfb1))
+
 ## [5.22.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.0...v5.22.1) (2026-02-22)
 
 
