@@ -1,6 +1,6 @@
 # Custom Domain @since(5.22.0)
 
-By default, SmartLink Manager generates smart link URLs using each site's base URL. You can override this with a dedicated custom domain — useful for branded short URLs like `go.myapp.com`. Configuration differs depending on whether you have a single site or a multisite setup.
+By default, SmartLink Manager generates smart link URLs using each site's base URL. You can override this with a dedicated custom domain — useful for branded short URLs like `go.myapp.com` — using a single setting: `smartlinkBaseUrl`.
 
 ## Single-Site URLs
 
@@ -34,7 +34,7 @@ This overrides the site's own base URL when generating smart link URLs, but does
 
 ## Multisite Site-Aware URLs
 
-For a Craft multisite where each site needs its own URL path segment, use `smartlinkBaseUrlPattern` with a site token:
+For a Craft multisite where each site needs its own URL path segment, use `smartlinkBaseUrl` with a site token:
 
 ```php
 // config/smartlink-manager.php
@@ -42,14 +42,14 @@ use craft\helpers\App;
 
 return [
     '*' => [
-        'smartlinkBaseUrlPattern' => App::env('SMARTLINK_BASE_URL_PATTERN'),
+        'smartlinkBaseUrl' => App::env('SMARTLINK_BASE_URL'),
     ],
 ];
 ```
 
 ```bash
 # .env
-SMARTLINK_BASE_URL_PATTERN=https://go.myapp.com/{siteHandle}
+SMARTLINK_BASE_URL=https://go.myapp.com/{siteHandle}
 ```
 
 **Supported tokens:**
@@ -60,13 +60,10 @@ SMARTLINK_BASE_URL_PATTERN=https://go.myapp.com/{siteHandle}
 | `{siteId}` | The site's numeric ID |
 | `{siteUid}` | The site's UID |
 
-With the pattern `https://go.myapp.com/{siteHandle}`, links generate URLs like:
+With `https://go.myapp.com/{siteHandle}`, links generate URLs like:
 
 - English site: `https://go.myapp.com/en/go/my-app`
 - German site: `https://go.myapp.com/de/go/my-app`
-
-> [!NOTE]
-> `smartlinkBaseUrlPattern` takes precedence over `smartlinkBaseUrl` when both are set.
 
 ## Site-Aware Routes
 
@@ -87,9 +84,8 @@ The site-aware routes allow the controller to resolve which Craft site to look u
 
 The `Settings::buildPublicUrl()` method resolves the correct base URL in this order:
 
-1. If `smartlinkBaseUrlPattern` is set and non-empty — expand site tokens and use as base
-2. Else if `smartlinkBaseUrl` is set and non-empty — use as base
-3. Else — use `UrlHelper::siteUrl()` with the smart link's `siteId`
+1. If `smartlinkBaseUrl` is set and non-empty — expand supported site tokens and use as base
+2. Else — use `UrlHelper::siteUrl()` with the smart link's `siteId`
 
 This method is called when generating `SmartLink::getRedirectUrl()`, `getQrCodeUrl()`, and `getQrCodeDisplayUrl()`.
 
@@ -107,7 +103,7 @@ If you use a true separate domain (not a subdomain of your main site), ensure:
 
 `smartlinkBaseUrl` must be a valid URL starting with `http://` or `https://`.
 
-`smartlinkBaseUrlPattern` must also start with `http://` or `https://`, and any `{...}` tokens must use one of the supported tokens listed above. Using unsupported tokens like `{siteName}` triggers a validation error.
+If `{...}` tokens are used in `smartlinkBaseUrl`, only `{siteHandle}`, `{siteId}`, and `{siteUid}` are supported. Using unsupported tokens like `{siteName}` triggers a validation error.
 
 ## Multi-Environment Example
 

@@ -24,6 +24,8 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 5. **Is the route registered?** SmartLink Manager registers its routes on plugin load. If you recently installed the plugin without running a full Craft init, try clearing the Craft caches: **Utilities → Caches → Clear All Caches**.
 
+6. **Are both SmartLink Manager and ShortLink Manager in root mode on the same host?** If both plugins have URL prefix disabled and share a host, root routes like `/{slug}` can collide. One plugin may capture requests meant for the other and trigger its own `notFoundRedirectUrl`.
+
 ---
 
 ## QR Code Not Generating
@@ -144,6 +146,22 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 3. **Clear manually** — go to **Utilities → SmartLink Manager** and use the **Clear Cache** button. Alternatively, use **Utilities → Caches → Clear All Caches** to flush all Craft caches.
 
 4. **Check the `clearCache` permission** — users need the `smartLinkManager:clearCache` permission to clear the cache from the CP. Admins always have access.
+
+---
+
+## Multisite Custom Domain Resolves to Wrong Site
+
+**Symptom:** In multisite, generated SmartLink URLs all resolve to one site unless the URL contains a site segment.
+
+**Cause:** A non-tokenized `smartlinkBaseUrl` (for example `https://go.example.com`) generates identical URLs for all sites. Incoming requests are then resolved by host/current site context.
+
+**Fix:** Use tokenized `smartlinkBaseUrl`:
+
+```php
+'smartlinkBaseUrl' => 'https://go.example.com/{siteHandle}',
+```
+
+Supported tokens: `{siteHandle}`, `{siteId}`, `{siteUid}`.
 
 ---
 

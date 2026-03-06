@@ -23,11 +23,11 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `usePrefix` | `bool` | `true` | Whether smart link URLs include `slugPrefix` (`true` => `/go/your-link`, `false` => `/your-link`) |
 | `pluginName` | `string` | `'SmartLink Manager'` | Plugin display name |
 | `slugPrefix` | `string` | `'go'` | URL prefix for smart links (e.g., `/go/your-link`) |
 | `qrPrefix` | `string` | `'qr'` | URL prefix for QR code pages. Supports nested patterns like `go/qr` |
-| `smartlinkBaseUrl` | `?string` | `null` | Optional absolute base URL for generated smart links and QR URLs (e.g., `https://go.example.com`). Supports env vars. @since(5.22.0) |
-| `smartlinkBaseUrlPattern` | `?string` | `null` | Optional base URL pattern with site tokens: `{siteHandle}`, `{siteId}`, `{siteUid}`. Example: `https://go.example.com/{siteHandle}`. Supports env vars. @since(5.22.0) |
+| `smartlinkBaseUrl` | `?string` | `null` | Optional absolute base URL for generated smart links and QR URLs (e.g., `https://go.example.com`). Supports tokens `{siteHandle}`, `{siteId}`, `{siteUid}` and env vars. @since(5.22.0) |
 | `notFoundRedirectUrl` | `string` | `'/'` | URL to redirect to when smart link is not found (404). Supports env vars |
 | `redirectTemplate` | `?string` | `null` | Custom redirect template path. Supports env vars |
 | `qrTemplate` | `?string` | `null` | Custom QR code display template path. Supports env vars |
