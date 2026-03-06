@@ -62,13 +62,22 @@ class RedirectController extends Controller
             return $this->redirectToNotFound();
         }
 
-        // Get the smart link for the current site
-        // Get any status to check expired/disabled/pending separately
+        // Get the smart link for the current site first.
+        // If not found, fallback across sites because custom-domain requests can
+        // resolve to a different current site than the link's saved site.
         $smartLink = SmartLink::find()
             ->slug($slug)
             ->siteId($site->id)
             ->status(null)
             ->one();
+
+        if (!$smartLink) {
+            $smartLink = SmartLink::find()
+                ->slug($slug)
+                ->site('*')
+                ->status(null)
+                ->one();
+        }
 
         if (!$smartLink) {
             $url = Craft::$app->getRequest()->getUrl();
@@ -90,6 +99,15 @@ class RedirectController extends Controller
             }
 
             // Fallback to configured URL
+            return $this->redirectToNotFound();
+        }
+
+        // Validate against the link's actual site, not only the request-resolved site.
+        if (!$settings->isSiteEnabled($smartLink->siteId)) {
+            $this->logInfo('SmartLink Manager disabled for smart link site', [
+                'siteId' => $smartLink->siteId,
+                'slug' => $slug,
+            ]);
             return $this->redirectToNotFound();
         }
 
@@ -151,7 +169,10 @@ class RedirectController extends Controller
         }
 
         // Resolve site from route first, then from query param, then fallback to current
-        $site = $this->resolveSite($siteHandle);
+        $site = null;
+        if ($siteHandle) {
+            $site = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+        }
         if (!$site) {
             $siteParam = Craft::$app->getRequest()->getParam('site');
             if ($siteParam) {
@@ -171,8 +192,8 @@ class RedirectController extends Controller
             return $this->redirect($redirectUrl);
         }
 
-        // Get the smart link for the site
-        // Get any status to check expired/disabled/pending separately
+        // Get the smart link for the resolved site first.
+        // If not found, fallback across sites (custom-domain/current-site mismatch).
         $smartLink = SmartLink::find()
             ->slug($slug)
             ->siteId($siteId)
@@ -180,7 +201,25 @@ class RedirectController extends Controller
             ->one();
 
         if (!$smartLink) {
+            $smartLink = SmartLink::find()
+                ->slug($slug)
+                ->site('*')
+                ->status(null)
+                ->one();
+        }
+
+        if (!$smartLink) {
             $settings = SmartLinkManager::$plugin->getSettings();
+            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            return $this->redirect($redirectUrl);
+        }
+
+        // Validate against the smart link's actual site.
+        if (!$settings->isSiteEnabled($smartLink->siteId)) {
+            $this->logInfo('SmartLink Manager disabled for smart link site', [
+                'siteId' => $smartLink->siteId,
+                'slug' => $slug,
+            ]);
             $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
             return $this->redirect($redirectUrl);
         }

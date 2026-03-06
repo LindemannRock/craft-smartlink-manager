@@ -54,12 +54,20 @@ class QrCodeController extends Controller
             throw new NotFoundHttpException('QR code not found.');
         }
 
-        // Get the smart link
+        // Get the smart link for the resolved site first, then fallback across sites.
         $smartLink = SmartLink::find()
             ->slug($slug)
             ->siteId($site->id)
             ->status(null) // Allow any status
             ->one();
+
+        if (!$smartLink) {
+            $smartLink = SmartLink::find()
+                ->slug($slug)
+                ->site('*')
+                ->status(null)
+                ->one();
+        }
 
         if (!$smartLink) {
             throw new NotFoundHttpException('QR code not found.');
@@ -193,12 +201,20 @@ class QrCodeController extends Controller
                 throw new NotFoundHttpException('QR code not found.');
             }
 
-            // Get the smart link - allow all statuses except trashed
+            // Get the smart link for the resolved site first, then fallback across sites.
             $smartLink = SmartLink::find()
                 ->slug($slug)
                 ->siteId($site->id)
                 ->status(null) // Allow any status
                 ->one();
+
+            if (!$smartLink) {
+                $smartLink = SmartLink::find()
+                    ->slug($slug)
+                    ->site('*')
+                    ->status(null)
+                    ->one();
+            }
 
             if (!$smartLink) {
                 throw new NotFoundHttpException('QR code not found.');
