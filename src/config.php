@@ -34,6 +34,7 @@ return [
         'ipHashSalt' => App::env('SMARTLINK_MANAGER_IP_SALT'),
 
         // URL Settings
+        'usePrefix' => true,               // Whether smart links should include slugPrefix in URLs (true => /go/slug, false => /slug)
         'slugPrefix' => 'go',              // URL prefix for smart links (e.g., 'go' creates /go/your-link)
         'qrPrefix' => 'go/qr',             // URL prefix for QR code pages (e.g., 'go/qr' creates /go/qr/your-link)
         'smartlinkBaseUrl' => null,        // Optional absolute URL for generated smart links/QR URLs (e.g., App::env('SMARTLINK_BASE_URL'))

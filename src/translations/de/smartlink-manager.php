@@ -98,9 +98,11 @@ return [
     // =========================================================================
 
     'URL Settings' => 'URL-Einstellungen',
+    'Use URL Prefix' => 'URL-Präfix verwenden',
     'Smart Link URL Prefix' => 'Smart Link URL-Präfix',
     '{singularName} URL Prefix' => '{singularName} URL-Präfix',
     'QR Code URL Prefix' => 'QR Code URL-Präfix',
+    'Enable to generate {singularName} URLs as /{prefix}/{slug}. Disable to generate root URLs as /{slug}.' => 'Aktivieren, um {singularName} URLs als /{prefix}/{slug} zu generieren. Deaktivieren, um Root-URLs als /{slug} zu generieren.',
     'The URL prefix for smart links (e.g., \'go\' creates /go/your-link)' => 'Das URL-Präfix für Smart Links (z. B. erzeugt \'go\' /go/your-link)',
     'The URL prefix for {pluginName} (e.g., \'go\' creates /go/your-link)' => 'Das URL-Präfix für {pluginName} (z. B. erzeugt \'go\' /go/your-link). Routen-Cache nach der Änderung leeren (php craft clear-caches/compiled-templates).',
     'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)' => 'Das URL-Präfix für QR Code Seiten (z. B. erzeugt \'qr\' /qr/your-link/view oder \'go/qr\' erzeugt /go/qr/your-link/view)',
@@ -110,6 +112,10 @@ return [
     'Smart Link Base URL Pattern' => 'Smart Link Basis-URL-Muster',
     'Optional absolute URL pattern for multisite domains. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Optionales absolutes URL-Muster für Multisite-Domains. Unterstützte Token: {siteHandle}, {siteId}, {siteUid}.',
     'Changing the URL prefix will break all existing {pluginName}. Only change this before creating your first {singularName}.' => 'Das Ändern des URL-Präfixes macht alle bestehenden {pluginName} ungültig. Ändern Sie dies nur, bevor Sie Ihren ersten {singularName} erstellen.',
+    'This is being overridden by the <code>usePrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Wird durch die Einstellung <code>usePrefix</code> in <code>config/smartlink-manager.php</code> überschrieben.',
+    'Both {smartName} and {shortName} are set to root URLs (no prefix) and share at least one host. Redirect routes can collide (e.g., <code>/slug</code>), and QR routes can also collide when both plugins use the same QR prefix (e.g., <code>/qr/slug</code>).' => 'Sowohl {smartName} als auch {shortName} sind auf Root-URLs (ohne Präfix) gesetzt und teilen mindestens einen Host. Weiterleitungs-Routen können kollidieren (z. B. <code>/slug</code>), und QR-Routen können ebenfalls kollidieren, wenn beide Plugins dasselbe QR-Präfix verwenden (z. B. <code>/qr/slug</code>).',
+    'Both {smartName} and {shortName} are set to root URLs (no prefix). Host overlap could not be fully resolved from current settings/config, so redirect route collisions are possible. QR routes may also collide if both plugins use the same QR prefix.' => 'Sowohl {smartName} als auch {shortName} sind auf Root-URLs (ohne Präfix) gesetzt. Eine Host-Überschneidung konnte aus den aktuellen Einstellungen/Konfigurationswerten nicht vollständig ermittelt werden, daher sind Kollisionen bei Weiterleitungs-Routen möglich. QR-Routen können ebenfalls kollidieren, wenn beide Plugins dasselbe QR-Präfix verwenden.',
+    'URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>.' => 'URL-Präfix ist deaktiviert. {singularName} URLs werden als Root-Pfade wie <code>/your-link</code> generiert.',
     'Multisite detected: when <code>Smart Link Base URL</code> is set without <code>Smart Link Base URL Pattern</code>, generated URLs may resolve to only one site. Set a pattern like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.' => 'Multisite erkannt: Wenn die <code>Smart Link Basis-URL</code> ohne <code>Smart Link Basis-URL-Muster</code> gesetzt ist, können generierte URLs nur zu einer Website auflösen. Setzen Sie ein Muster wie <code>https://go.example.com/{siteHandle}</code>, um websitespezifisches Routing beizubehalten.',
 
     // =========================================================================

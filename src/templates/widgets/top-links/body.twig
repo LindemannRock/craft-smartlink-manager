@@ -19,7 +19,8 @@
                                 </a>
                                 <div class="link-slug">
                                     {% if link.enabled %}
-                                        <a href="{{ plugin.settings.buildPublicUrl((plugin.settings.slugPrefix ?? 'go') ~ '/' ~ link.slug, link.siteId ?? null) }}" target="_blank">/{{ link.slug }}</a>
+                                        {% set redirectPath = ((plugin.settings.usePrefix ?? true) ? ((plugin.settings.slugPrefix ?? 'go') ~ '/') : '') ~ link.slug %}
+                                        <a href="{{ plugin.settings.buildPublicUrl(redirectPath, link.siteId ?? null) }}" target="_blank">/{{ link.slug }}</a>
                                     {% else %}
                                         <span class="disabled">/{{ link.slug }}</span>
                                     {% endif %}

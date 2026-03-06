@@ -33,7 +33,8 @@
                     </a>
                     <div class="link-meta">
                         {% if topLink.enabled is defined and topLink.enabled %}
-                            <a href="{{ plugin.settings.buildPublicUrl((plugin.settings.slugPrefix ?? 'go') ~ '/' ~ topLink.slug, topLink.siteId ?? null) }}" target="_blank" class="slug-link">/{{ topLink.slug }}</a>
+                            {% set redirectPath = ((plugin.settings.usePrefix ?? true) ? ((plugin.settings.slugPrefix ?? 'go') ~ '/') : '') ~ topLink.slug %}
+                            <a href="{{ plugin.settings.buildPublicUrl(redirectPath, topLink.siteId ?? null) }}" target="_blank" class="slug-link">/{{ topLink.slug }}</a>
                         {% else %}
                             <span class="slug-disabled">/{{ topLink.slug }}</span>
                         {% endif %}

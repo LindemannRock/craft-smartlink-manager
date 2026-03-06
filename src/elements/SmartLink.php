@@ -847,11 +847,16 @@ class SmartLink extends Element
     public function getRedirectUrl(): string
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
-        $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
         $slug = ltrim((string) $this->slug, '/');
+        $usePrefix = (bool) ($settings->usePrefix ?? true);
 
-        return $settings->buildPublicUrl("{$slugPrefix}/{$slug}", $this->siteId);
+        if ($usePrefix) {
+            $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
+            $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
+            return $settings->buildPublicUrl("{$slugPrefix}/{$slug}", $this->siteId);
+        }
+
+        return $settings->buildPublicUrl($slug, $this->siteId);
     }
     
     /**

@@ -161,6 +161,7 @@ class Install extends Migration
                 // Asset/Volume settings
                 'imageVolumeUid' => $this->string()->null(),
                 // URL settings
+                'usePrefix' => $this->boolean()->notNull()->defaultValue(true)->comment('Whether smart links should include slugPrefix in public URLs'),
                 'slugPrefix' => $this->string(50)->notNull()->defaultValue('go'),
                 'qrPrefix' => $this->string(50)->notNull()->defaultValue('go/qr'),
                 'smartlinkBaseUrl' => $this->string(500)->null()->comment('Optional absolute base URL override for generated smart links'),
@@ -227,10 +228,20 @@ class Install extends Migration
 
             // Insert default settings row
             $this->insert('{{%smartlinkmanager_settings}}', [
+                'usePrefix' => true,
                 'dateCreated' => Db::prepareDateForDb(new \DateTime()),
                 'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
                 'uid' => StringHelper::UUID(),
             ]);
+        }
+
+        // Backfill support for existing installs without a dedicated migration file
+        if ($this->db->tableExists('{{%smartlinkmanager_settings}}') && !$this->db->columnExists('{{%smartlinkmanager_settings}}', 'usePrefix')) {
+            $this->addColumn(
+                '{{%smartlinkmanager_settings}}',
+                'usePrefix',
+                $this->boolean()->notNull()->defaultValue(true)->after('imageVolumeUid')
+            );
         }
 
         return true;

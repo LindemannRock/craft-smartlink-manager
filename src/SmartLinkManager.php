@@ -526,6 +526,7 @@ class SmartLinkManager extends Plugin
     private function getSiteUrlRules(): array
     {
         $settings = $this->getSettings();
+        $usePrefix = (bool) ($settings->usePrefix ?? true);
         $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
         $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
         $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
@@ -533,15 +534,23 @@ class SmartLinkManager extends Plugin
         $siteHandles = array_map(static fn($site) => preg_quote($site->handle, '/'), Craft::$app->getSites()->getAllSites());
         $siteHandlePattern = !empty($siteHandles) ? implode('|', $siteHandles) : '[a-zA-Z0-9_-]+';
 
-        return [
-            $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/index',
+        $rules = [
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
-            '<siteHandle:' . $siteHandlePattern . '>/' . $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/index',
             '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
             '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
             'smartlink-manager/qr-code/generate' => 'smartlink-manager/qr-code/generate',
         ];
+
+        if ($usePrefix) {
+            $rules[$slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            $rules['<siteHandle:' . $siteHandlePattern . '>/' . $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+        } else {
+            $rules['<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            $rules['<siteHandle:' . $siteHandlePattern . '>/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+        }
+
+        return $rules;
     }
 
     /**

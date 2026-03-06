@@ -225,6 +225,11 @@ class Settings extends Model
     public string $slugPrefix = 'go';
 
     /**
+     * @var bool Whether smart links should include slugPrefix in public URLs
+     */
+    public bool $usePrefix = true;
+
+    /**
      * @var string URL prefix for QR codes (default: 'qr')
      */
     public string $qrPrefix = 'qr';
@@ -307,6 +312,7 @@ class Settings extends Model
     protected static function booleanFields(): array
     {
         return [
+            'usePrefix',
             'enableAnalytics',
             'includeDisabledInExport',
             'includeExpiredInExport',
@@ -410,6 +416,7 @@ class Settings extends Model
             [['pluginName', 'slugPrefix', 'qrPrefix'], 'required'],
             [['pluginName'], 'string', 'max' => 255],
             [['slugPrefix', 'qrPrefix'], 'string', 'max' => 50],
+            [['usePrefix'], 'boolean'],
             [['smartlinkBaseUrl', 'smartlinkBaseUrlPattern'], 'string', 'max' => 500],
             [['smartlinkBaseUrl'], 'url', 'defaultScheme' => 'https', 'skipOnEmpty' => true],
             [['smartlinkBaseUrlPattern'], 'validateSmartlinkBaseUrlPattern'],
@@ -537,6 +544,10 @@ class Settings extends Model
      */
     public function validateSlugPrefix($attribute, $params, $validator)
     {
+        if (!$this->usePrefix) {
+            return;
+        }
+
         $slugPrefix = $this->$attribute;
 
         if (empty($slugPrefix)) {
@@ -598,21 +609,22 @@ class Settings extends Model
         // Parse the prefix (supports both "qr" and "go/qr" patterns)
         $segments = explode('/', $qrPrefix);
         $isNested = count($segments) > 1;
+        $activeSlugPrefix = trim((string) $this->slugPrefix, '/');
 
-        // Check against own slugPrefix
-        if (!$isNested && $qrPrefix === $this->slugPrefix) {
+        // Check against own slugPrefix when prefix mode is enabled
+        if ($this->usePrefix && !$isNested && $qrPrefix === $activeSlugPrefix) {
             $this->addError($attribute, Craft::t('smartlink-manager', 'QR prefix cannot be the same as your slug prefix. Try: qr, code, qrc, or {slug}/qr', [
-                'slug' => $this->slugPrefix,
+                'slug' => $activeSlugPrefix,
             ]));
             return;
         }
 
-        // Check if nested pattern conflicts with own slugPrefix
-        if ($isNested) {
+        // Check if nested pattern conflicts with own slugPrefix when prefix mode is enabled
+        if ($this->usePrefix && $isNested) {
             $baseSegment = $segments[0];
-            if ($baseSegment !== $this->slugPrefix) {
+            if ($baseSegment !== $activeSlugPrefix) {
                 $this->addError($attribute, Craft::t('smartlink-manager', 'Nested QR prefix must start with your slug prefix "{slug}". Use: {slug}/{qr} or use standalone like "qr"', [
-                    'slug' => $this->slugPrefix,
+                    'slug' => $activeSlugPrefix,
                     'qr' => $segments[1] ?? 'qr',
                 ]));
                 return;
@@ -827,6 +839,7 @@ class Settings extends Model
     {
         return [
             'pluginName' => Craft::t('smartlink-manager', 'Plugin Name'),
+            'usePrefix' => Craft::t('smartlink-manager', 'Use URL Prefix'),
             'slugPrefix' => Craft::t('smartlink-manager', 'Smart Link URL Prefix'),
             'qrPrefix' => Craft::t('smartlink-manager', 'QR Code URL Prefix'),
             'smartlinkBaseUrl' => Craft::t('smartlink-manager', 'Smart Link Base URL'),

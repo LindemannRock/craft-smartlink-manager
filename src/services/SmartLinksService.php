@@ -168,11 +168,19 @@ class SmartLinksService extends Component
      */
     public function getSmartLinkBySlug(string $slug, ?int $siteId = null): ?SmartLink
     {
-        return SmartLink::find()
+        $slug = strtolower(trim($slug));
+
+        $query = SmartLink::find()
             ->slug($slug)
-            ->siteId($siteId)
-            ->status(null)
-            ->one();
+            ->status(null);
+
+        if ($siteId) {
+            $query->siteId($siteId);
+        } else {
+            $query->siteId('*');
+        }
+
+        return $query->one();
     }
 
     /**
@@ -347,9 +355,12 @@ class SmartLinksService extends Component
             return;
         }
 
-        $slugPrefix = $settings->slugPrefix ?? 'go';
-        $oldUrl = '/' . $slugPrefix . '/' . $oldSlug;
-        $newUrl = '/' . $slugPrefix . '/' . $link->slug;
+        $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
+        $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
+        $usePrefix = (bool) ($settings->usePrefix ?? true);
+
+        $oldUrl = $usePrefix ? '/' . $slugPrefix . '/' . $oldSlug : '/' . $oldSlug;
+        $newUrl = $usePrefix ? '/' . $slugPrefix . '/' . $link->slug : '/' . $link->slug;
 
         // Check if Redirect Manager integration is available and enabled
         $redirectIntegration = SmartLinkManager::$plugin->integration->getIntegration('redirect-manager');

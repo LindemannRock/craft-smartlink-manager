@@ -74,7 +74,9 @@ class AnalyticsExportService
 
         $settings = SmartLinkManager::$plugin->getSettings();
         $geoEnabled = $settings->enableGeoDetection ?? true;
-        $slugPrefix = $settings->slugPrefix ?? 'go';
+        $usePrefix = (bool) ($settings->usePrefix ?? true);
+        $slugPrefix = trim((string) ($settings->slugPrefix ?? 'go'), '/');
+        $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
 
         $linkIds = array_unique(array_column($results, 'linkId'));
         $smartLinks = [];
@@ -106,7 +108,8 @@ class AnalyticsExportService
             if (!empty($row['siteId'])) {
                 $site = Craft::$app->getSites()->getSiteById($row['siteId']);
                 $siteName = $site ? $site->name : '';
-                $smartLinkUrl = $settings->buildPublicUrl("{$slugPrefix}/{$smartLink->slug}", (int) $row['siteId']);
+                $path = $usePrefix ? "{$slugPrefix}/{$smartLink->slug}" : $smartLink->slug;
+                $smartLinkUrl = $settings->buildPublicUrl($path, (int) $row['siteId']);
             }
 
             $metadata = !empty($row['metadata']) ? Json::decode($row['metadata']) : [];

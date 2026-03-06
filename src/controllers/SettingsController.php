@@ -799,6 +799,7 @@ class SettingsController extends Controller
             'general' => [
                 'pluginName',
                 'enabledSites',
+                'usePrefix',
                 'slugPrefix',
                 'qrPrefix',
                 'smartlinkBaseUrl',
