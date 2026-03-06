@@ -158,14 +158,14 @@ class Install extends Migration
                 'pluginName' => $this->string(255)->notNull()->defaultValue('SmartLink Manager'),
                 // Site settings
                 'enabledSites' => $this->text()->null()->comment('JSON array of enabled site IDs'),
-                // Asset/Volume settings
-                'imageVolumeUid' => $this->string()->null(),
                 // URL settings
+                'smartlinkBaseUrl' => $this->string(500)->null()->comment('Optional absolute base URL override for generated smart links'),
+                'smartlinkBaseUrlPattern' => $this->string(500)->null()->comment('Optional absolute pattern with site tokens ({siteHandle}, {siteId}, {siteUid})'),
                 'usePrefix' => $this->boolean()->notNull()->defaultValue(true)->comment('Whether smart links should include slugPrefix in public URLs'),
                 'slugPrefix' => $this->string(50)->notNull()->defaultValue('go'),
                 'qrPrefix' => $this->string(50)->notNull()->defaultValue('go/qr'),
-                'smartlinkBaseUrl' => $this->string(500)->null()->comment('Optional absolute base URL override for generated smart links'),
-                'smartlinkBaseUrlPattern' => $this->string(500)->null()->comment('Optional absolute pattern with site tokens ({siteHandle}, {siteId}, {siteUid})'),
+                // Asset/Volume settings
+                'imageVolumeUid' => $this->string()->null(),
                 // QR Code settings
                 'defaultQrSize' => $this->integer()->notNull()->defaultValue(256),
                 'defaultQrColor' => $this->string(7)->notNull()->defaultValue('#000000'),
@@ -199,17 +199,18 @@ class Install extends Migration
                 'cacheDeviceDetection' => $this->boolean()->notNull()->defaultValue(true),
                 'deviceDetectionCacheDuration' => $this->integer()->notNull()->defaultValue(3600),
                 'languageDetectionMethod' => $this->string(10)->notNull()->defaultValue('browser'),
+                // Redirect/Behavior settings
+                'notFoundRedirectUrl' => $this->string()->notNull()->defaultValue('/'),
                 // Interface settings
                 'itemsPerPage' => $this->integer()->notNull()->defaultValue(100),
-                'notFoundRedirectUrl' => $this->string()->notNull()->defaultValue('/'),
                 // Export settings
                 'includeDisabledInExport' => $this->boolean()->defaultValue(false),
                 'includeExpiredInExport' => $this->boolean()->notNull()->defaultValue(false),
                 // Integration settings
                 'enabledIntegrations' => $this->text()->null()->comment('JSON array of enabled integration handles'),
+                'redirectManagerEvents' => $this->text()->null()->comment('JSON array of redirect manager event types'),
                 'seomaticTrackingEvents' => $this->text()->null()->comment('JSON array of event types to track in SEOmatic'),
                 'seomaticEventPrefix' => $this->string(50)->defaultValue('smart_links')->comment('Event prefix for GTM/GA events'),
-                'redirectManagerEvents' => $this->text()->null()->comment('JSON array of redirect manager event types'),
                 // Logging
                 'logLevel' => $this->string(20)->notNull()->defaultValue('error'),
                 // Timestamps
@@ -240,7 +241,7 @@ class Install extends Migration
             $this->addColumn(
                 '{{%smartlinkmanager_settings}}',
                 'usePrefix',
-                $this->boolean()->notNull()->defaultValue(true)->after('imageVolumeUid')
+                $this->boolean()->notNull()->defaultValue(true)->after('smartlinkBaseUrlPattern')
             );
         }
 
