@@ -88,7 +88,7 @@
             {% set currentUnknownHost = false %}
             {% set otherUnknownHost = false %}
 
-            {% set smartlinkUrlSource = (settings.smartlinkBaseUrlPattern ?? '') ?: (settings.smartlinkBaseUrl ?? '') %}
+            {% set smartlinkUrlSource = settings.smartlinkBaseUrl ?? '' %}
             {% if smartlinkUrlSource|trim is not empty %}
                 {% if '://' in smartlinkUrlSource %}
                     {% set smartlinkHost = smartlinkUrlSource|replace({'https://': '', 'http://': ''})|split('/')|first|split(':')|first|lower %}
@@ -111,9 +111,9 @@
                 {% endfor %}
             {% endif %}
 
-            {% set otherSettings = shortlinkEnabledForWarning ? shortlinkPluginForWarning.settings : null %}
-            {% if otherSettings %}
-                {% set shortlinkUrlSource = (otherSettings.shortlinkBaseUrlPattern ?? '') ?: (otherSettings.shortlinkBaseUrl ?? '') %}
+            {% set shortlinkSettingsForWarning = shortlinkEnabledForWarning ? shortlinkPluginForWarning.settings : null %}
+            {% if shortlinkSettingsForWarning %}
+                {% set shortlinkUrlSource = shortlinkSettingsForWarning.shortlinkBaseUrl ?? '' %}
                 {% if shortlinkUrlSource|trim is not empty %}
                     {% if '://' in shortlinkUrlSource %}
                         {% set shortlinkHost = shortlinkUrlSource|replace({'https://': '', 'http://': ''})|split('/')|first|split(':')|first|lower %}
@@ -212,7 +212,7 @@
         {% set qrPrefixValue = settings.qrPrefix %}
         {% set nestedDefault = (settings.slugPrefix ?: 'go') ~ '/qr' %}
         {% if not currentUsePrefix %}
-            {% if qrPrefixValue is empty or qrPrefixValue == nestedDefault %}
+            {% if qrPrefixValue is empty %}
                 {% set qrPrefixValue = 'qr' %}
             {% endif %}
         {% elseif qrPrefixValue is empty %}
@@ -259,8 +259,8 @@
         }) }}
 
         {{ forms.autosuggestField({
-            label: "Smart Link Base URL"|t('smartlink-manager'),
-            instructions: "Optional absolute URL used for generated smart links and QR URLs. Leave empty to use each site's base URL."|t('smartlink-manager'),
+            label: "{singularName} Base URL"|t('smartlink-manager', {singularName: smartlinkHelper.displayName}),
+            instructions: "Base URL for {singularName} and QR code URLs. For multisite, you can use tokens: {siteHandle}, {siteId}, {siteUid} (e.g., https://go.example.com/{siteHandle}). Leave empty to use each site's base URL."|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName, siteHandle: '{siteHandle}'}),
             id: 'smartlinkBaseUrl',
             name: 'settings[smartlinkBaseUrl]',
             value: settings.smartlinkBaseUrl ?? '',
@@ -272,25 +272,13 @@
                 "This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
 
-        {{ forms.autosuggestField({
-            label: "Smart Link Base URL Pattern"|t('smartlink-manager'),
-            instructions: "Optional absolute URL pattern for multisite domains. Supported tokens: {siteHandle}, {siteId}, {siteUid}."|t('smartlink-manager'),
-            id: 'smartlinkBaseUrlPattern',
-            name: 'settings[smartlinkBaseUrlPattern]',
-            value: settings.smartlinkBaseUrlPattern ?? '',
-            errors: settings.getErrors('smartlinkBaseUrlPattern'),
-            placeholder: 'https://go.example.com/{siteHandle}',
-            suggestEnvVars: true,
-            disabled: settings.isOverriddenByConfig('smartlinkBaseUrlPattern'),
-            warning: settings.isOverriddenByConfig('smartlinkBaseUrlPattern') ?
-                "This is being overridden by the <code>smartlinkBaseUrlPattern</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
-        }) }}
-
         {% set hasMultipleSites = craft.app.sites.getAllSites()|length > 1 %}
-        {% if hasMultipleSites and (settings.smartlinkBaseUrl ?? '') is not empty and (settings.smartlinkBaseUrlPattern ?? '') is empty %}
+        {% set smartlinkBaseUrlValue = settings.smartlinkBaseUrl ?? '' %}
+        {% set hasSiteToken = '{siteHandle}' in smartlinkBaseUrlValue or '{siteId}' in smartlinkBaseUrlValue or '{siteUid}' in smartlinkBaseUrlValue %}
+        {% if hasMultipleSites and smartlinkBaseUrlValue|trim is not empty and not hasSiteToken %}
             {% include 'lindemannrock-base/_components/info-box' with {
                 type: 'warning',
-                message: "Multisite detected: when <code>Smart Link Base URL</code> is set without <code>Smart Link Base URL Pattern</code>, generated URLs may resolve to only one site. Set a pattern like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing."|t('smartlink-manager')|raw
+                message: "Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing."|t('smartlink-manager', {singularName: smartlinkHelper.displayName, siteHandle: '{siteHandle}'})|raw
             } %}
         {% endif %}
 

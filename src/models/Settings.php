@@ -242,15 +242,6 @@ class Settings extends Model
     public ?string $smartlinkBaseUrl = null;
 
     /**
-     * @var string|null Optional absolute base URL pattern with site tokens.
-     * Supported tokens: {siteHandle}, {siteId}, {siteUid}
-     * Example: https://go.example.com/{siteHandle}
-     * @since 5.22.0
-     */
-    public ?string $smartlinkBaseUrlPattern = null;
-
-
-    /**
      * @var string URL to redirect to when smart link is not found (404)
      */
     public string $notFoundRedirectUrl = '/';
@@ -398,7 +389,6 @@ class Settings extends Model
                     'redirectTemplate',
                     'qrTemplate',
                     'smartlinkBaseUrl',
-                    'smartlinkBaseUrlPattern',
                     'imageVolumeUid',
                     'qrLogoVolumeUid',
                     'ipHashSalt',
@@ -417,9 +407,8 @@ class Settings extends Model
             [['pluginName'], 'string', 'max' => 255],
             [['slugPrefix', 'qrPrefix'], 'string', 'max' => 50],
             [['usePrefix'], 'boolean'],
-            [['smartlinkBaseUrl', 'smartlinkBaseUrlPattern'], 'string', 'max' => 500],
-            [['smartlinkBaseUrl'], 'url', 'defaultScheme' => 'https', 'skipOnEmpty' => true],
-            [['smartlinkBaseUrlPattern'], 'validateSmartlinkBaseUrlPattern'],
+            [['smartlinkBaseUrl'], 'string', 'max' => 500],
+            [['smartlinkBaseUrl'], 'validateSmartlinkBaseUrl'],
             [['slugPrefix'], 'match', 'pattern' => '/^[a-zA-Z0-9\-\_]+$/', 'message' => Craft::t('smartlink-manager', 'Only letters, numbers, hyphens, and underscores are allowed.')],
             [['qrPrefix'], 'match', 'pattern' => '/^[a-zA-Z0-9\-\_\/]+$/', 'message' => Craft::t('smartlink-manager', 'Only letters, numbers, hyphens, underscores, and slashes are allowed.')],
             [['qrPrefix'], RoutePrefixValidator::class, 'translationCategory' => 'smartlink-manager'],
@@ -718,24 +707,28 @@ class Settings extends Model
     }
 
     /**
-     * Validate smart link base URL pattern format.
-     *
-     * @since 5.22.0
+     * Validate smart link base URL format (plain URL or tokenized URL).
      */
-    public function validateSmartlinkBaseUrlPattern(string $attribute, mixed $params, mixed $validator): void
+    public function validateSmartlinkBaseUrl(string $attribute, mixed $params, mixed $validator): void
     {
-        $pattern = trim((string) App::parseEnv($this->$attribute));
-        if ($pattern === '') {
+        $baseUrl = trim((string) App::parseEnv($this->$attribute));
+        $this->$attribute = $baseUrl;
+        if ($baseUrl === '') {
             return;
         }
 
-        if (!preg_match('/^https?:\/\//i', $pattern)) {
-            $this->addError($attribute, Craft::t('smartlink-manager', 'Smart link base URL pattern must start with http:// or https://'));
+        if (preg_match('/\s/', $baseUrl) === 1) {
+            $this->addError($attribute, Craft::t('smartlink-manager', 'Smart link base URL cannot contain spaces.'));
             return;
         }
 
-        if (strpos($pattern, '{') !== false && !preg_match('/\{siteHandle\}|\{siteId\}|\{siteUid\}/', $pattern)) {
-            $this->addError($attribute, Craft::t('smartlink-manager', 'Unsupported token in smart link base URL pattern. Supported tokens: {siteHandle}, {siteId}, {siteUid}.'));
+        if (!preg_match('/^https?:\/\//i', $baseUrl)) {
+            $this->addError($attribute, Craft::t('smartlink-manager', 'Smart link base URL must start with http:// or https://'));
+            return;
+        }
+
+        if (strpos($baseUrl, '{') !== false && !preg_match('/\{siteHandle\}|\{siteId\}|\{siteUid\}/', $baseUrl)) {
+            $this->addError($attribute, Craft::t('smartlink-manager', 'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.'));
         }
     }
 
@@ -754,22 +747,10 @@ class Settings extends Model
         $relativePath = trim($relativePath, '/');
         $siteId = $siteId ?: Craft::$app->getSites()->getCurrentSite()->id;
 
-        $pattern = trim((string) App::parseEnv($this->smartlinkBaseUrlPattern ?? ''));
-        if ($pattern !== '') {
-            $base = $this->expandSmartlinkBasePattern($pattern, $siteId);
-            if ($base !== '') {
-                $url = rtrim($base, '/');
-                if ($relativePath !== '') {
-                    $url .= '/' . $relativePath;
-                }
-
-                return UrlHelper::urlWithParams($url, $params);
-            }
-        }
-
         $baseUrl = trim((string) App::parseEnv($this->smartlinkBaseUrl ?? ''));
         if ($baseUrl !== '') {
-            $url = rtrim($baseUrl, '/');
+            $expandedBaseUrl = $this->expandSmartlinkBaseUrl($baseUrl, $siteId);
+            $url = rtrim($expandedBaseUrl, '/');
             if ($relativePath !== '') {
                 $url .= '/' . $relativePath;
             }
@@ -781,16 +762,16 @@ class Settings extends Model
     }
 
     /**
-     * Expand supported site tokens in smart link base pattern.
+     * Expand supported site tokens in smart link base URL.
      */
-    private function expandSmartlinkBasePattern(string $pattern, int $siteId): string
+    private function expandSmartlinkBaseUrl(string $baseUrl, int $siteId): string
     {
         $site = Craft::$app->getSites()->getSiteById($siteId);
         if (!$site) {
-            return $pattern;
+            return $baseUrl;
         }
 
-        return strtr($pattern, [
+        return strtr($baseUrl, [
             '{siteHandle}' => $site->handle,
             '{siteId}' => (string) $site->id,
             '{siteUid}' => $site->uid,
@@ -843,7 +824,6 @@ class Settings extends Model
             'slugPrefix' => Craft::t('smartlink-manager', 'Smart Link URL Prefix'),
             'qrPrefix' => Craft::t('smartlink-manager', 'QR Code URL Prefix'),
             'smartlinkBaseUrl' => Craft::t('smartlink-manager', 'Smart Link Base URL'),
-            'smartlinkBaseUrlPattern' => Craft::t('smartlink-manager', 'Smart Link Base URL Pattern'),
             'enableAnalytics' => Craft::t('smartlink-manager', 'Enable Analytics'),
             'analyticsRetention' => Craft::t('smartlink-manager', 'Analytics Retention (days)'),
             'includeDisabledInExport' => Craft::t('smartlink-manager', 'Include Disabled Links in Export'),

@@ -803,7 +803,6 @@ class SettingsController extends Controller
                 'slugPrefix',
                 'qrPrefix',
                 'smartlinkBaseUrl',
-                'smartlinkBaseUrlPattern',
                 'redirectTemplate',
                 'qrTemplate',
                 'imageVolumeUid',

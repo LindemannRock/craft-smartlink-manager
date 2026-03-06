@@ -159,8 +159,7 @@ class Install extends Migration
                 // Site settings
                 'enabledSites' => $this->text()->null()->comment('JSON array of enabled site IDs'),
                 // URL settings
-                'smartlinkBaseUrl' => $this->string(500)->null()->comment('Optional absolute base URL override for generated smart links'),
-                'smartlinkBaseUrlPattern' => $this->string(500)->null()->comment('Optional absolute pattern with site tokens ({siteHandle}, {siteId}, {siteUid})'),
+                'smartlinkBaseUrl' => $this->string(500)->null()->comment('Optional absolute base URL with optional site tokens ({siteHandle}, {siteId}, {siteUid})'),
                 'usePrefix' => $this->boolean()->notNull()->defaultValue(true)->comment('Whether smart links should include slugPrefix in public URLs'),
                 'slugPrefix' => $this->string(50)->notNull()->defaultValue('go'),
                 'qrPrefix' => $this->string(50)->notNull()->defaultValue('go/qr'),
@@ -241,7 +240,7 @@ class Install extends Migration
             $this->addColumn(
                 '{{%smartlinkmanager_settings}}',
                 'usePrefix',
-                $this->boolean()->notNull()->defaultValue(true)->after('smartlinkBaseUrlPattern')
+                $this->boolean()->notNull()->defaultValue(true)->after('smartlinkBaseUrl')
             );
         }
 

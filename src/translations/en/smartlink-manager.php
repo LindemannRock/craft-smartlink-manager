@@ -106,11 +106,13 @@ return [
     'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)' => 'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)',
     'Clear routes cache after changing this (php craft clear-caches/compiled-templates).' => 'Clear routes cache after changing this (php craft clear-caches/compiled-templates).',
     'Smart Link Base URL' => 'Smart Link Base URL',
+    '{singularName} Base URL' => '{singularName} Base URL',
     'Optional absolute URL used for generated smart links and QR URLs. Leave empty to use each site\'s base URL.' => 'Optional absolute URL used for generated smart links and QR URLs. Leave empty to use each site\'s base URL.',
-    'Smart Link Base URL Pattern' => 'Smart Link Base URL Pattern',
-    'Optional absolute URL pattern for multisite domains. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Optional absolute URL pattern for multisite domains. Supported tokens: {siteHandle}, {siteId}, {siteUid}.',
+    'Base URL for generated smart links and QR URLs. For multisite, you can use tokens: {siteHandle}, {siteId}, {siteUid} (e.g., https://go.example.com/{siteHandle}). Leave empty to use each site\'s base URL.' => 'Base URL for generated smart links and QR URLs. For multisite, you can use tokens: {siteHandle}, {siteId}, {siteUid} (e.g., https://go.example.com/{siteHandle}). Leave empty to use each site\'s base URL.',
+    'Base URL for {singularName} and QR code URLs. For multisite, you can use tokens: {siteHandle}, {siteId}, {siteUid} (e.g., https://go.example.com/{siteHandle}). Leave empty to use each site\'s base URL.' => 'Base URL for {singularName} and QR code URLs. For multisite, you can use tokens: {siteHandle}, {siteId}, {siteUid} (e.g., https://go.example.com/{siteHandle}). Leave empty to use each site\'s base URL.',
     'Changing the URL prefix will break all existing {pluginName}. Only change this before creating your first {singularName}.' => 'Changing the URL prefix will break all existing {pluginName}. Only change this before creating your first {singularName}.',
-    'Multisite detected: when <code>Smart Link Base URL</code> is set without <code>Smart Link Base URL Pattern</code>, generated URLs may resolve to only one site. Set a pattern like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.' => 'Multisite detected: when <code>Smart Link Base URL</code> is set without <code>Smart Link Base URL Pattern</code>, generated URLs may resolve to only one site. Set a pattern like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.',
+    'Multisite detected: <code>Smart Link Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.' => 'Multisite detected: <code>Smart Link Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.',
+    'Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.' => 'Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.',
 
     // =========================================================================
     // Template Settings
@@ -813,8 +815,9 @@ return [
     'QR prefix cannot be the same as your slug prefix. Try: qr, code, qrc, or {slug}/qr' => 'QR prefix cannot be the same as your slug prefix. Try: qr, code, qrc, or {slug}/qr',
     'Nested QR prefix must start with your slug prefix "{slug}". Use: {slug}/{qr} or use standalone like "qr"' => 'Nested QR prefix must start with your slug prefix "{slug}". Use: {slug}/{qr} or use standalone like "qr"',
     'QR prefix "{prefix}" conflicts with: {conflicts}. Suggestions: {suggestions}' => 'QR prefix "{prefix}" conflicts with: {conflicts}. Suggestions: {suggestions}',
-    'Smart link base URL pattern must start with http:// or https://' => 'Smart link base URL pattern must start with http:// or https://',
-    'Unsupported token in smart link base URL pattern. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Unsupported token in smart link base URL pattern. Supported tokens: {siteHandle}, {siteId}, {siteUid}.',
+    'Smart link base URL must start with http:// or https://' => 'Smart link base URL must start with http:// or https://',
+    'Smart link base URL cannot contain spaces.' => 'Smart link base URL cannot contain spaces.',
+    'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.',
 
     // =========================================================================
     // Config Override Warnings
@@ -859,7 +862,6 @@ return [
     'This is being overridden by the <code>redirectManagerEvents</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>redirectManagerEvents</code> setting in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>smartlinkBaseUrlPattern</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>smartlinkBaseUrlPattern</code> setting in <code>config/smartlink-manager.php</code>.',
 
     // =========================================================================
     // General Interface
