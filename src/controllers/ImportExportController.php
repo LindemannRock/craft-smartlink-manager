@@ -523,14 +523,18 @@ class ImportExportController extends Controller
         Craft::$app->getSession()->remove('smartlink-import');
         Craft::$app->getSession()->remove('smartlink-preview');
 
+        $pluginName = SmartLinkManager::$plugin->getSettings()->getPluralLowerDisplayName();
+
         if ($failed > 0) {
-            Craft::$app->getSession()->setNotice(Craft::t('smartlink-manager', 'Import completed: {imported} imported, {failed} failed.', [
+            Craft::$app->getSession()->setNotice(Craft::t('smartlink-manager', 'Import completed: {imported} {pluginName} imported, {failed} failed.', [
                 'imported' => $imported,
+                'pluginName' => $pluginName,
                 'failed' => $failed,
             ]));
         } else {
-            Craft::$app->getSession()->setNotice(Craft::t('smartlink-manager', 'Import completed: {imported} smart links imported.', [
+            Craft::$app->getSession()->setNotice(Craft::t('smartlink-manager', 'Import completed: {imported} {pluginName} imported.', [
                 'imported' => $imported,
+                'pluginName' => $pluginName,
             ]));
         }
 

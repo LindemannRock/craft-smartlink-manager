@@ -978,6 +978,8 @@ return [
     'Click the button below to import {count} valid smart link(s).' => 'Click the button below to import {count} valid smart link(s).',
     'Import completed: {imported} smart links imported.' => 'Import completed: {imported} smart links imported.',
     'Import completed: {imported} imported, {failed} failed.' => 'Import completed: {imported} imported, {failed} failed.',
+    'Import completed: {imported} {pluginName} imported.' => 'Import completed: {imported} {pluginName} imported.',
+    'Import completed: {imported} {pluginName} imported, {failed} failed.' => 'Import completed: {imported} {pluginName} imported, {failed} failed.',
     'Failed to clear import history.' => 'Failed to clear import history.',
     'Slug must be mapped.' => 'Slug must be mapped.',
     'Slug (required)' => 'Slug (required)',

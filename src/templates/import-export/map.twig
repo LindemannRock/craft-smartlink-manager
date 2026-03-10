@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 {% for row in previewRows %}
-                    <tr>{% for cell in row %}<td><code>{{ cell }}</code></td>{% endfor %}</tr>
+                    <tr>{% for cell in row %}<td><code class="lr-cell-clip" title="{{ cell }}">{{ cell }}</code></td>{% endfor %}</tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -123,7 +123,7 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td><code class="light">{{ previewRows[0][i] ?? '-' }}</code></td>
+                                <td><code class="light lr-cell-clip" title="{{ previewRows[0][i] ?? '-' }}">{{ previewRows[0][i] ?? '-' }}</code></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -151,6 +151,24 @@
 {% endblock %}
 
 {% js %}
+const noWrapStyleId = 'smartlink-import-cell-clip-style';
+if (!document.getElementById(noWrapStyleId)) {
+    const style = document.createElement('style');
+    style.id = noWrapStyleId;
+    style.textContent = `
+        .lr-cell-clip {
+            display: block;
+            max-width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 const mappingForm = document.getElementById('mapping-form');
 const mappingErrorDiv = document.getElementById('mappingErrors');
 const mappingErrorText = document.getElementById('mappingErrorText');

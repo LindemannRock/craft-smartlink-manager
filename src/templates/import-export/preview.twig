@@ -37,9 +37,9 @@
                 <tbody>
                     {% for row in validRows %}
                         <tr>
-                            <td><code style="font-size: 11px;">{{ row.slug }}</code></td>
+                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.slug }}">{{ row.slug }}</code></td>
                             <td>{{ row.title }}</td>
-                            <td><code style="font-size: 11px;">{{ row.fallbackUrl }}</code></td>
+                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{% if row.imageId %}{{ row.imageId }}{% else %}-{% endif %}</td>
                             <td>{{ row.enabled ? 'Yes' : 'No' }}</td>
                             <td>
@@ -72,8 +72,8 @@
                 <tbody>
                     {% for row in duplicateRows %}
                         <tr>
-                            <td><code style="font-size: 11px;">{{ row.slug }}</code></td>
-                            <td><code style="font-size: 11px;">{{ row.fallbackUrl }}</code></td>
+                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.slug }}">{{ row.slug }}</code></td>
+                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{{ row.reason }}</td>
                         </tr>
                     {% endfor %}
@@ -99,8 +99,8 @@
                     {% for row in errorRows %}
                         <tr>
                             <td>{{ row.rowNumber }}</td>
-                            <td><code style="font-size: 11px;">{{ row.slug }}</code></td>
-                            <td><code style="font-size: 11px;">{{ row.fallbackUrl }}</code></td>
+                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.slug }}">{{ row.slug }}</code></td>
+                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{{ row.error }}</td>
                         </tr>
                     {% endfor %}
@@ -143,6 +143,24 @@
 {% endblock %}
 
 {% js %}
+const noWrapStyleId = 'smartlink-import-cell-clip-style';
+if (!document.getElementById(noWrapStyleId)) {
+    const style = document.createElement('style');
+    style.id = noWrapStyleId;
+    style.textContent = `
+        .lr-cell-clip {
+            display: block;
+            max-width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 const importForm = document.getElementById('importForm');
 if (importForm) {
     importForm.addEventListener('submit', function(e) {

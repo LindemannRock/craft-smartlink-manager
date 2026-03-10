@@ -984,6 +984,8 @@ return [
     'Click the button below to import {count} valid smart link(s).' => 'Klicken Sie auf die Schaltfläche unten, um {count} gültige(n) Smart Link(s) zu importieren.',
     'Import completed: {imported} smart links imported.' => 'Import abgeschlossen: {imported} Smart Links importiert.',
     'Import completed: {imported} imported, {failed} failed.' => 'Import abgeschlossen: {imported} importiert, {failed} fehlgeschlagen.',
+    'Import completed: {imported} {pluginName} imported.' => 'Import abgeschlossen: {imported} {pluginName} importiert.',
+    'Import completed: {imported} {pluginName} imported, {failed} failed.' => 'Import abgeschlossen: {imported} {pluginName} importiert, {failed} fehlgeschlagen.',
     'Failed to clear import history.' => 'Importverlauf konnte nicht geleert werden.',
     'Slug must be mapped.' => 'Slug muss zugeordnet werden.',
     'Slug (required)' => 'Slug (erforderlich)',
