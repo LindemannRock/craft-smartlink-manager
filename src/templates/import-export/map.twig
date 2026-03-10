@@ -1,0 +1,187 @@
+{% extends "smartlink-manager/_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set title = "Map CSV Columns"|t('smartlink-manager') %}
+{% set fullPageForm = false %}
+{% set selectedSubnavItem = 'import-export' %}
+
+{% set crumbs = [
+    { label: smartlinkHelper.fullName|t('smartlink-manager'), url: url('smartlink-manager') },
+    { label: 'Import/Export'|t('smartlink-manager'), url: url('smartlink-manager/import-export') },
+    { label: 'Map Columns'|t('smartlink-manager') }
+] %}
+
+{% block content %}
+    <h2 style="margin-top: 0px;">{{ "Map CSV Columns"|t('smartlink-manager') }}</h2>
+    <p>{{ "Your CSV has {count} rows. Map each CSV column to a smart link field."|t('smartlink-manager', {count: rowCount}) }}</p>
+
+    <h3>{{ "Preview of CSV Data"|t('smartlink-manager') }}</h3>
+    <div style="overflow-x: auto; margin-bottom: 30px;">
+        <table class="data fullwidth">
+            <thead>
+                <tr>{% for header in headers %}<th>{{ header }}</th>{% endfor %}</tr>
+            </thead>
+            <tbody>
+                {% for row in previewRows %}
+                    <tr>{% for cell in row %}<td><code>{{ cell }}</code></td>{% endfor %}</tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if rowCount > 5 %}
+            <p class="light" style="margin-top: 10px;">{{ "Showing first 5 rows. {total} total rows will be imported."|t('smartlink-manager', {total: rowCount}) }}</p>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <h3>{{ "Column Mapping"|t('smartlink-manager') }}</h3>
+    <p>{{ "Map your CSV columns to smart link fields. Required fields must be mapped."|t('smartlink-manager') }}</p>
+    <p class="light">{{ "Note: only columns mapped to a field will be imported."|t('smartlink-manager') }}</p>
+
+    <form method="post" action="{{ actionUrl('smartlink-manager/import-export/preview') }}" id="mapping-form">
+        {{ csrfInput() }}
+
+        {% set fieldOptions = [
+            {value: '', label: '-- Do not import --'|t('smartlink-manager')},
+            {value: 'slug', label: 'Slug (required)'|t('smartlink-manager')},
+            {value: 'title', label: 'Title'|t('smartlink-manager')},
+            {value: 'description', label: 'Description'|t('smartlink-manager')},
+            {value: 'iosUrl', label: 'iOS URL'|t('smartlink-manager')},
+            {value: 'androidUrl', label: 'Android URL'|t('smartlink-manager')},
+            {value: 'huaweiUrl', label: 'Huawei URL'|t('smartlink-manager')},
+            {value: 'amazonUrl', label: 'Amazon URL'|t('smartlink-manager')},
+            {value: 'windowsUrl', label: 'Windows URL'|t('smartlink-manager')},
+            {value: 'macUrl', label: 'Mac URL'|t('smartlink-manager')},
+            {value: 'fallbackUrl', label: 'Fallback URL (required)'|t('smartlink-manager')},
+            {value: 'imageId', label: 'Image Asset ID'|t('smartlink-manager')},
+            {value: 'imageSize', label: 'Image Size (xl/lg/md/sm)'|t('smartlink-manager')},
+            {value: 'enabled', label: 'Enabled (1/0)'|t('smartlink-manager')},
+            {value: 'siteId', label: 'Site ID'|t('smartlink-manager')},
+            {value: 'siteHandle', label: 'Site Handle'|t('smartlink-manager')},
+            {value: 'trackAnalytics', label: 'Track Analytics (1/0)'|t('smartlink-manager')},
+            {value: 'qrCodeEnabled', label: 'QR Enabled (1/0)'|t('smartlink-manager')},
+            {value: 'qrCodeSize', label: 'QR Size'|t('smartlink-manager')},
+            {value: 'qrCodeColor', label: 'QR Color (#RRGGBB)'|t('smartlink-manager')},
+            {value: 'qrCodeBgColor', label: 'QR Background (#RRGGBB)'|t('smartlink-manager')},
+            {value: 'qrCodeEyeColor', label: 'QR Eye Color (#RRGGBB)'|t('smartlink-manager')},
+            {value: 'qrCodeFormat', label: 'QR Format (png/svg)'|t('smartlink-manager')},
+            {value: 'qrLogoId', label: 'QR Logo Asset ID'|t('smartlink-manager')},
+            {value: 'hideTitle', label: 'Hide Title (1/0)'|t('smartlink-manager')},
+            {value: 'languageDetection', label: 'Language Detection (1/0)'|t('smartlink-manager')},
+            {value: 'postDate', label: 'Post Date (YYYY-MM-DD HH:MM:SS)'|t('smartlink-manager')},
+            {value: 'dateExpired', label: 'Date Expired (YYYY-MM-DD HH:MM:SS)'|t('smartlink-manager')},
+        ] %}
+
+        <div class="field">
+            <div class="input">
+                <table class="editable fullwidth">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">{{ "CSV Column"|t('smartlink-manager') }}</th>
+                            <th style="width: 40%;">{{ "Maps to Field"|t('smartlink-manager') }}</th>
+                            <th style="width: 30%;">{{ "Sample Data"|t('smartlink-manager') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i, header in headers %}
+                            {% set lowerHeader = header|lower %}
+                            <tr>
+                                <td><strong>{{ header }}</strong></td>
+                                <td>
+                                    <div class="select fullwidth">
+                                        <select name="mapping[{{ i }}]" class="column-mapping">
+                                            {% for option in fieldOptions %}
+                                                {% set isMatch = false %}
+                                                {% if option.value == 'slug' and lowerHeader in ['slug', 'code'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'title' and lowerHeader in ['title', 'name'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'description' and lowerHeader in ['description'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'iosUrl' and lowerHeader in ['iosurl', 'ios url'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'androidUrl' and lowerHeader in ['androidurl', 'android url'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'huaweiUrl' and lowerHeader in ['huaweiurl', 'huawei url'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'amazonUrl' and lowerHeader in ['amazonurl', 'amazon url'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'windowsUrl' and lowerHeader in ['windowsurl', 'windows url'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'macUrl' and lowerHeader in ['macurl', 'mac url'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'fallbackUrl' and lowerHeader in ['fallbackurl', 'fallback url', 'destinationurl', 'destination'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'imageId' and lowerHeader in ['imageid', 'image_id', 'image id'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'imageSize' and lowerHeader in ['imagesize', 'image size'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'enabled' and lowerHeader in ['enabled', 'active'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'siteId' and lowerHeader in ['siteid', 'site_id'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'siteHandle' and lowerHeader in ['sitehandle', 'site_handle', 'site'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'trackAnalytics' and lowerHeader in ['trackanalytics', 'analytics'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrCodeEnabled' and lowerHeader in ['qrcodeenabled', 'qrenabled'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrCodeSize' and lowerHeader in ['qrcodesize', 'qrsize'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrCodeColor' and lowerHeader in ['qrcodecolor', 'qrcolor'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrCodeBgColor' and lowerHeader in ['qrcodebgcolor', 'qrbgcolor'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrCodeEyeColor' and lowerHeader in ['qrcodeeyecolor', 'qreyecolor'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrCodeFormat' and lowerHeader in ['qrcodeformat', 'qrformat'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'qrLogoId' and lowerHeader in ['qrlogoid', 'qr_logo_id'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'hideTitle' and lowerHeader in ['hidetitle', 'hide_title'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'languageDetection' and lowerHeader in ['languagedetection', 'language_detection'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'postDate' and lowerHeader in ['postdate', 'post_date', 'post date', 'datecreated', 'createdat'] %}{% set isMatch = true %}{% endif %}
+                                                {% if option.value == 'dateExpired' and lowerHeader in ['dateexpired', 'date_expired', 'expiresat'] %}{% set isMatch = true %}{% endif %}
+                                                <option value="{{ option.value }}" {% if isMatch %}selected{% endif %}>{{ option.label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </td>
+                                <td><code class="light">{{ previewRows[0][i] ?? '-' }}</code></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% include 'lindemannrock-base/_components/info-box' with {
+            message: '',
+            type: 'error',
+            variant: 'colored',
+            margin: 'both',
+            boxId: 'mappingErrors',
+            messageId: 'mappingErrorText',
+            hidden: true
+        } only %}
+
+        <div class="buttons">
+            <a href="{{ url('smartlink-manager/import-export') }}" class="btn">{{ "Cancel"|t('smartlink-manager') }}</a>
+            <button type="submit" class="btn submit" id="previewBtn">{{ "Preview Import"|t('smartlink-manager') }}</button>
+        </div>
+    </form>
+
+    {% include 'lindemannrock-base/_components/plugin-credit' %}
+{% endblock %}
+
+{% js %}
+const mappingForm = document.getElementById('mapping-form');
+const mappingErrorDiv = document.getElementById('mappingErrors');
+const mappingErrorText = document.getElementById('mappingErrorText');
+
+mappingForm?.addEventListener('submit', function(e) {
+    const mappings = Array.from(document.querySelectorAll('.column-mapping')).map(m => m.value);
+    const hasSlug = mappings.includes('slug');
+
+    if (!hasSlug) {
+        e.preventDefault();
+        mappingErrorDiv.style.display = 'block';
+        mappingErrorText.innerHTML = '<strong>Required field not mapped: Slug</strong>';
+        mappingErrorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+    }
+
+    const nonEmpty = mappings.filter(v => v !== '');
+    if (nonEmpty.length !== new Set(nonEmpty).size) {
+        e.preventDefault();
+        mappingErrorDiv.style.display = 'block';
+        mappingErrorText.innerHTML = '<strong>Error: You cannot map multiple CSV columns to the same field</strong>';
+        mappingErrorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+    }
+
+    mappingErrorDiv.style.display = 'none';
+});
+
+document.querySelectorAll('.column-mapping').forEach(select => {
+    select.addEventListener('change', function() {
+        mappingErrorDiv.style.display = 'none';
+    });
+});
+{% endjs %}

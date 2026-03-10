@@ -390,6 +390,19 @@ class SmartLinkManager extends Plugin
             'when' => $settings->enableAnalytics,
         ];
 
+        $sections[] = [
+            'key' => 'import-export',
+            'label' => Craft::t('smartlink-manager', 'Import/Export'),
+            'url' => 'smartlink-manager/import-export',
+            'permissionsAny' => [
+                'smartLinkManager:manageImportExport',
+                'smartLinkManager:importLinks',
+                'smartLinkManager:exportLinks',
+                'smartLinkManager:viewImportHistory',
+                'smartLinkManager:clearImportHistory',
+            ],
+        ];
+
         if ($includeLogs) {
             $sections[] = [
                 'key' => 'logs',
@@ -502,6 +515,13 @@ class SmartLinkManager extends Plugin
             'smartlink-manager/analytics' => 'smartlink-manager/analytics/index',
             'smartlink-manager/analytics/<linkId:\d+>' => 'smartlink-manager/analytics/link',
             'smartlink-manager/analytics/export' => 'smartlink-manager/analytics/export',
+            'smartlink-manager/import-export' => 'smartlink-manager/import-export/index',
+            'smartlink-manager/import-export/upload' => 'smartlink-manager/import-export/upload',
+            'smartlink-manager/import-export/map' => 'smartlink-manager/import-export/map',
+            'smartlink-manager/import-export/preview' => 'smartlink-manager/import-export/preview',
+            'smartlink-manager/import-export/import' => 'smartlink-manager/import-export/import',
+            'smartlink-manager/import-export/export' => 'smartlink-manager/import-export/export',
+            'smartlink-manager/import-export/clear-logs' => 'smartlink-manager/import-export/clear-logs',
             'smartlink-manager/settings' => 'smartlink-manager/settings/index',
             'smartlink-manager/settings/general' => 'smartlink-manager/settings/general',
             'smartlink-manager/settings/analytics' => 'smartlink-manager/settings/analytics',
@@ -585,6 +605,23 @@ class SmartLinkManager extends Plugin
                     ],
                     'smartLinkManager:clearAnalytics' => [
                         'label' => Craft::t('smartlink-manager', 'Clear analytics'),
+                    ],
+                ],
+            ],
+            'smartLinkManager:manageImportExport' => [
+                'label' => Craft::t('smartlink-manager', 'Manage import/export'),
+                'nested' => [
+                    'smartLinkManager:importLinks' => [
+                        'label' => Craft::t('smartlink-manager', 'Import links'),
+                    ],
+                    'smartLinkManager:exportLinks' => [
+                        'label' => Craft::t('smartlink-manager', 'Export links'),
+                    ],
+                    'smartLinkManager:viewImportHistory' => [
+                        'label' => Craft::t('smartlink-manager', 'View import history'),
+                    ],
+                    'smartLinkManager:clearImportHistory' => [
+                        'label' => Craft::t('smartlink-manager', 'Clear import history'),
                     ],
                 ],
             ],

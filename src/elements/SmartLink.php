@@ -397,7 +397,7 @@ class SmartLink extends Element
                     'pluginName' => SmartLinkManager::$plugin->getSettings()->getPluralDisplayName(),
                 ]),
                 'criteria' => [],
-                'defaultSort' => ['dateCreated', 'desc'],
+                'defaultSort' => ['postDate', 'desc'],
             ],
         ];
     }
@@ -508,7 +508,6 @@ class SmartLink extends Element
             'status',
             'clicks',
             'postDate',
-            'dateCreated',
         ];
     }
 

@@ -1,0 +1,118 @@
+{% extends "smartlink-manager/_layouts/cp" %}
+{% set title = "Import/Export"|t('smartlink-manager') %}
+{% set fullPageForm = false %}
+{% set selectedSubnavItem = 'import-export' %}
+
+{% set crumbs = [
+    { label: smartlinkHelper.fullName|t('smartlink-manager'), url: url('smartlink-manager') },
+    { label: 'Import/Export'|t('smartlink-manager'), url: url('smartlink-manager/import-export') }
+] %}
+{% set canImportExport = canImport or canExport %}
+{% set tabs = {} %}
+{% if canImportExport %}
+    {% set tabs = tabs|merge({
+        importExport: {
+            label: 'Import/Export'|t('smartlink-manager'),
+            url: '#import-export',
+        },
+    }) %}
+{% endif %}
+{% if canViewHistory %}
+    {% set tabs = tabs|merge({
+        importHistory: {
+            label: 'Import History'|t('smartlink-manager'),
+            url: '#import-history',
+        },
+    }) %}
+{% endif %}
+{% if not canImportExport and canViewHistory %}
+    {% set selectedTab = 'importHistory' %}
+{% endif %}
+
+{% set maxRows = importLimits.maxRows ?? 4000 %}
+{% set maxBytes = importLimits.maxBytes ?? 5242880 %}
+{% set maxSize = craft.app.formatter.asShortSize(maxBytes, 2) %}
+
+{% block content %}
+    <div id="import-export">
+        <h2 style="margin-top: 0;">{{ "Export Smart Links"|t('smartlink-manager') }}</h2>
+
+        {% if canExport %}
+            <p>{{ "Download all your current smart links as a CSV file for backup or migration to another site."|t('smartlink-manager') }}</p>
+            <form method="post" action="{{ actionUrl('smartlink-manager/import-export/export') }}" style="margin-bottom: 50px;">
+                {{ csrfInput() }}
+                <button type="submit" class="btn secondary">{{ "Export All Smart Links as CSV"|t('smartlink-manager') }}</button>
+            </form>
+        {% else %}
+            <p class="light">{{ "You do not have permission to export smart links."|t('smartlink-manager') }}</p>
+        {% endif %}
+
+        <hr>
+
+        <h2>{{ "Import Smart Links"|t('smartlink-manager') }}</h2>
+
+        {% set csvFormatTip %}
+            <h4>{{ "CSV Format"|t('smartlink-manager') }}</h4>
+            <p><strong>{{ "Required columns:"|t('smartlink-manager') }}</strong> slug, fallbackUrl</p>
+            <p><strong>{{ "Optional columns:"|t('smartlink-manager') }}</strong> title, description, iosUrl, androidUrl, huaweiUrl, amazonUrl, windowsUrl, macUrl, imageId, imageSize, enabled, siteId, siteHandle, trackAnalytics, qrCodeEnabled, qrCodeSize, qrCodeColor, qrCodeBgColor, qrCodeEyeColor, qrCodeFormat, qrLogoId, hideTitle, languageDetection, postDate, dateExpired</p>
+            <pre style="background: #f3f4f6; padding: 8px; border-radius: 4px; font-size: 12px;">slug,title,fallbackUrl,iosUrl,androidUrl,imageId,imageSize,siteHandle,enabled,trackAnalytics,qrCodeEnabled,postDate,dateExpired
+my-app-launch,My App Launch,https://example.com/fallback,https://apps.apple.com/...,https://play.google.com/...,1727,xl,en,1,1,1,2025-12-01 21:31:00,</pre>
+        {% endset %}
+
+        {% if canImport %}
+            {% include 'lindemannrock-base/_partials/import-csv' with {
+                action: actionUrl('smartlink-manager/import-export/upload'),
+                formId: 'uploadForm',
+                title: 'Import from CSV'|t('smartlink-manager'),
+                description: "Import smart links from CSV. You'll map columns and preview before importing."|t('smartlink-manager'),
+                csvFormatTip: csvFormatTip,
+                fileLabel: 'CSV File'|t('smartlink-manager'),
+                fileInstructions: 'Select a CSV file to import smart links'|t('smartlink-manager'),
+                delimiterLabel: 'CSV Delimiter'|t('smartlink-manager'),
+                delimiterInstructions: 'Character used to separate values in your CSV (auto-detect is default)'|t('smartlink-manager'),
+                delimiterValue: 'auto',
+                delimiterOptions: {
+                    'auto': 'Auto (detect)'|t('smartlink-manager'),
+                    ',': 'Comma (,)'|t('smartlink-manager'),
+                    ';': 'Semicolon (;)'|t('smartlink-manager'),
+                    "\t": 'Tab'|t('smartlink-manager'),
+                    '|': 'Pipe (|)'|t('smartlink-manager'),
+                },
+                showBackupToggle: false,
+                infoBoxMessage: 'The maximum file size is {size} and the import is limited to {rows} rows per file.'|t('smartlink-manager', {
+                    size: maxSize,
+                    rows: maxRows|number_format
+                }),
+                submitLabel: 'Upload & Map Columns'|t('smartlink-manager'),
+            } %}
+        {% else %}
+            <p class="light">{{ "You do not have permission to import smart links."|t('smartlink-manager') }}</p>
+        {% endif %}
+    </div>
+
+    {% if canViewHistory %}
+        {% include 'lindemannrock-base/_partials/import-history' with {
+            sectionId: 'import-history',
+            title: 'Import History'|t('smartlink-manager'),
+            importHistory: importHistory,
+            canClearHistory: currentUser.can('smartLinkManager:clearImportHistory'),
+            clearButtonId: 'clear-logs-btn',
+            clearLabel: 'Clear history'|t('smartlink-manager'),
+            emptyMessage: 'No import history yet.'|t('smartlink-manager'),
+            translationCategory: 'smartlink-manager',
+        } only %}
+    {% endif %}
+
+    {% include 'lindemannrock-base/_components/plugin-credit' %}
+{% endblock %}
+
+{% js %}
+    {% include 'lindemannrock-base/_partials/import-history-js' with {
+        tabStorageKey: 'showHistoryTab',
+        tabSelector: 'a[href="#import-history"]',
+        clearButtonId: 'clear-logs-btn',
+        clearAction: 'smartlink-manager/import-export/clear-logs',
+        confirmMessage: 'Are you sure you want to clear all import logs? This action cannot be undone.'|t('smartlink-manager'),
+        clearErrorMessage: 'Failed to clear history.'|t('smartlink-manager'),
+    } only %}
+{% endjs %}
