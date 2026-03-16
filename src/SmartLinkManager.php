@@ -338,9 +338,6 @@ class SmartLinkManager extends Plugin
         if ($item) {
             $item['label'] = $settings->getFullName();
 
-            // Use Craft's built-in link icon
-            $item['icon'] = '@appicons/link.svg';
-
             $sections = $this->getCpSections($settings);
             $item['subnav'] = CpNavHelper::buildSubnav($user, $settings, $sections);
 

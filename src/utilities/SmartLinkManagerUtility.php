@@ -44,7 +44,7 @@ class SmartLinkManagerUtility extends Utility
      */
     public static function icon(): ?string
     {
-        return 'link';
+        return '@lindemannrock/smartlinkmanager/icon-mask.svg';
     }
 
     /**
