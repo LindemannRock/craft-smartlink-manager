@@ -13,6 +13,7 @@ use craft\helpers\App;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
+use lindemannrock\base\helpers\AnalyticsIpHelper;
 use lindemannrock\base\traits\GeoLookupTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -79,20 +80,19 @@ class AnalyticsTrackingService
             $db = Craft::$app->getDb();
 
             $settings = SmartLinkManager::$plugin->getSettings();
-            if ($settings->anonymizeIpAddress && isset($metadata['ip'])) {
-                $metadata['ip'] = $this->_anonymizeIp($metadata['ip']);
+            $ipState = AnalyticsIpHelper::prepare(
+                $metadata['ip'] ?? null,
+                $settings->anonymizeIpAddress,
+                $settings->enableGeoDetection,
+                fn(string $ip): string => $this->_hashIpWithSalt($ip),
+            );
+
+            if ($ipState['hashError'] !== null) {
+                $this->logError('Failed to hash IP address', ['error' => $ipState['hashError']->getMessage()]);
             }
 
-            $ipHash = null;
-            if (isset($metadata['ip'])) {
-                try {
-                    $ipHash = $this->_hashIpWithSalt($metadata['ip']);
-                } catch (\Exception $e) {
-                    $this->logError('Failed to hash IP address', ['error' => $e->getMessage()]);
-                    $ipHash = null;
-                    unset($metadata['ip']);
-                }
-            }
+            $ipHash = $ipState['hashedIp'];
+            $geoLookupIp = $ipState['geoLookupIp'];
 
             $data = [
                 'linkId' => $linkId,
@@ -120,8 +120,8 @@ class AnalyticsTrackingService
                 'uid' => StringHelper::UUID(),
             ];
 
-            if (SmartLinkManager::$plugin->getSettings()->enableGeoDetection && isset($metadata['ip'])) {
-                $location = $this->getLocationFromIp($metadata['ip']);
+            if ($geoLookupIp) {
+                $location = $this->getLocationFromIp($geoLookupIp);
                 if ($location) {
                     $data['country'] = $location['countryCode'];
                     $data['city'] = $location['city'];
@@ -282,33 +282,6 @@ class AnalyticsTrackingService
             ->execute();
 
         $smartLink->hits++;
-    }
-
-    /**
-     * Anonymize IP address for privacy
-     * IPv4: Masks last octet (192.168.1.123 -> 192.168.1.0)
-     * IPv6: Masks last 80 bits (keeps first 48 bits)
-     *
-     * @param string $ip
-     * @return string
-     */
-    private function _anonymizeIp(string $ip): string
-    {
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            return preg_replace('/\.\d+$/', '.0', $ip);
-        } elseif (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-            $binary = inet_pton($ip);
-            if ($binary === false) {
-                return $ip;
-            }
-
-            $anonymized = substr($binary, 0, 6) . str_repeat("\0", 10);
-
-            $result = inet_ntop($anonymized);
-            return $result !== false ? $result : $ip;
-        }
-
-        return $ip;
     }
 
     /**
