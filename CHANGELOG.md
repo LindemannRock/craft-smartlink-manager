@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.25.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.24.0...v5.25.0) (2026-03-17)
+
+
+### Features
+
+* **analytics:** improve IP handling and remove anonymization method ([cd61e77](https://github.com/LindemannRock/craft-smartlink-manager/commit/cd61e77cd04c694a54894b79b7532f86d9f011b3))
+
 ## [5.24.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.23.0...v5.24.0) (2026-03-17)
 
 
