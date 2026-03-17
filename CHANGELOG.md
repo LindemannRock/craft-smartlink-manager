@@ -1,5 +1,24 @@
 # Changelog
 
+## [5.24.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.23.0...v5.24.0) (2026-03-17)
+
+
+### Features
+
+* add installation experience details for SmartLink Manager ([2c1c70f](https://github.com/LindemannRock/craft-smartlink-manager/commit/2c1c70f4054ae312439934a7cad7eae747ef6b67))
+* **analytics:** implement build process and update asset management ([70104cc](https://github.com/LindemannRock/craft-smartlink-manager/commit/70104cc9a7c5ea717bceeff8fc21d7cc2b187b57))
+* **import-export:** add CSV import/export functionality with history tracking ([e9fdf27](https://github.com/LindemannRock/craft-smartlink-manager/commit/e9fdf27f27dbf3ad0cd213a5ea28acd24f019bfd))
+* **settings:** add usePrefix setting for smart link URL generation ([a18c958](https://github.com/LindemannRock/craft-smartlink-manager/commit/a18c958bc4d718f2b55e91c687ea05039b02e579))
+
+
+### Bug Fixes
+
+* **icon:** update icon path to use new SVG mask file ([be86101](https://github.com/LindemannRock/craft-smartlink-manager/commit/be861017368c2b6bb6ba820200d5d6c278793776))
+* **import-export:** update import completion messages to include plugin name ([a49a2e7](https://github.com/LindemannRock/craft-smartlink-manager/commit/a49a2e758ab43322ac5bdf35638cd14c90d6d7c8))
+* **migrations:** update smartlinkmanager settings with new fields ([870dc2d](https://github.com/LindemannRock/craft-smartlink-manager/commit/870dc2d467fd9225423b056498b5b9f37090c79f))
+* **QrCodeController, RedirectController:** enhance smart link retrieval logic ([febfba4](https://github.com/LindemannRock/craft-smartlink-manager/commit/febfba41ddfc5316add0841d48d720ac96ee491b))
+* **settings:** remove redundant save buttons from settings templates ([265f8ca](https://github.com/LindemannRock/craft-smartlink-manager/commit/265f8ca8d93643ced46a930f008fe6bc321d166f))
+
 ## [5.23.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.1...v5.23.0) (2026-03-04)
 
 
