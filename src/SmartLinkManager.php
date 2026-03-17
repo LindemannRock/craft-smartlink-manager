@@ -100,7 +100,17 @@ class SmartLinkManager extends Plugin
             $this,
             'smartlinkHelper',
             ['smartLinkManager:viewSystemLogs'],
-            ['smartLinkManager:downloadSystemLogs']
+            ['smartLinkManager:downloadSystemLogs'],
+            [
+                'installExperience' => [
+                    'headline' => 'SmartLink Manager',
+                    'body' => 'Manage smart links, route users by device, and track engagement from one control panel workspace.',
+                    'ctaLabel' => 'Open SmartLink Manager',
+                    'ctaUrl' => 'smartlink-manager',
+                    'redirectUri' => 'smartlink-manager',
+                    'confettiPreset' => 'surprise',
+                ],
+            ]
         );
         PluginHelper::applyPluginNameFromConfig($this);
 
