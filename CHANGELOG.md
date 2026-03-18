@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.25.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.0...v5.25.1) (2026-03-17)
+
+
+### Miscellaneous Chores
+
+* **workflows:** update permissions in release-please workflow ([01e30a2](https://github.com/LindemannRock/craft-smartlink-manager/commit/01e30a2f48f7b07d1b555c938b3c4b33d14a0d3a))
+
 ## [5.25.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.24.0...v5.25.0) (2026-03-17)
 
 
