@@ -133,9 +133,8 @@ class RedirectController extends Controller
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
         $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
-        // Set cache headers - this page can be fully cached
         $response = Craft::$app->getResponse();
-        $response->headers->set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+        $this->applyNoStoreHeaders($response);
 
         // Render the template - all links will point to action URLs for tracking
         $settings = SmartLinkManager::$plugin->getSettings();
@@ -282,8 +281,10 @@ class RedirectController extends Controller
             };
         }
 
+        $shouldTrack = $smartLink->trackAnalytics && SmartLinkManager::$plugin->getSettings()->enableAnalytics;
+
         // Track the click if analytics are enabled
-        if ($smartLink->trackAnalytics && SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
+        if ($shouldTrack) {
             // Normalize platform value to match DeviceInfo valid values
             $normalizedPlatform = match ($platform) {
                 'mac' => 'macos',
@@ -327,11 +328,19 @@ class RedirectController extends Controller
 
         // Redirect to destination
         if ($destinationUrl) {
-            return $this->redirect($this->_sanitizeUrl($destinationUrl), 302);
+            $response = $this->redirect($this->_sanitizeUrl($destinationUrl), 302);
+            if ($shouldTrack) {
+                $this->applyNoStoreHeaders($response);
+            }
+            return $response;
         }
 
         // No destination URL available, redirect to fallback
-        return $this->redirect($this->_sanitizeUrl($smartLink->fallbackUrl), 302);
+        $response = $this->redirect($this->_sanitizeUrl($smartLink->fallbackUrl), 302);
+        if ($shouldTrack) {
+            $this->applyNoStoreHeaders($response);
+        }
+        return $response;
     }
 
     /**
@@ -418,6 +427,13 @@ class RedirectController extends Controller
             ]);
             return null;
         }
+    }
+
+    private function applyNoStoreHeaders(Response $response): void
+    {
+        $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
     }
 
     /**
