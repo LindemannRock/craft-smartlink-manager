@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.25.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.1...v5.25.2) (2026-03-18)
+
+
+### Bug Fixes
+
+* **redirect:** apply no-store headers for cached responses ([3fe36b6](https://github.com/LindemannRock/craft-smartlink-manager/commit/3fe36b6c8f48fbf4b611333006e0ee6d7a9628cc))
+
 ## [5.25.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.0...v5.25.1) (2026-03-17)
 
 
