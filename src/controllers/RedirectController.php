@@ -162,7 +162,7 @@ class RedirectController extends Controller
 
         // Validate platform parameter - only allow valid values
         $validPlatforms = ['auto', 'ios', 'android', 'huawei', 'amazon', 'windows', 'mac', 'fallback'];
-        if (!in_array($platform, $validPlatforms)) {
+        if (!in_array($platform, $validPlatforms, true)) {
             // Invalid platform, default to auto
             $platform = 'auto';
         }

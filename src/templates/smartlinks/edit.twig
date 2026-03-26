@@ -824,16 +824,17 @@
             downloadUrl += '&eyeColor=' + eyeColor;
         }
 
-        // Create temporary link and click it
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        {% set filename = craft.smartLinks.settings.qrDownloadFilename ?? '{slug}-qr-{size}' %}
-        {% set filename = filename|replace({'{slug}': smartLink.slug}) %}
-        const finalFilename = '{{ filename }}'.replace('{size}', size).replace('{format}', format);
-        link.download = `${finalFilename}.${format}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Trigger the download in a hidden iframe so Craft's unsaved-changes
+        // guard doesn't treat it as leaving the editor page.
+        let downloadFrame = document.getElementById('smartlink-qr-download-frame');
+        if (!downloadFrame) {
+            downloadFrame = document.createElement('iframe');
+            downloadFrame.id = 'smartlink-qr-download-frame';
+            downloadFrame.style.display = 'none';
+            document.body.appendChild(downloadFrame);
+        }
+
+        downloadFrame.src = downloadUrl;
     });
 
     // Reset QR code settings to plugin defaults

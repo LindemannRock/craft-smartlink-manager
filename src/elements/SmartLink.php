@@ -1138,7 +1138,7 @@ class SmartLink extends Element
             $primarySiteId = Craft::$app->sites->getPrimarySite()->id;
             
             // For new SmartLinks (not duplications), ensure unique slug
-            if (!$this->duplicateOf && $this->slug && ($this->siteId == $primarySiteId || !$this->propagating)) {
+            if (!$this->duplicateOf && $this->slug && ($this->siteId === $primarySiteId || !$this->propagating)) {
                 $baseSlug = $this->slug;
                 $testSlug = $baseSlug;
                 $num = 1;
@@ -1175,7 +1175,7 @@ class SmartLink extends Element
             // For other sites, slug will be the same
             $primarySiteId = Craft::$app->sites->getPrimarySite()->id;
 
-            if ($this->siteId == $primarySiteId || !$this->propagating) {
+            if ($this->siteId === $primarySiteId || !$this->propagating) {
                 // Ensure duplicateOf has its content loaded
                 if (!$this->duplicateOf->fallbackUrl) {
                     $this->duplicateOf->loadContent();
@@ -1227,7 +1227,7 @@ class SmartLink extends Element
                 }
                 
                 // Generate unique slug only on primary site
-                if ($this->siteId == $primarySiteId) {
+                if ($this->siteId === $primarySiteId) {
                     $baseSlug = $this->duplicateOf->slug ?: $this->slug;
                     $testSlug = $baseSlug;
                     $num = 1;

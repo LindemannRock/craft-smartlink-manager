@@ -791,7 +791,7 @@ class Settings extends Model
             return true;
         }
 
-        return in_array($siteId, $this->enabledSites);
+        return in_array($siteId, $this->enabledSites, true);
     }
 
     /**

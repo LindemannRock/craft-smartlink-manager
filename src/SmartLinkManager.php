@@ -488,10 +488,10 @@ class SmartLinkManager extends Plugin
 
         // Return only sites that are enabled for this plugin AND editable by the current user
         return array_filter(Craft::$app->getSites()->getAllSites(), function($site) use ($enabledSiteIds, $editableSiteIds) {
-            if (!in_array($site->id, $enabledSiteIds)) {
+            if (!in_array($site->id, $enabledSiteIds, true)) {
                 return false;
             }
-            if ($editableSiteIds !== null && !in_array($site->id, $editableSiteIds)) {
+            if ($editableSiteIds !== null && !in_array($site->id, $editableSiteIds, true)) {
                 return false;
             }
             return true;

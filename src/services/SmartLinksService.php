@@ -55,26 +55,6 @@ class SmartLinksService extends Component
     // =========================================================================
 
     /**
-     * Create a new smart link
-     *
-     * @param array $config
-     * @return SmartLink
-     */
-    public function createSmartLink(array $config): SmartLink
-    {
-        $smartLink = new SmartLink();
-
-        // Set attributes
-        foreach ($config as $key => $value) {
-            if ($smartLink->canSetProperty($key)) {
-                $smartLink->$key = $value;
-            }
-        }
-
-        return $smartLink;
-    }
-
-    /**
      * Save a smart link
      *
      * @param SmartLink $smartLink
@@ -111,25 +91,6 @@ class SmartLinksService extends Component
         }
 
         return $success;
-    }
-
-    /**
-     * Update a smart link
-     *
-     * @param SmartLink $smartLink
-     * @param array $config
-     * @return bool
-     */
-    public function updateSmartLink(SmartLink $smartLink, array $config): bool
-    {
-        // Update attributes
-        foreach ($config as $key => $value) {
-            if ($smartLink->canSetProperty($key)) {
-                $smartLink->$key = $value;
-            }
-        }
-
-        return $this->saveSmartLink($smartLink);
     }
 
     /**
@@ -184,20 +145,6 @@ class SmartLinksService extends Component
     }
 
     /**
-     * Get all active smart links
-     *
-     * @param int|null $siteId
-     * @return SmartLink[]
-     */
-    public function getActiveSmartLinks(?int $siteId = null): array
-    {
-        return SmartLink::find()
-            ->siteId($siteId)
-            ->status(SmartLink::STATUS_ENABLED)
-            ->all();
-    }
-
-    /**
      * Generate QR code for a smart link
      *
      * @param SmartLink $smartLink
@@ -219,78 +166,6 @@ class SmartLinksService extends Component
     public function generateQrCodeDataUrl(SmartLink $smartLink, array $options = []): string
     {
         return SmartLinkManager::$plugin->qrCode->generateQrCodeDataUrl($smartLink->getRedirectUrl(), $options);
-    }
-
-    /**
-     * Import smart links from array
-     *
-     * @param array $links
-     * @return array Results with 'success' and 'errors' keys
-     */
-    public function importSmartLinks(array $links): array
-    {
-        $results = [
-            'success' => 0,
-            'errors' => [],
-        ];
-
-        foreach ($links as $linkData) {
-            try {
-                $smartLink = $this->createSmartLink($linkData);
-
-                if ($this->saveSmartLink($smartLink)) {
-                    $results['success']++;
-                } else {
-                    $results['errors'][] = [
-                        'data' => $linkData,
-                        'errors' => $smartLink->getErrors(),
-                    ];
-                }
-            } catch (\Exception $e) {
-                $results['errors'][] = [
-                    'data' => $linkData,
-                    'errors' => ['exception' => $e->getMessage()],
-                ];
-            }
-        }
-
-        return $results;
-    }
-
-    /**
-     * Export smart links
-     *
-     * @param SmartLink[] $smartLinks
-     * @return array
-     */
-    public function exportSmartLinks(array $smartLinks): array
-    {
-        $data = [];
-
-        foreach ($smartLinks as $smartLink) {
-            $data[] = [
-                'name' => $smartLink->title,
-                'slug' => $smartLink->slug,
-                'description' => $smartLink->description,
-                'iosUrl' => $smartLink->iosUrl,
-                'androidUrl' => $smartLink->androidUrl,
-                'huaweiUrl' => $smartLink->huaweiUrl,
-                'amazonUrl' => $smartLink->amazonUrl,
-                'windowsUrl' => $smartLink->windowsUrl,
-                'macUrl' => $smartLink->macUrl,
-                'fallbackUrl' => $smartLink->fallbackUrl,
-                'trackAnalytics' => $smartLink->trackAnalytics,
-                'enabled' => $smartLink->enabled,
-                'qrCodeEnabled' => $smartLink->qrCodeEnabled,
-                'qrCodeSize' => $smartLink->qrCodeSize,
-                'qrCodeColor' => $smartLink->qrCodeColor,
-                'qrCodeBgColor' => $smartLink->qrCodeBgColor,
-                'languageDetection' => $smartLink->languageDetection,
-                'localizedUrls' => $smartLink->localizedUrls,
-            ];
-        }
-
-        return $data;
     }
 
     /**
@@ -345,13 +220,13 @@ class SmartLinksService extends Component
 
         // Check if Redirect Manager integration is enabled
         $enabledIntegrations = $settings->enabledIntegrations ?? [];
-        if (!in_array('redirect-manager', $enabledIntegrations)) {
+        if (!in_array('redirect-manager', $enabledIntegrations, true)) {
             return;
         }
 
         // Check if slug change event is enabled
         $redirectManagerEvents = $settings->redirectManagerEvents ?? [];
-        if (!in_array('slug-change', $redirectManagerEvents)) {
+        if (!in_array('slug-change', $redirectManagerEvents, true)) {
             return;
         }
 

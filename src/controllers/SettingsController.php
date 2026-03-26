@@ -405,6 +405,13 @@ class SettingsController extends Controller
             }
         }
 
+        // Restrict to attributes belonging to the current settings section
+        $section = $this->_validSettingsSection();
+        $allowedAttributes = $this->_validationAttributesForSection($section);
+        if ($allowedAttributes) {
+            $settingsData = array_intersect_key($settingsData, array_flip($allowedAttributes));
+        }
+
         // Only update fields that were posted and are not overridden by config
         foreach ($settingsData as $key => $value) {
             if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {
@@ -432,8 +439,7 @@ class SettingsController extends Controller
 
         // Validate only fields belonging to the current settings section.
         // This prevents unrelated tabs from blocking save with non-inline errors.
-        $section = $this->_validSettingsSection();
-        $attributesToValidate = $this->_validationAttributesForSection($section);
+        $attributesToValidate = $allowedAttributes;
         $attributesToValidate = array_values(array_filter(
             $attributesToValidate,
             fn(string $attribute): bool => !$settings->isOverriddenByConfig($attribute),

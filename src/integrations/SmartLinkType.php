@@ -74,7 +74,7 @@ class SmartLinkType extends BaseElementLinkType
         // Check if smart links are enabled for this site
         $settings = SmartLinkManager::$plugin->getSettings();
         $enabledSites = $settings->enabledSites ?? [];
-        $siteEnabled = empty($enabledSites) || in_array($siteId, $enabledSites);
+        $siteEnabled = empty($enabledSites) || in_array($siteId, $enabledSites, true);
 
         // Parse the value to get the element
         $smartLink = null;
@@ -278,7 +278,7 @@ class SmartLinkType extends BaseElementLinkType
         // Check if smart links are enabled for the current site
         $settings = SmartLinkManager::$plugin->getSettings();
         $enabledSites = $settings->enabledSites ?? [];
-        $siteEnabled = empty($enabledSites) || in_array($currentSiteId, $enabledSites);
+        $siteEnabled = empty($enabledSites) || in_array($currentSiteId, $enabledSites, true);
 
         // If site is not enabled, return null (field will be empty)
         if (!$siteEnabled) {

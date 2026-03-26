@@ -151,18 +151,6 @@ class AnalyticsService extends Component
     }
 
     /**
-     * Get aggregated stats for multiple smart links
-     *
-     * @param array $linkIds
-     * @param string $period
-     * @return array
-     */
-    public function getAggregatedStats(array $linkIds, string $period = '30d'): array
-    {
-        return $this->_summary->getAggregatedStats($linkIds, $period);
-    }
-
-    /**
      * Get top smart links by clicks
      *
      * @param string $dateRange

@@ -46,8 +46,21 @@ class ImportExportController extends Controller
                 ->limit(20)
                 ->all();
 
+            // Pre-fetch all users in one query to avoid N+1
+            $userIds = array_unique(array_filter(array_map(
+                fn($r) => $r->userId,
+                $records,
+            )));
+            $usersById = [];
+            if ($userIds) {
+                $usersById = \craft\elements\User::find()
+                    ->id($userIds)
+                    ->indexBy('id')
+                    ->all();
+            }
+
             foreach ($records as $record) {
-                $user = Craft::$app->getUsers()->getUserById($record->userId);
+                $user = $usersById[$record->userId] ?? null;
                 $history[] = [
                     'formattedDate' => DateFormatHelper::formatDatetime($record->dateCreated),
                     'user' => $user?->username ?? Craft::t('smartlink-manager', 'Unknown'),
@@ -504,7 +517,8 @@ class ImportExportController extends Controller
 
                     $imported++;
                 }
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
+                Craft::error("Import failed for slug group: {$e->getMessage()}", __METHOD__);
                 $failed += count($slugRows);
             }
         }

@@ -242,41 +242,6 @@ class AnalyticsSummaryService
     }
 
     /**
-     * Get aggregated stats for multiple smart links
-     *
-     * @param array $linkIds
-     * @param string $period
-     * @return array
-     */
-    public function getAggregatedStats(array $linkIds, string $period = '30d'): array
-    {
-        $query = (new Query())
-            ->from(['{{%smartlinkmanager_analytics}}'])
-            ->where(['in', 'linkId', $linkIds]);
-
-        $seconds = $this->_periodToSeconds($period);
-        if ($seconds > 0) {
-            $cutoff = (new \DateTime())->modify("-{$seconds} seconds");
-            $query->andWhere(['>=', 'dateCreated', Db::prepareDateForDb($cutoff)]);
-        }
-
-        $stats = [];
-        foreach ($linkIds as $linkId) {
-            $linkQuery = (clone $query)->andWhere(['linkId' => $linkId]);
-            $stats[$linkId] = [
-                'total' => (int) $linkQuery->count(),
-                'devices' => $linkQuery
-                    ->select(['deviceType', 'COUNT(*) as count'])
-                    ->groupBy(['deviceType'])
-                    ->indexBy('deviceType')
-                    ->column(),
-            ];
-        }
-
-        return $stats;
-    }
-
-    /**
      * Get top smart links by clicks
      *
      * @param string $dateRange
@@ -475,7 +440,7 @@ class AnalyticsSummaryService
             $clickType = $metadata['clickType'] ?? 'redirect';
             $destinationUrl = '';
 
-            if ($clickType == 'button') {
+            if ($clickType === 'button') {
                 $destinationUrl = $metadata['buttonUrl'] ?? '';
             } else {
                 $destinationUrl = $metadata['redirectUrl'] ?? $metadata['buttonUrl'] ?? '';
@@ -664,30 +629,5 @@ class AnalyticsSummaryService
             'total' => $totalButtonClicks,
             'byPlatform' => $platformCounts,
         ];
-    }
-
-    /**
-     * Convert period string to seconds
-     *
-     * @param string $period
-     * @return int
-     */
-    private function _periodToSeconds(string $period): int
-    {
-        $matches = [];
-        if (!preg_match('/^(\d+)([hdwmy])$/', $period, $matches)) {
-            return 0;
-        }
-
-        $value = (int) $matches[1];
-        $unit = $matches[2];
-
-        return match ($unit) {
-            'h' => $value * 3600,
-            'd' => $value * 86400,
-            'w' => $value * 604800,
-            'm' => $value * 2592000,
-            'y' => $value * 31536000,
-        };
     }
 }

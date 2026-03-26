@@ -9,7 +9,6 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
-use craft\base\Element;
 use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
 use lindemannrock\base\helpers\CpNavHelper;
@@ -76,7 +75,7 @@ class SmartlinksController extends Controller
         $enabledSites = SmartLinkManager::$plugin->getEnabledSites();
         $enabledSiteIds = array_map(fn($s) => $s->id, $enabledSites);
 
-        if (!in_array($currentSite->id, $enabledSiteIds)) {
+        if (!in_array($currentSite->id, $enabledSiteIds, true)) {
             $firstSite = reset($enabledSites);
             if ($firstSite) {
                 return $this->redirect('smartlink-manager?site=' . $firstSite->handle);

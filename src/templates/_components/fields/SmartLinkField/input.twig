@@ -40,15 +40,16 @@
             var elementId = $element.data('id');
             
             if (!$element.data('preview-loaded')) {
-                $.get('{{ actionUrl('smartlink-manager/smartlink-manager/get-details') }}', {
+                $.get('{{ actionUrl('smartlink-manager/smartlinks/get-details') }}', {
                     id: elementId
                 }, function(response) {
                     if (response.success) {
                         var smartLink = response.smartLink;
+                        var esc = Craft.escapeHtml;
                         var tooltip = '<div class="smart-link-preview">' +
-                            '<strong>' + smartLink.name + '</strong><br>' +
-                            '<span class="light">' + smartLink.redirectUrl + '</span><br>' +
-                            '<span class="light">' + {{ "Clicks:"|t('smartlink-manager')|json_encode|raw }} + ' ' + smartLink.clicks + '</span>' +
+                            '<strong>' + esc(smartLink.name) + '</strong><br>' +
+                            '<span class="light">' + esc(smartLink.redirectUrl) + '</span><br>' +
+                            '<span class="light">' + {{ "Clicks:"|t('smartlink-manager')|json_encode|raw }} + ' ' + esc(String(smartLink.clicks)) + '</span>' +
                             '</div>';
                         
                         $element.attr('title', '').data('preview-loaded', true);

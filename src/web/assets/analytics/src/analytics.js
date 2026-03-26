@@ -88,7 +88,7 @@
         function setPeakInfo(text) {
             var el = document.getElementById('peak-hour-info');
             if (el) {
-                el.textContent = text || '';
+                el.innerHTML = text || '';
             }
         }
 

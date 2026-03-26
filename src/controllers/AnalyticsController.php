@@ -339,7 +339,7 @@ class AnalyticsController extends Controller
     {
         $allowedSiteIds = $this->_getAllowedSiteIds();
 
-        if ($siteId !== null && in_array($siteId, $allowedSiteIds)) {
+        if ($siteId !== null && in_array($siteId, $allowedSiteIds, true)) {
             return $siteId;
         }
 
