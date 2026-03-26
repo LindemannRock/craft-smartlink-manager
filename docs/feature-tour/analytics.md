@@ -109,6 +109,18 @@ The analytics dashboard is available in the **SmartLink Manager** CP section und
 
 The dashboard date range filter applies to all charts and stats simultaneously.
 
+## Redirect Tracking Under Cache
+
+SmartLink Manager records redirect and QR-scan analytics on the internal `smartlink-manager/redirect/go` action route before the final redirect is issued.
+
+This matters because:
+
+- the public redirect or QR page can be cached independently
+- the tracked hop itself is the server-side analytics write
+- when analytics are active, the final redirect response from that route uses `no-store` headers
+
+That tracked-hop architecture is why SmartLink redirect and QR analytics remain reliable under cache in the normal flow.
+
 ## Exporting Analytics Data
 
 Export click data from the analytics dashboard using the **Export** button. Three formats are available:

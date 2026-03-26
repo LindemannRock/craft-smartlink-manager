@@ -82,7 +82,7 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 3. **Is analytics enabled on the specific smart link?** On the smart link edit page, confirm **Track Analytics** is checked.
 
-4. **Is the queue running?** Analytics writes may be processed via the Craft queue. Check **Utilities → Queue** for stuck or failed jobs.
+4. **Are requests reaching the tracked hop?** SmartLink click analytics are written synchronously on the internal `smartlink-manager/redirect/go` action route, not via the Craft queue. If counts are missing, inspect plugin logs and confirm your redirect/QR flow is still reaching that action.
 
 5. **Check the logs** for database write errors that might indicate a missing `smartlinkmanager_analytics` table or permission issue.
 

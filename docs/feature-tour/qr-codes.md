@@ -6,6 +6,15 @@ Every smart link in SmartLink Manager can have a QR code. Each QR code encodes t
 
 QR codes are generated dynamically by the `bacon/bacon-qr-code` library and cached to avoid regenerating on every request. Each QR code encodes the smart link's public URL (e.g., `https://example.com/qr/my-app`).
 
+When a visitor scans that QR code, the analytics-safe redirect flow is:
+
+1. the QR code opens the smart link's public URL
+2. SmartLink renders its normal redirect page if needed
+3. navigation passes through the internal `smartlink-manager/redirect/go` action
+4. analytics are written there before the final redirect is issued
+
+That internal tracked hop is the important part under browser/CDN/static cache, not the QR image endpoint itself.
+
 When QR code generation is enabled on a smart link, two endpoints become available:
 
 | URL | Returns |
