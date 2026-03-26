@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.25.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.2...v5.25.3) (2026-03-26)
+
+
+### Bug Fixes
+
+* **controllers:** enforce strict type checking in array checks ([bfd87b5](https://github.com/LindemannRock/craft-smartlink-manager/commit/bfd87b5e506945f24f2e979cc27cf167b2f415d6))
+
+
+### Miscellaneous Chores
+
+* **release-please:** remove issues permission and skip-labeling option ([3c5a9a3](https://github.com/LindemannRock/craft-smartlink-manager/commit/3c5a9a314cbdb1dd86cc9996287f468c7fc01b3f))
+
 ## [5.25.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.1...v5.25.2) (2026-03-18)
 
 
