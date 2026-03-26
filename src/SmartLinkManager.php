@@ -103,9 +103,9 @@ class SmartLinkManager extends Plugin
             ['smartLinkManager:downloadSystemLogs'],
             [
                 'installExperience' => [
-                    'headline' => 'SmartLink Manager',
-                    'body' => 'Manage smart links, route users by device, and track engagement from one control panel workspace.',
-                    'ctaLabel' => 'Open SmartLink Manager',
+                    'headline' => Craft::t('smartlink-manager', 'SmartLink Manager'),
+                    'body' => Craft::t('smartlink-manager', 'Manage smart links, route users by device, and track engagement from one control panel workspace.'),
+                    'ctaLabel' => Craft::t('smartlink-manager', 'Open SmartLink Manager'),
                     'ctaUrl' => 'smartlink-manager',
                     'redirectUri' => 'smartlink-manager',
                     'confettiPreset' => 'surprise',
