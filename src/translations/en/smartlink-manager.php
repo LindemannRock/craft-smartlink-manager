@@ -19,6 +19,8 @@ return [
     // =========================================================================
 
     'SmartLink Manager' => 'SmartLink Manager',
+    'Manage smart links, route users by device, and track engagement from one control panel workspace.' => 'Manage smart links, route users by device, and track engagement from one control panel workspace.',
+    'Open SmartLink Manager' => 'Open SmartLink Manager',
     '{name} plugin loaded' => '{name} plugin loaded',
     '{displayName} caches' => '{displayName} caches',
 
