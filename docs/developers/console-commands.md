@@ -1,4 +1,4 @@
-# Console Commands @since(5.0.0)
+# Console Commands
 
 SmartLink Manager provides console commands for security setup and testing.
 
@@ -26,7 +26,7 @@ The command will:
 
 ---
 
-## Add Demo QR Click @since(1.0.0)
+## Add Demo QR Click
 
 Adds a simulated QR code scan to a smart link's analytics. Useful for testing analytics tracking and QR scan reporting during development.
 

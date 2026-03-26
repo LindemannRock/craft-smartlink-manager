@@ -112,7 +112,6 @@ When building a custom redirect template, these variables are available:
 |----------|------|-------------|
 | `smartLink` | `SmartLink` | The smart link element being followed |
 | `device` | `DeviceInfo` | The detected device information |
-| `redirectUrl` | `string` | The resolved destination URL |
 | `language` | `string\|null` | The detected language code, or `null` if undetected |
 
 Example custom redirect template:
@@ -122,12 +121,12 @@ Example custom redirect template:
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0;url={{ redirectUrl }}">
+    <meta http-equiv="refresh" content="0;url={{ smartLink.getUrl() }}">
     <title>Redirecting...</title>
 </head>
 <body>
     <p>Redirecting to {{ smartLink.title }}...</p>
-    <p><a href="{{ redirectUrl }}">Click here if not redirected</a></p>
+    <p><a href="{{ smartLink.getUrl() }}">Click here if not redirected</a></p>
 </body>
 </html>
 ```

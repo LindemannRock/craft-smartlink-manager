@@ -145,10 +145,10 @@ The `SmartLink` element provides methods for embedding QR codes in Twig template
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `getQrCodeUrl(options)` @since(1.0.0) | `string` | URL to the raw QR image — most efficient for web use |
-| `getQrCodeDataUri(options)` @since(1.0.0) | `string` | Base64 `data:image/...` URI — use for email or inline embedding |
-| `getQrCode(options)` @since(1.0.0) | `string` | Raw binary image data (for programmatic use) |
-| `getQrCodeDisplayUrl(options)` @since(1.0.0) | `string` | URL to the `/view` display page |
+| `getQrCodeUrl(options)` | `string` | URL to the raw QR image — most efficient for web use |
+| `getQrCodeDataUri(options)` | `string` | Base64 `data:image/...` URI — use for email or inline embedding |
+| `getQrCode(options)` | `string` | Raw binary image data (for programmatic use) |
+| `getQrCodeDisplayUrl(options)` | `string` | URL to the `/view` display page |
 
 All methods accept an `options` array with any of the customization options listed above. When called without arguments (or as properties like `link.qrCodeUrl`), global defaults are used.
 

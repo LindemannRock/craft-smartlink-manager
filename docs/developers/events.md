@@ -1,4 +1,4 @@
-# Events @since(5.0.0)
+# Events
 
 Events allow you to extend SmartLink Manager's behavior with custom logic.
 
@@ -13,7 +13,7 @@ All events below use the `SmartLinkEvent` class with these properties:
 | `redirectUrl` | `string` | The redirect URL (modifiable in `beforeRedirect`) |
 | `metadata` | `array` | Additional metadata (language, referrer, source, IP) |
 
-## `EVENT_BEFORE_REDIRECT` @since(1.0.0)
+## `EVENT_BEFORE_REDIRECT`
 
 Triggered before a smart link redirects the visitor. Modify `$event->redirectUrl` to change the redirect destination.
 
@@ -34,7 +34,7 @@ Event::on(
 );
 ```
 
-## `EVENT_AFTER_TRACK_ANALYTICS` @since(1.0.0)
+## `EVENT_AFTER_TRACK_ANALYTICS`
 
 Triggered after analytics are recorded for a redirect. Use this to send data to external services or trigger custom logic.
 
@@ -57,7 +57,7 @@ Event::on(
 );
 ```
 
-## `EVENT_AFTER_SAVE_SETTINGS` @since(5.0.0)
+## `EVENT_AFTER_SAVE_SETTINGS`
 
 Triggered after plugin settings are saved. Defined on the `Settings` model.
 
