@@ -1,4 +1,4 @@
-# Permissions @since(5.0.0)
+# Permissions
 
 SmartLink Manager registers granular permissions that can be assigned to user groups via **Settings → Users → User Groups → [Group Name] → SmartLink Manager**.
 
