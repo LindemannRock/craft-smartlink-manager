@@ -965,7 +965,6 @@ return [
     'Manage import/export' => 'Import/Export verwalten',
     'Import links' => 'Links importieren',
     'Export links' => 'Links exportieren',
-    'View import history' => 'Importverlauf anzeigen',
     'Clear import history' => 'Importverlauf leeren',
     'Export Smart Links' => 'Smart Links exportieren',
     'Export All Smart Links as CSV' => 'Alle Smart Links als CSV exportieren',

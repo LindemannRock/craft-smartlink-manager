@@ -401,13 +401,7 @@ class SmartLinkManager extends Plugin
             'key' => 'import-export',
             'label' => Craft::t('smartlink-manager', 'Import/Export'),
             'url' => 'smartlink-manager/import-export',
-            'permissionsAny' => [
-                'smartLinkManager:manageImportExport',
-                'smartLinkManager:importLinks',
-                'smartLinkManager:exportLinks',
-                'smartLinkManager:viewImportHistory',
-                'smartLinkManager:clearImportHistory',
-            ],
+            'permissionsAll' => ['smartLinkManager:manageImportExport'],
         ];
 
         if ($includeLogs) {
@@ -623,9 +617,6 @@ class SmartLinkManager extends Plugin
                     ],
                     'smartLinkManager:exportLinks' => [
                         'label' => Craft::t('smartlink-manager', 'Export links'),
-                    ],
-                    'smartLinkManager:viewImportHistory' => [
-                        'label' => Craft::t('smartlink-manager', 'View import history'),
                     ],
                     'smartLinkManager:clearImportHistory' => [
                         'label' => Craft::t('smartlink-manager', 'Clear import history'),

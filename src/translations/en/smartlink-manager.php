@@ -961,7 +961,6 @@ return [
     'Manage import/export' => 'Manage import/export',
     'Import links' => 'Import links',
     'Export links' => 'Export links',
-    'View import history' => 'View import history',
     'Clear import history' => 'Clear import history',
     'Export Smart Links' => 'Export Smart Links',
     'Export All Smart Links as CSV' => 'Export All Smart Links as CSV',

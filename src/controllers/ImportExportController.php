@@ -32,52 +32,50 @@ class ImportExportController extends Controller
 
     public function actionIndex(): Response
     {
-        $this->requireAnyImportExportPermission();
+        $this->requirePermission('smartLinkManager:manageImportExport');
 
         $canImport = $this->canImport();
         $canExport = $this->canExport();
-        $canViewHistory = $this->canViewHistory();
+        $canClearHistory = $this->canClearHistory();
+
+        /** @var ImportHistoryRecord[] $records */
+        $records = ImportHistoryRecord::find()
+            ->orderBy(['dateCreated' => SORT_DESC])
+            ->limit(20)
+            ->all();
+
+        // Pre-fetch all users in one query to avoid N+1
+        $userIds = array_unique(array_filter(array_map(
+            fn($r) => $r->userId,
+            $records,
+        )));
+        $usersById = [];
+        if ($userIds) {
+            $usersById = \craft\elements\User::find()
+                ->id($userIds)
+                ->indexBy('id')
+                ->all();
+        }
 
         $history = [];
-        if ($canViewHistory) {
-            /** @var ImportHistoryRecord[] $records */
-            $records = ImportHistoryRecord::find()
-                ->orderBy(['dateCreated' => SORT_DESC])
-                ->limit(20)
-                ->all();
-
-            // Pre-fetch all users in one query to avoid N+1
-            $userIds = array_unique(array_filter(array_map(
-                fn($r) => $r->userId,
-                $records,
-            )));
-            $usersById = [];
-            if ($userIds) {
-                $usersById = \craft\elements\User::find()
-                    ->id($userIds)
-                    ->indexBy('id')
-                    ->all();
-            }
-
-            foreach ($records as $record) {
-                $user = $usersById[$record->userId] ?? null;
-                $history[] = [
-                    'formattedDate' => DateFormatHelper::formatDatetime($record->dateCreated),
-                    'user' => $user?->username ?? Craft::t('smartlink-manager', 'Unknown'),
-                    'filename' => $record->filename,
-                    'formattedSize' => $record->filesize
-                        ? Craft::$app->getFormatter()->asShortSize($record->filesize, 2)
-                        : '-',
-                    'imported' => (int)$record->imported,
-                    'failed' => (int)$record->failed,
-                ];
-            }
+        foreach ($records as $record) {
+            $user = $usersById[$record->userId] ?? null;
+            $history[] = [
+                'formattedDate' => DateFormatHelper::formatDatetime($record->dateCreated),
+                'user' => $user?->username ?? Craft::t('smartlink-manager', 'Unknown'),
+                'filename' => $record->filename,
+                'formattedSize' => $record->filesize
+                    ? Craft::$app->getFormatter()->asShortSize($record->filesize, 2)
+                    : '-',
+                'imported' => (int)$record->imported,
+                'failed' => (int)$record->failed,
+            ];
         }
 
         return $this->renderTemplate('smartlink-manager/import-export/index', [
             'canImport' => $canImport,
             'canExport' => $canExport,
-            'canViewHistory' => $canViewHistory,
+            'canClearHistory' => $canClearHistory,
             'importHistory' => $history,
             'importLimits' => [
                 'maxRows' => CsvImportHelper::DEFAULT_MAX_ROWS,
@@ -604,21 +602,6 @@ class ImportExportController extends Controller
         }
     }
 
-    private function requireAnyImportExportPermission(): void
-    {
-        if (
-            Craft::$app->getUser()->checkPermission('smartLinkManager:manageImportExport') ||
-            $this->canImport() ||
-            $this->canExport() ||
-            $this->canViewHistory() ||
-            $this->canClearHistory()
-        ) {
-            return;
-        }
-
-        throw new ForbiddenHttpException('User does not have permission to access import/export.');
-    }
-
     private function requireImportPermission(): void
     {
         if (!$this->canImport()) {
@@ -648,11 +631,6 @@ class ImportExportController extends Controller
     private function canExport(): bool
     {
         return Craft::$app->getUser()->checkPermission('smartLinkManager:exportLinks');
-    }
-
-    private function canViewHistory(): bool
-    {
-        return Craft::$app->getUser()->checkPermission('smartLinkManager:viewImportHistory');
     }
 
     private function canClearHistory(): bool
