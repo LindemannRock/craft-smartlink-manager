@@ -598,17 +598,6 @@ class SmartLinkManager extends Plugin
                     ],
                 ],
             ],
-            'smartLinkManager:viewAnalytics' => [
-                'label' => Craft::t('smartlink-manager', 'View analytics'),
-                'nested' => [
-                    'smartLinkManager:exportAnalytics' => [
-                        'label' => Craft::t('smartlink-manager', 'Export analytics'),
-                    ],
-                    'smartLinkManager:clearAnalytics' => [
-                        'label' => Craft::t('smartlink-manager', 'Clear analytics'),
-                    ],
-                ],
-            ],
             'smartLinkManager:manageImportExport' => [
                 'label' => Craft::t('smartlink-manager', 'Manage import/export'),
                 'nested' => [
@@ -620,6 +609,17 @@ class SmartLinkManager extends Plugin
                     ],
                     'smartLinkManager:clearImportHistory' => [
                         'label' => Craft::t('smartlink-manager', 'Clear import history'),
+                    ],
+                ],
+            ],
+            'smartLinkManager:viewAnalytics' => [
+                'label' => Craft::t('smartlink-manager', 'View analytics'),
+                'nested' => [
+                    'smartLinkManager:exportAnalytics' => [
+                        'label' => Craft::t('smartlink-manager', 'Export analytics'),
+                    ],
+                    'smartLinkManager:clearAnalytics' => [
+                        'label' => Craft::t('smartlink-manager', 'Clear analytics'),
                     ],
                 ],
             ],
