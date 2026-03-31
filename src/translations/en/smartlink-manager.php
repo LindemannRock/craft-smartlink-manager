@@ -6,12 +6,6 @@
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-/**
- * English Translations
- *
- * @since 1.0.0
- */
-
 return [
 
     // =========================================================================
@@ -69,6 +63,7 @@ return [
     'Cache' => 'Cache',
     'Field Layout' => 'Field Layout',
     'Overview' => 'Overview',
+    'Import/Export' => 'Import/Export',
 
     // =========================================================================
     // General Settings
@@ -92,8 +87,7 @@ return [
 
     'Site Settings' => 'Site Settings',
     'Enabled Sites' => 'Enabled Sites',
-    'Select which sites SmartLink Manager should be enabled for. Leave empty to enable for all sites.' => 'Select which sites SmartLink Manager should be enabled for. Leave empty to enable for all sites.',
-    'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.',
+'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.',
 
     // =========================================================================
     // URL Settings
@@ -103,8 +97,7 @@ return [
     'Smart Link URL Prefix' => 'Smart Link URL Prefix',
     '{singularName} URL Prefix' => '{singularName} URL Prefix',
     'QR Code URL Prefix' => 'QR Code URL Prefix',
-    'The URL prefix for smart links (e.g., \'go\' creates /go/your-link)' => 'The URL prefix for smart links (e.g., \'go\' creates /go/your-link)',
-    'The URL prefix for {pluginName} (e.g., \'go\' creates /go/your-link)' => 'The URL prefix for {pluginName} (e.g., \'go\' creates /go/your-link). Clear routes cache after changing (php craft clear-caches/compiled-templates).',
+'The URL prefix for {pluginName} (e.g., \'go\' creates /go/your-link)' => 'The URL prefix for {pluginName} (e.g., \'go\' creates /go/your-link). Clear routes cache after changing (php craft clear-caches/compiled-templates).',
     'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)' => 'The URL prefix for QR code pages (e.g., \'qr\' creates /qr/your-link/view or \'go/qr\' creates /go/qr/your-link/view)',
     'Clear routes cache after changing this (php craft clear-caches/compiled-templates).' => 'Clear routes cache after changing this (php craft clear-caches/compiled-templates).',
     'Smart Link Base URL' => 'Smart Link Base URL',
@@ -115,6 +108,14 @@ return [
     'Changing the URL prefix will break all existing {pluginName}. Only change this before creating your first {singularName}.' => 'Changing the URL prefix will break all existing {pluginName}. Only change this before creating your first {singularName}.',
     'Multisite detected: <code>Smart Link Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.' => 'Multisite detected: <code>Smart Link Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.',
     'Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.' => 'Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing.',
+    'Use URL Prefix' => 'Use URL Prefix',
+    'Enable to generate {singularName} URLs as /{prefix}/{slug}. Disable to generate root URLs as /{slug}.' => 'Enable to generate {singularName} URLs as /{prefix}/{slug}. Disable to generate root URLs as /{slug}.',
+    'Both {smartName} and {shortName} are set to root URLs (no prefix) and share at least one host. Redirect routes can collide (e.g., <code>/slug</code>), and QR routes can also collide when both plugins use the same QR prefix (e.g., <code>/qr/slug</code>).' => 'Both {smartName} and {shortName} are set to root URLs (no prefix) and share at least one host. Redirect routes can collide (e.g., <code>/slug</code>), and QR routes can also collide when both plugins use the same QR prefix (e.g., <code>/qr/slug</code>).',
+    'Both {smartName} and {shortName} are set to root URLs (no prefix). Host overlap could not be fully resolved from current settings/config, so redirect route collisions are possible. QR routes may also collide if both plugins use the same QR prefix.' => 'Both {smartName} and {shortName} are set to root URLs (no prefix). Host overlap could not be fully resolved from current settings/config, so redirect route collisions are possible. QR routes may also collide if both plugins use the same QR prefix.',
+    'URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>.' => 'URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>.',
+    'This is being overridden by the <code>usePrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>usePrefix</code> setting in <code>config/smartlink-manager.php</code>.',
+    'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.',
+    'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.',
 
     // =========================================================================
     // Template Settings
@@ -136,10 +137,8 @@ return [
 
     'Asset Settings' => 'Asset Settings',
     'Image Volume' => 'Image Volume',
-    'Smart Link Image Volume' => 'Smart Link Image Volume',
-    '{singularName} Image Volume' => '{singularName} Image Volume',
-    'Which asset volume should be used for SmartLink Manager images' => 'Which asset volume should be used for SmartLink Manager images',
-    'Which asset volume should be used for {singularName} images' => 'Which asset volume should be used for {singularName} images',
+'{singularName} Image Volume' => '{singularName} Image Volume',
+'Which asset volume should be used for {singularName} images' => 'Which asset volume should be used for {singularName} images',
     'All asset volumes' => 'All asset volumes',
 
     // =========================================================================
@@ -248,8 +247,7 @@ return [
     'Behavior Settings' => 'Behavior Settings',
     'Redirect Behavior' => 'Redirect Behavior',
     '404 Redirect URL' => '404 Redirect URL',
-    'Where to redirect when a smart link is not found or disabled' => 'Where to redirect when a smart link is not found or disabled',
-    'Where to redirect when a {singularName} is not found or disabled' => 'Where to redirect when a {singularName} is not found or disabled',
+'Where to redirect when a {singularName} is not found or disabled' => 'Where to redirect when a {singularName} is not found or disabled',
     'Can be a relative path (/) or full URL (https://example.com)' => 'Can be a relative path (/) or full URL (https://example.com)',
 
     // =========================================================================
@@ -259,12 +257,9 @@ return [
     'Analytics Settings' => 'Analytics Settings',
     'Enable Analytics' => 'Enable Analytics',
     'Track Analytics' => 'Track Analytics',
-    'Track clicks and visitor data for smart links' => 'Track clicks and visitor data for smart links',
-    'Track clicks and visitor data for {pluginName}' => 'Track clicks and visitor data for {pluginName}',
-    'When enabled, SmartLink Manager will track visitor interactions, device types, geographic data, and other analytics information.' => 'When enabled, SmartLink Manager will track visitor interactions, device types, geographic data, and other analytics information.',
-    'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => 'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.',
-    'Are you sure you want to disable analytics tracking for this smart link? This smart link will no longer collect visitor data and interactions.' => 'Are you sure you want to disable analytics tracking for this smart link? This smart link will no longer collect visitor data and interactions.',
-    'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => 'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.',
+'Track clicks and visitor data for {pluginName}' => 'Track clicks and visitor data for {pluginName}',
+'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => 'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.',
+'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => 'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.',
 
     // =========================================================================
     // Analytics Settings — IP Privacy
@@ -385,15 +380,11 @@ return [
     'Export Settings' => 'Export Settings',
     'Analytics Export Options' => 'Analytics Export Options',
     'Include Disabled Links in Export' => 'Include Disabled Links in Export',
-    'Include Disabled SmartLinks in Export' => 'Include Disabled SmartLinks in Export',
-    'Include Disabled {pluginName} in Export' => 'Include Disabled {pluginName} in Export',
-    'When enabled, analytics exports will include data from disabled smart links' => 'When enabled, analytics exports will include data from disabled smart links',
-    'When enabled, analytics exports will include data from disabled {pluginName}' => 'When enabled, analytics exports will include data from disabled {pluginName}',
+'Include Disabled {pluginName} in Export' => 'Include Disabled {pluginName} in Export',
+'When enabled, analytics exports will include data from disabled {pluginName}' => 'When enabled, analytics exports will include data from disabled {pluginName}',
     'Include Expired Links in Export' => 'Include Expired Links in Export',
-    'Include Expired SmartLinks in Export' => 'Include Expired SmartLinks in Export',
-    'Include Expired {pluginName} in Export' => 'Include Expired {pluginName} in Export',
-    'When enabled, analytics exports will include data from expired smart links' => 'When enabled, analytics exports will include data from expired smart links',
-    'When enabled, analytics exports will include data from expired {pluginName}' => 'When enabled, analytics exports will include data from expired {pluginName}',
+'Include Expired {pluginName} in Export' => 'Include Expired {pluginName} in Export',
+'When enabled, analytics exports will include data from expired {pluginName}' => 'When enabled, analytics exports will include data from expired {pluginName}',
     'Export as CSV' => 'Export as CSV',
 
     // =========================================================================
@@ -402,11 +393,9 @@ return [
 
     'Interface Settings' => 'Interface Settings',
     'Items Per Page' => 'Items Per Page',
-    'Number of smart links to show per page' => 'Number of smart links to show per page',
-    'Number of {pluginName} to show per page' => 'Number of {pluginName} to show per page',
+'Number of {pluginName} to show per page' => 'Number of {pluginName} to show per page',
     'Allow Multiple' => 'Allow Multiple',
-    'Whether to allow multiple smart links to be selected' => 'Whether to allow multiple smart links to be selected',
-    'Whether to allow multiple {pluginName} to be selected' => 'Whether to allow multiple {pluginName} to be selected',
+'Whether to allow multiple {pluginName} to be selected' => 'Whether to allow multiple {pluginName} to be selected',
     'The maximum number of {pluginName} that can be selected.' => 'The maximum number of {pluginName} that can be selected.',
     'Which sources should be available to select {pluginName} from?' => 'Which sources should be available to select {pluginName} from?',
 
@@ -477,23 +466,17 @@ return [
     // =========================================================================
 
     'Title' => 'Title',
-    'The title of this smart link' => 'The title of this smart link',
-    'The title of this {singularName}' => 'The title of this {singularName}',
+'The title of this {singularName}' => 'The title of this {singularName}',
     'Description' => 'Description',
-    'A brief description of this smart link' => 'A brief description of this smart link',
-    'A brief description of this {singularName}' => 'A brief description of this {singularName}',
+'A brief description of this {singularName}' => 'A brief description of this {singularName}',
     'Icon' => 'Icon',
-    'Icon identifier or URL for this smart link' => 'Icon identifier or URL for this smart link',
-    'Icon identifier or URL for this {singularName}' => 'Icon identifier or URL for this {singularName}',
+'Icon identifier or URL for this {singularName}' => 'Icon identifier or URL for this {singularName}',
     'Image' => 'Image',
-    'Select an image for this smart link' => 'Select an image for this smart link',
-    'Select an image for this {singularName}' => 'Select an image for this {singularName}',
+'Select an image for this {singularName}' => 'Select an image for this {singularName}',
     'Image Size' => 'Image Size',
-    'Select the size for the smart link image' => 'Select the size for the smart link image',
-    'Select the size for the {singularName} image' => 'Select the size for the {singularName} image',
+'Select the size for the {singularName} image' => 'Select the size for the {singularName} image',
     'Hide Title on Landing Pages' => 'Hide Title on Landing Pages',
-    'Hide the smart link title on both redirect and QR code landing pages' => 'Hide the smart link title on both redirect and QR code landing pages',
-    'Hide the {singularName} title on both redirect and QR code landing pages' => 'Hide the {singularName} title on both redirect and QR code landing pages',
+'Hide the {singularName} title on both redirect and QR code landing pages' => 'Hide the {singularName} title on both redirect and QR code landing pages',
     'Display Settings' => 'Display Settings',
     'Advanced Settings' => 'Advanced Settings',
     'Destination URL' => 'Destination URL',
@@ -547,8 +530,7 @@ return [
     // Analytics Dashboard — Overview Tab
     // =========================================================================
 
-    'SmartLink Manager Overview' => 'SmartLink Manager Overview',
-    'View Analytics' => 'View Analytics',
+'View Analytics' => 'View Analytics',
     'Traffic Overview' => 'Traffic Overview',
     'Traffic & Devices' => 'Traffic & Devices',
     'Geographic' => 'Geographic',
@@ -563,13 +545,10 @@ return [
     'Avg. Interactions/Day' => 'Avg. Interactions/Day',
     'Engagement Rate' => 'Engagement Rate',
     'Top {pluginName} (Top 20)' => 'Top {pluginName} (Top 20)',
-    'Top SmartLinks' => 'Top SmartLinks',
-    'Top Performing Links (Last 7 Days)' => 'Top Performing Links (Last 7 Days)',
     'Latest Interactions (Top 20)' => 'Latest Interactions (Top 20)',
     'Interactions (Last 20)' => 'Interactions (Last 20)',
     'No analytics data yet' => 'No analytics data yet',
-    'Analytics will appear here once your smart link starts receiving clicks.' => 'Analytics will appear here once your smart link starts receiving clicks.',
-    'Analytics will appear here once your {singularName} starts receiving clicks.' => 'Analytics will appear here once your {singularName} starts receiving clicks.',
+'Analytics will appear here once your {singularName} starts receiving clicks.' => 'Analytics will appear here once your {singularName} starts receiving clicks.',
     'Failed to load analytics data' => 'Failed to load analytics data',
     'Failed to load countries data' => 'Failed to load countries data',
     'No data for selected period' => 'No data for selected period',
@@ -871,7 +850,6 @@ return [
 
     'Save Settings' => 'Save Settings',
     'Actions' => 'Actions',
-    'Manage SmartLinks' => 'Manage SmartLinks',
     'Loading...' => 'Loading...',
     'Error' => 'Error',
 
@@ -997,5 +975,73 @@ return [
     'Hide Title (1/0)' => 'Hide Title (1/0)',
     'Language Detection (1/0)' => 'Language Detection (1/0)',
     'Metadata (JSON)' => 'Metadata (JSON)',
+
+    // Import/Export — Controller messages
+    'Unknown' => 'Unknown',
+    'Please select a CSV file to upload.' => 'Please select a CSV file to upload.',
+    'Failed to parse CSV: {error}' => 'Failed to parse CSV: {error}',
+    'No import data found. Please upload a CSV file.' => 'No import data found. Please upload a CSV file.',
+    'No preview data found. Please map columns first.' => 'No preview data found. Please map columns first.',
+    'Import session expired. Please upload the file again.' => 'Import session expired. Please upload the file again.',
+
+    // Import/Export — Template UI
+    'Import History' => 'Import History',
+    'CSV Format' => 'CSV Format',
+    'Required columns:' => 'Required columns:',
+    'Optional columns:' => 'Optional columns:',
+    'Import from CSV' => 'Import from CSV',
+    'CSV File' => 'CSV File',
+    'CSV Delimiter' => 'CSV Delimiter',
+    'Character used to separate values in your CSV (auto-detect is default)' => 'Character used to separate values in your CSV (auto-detect is default)',
+    'Auto (detect)' => 'Auto (detect)',
+    'Comma (,)' => 'Comma (,)',
+    'Semicolon (;)' => 'Semicolon (;)',
+    'Tab' => 'Tab',
+    'Pipe (|)' => 'Pipe (|)',
+    'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'The maximum file size is {size} and the import is limited to {rows} rows per file.',
+    'Upload & Map Columns' => 'Upload & Map Columns',
+    'Clear history' => 'Clear history',
+    'No import history yet.' => 'No import history yet.',
+    'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Are you sure you want to clear all import logs? This action cannot be undone.',
+    'Failed to clear history.' => 'Failed to clear history.',
+    'Map CSV Columns' => 'Map CSV Columns',
+    'Your CSV has {count} rows. Map each CSV column to a smart link field.' => 'Your CSV has {count} rows. Map each CSV column to a smart link field.',
+    'Preview of CSV Data' => 'Preview of CSV Data',
+    'Showing first 5 rows. {total} total rows will be imported.' => 'Showing first 5 rows. {total} total rows will be imported.',
+    'Column Mapping' => 'Column Mapping',
+    'Note: only columns mapped to a field will be imported.' => 'Note: only columns mapped to a field will be imported.',
+    '-- Do not import --' => '-- Do not import --',
+    'Enabled (1/0)' => 'Enabled (1/0)',
+    'Site ID' => 'Site ID',
+    'Site Handle' => 'Site Handle',
+    'Track Analytics (1/0)' => 'Track Analytics (1/0)',
+    'Post Date (YYYY-MM-DD HH:MM:SS)' => 'Post Date (YYYY-MM-DD HH:MM:SS)',
+    'Date Expired (YYYY-MM-DD HH:MM:SS)' => 'Date Expired (YYYY-MM-DD HH:MM:SS)',
+    'CSV Column' => 'CSV Column',
+    'Maps to Field' => 'Maps to Field',
+    'Sample Data' => 'Sample Data',
+    'Map Columns' => 'Map Columns',
+    'Cancel' => 'Cancel',
+    'Preview Import' => 'Preview Import',
+    'Import Preview' => 'Import Preview',
+    'Total Rows' => 'Total Rows',
+    'Valid' => 'Valid',
+    'Duplicates' => 'Duplicates',
+    'Errors' => 'Errors',
+    'Duplicates (will be skipped)' => 'Duplicates (will be skipped)',
+    'Invalid Rows (will be skipped)' => 'Invalid Rows (will be skipped)',
+    'Row' => 'Row',
+    'Reason' => 'Reason',
+    'Image ID' => 'Image ID',
+    'Ready to Import' => 'Ready to Import',
+
+    // Base partial: import-history
+    'Created By' => 'Created By',
+    'Filename' => 'Filename',
+    'Imported' => 'Imported',
+    'Failed' => 'Failed',
+
+    // Analytics partial
+    'Device Breakdown' => 'Device Breakdown',
 
 ];
