@@ -8,29 +8,20 @@
 
 return [
 
-    // =========================================================================
-    // Plugin Meta
-    // =========================================================================
-
+    // Plugin meta
     'SmartLink Manager' => 'SmartLink Manager',
     'Manage smart links, route users by device, and track engagement from one control panel workspace.' => 'Beheer uw smart links, stuur gebruikers door op basis van hun apparaat en volg betrokkenheid vanuit één werkruimte.',
     'Open SmartLink Manager' => 'SmartLink Manager openen',
     '{name} plugin loaded' => 'Plugin {name} geladen',
     '{displayName} caches' => '{displayName} caches',
 
-    // =========================================================================
     // Element Names
-    // =========================================================================
-
     'Smart Link' => 'Smart Link',
     'smart link' => 'smart link',
     'smart links' => 'smart links',
     'New smart link' => 'Nieuwe smart link',
 
-    // =========================================================================
     // Permissions
-    // =========================================================================
-
     'Manage {plural}' => '{plural} beheren',
     'Create {plural}' => '{plural} aanmaken',
     'Edit {plural}' => '{plural} bewerken',
@@ -44,10 +35,7 @@ return [
     'Download system logs' => 'Systeemlogboeken downloaden',
     'Manage settings' => 'Instellingen beheren',
 
-    // =========================================================================
     // Navigation & Breadcrumbs
-    // =========================================================================
-
     'Links' => 'Links',
     'Analytics' => 'Analyses',
     'Logs' => 'Logboeken',
@@ -65,10 +53,7 @@ return [
     'Overview' => 'Overzicht',
     'Import/Export' => 'Import/Export',
 
-    // =========================================================================
     // General Settings
-    // =========================================================================
-
     'General Settings' => 'Algemene instellingen',
     'Plugin Name' => 'Pluginnaam',
     'The name of the plugin as it appears in the Control Panel menu' => 'De naam van de plugin zoals deze verschijnt in het menu van het configuratiescherm',
@@ -112,18 +97,12 @@ return [
     'file' => 'bestand',
     'files' => 'bestanden',
 
-    // =========================================================================
     // Site Settings
-    // =========================================================================
-
     'Site Settings' => 'Site-instellingen',
     'Enabled Sites' => 'Ingeschakelde sites',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Selecteer voor welke sites {pluginName} moet worden ingeschakeld. Laat leeg om voor alle sites in te schakelen.',
 
-    // =========================================================================
     // URL Settings
-    // =========================================================================
-
     'URL Settings' => 'URL-instellingen',
     'Smart Link URL Prefix' => 'Smart Link URL-voorvoegsel',
     '{singularName} URL Prefix' => '{singularName} URL-voorvoegsel',
@@ -148,10 +127,7 @@ return [
     'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>slugPrefix</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>qrPrefix</code> in <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // Template Settings
-    // =========================================================================
-
     'Template Settings' => 'Template-instellingen',
     'Redirect Template' => 'Doorstuur-template',
     'Custom Redirect Template' => 'Aangepaste doorstuur-template',
@@ -162,20 +138,14 @@ return [
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/qr)' => 'Pad naar aangepaste template in uw map templates/ (bijv. smartlink-manager/qr)',
     'These templates must exist in your site\'s <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed.' => 'Deze templates moeten bestaan in de map <code>templates/</code> van uw site. Kopieer de referentietemplates van <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> naar <code>templates/smartlink-manager/</code> en pas ze naar wens aan.',
 
-    // =========================================================================
     // Asset Settings
-    // =========================================================================
-
     'Asset Settings' => 'Bestandsinstellingen',
     'Image Volume' => 'Afbeeldingsvolume',
     '{singularName} Image Volume' => '{singularName} afbeeldingsvolume',
     'Which asset volume should be used for {singularName} images' => 'Welk bestandsvolume moet worden gebruikt voor {singularName}-afbeeldingen',
     'All asset volumes' => 'Alle bestandsvolumes',
 
-    // =========================================================================
     // QR Code Settings — Appearance
-    // =========================================================================
-
     'QR Code Settings' => 'QR Code-instellingen',
     'Appearance & Style' => 'Uiterlijk en stijl',
     'Enable QR Code' => 'QR Code inschakelen',
@@ -196,10 +166,7 @@ return [
     'Color for position markers (leave empty to use main color)' => 'Kleur voor positiemarkeerders (laat leeg om de hoofdkleur te gebruiken)',
     'Size' => 'Grootte',
 
-    // =========================================================================
     // QR Code Settings — Logo
-    // =========================================================================
-
     'Logo Settings' => 'Logo-instellingen',
     'Enable QR Code Logo' => 'QR Code-logo inschakelen',
     'Enable Logo Overlay' => 'Logo-overlay inschakelen',
@@ -221,10 +188,7 @@ return [
     'Please save settings to apply the volume change to the logo selection field.' => 'Sla de instellingen op om de volumewijziging toe te passen op het logoselectieveld.',
     'Please save to apply the volume change' => 'Sla op om de volumewijziging toe te passen',
 
-    // =========================================================================
     // QR Code Settings — Technical
-    // =========================================================================
-
     'Technical Options' => 'Technische opties',
     'Error Correction Level' => 'Foutcorrectieniveau',
     'Higher levels work better if QR code is damaged but create denser patterns' => 'Hogere niveaus werken beter als de QR Code beschadigd is, maar creëren dichtere patronen',
@@ -236,10 +200,7 @@ return [
     'Eye Style' => 'Stijl van positiemarkeerders',
     'Shape of the position markers (corners)' => 'Vorm van de positiemarkeerders (hoeken)',
 
-    // =========================================================================
     // QR Code Settings — Downloads
-    // =========================================================================
-
     'Download Settings' => 'Download-instellingen',
     'Enable QR Code Downloads' => 'QR Code-downloads inschakelen',
     'Allow users to download QR codes' => 'Gebruikers toestaan QR Codes te downloaden',
@@ -252,10 +213,7 @@ return [
     'Extra Large (2048px)' => 'Extra groot (2048px)',
     'Custom Size...' => 'Aangepaste grootte...',
 
-    // =========================================================================
     // QR Code Settings — Actions & Preview
-    // =========================================================================
-
     'QR Code Actions' => 'QR Code-acties',
     'View QR Code' => 'QR Code bekijken',
     'QR Code Image' => 'QR Code-afbeelding',
@@ -271,20 +229,14 @@ return [
     'Configure QR code caching to improve performance and reduce server load.' => 'Configureer QR Code-caching om de prestaties te verbeteren en de serverbelasting te verminderen.',
     'Go to Cache Settings' => 'Naar cache-instellingen',
 
-    // =========================================================================
     // Behavior Settings
-    // =========================================================================
-
     'Behavior Settings' => 'Gedragsinstellingen',
     'Redirect Behavior' => 'Doorstuurgedrag',
     '404 Redirect URL' => '404-doorstuur-URL',
     'Where to redirect when a {singularName} is not found or disabled' => 'Waarheen doorsturen wanneer een {singularName} niet gevonden of uitgeschakeld is',
     'Can be a relative path (/) or full URL (https://example.com)' => 'Kan een relatief pad (/) of een volledige URL (https://example.com) zijn',
 
-    // =========================================================================
     // Analytics Settings
-    // =========================================================================
-
     'Analytics Settings' => 'Analyseinstellingen',
     'Enable Analytics' => 'Analyses inschakelen',
     'Track Analytics' => 'Analyses bijhouden',
@@ -292,10 +244,7 @@ return [
     'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => 'Wanneer ingeschakeld, zal {pluginName} bezoekersinacties, apparaattypen, geografische gegevens en andere analyse-informatie bijhouden.',
     'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => 'Weet u zeker dat u het bijhouden van analyses voor deze {singularName} wilt uitschakelen? Deze {singularName} verzamelt dan geen bezoekersgegevens en -interacties meer.',
 
-    // =========================================================================
     // Analytics Settings — IP Privacy
-    // =========================================================================
-
     'IP Address Privacy' => 'IP-adresprivacy',
     'Anonymize IP Addresses' => 'IP-adressen anonimiseren',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => 'Maskeer IP-adressen voor opslag voor maximale privacy. <strong>IPv4</strong>: maskeert het laatste octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: maskeert de laatste 80 bits. <strong>Afweging</strong>: vermindert de nauwkeurigheid van unieke bezoekers (gebruikers op hetzelfde subnet tellen als één bezoeker). Geolocatie werkt nog normaal.',
@@ -305,10 +254,7 @@ return [
     'Full IP hashed with salt (accurate unique visitors)' => 'Volledig IP gehasht met salt (nauwkeurige unieke bezoekers)',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'Subnet gemaskeerd + gehasht met salt (maximale privacy, minder nauwkeurig)',
 
-    // =========================================================================
     // Analytics Settings — Retention & Cleanup
-    // =========================================================================
-
     'Analytics Retention (days)' => 'Analysebewaring (dagen)',
     'Analytics Retention' => 'Analysebewaring',
     'How many days to keep analytics data (0 for unlimited, max 3650)' => 'Hoeveel dagen analysegegevens bewaren (0 voor onbeperkt, max. 3650)',
@@ -321,10 +267,7 @@ return [
     'Warning' => 'Waarschuwing',
     'Analytics data will be retained indefinitely. This could result in large database size, slower performance, and increased storage costs over time. Consider setting a retention period (recommended: 90-365 days) for production sites.' => 'Analysegegevens worden voor onbepaalde tijd bewaard. Dit kan resulteren in een grote databaseomvang, tragere prestaties en hogere opslagkosten. Overweeg een bewaartermijn in te stellen (aanbevolen: 90–365 dagen) voor productiesites.',
 
-    // =========================================================================
     // Geo Provider Settings (from base _partials/geo-settings, uses |t(pluginHandle))
-    // =========================================================================
-
     'Geographic Detection' => 'Geografische detectie',
     'Geographic Analytics' => 'Geografische analyses',
     'Geographic Distribution' => 'Geografische verdeling',
@@ -363,27 +306,18 @@ return [
     'COPIED!' => 'GEKOPIEERD!',
     'Failed to copy to clipboard' => 'Kopiëren naar klembord mislukt',
 
-    // =========================================================================
     // Device Detection Settings
-    // =========================================================================
-
     'Cache Device Detection' => 'Apparaatdetectie cachen',
     'Cache device detection results for better performance' => 'Resultaten van apparaatdetectie cachen voor betere prestaties',
     'Device Detection Cache Duration (seconds)' => 'Cacheduur apparaatdetectie (seconden)',
 
-    // =========================================================================
     // Language Detection Settings
-    // =========================================================================
-
     'Language Detection Method' => 'Taaldetectiemethode',
     'How to detect user language preference' => 'Hoe de taalvoorkeur van de gebruiker te detecteren',
     'Language Detection' => 'Taaldetectie',
     'Enable automatic language detection to redirect users based on their browser or location' => 'Automatische taaldetectie inschakelen om gebruikers door te sturen op basis van hun browser of locatie',
 
-    // =========================================================================
     // Cache Settings
-    // =========================================================================
-
     'Cache Settings' => 'Cache-instellingen',
     'Cache Storage Settings' => 'Instellingen voor cacheopslag',
     'Cache Storage Method' => 'Methode voor cacheopslag',
@@ -404,10 +338,7 @@ return [
     'Device detection caching is only available when Analytics is enabled. Go to' => 'Apparaatdetectiecaching is alleen beschikbaar wanneer analyses zijn ingeschakeld. Ga naar',
     'to enable analytics.' => 'om analyses in te schakelen.',
 
-    // =========================================================================
     // Export Settings
-    // =========================================================================
-
     'Export Settings' => 'Exportinstellingen',
     'Analytics Export Options' => 'Opties voor analyse-export',
     'Include Disabled Links in Export' => 'Uitgeschakelde links opnemen in export',
@@ -418,10 +349,7 @@ return [
     'When enabled, analytics exports will include data from expired {pluginName}' => 'Wanneer ingeschakeld, bevatten analyse-exports gegevens van verlopen {pluginName}',
     'Export as CSV' => 'Exporteren als CSV',
 
-    // =========================================================================
     // Interface Settings
-    // =========================================================================
-
     'Interface Settings' => 'Interface-instellingen',
     'Items Per Page' => 'Items per pagina',
     'Number of {pluginName} to show per page' => 'Aantal {pluginName} per pagina weergeven',
@@ -430,10 +358,7 @@ return [
     'The maximum number of {pluginName} that can be selected.' => 'Het maximale aantal {pluginName} dat kan worden geselecteerd.',
     'Which sources should be available to select {pluginName} from?' => 'Welke bronnen moeten beschikbaar zijn om {pluginName} uit te selecteren?',
 
-    // =========================================================================
     // Integration Settings
-    // =========================================================================
-
     'Third-Party Integrations' => 'Integraties van derden',
     'Integrations Settings' => 'Integratie-instellingen',
     'Integrate {pluginName} with third-party analytics and tracking services to push click events to Google Tag Manager, Google Analytics, and other platforms.' => 'Integreer {pluginName} met analyse- en trackingdiensten van derden om klikgebeurtenissen naar Google Tag Manager, Google Analytics en andere platforms te sturen.',
@@ -492,10 +417,7 @@ return [
     'Invalid {pluginName} format.' => 'Ongeldige {pluginName}-indeling.',
     '{pluginName} not found.' => '{pluginName} niet gevonden.',
 
-    // =========================================================================
     // Smart Link Fields (edit page)
-    // =========================================================================
-
     'Title' => 'Titel',
     'The title of this {singularName}' => 'De titel van deze {singularName}',
     'Description' => 'Beschrijving',
@@ -532,17 +454,11 @@ return [
     'URL copied to clipboard' => 'URL gekopieerd naar klembord',
     'New {singularName}' => 'Nieuwe {singularName}',
 
-    // =========================================================================
     // Field Layout
-    // =========================================================================
-
     'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => 'Voeg aangepaste velden toe aan {singularName}-elementen. Alle velden die u hier toevoegt, verschijnen in het bewerkingsscherm van {singularName}.',
     'No field layout available.' => 'Geen veldindeling beschikbaar.',
 
-    // =========================================================================
     // Smart Link Element — Index & Actions
-    // =========================================================================
-
     'Slug' => 'Slug',
     'Redirect Page' => 'Doorstuurpagina',
     'All {pluginName}' => 'Alle {pluginName}',
@@ -557,10 +473,7 @@ return [
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'U kunt maximaal {limit} {limit, plural, =1{smart link} other{smart links}} selecteren.',
     'Create a new smart link' => 'Een nieuwe smart link aanmaken',
 
-    // =========================================================================
     // Analytics Dashboard — Overview Tab
-    // =========================================================================
-
     'View Analytics' => 'Analyses bekijken',
     'Traffic Overview' => 'Verkeersoverzicht',
     'Traffic & Devices' => 'Verkeer en apparaten',
@@ -584,10 +497,7 @@ return [
     'Failed to load countries data' => 'Laden van landengegevens mislukt',
     'No data for selected period' => 'Geen gegevens voor de geselecteerde periode',
 
-    // =========================================================================
     // Analytics Dashboard — Traffic & Devices Tab
-    // =========================================================================
-
     'Device Analytics' => 'Apparaatanalyses',
     'Device Types' => 'Apparaattypen',
     'Device Brands' => 'Apparaatmerken',
@@ -598,10 +508,7 @@ return [
     'Peak usage at {hour}' => 'Piekgebruik om {hour}',
     'Daily Clicks' => 'Dagelijkse klikken',
 
-    // =========================================================================
     // Analytics Dashboard — Geographic Tab
-    // =========================================================================
-
     'Top Countries' => 'Toplanden',
     'Top Cities' => 'Topsteden',
     'Top Cities Worldwide' => 'Topsteden wereldwijd',
@@ -610,10 +517,7 @@ return [
     'Geographic detection is disabled.' => 'Geografische detectie is uitgeschakeld.',
     'Enable in Settings' => 'Inschakelen via instellingen',
 
-    // =========================================================================
     // Analytics Data — Table Columns & Labels
-    // =========================================================================
-
     'Date' => 'Datum',
     'Time' => 'Tijd',
     'Device' => 'Apparaat',
@@ -638,10 +542,7 @@ return [
     'Name' => 'Naam',
     'Percentage' => 'Percentage',
 
-    // =========================================================================
     // Analytics Dashboard — JS strings (passed to JavaScript)
-    // =========================================================================
-
     'No interaction data available for the selected filters.' => 'Geen interactiegegevens beschikbaar voor de geselecteerde filters.',
     'No device data available for the selected filters.' => 'Geen apparaatgegevens beschikbaar voor de geselecteerde filters.',
     'No device brand data available for the selected filters.' => 'Geen apparaatmerkgegevens beschikbaar voor de geselecteerde filters.',
@@ -650,10 +551,7 @@ return [
     'No hourly data available for the selected filters.' => 'Geen uurgegevens beschikbaar voor de geselecteerde filters.',
     'Peak usage at' => 'Piekgebruik om',
 
-    // =========================================================================
     // Interaction Types
-    // =========================================================================
-
     'Direct' => 'Direct',
     'Direct Visits' => 'Directe bezoeken',
     'QR' => 'QR',
@@ -661,10 +559,7 @@ return [
     'Button' => 'Knop',
     'Landing' => 'Landing',
 
-    // =========================================================================
     // Analytics Export — CSV/Excel Column Headers
-    // =========================================================================
-
     'Date/Time' => 'Datum/Tijd',
     'Status' => 'Status',
     'Smart Link URL' => 'Smart Link-URL',
@@ -677,10 +572,7 @@ return [
     'Language' => 'Taal',
     'User Agent' => 'User Agent',
 
-    // =========================================================================
     // Time Periods
-    // =========================================================================
-
     'Today' => 'Vandaag',
     'Yesterday' => 'Gisteren',
     'Last 7 days' => 'Afgelopen 7 dagen',
@@ -689,10 +581,7 @@ return [
     'All time' => 'Alle tijd',
     'Date Range' => 'Datumreeks',
 
-    // =========================================================================
     // Utilities
-    // =========================================================================
-
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Bewaak de linkprestaties, volg analyses bij en beheer de cache voor uw {singularName}-doorstuuracties en QR Codes.',
     'Active {pluginName}' => 'Actieve {pluginName}',
     'Links Status' => 'Linkstatus',
@@ -727,10 +616,7 @@ return [
     'Failed to clear caches' => 'Caches wissen mislukt',
     'Failed to clear analytics' => 'Analyses wissen mislukt',
 
-    // =========================================================================
     // Widgets — Analytics Summary
-    // =========================================================================
-
     '{pluginName} - Analytics' => '{pluginName} – Analyses',
     'Top Performer' => 'Beste prestatie',
     'interactions' => 'interacties',
@@ -738,10 +624,7 @@ return [
     'You don\'t have permission to view analytics.' => 'U heeft geen toestemming om analyses te bekijken.',
     'Analytics are disabled in plugin settings.' => 'Analyses zijn uitgeschakeld in de plugininstellingen.',
 
-    // =========================================================================
     // Widgets — Top Links
-    // =========================================================================
-
     '{pluginName} - Top Links' => '{pluginName} – Toplinks',
     'Link' => 'Link',
     'Number of Links' => 'Aantal links',
@@ -750,10 +633,7 @@ return [
     'No {pluginName} yet' => 'Nog geen {pluginName}',
     'Create your first {singularName} to see it here.' => 'Maak uw eerste {singularName} aan om deze hier te zien.',
 
-    // =========================================================================
     // Public Templates — Redirect Page (redirect.twig)
-    // =========================================================================
-
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',
@@ -762,16 +642,10 @@ return [
     'Mac App Store' => 'Mac App Store',
     'Continue to Website' => 'Doorgaan naar website',
 
-    // =========================================================================
     // Public Templates — QR Code Page (qr.twig)
-    // =========================================================================
-
     'Scan with your phone\'s camera to download' => 'Scan met de camera van uw telefoon om te downloaden',
 
-    // =========================================================================
     // Controller Messages — Flash Notices & Errors
-    // =========================================================================
-
     // SmartlinksController
     'Smart link saved.' => 'Smart link opgeslagen.',
     'Couldn\'t save smart link.' => 'Smart link kon niet worden opgeslagen.',
@@ -807,18 +681,12 @@ return [
     'Please enter a valid size between 100 and 4096 pixels' => 'Voer een geldige grootte in tussen 100 en 4096 pixels',
     'Reset QR code settings to plugin defaults?' => 'QR Code-instellingen terugzetten naar standaardinstellingen van de plugin?',
 
-    // =========================================================================
     // Job Messages
-    // =========================================================================
-
     '{pluginName}: Cleaning up old analytics' => '{pluginName}: Oude analyses opruimen',
     'Deleting {count} old analytics records' => '{count} oude analyserecords verwijderen',
     'Deleted {deleted} of {total} records' => '{deleted} van {total} records verwijderd',
 
-    // =========================================================================
     // Validation Messages
-    // =========================================================================
-
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Alleen letters, cijfers, koppeltekens en underscores zijn toegestaan.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Alleen letters, cijfers, koppeltekens, underscores en slashes zijn toegestaan.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Alleen kleine letters, cijfers en underscores zijn toegestaan.',
@@ -831,10 +699,7 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Basis-URL van smart link mag geen spaties bevatten.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Niet-ondersteund token in de basis-URL van smart link. Ondersteunde tokens: {siteHandle}, {siteId}, {siteUid}.',
 
-    // =========================================================================
     // Config Override Warnings
-    // =========================================================================
-
     'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>pluginName</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enableAnalytics</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>enableAnalytics</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>analyticsRetention</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>analyticsRetention</code> in <code>config/smartlink-manager.php</code>.',
@@ -875,35 +740,23 @@ return [
     'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>logLevel</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>smartlinkBaseUrl</code> in <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // General Interface
-    // =========================================================================
-
     'Save Settings' => 'Instellingen opslaan',
     'Actions' => 'Acties',
     'Loading...' => 'Laden...',
     'Error' => 'Fout',
 
-    // =========================================================================
     // Behavior Settings — Select Options
-    // =========================================================================
-
     'Browser preference' => 'Browservoorkeur',
     'IP geolocation' => 'IP-geolocatie',
     'Both' => 'Beide',
 
-    // =========================================================================
     // General Settings — URL Tips (Redirect Manager integration)
-    // =========================================================================
-
     'Changing will break existing URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard)' => 'Wijziging verbreekt bestaande URL\'s. Om te migreren, maak een wildcard-doorstuuractie aan in {redirectPluginName}: Bron \'/old/*\' → Bestemming \'/new/$1\' (Overeenkomsttype: Wildcard)',
     'Changing will break existing QR URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard). Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns.' => 'Wijziging verbreekt bestaande QR-URL\'s. Om te migreren, maak een wildcard-doorstuuractie aan in {redirectPluginName}: Bron \'/old/*\' → Bestemming \'/new/$1\' (Overeenkomsttype: Wildcard). Ondersteunt zelfstandige (bijv. \'qr\') of geneste (bijv. \'go/qr\') patronen.',
     'Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns. Checked for conflicts with ShortLink Manager.' => 'Ondersteunt zelfstandige (bijv. \'qr\') of geneste (bijv. \'go/qr\') patronen. Gecontroleerd op conflicten met ShortLink Manager.',
 
-    // =========================================================================
     // QR Code Settings — Select Options
-    // =========================================================================
-
     'Square' => 'Vierkant',
     'Rounded' => 'Afgerond',
     'Dots' => 'Punten',
@@ -914,25 +767,16 @@ return [
     'High (~30% correction)' => 'Hoog (~30% correctie)',
     'Failed to generate preview' => 'Voorbeeld genereren mislukt',
 
-    // =========================================================================
     // Smart Link Fields — Image Size Options
-    // =========================================================================
-
     'Extra Large' => 'Extra groot',
     'Large' => 'Groot',
     'Medium' => 'Middel',
     'Small' => 'Klein',
 
-    // =========================================================================
     // Smart Link Field Input — Tooltip
-    // =========================================================================
-
     'Clicks:' => 'Klikken:',
 
-    // =========================================================================
     // Cache Settings — Info Boxes & Durations
-    // =========================================================================
-
     'Cache Location' => 'Cachelocatie',
     'Using Craft\'s configured Redis cache from <code>config/app.php</code>' => 'Gebruik van de geconfigureerde Redis-cache van Craft uit <code>config/app.php</code>',
     'Redis Not Configured' => 'Redis niet geconfigureerd',
@@ -943,10 +787,7 @@ return [
     'Recommended to keep enabled for production sites' => 'Aanbevolen om ingeschakeld te laten voor productiesites',
     'Cache duration in seconds. Current:' => 'Cacheduur in seconden. Huidig:',
 
-    // =========================================================================
     // Time Unit Strings (for JS secondsToHuman)
-    // =========================================================================
-
     '{count} second' => '{count} seconde',
     '{count} seconds' => '{count} seconden',
     '{count} minute' => '{count} minuut',
@@ -956,17 +797,11 @@ return [
     '{count} day' => '{count} dag',
     '{count} days' => '{count} dagen',
 
-    // =========================================================================
     // Template Settings — Copy hints
-    // =========================================================================
-
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>' => 'Vereist: kopieer <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> naar <code>templates/smartlink-manager/redirect.twig</code>',
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>' => 'Vereist: kopieer <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> naar <code>templates/smartlink-manager/qr.twig</code>',
 
-    // =========================================================================
     // Import/Export
-    // =========================================================================
-
     'Manage import/export' => 'Import/export beheren',
     'Import links' => 'Links importeren',
     'Export links' => 'Links exporteren',

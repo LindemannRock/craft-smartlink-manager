@@ -8,29 +8,20 @@
 
 return [
 
-    // =========================================================================
-    // Plugin Meta
-    // =========================================================================
-
+    // Plugin meta
     'SmartLink Manager' => 'SmartLink Manager',
     'Manage smart links, route users by device, and track engagement from one control panel workspace.' => 'Administrer smart links, viderestill brukere etter enhet og spor engasjement fra ett arbeidsområde i kontrollpanelet.',
     'Open SmartLink Manager' => 'Åpne SmartLink Manager',
     '{name} plugin loaded' => '{name} plugin lastet inn',
     '{displayName} caches' => '{displayName} cache',
 
-    // =========================================================================
     // Element Names
-    // =========================================================================
-
     'Smart Link' => 'Smart Link',
     'smart link' => 'smart link',
     'smart links' => 'smart links',
     'New smart link' => 'Ny smart link',
 
-    // =========================================================================
     // Permissions
-    // =========================================================================
-
     'Manage {plural}' => 'Administrer {plural}',
     'Create {plural}' => 'Opprett {plural}',
     'Edit {plural}' => 'Rediger {plural}',
@@ -44,10 +35,7 @@ return [
     'Download system logs' => 'Last ned systemlogger',
     'Manage settings' => 'Administrer innstillinger',
 
-    // =========================================================================
     // Navigation & Breadcrumbs
-    // =========================================================================
-
     'Links' => 'Lenker',
     'Analytics' => 'Analyse',
     'Logs' => 'Logger',
@@ -65,10 +53,7 @@ return [
     'Overview' => 'Oversikt',
     'Import/Export' => 'Import/Export',
 
-    // =========================================================================
     // General Settings
-    // =========================================================================
-
     'General Settings' => 'Generelle innstillinger',
     'Plugin Name' => 'Plugin-navn',
     'The name of the plugin as it appears in the Control Panel menu' => 'Navnet på plugin-programmet slik det vises i kontrollpanelets meny',
@@ -112,18 +97,12 @@ return [
     'file' => 'fil',
     'files' => 'filer',
 
-    // =========================================================================
     // Site Settings
-    // =========================================================================
-
     'Site Settings' => 'Nettstedsinnstillinger',
     'Enabled Sites' => 'Aktiverte nettsteder',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Velg hvilke nettsteder {pluginName} skal aktiveres for. La stå tomt for å aktivere for alle nettsteder.',
 
-    // =========================================================================
     // URL Settings
-    // =========================================================================
-
     'URL Settings' => 'URL-innstillinger',
     'Smart Link URL Prefix' => 'Smart Link URL-prefiks',
     '{singularName} URL Prefix' => '{singularName} URL-prefiks',
@@ -148,10 +127,7 @@ return [
     'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>slugPrefix</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>qrPrefix</code> i <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // Template Settings
-    // =========================================================================
-
     'Template Settings' => 'Malinnstillinger',
     'Redirect Template' => 'Viderestillingsmal',
     'Custom Redirect Template' => 'Tilpasset viderestillingsmal',
@@ -162,20 +138,14 @@ return [
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/qr)' => 'Sti til tilpasset mal i din templates/-mappe (f.eks. smartlink-manager/qr)',
     'These templates must exist in your site\'s <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed.' => 'Disse malene må finnes i nettstedets <code>templates/</code>-mappe. Kopier referansemalene fra <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> til <code>templates/smartlink-manager/</code> og tilpass etter behov.',
 
-    // =========================================================================
     // Asset Settings
-    // =========================================================================
-
     'Asset Settings' => 'Ressursinnstillinger',
     'Image Volume' => 'Bildevolum',
     '{singularName} Image Volume' => '{singularName} bildevolum',
     'Which asset volume should be used for {singularName} images' => 'Hvilket ressursvolum skal brukes for {singularName}-bilder',
     'All asset volumes' => 'Alle ressursvolumer',
 
-    // =========================================================================
     // QR Code Settings — Appearance
-    // =========================================================================
-
     'QR Code Settings' => 'QR Code-innstillinger',
     'Appearance & Style' => 'Utseende og stil',
     'Enable QR Code' => 'Aktiver QR Code',
@@ -196,10 +166,7 @@ return [
     'Color for position markers (leave empty to use main color)' => 'Farge for posisjonsmarkører (la stå tomt for å bruke hovedfargen)',
     'Size' => 'Størrelse',
 
-    // =========================================================================
     // QR Code Settings — Logo
-    // =========================================================================
-
     'Logo Settings' => 'Logoinnstillinger',
     'Enable QR Code Logo' => 'Aktiver QR Code-logo',
     'Enable Logo Overlay' => 'Aktiver logooverlegg',
@@ -221,10 +188,7 @@ return [
     'Please save settings to apply the volume change to the logo selection field.' => 'Lagre innstillingene for å bruke volumendringen på logovalgsfeltet.',
     'Please save to apply the volume change' => 'Lagre for å bruke volumendringen',
 
-    // =========================================================================
     // QR Code Settings — Technical
-    // =========================================================================
-
     'Technical Options' => 'Tekniske alternativer',
     'Error Correction Level' => 'Feilkorrigeringsnivå',
     'Higher levels work better if QR code is damaged but create denser patterns' => 'Høyere nivåer fungerer bedre hvis QR-koden er skadet, men skaper tettere mønstre',
@@ -236,10 +200,7 @@ return [
     'Eye Style' => 'Øyestil',
     'Shape of the position markers (corners)' => 'Form på posisjonsmarkører (hjørner)',
 
-    // =========================================================================
     // QR Code Settings — Downloads
-    // =========================================================================
-
     'Download Settings' => 'Nedlastingsinnstillinger',
     'Enable QR Code Downloads' => 'Aktiver QR Code-nedlastinger',
     'Allow users to download QR codes' => 'Tillat brukere å laste ned QR-koder',
@@ -252,10 +213,7 @@ return [
     'Extra Large (2048px)' => 'Ekstra stor (2048 px)',
     'Custom Size...' => 'Tilpasset størrelse...',
 
-    // =========================================================================
     // QR Code Settings — Actions & Preview
-    // =========================================================================
-
     'QR Code Actions' => 'QR Code-handlinger',
     'View QR Code' => 'Vis QR Code',
     'QR Code Image' => 'QR Code-bilde',
@@ -271,20 +229,14 @@ return [
     'Configure QR code caching to improve performance and reduce server load.' => 'Konfigurer QR Code-caching for å forbedre ytelsen og redusere serverbelastningen.',
     'Go to Cache Settings' => 'Gå til cache-innstillinger',
 
-    // =========================================================================
     // Behavior Settings
-    // =========================================================================
-
     'Behavior Settings' => 'Atferdsinnstillinger',
     'Redirect Behavior' => 'Viderestillingsatferd',
     '404 Redirect URL' => '404-viderestillings-URL',
     'Where to redirect when a {singularName} is not found or disabled' => 'Hvor det skal viderestilles når en {singularName} ikke finnes eller er deaktivert',
     'Can be a relative path (/) or full URL (https://example.com)' => 'Kan være en relativ sti (/) eller full URL (https://example.com)',
 
-    // =========================================================================
     // Analytics Settings
-    // =========================================================================
-
     'Analytics Settings' => 'Analyseinnstillinger',
     'Enable Analytics' => 'Aktiver analyse',
     'Track Analytics' => 'Spor analyse',
@@ -292,10 +244,7 @@ return [
     'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => 'Når aktivert sporer {pluginName} besøkendes interaksjoner, enhetstyper, geografiske data og annen analyseinformasjon.',
     'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => 'Er du sikker på at du vil deaktivere analysesporing for denne {singularName}? Denne {singularName} vil ikke lenger samle besøksdata og interaksjoner.',
 
-    // =========================================================================
     // Analytics Settings — IP Privacy
-    // =========================================================================
-
     'IP Address Privacy' => 'IP-adressebeskyttelse',
     'Anonymize IP Addresses' => 'Anonymiser IP-adresser',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => 'Masker IP-adresser før lagring for maksimal personvern. <strong>IPv4</strong>: maskerer siste oktet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: maskerer de siste 80 bitene. <strong>Avveining</strong>: Reduserer nøyaktigheten for unike besøkende (brukere på samme subnett telles som én besøkende). Geolokalisering fungerer fortsatt normalt.',
@@ -305,10 +254,7 @@ return [
     'Full IP hashed with salt (accurate unique visitors)' => 'Full IP hashet med salt (nøyaktig telling av unike besøkende)',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'Subnett maskert + hashet med salt (maksimalt personvern, mindre nøyaktig)',
 
-    // =========================================================================
     // Analytics Settings — Retention & Cleanup
-    // =========================================================================
-
     'Analytics Retention (days)' => 'Analyselagring (dager)',
     'Analytics Retention' => 'Analyselagring',
     'How many days to keep analytics data (0 for unlimited, max 3650)' => 'Hvor mange dager analysedata skal beholdes (0 for ubegrenset, maks 3650)',
@@ -321,10 +267,7 @@ return [
     'Warning' => 'Advarsel',
     'Analytics data will be retained indefinitely. This could result in large database size, slower performance, and increased storage costs over time. Consider setting a retention period (recommended: 90-365 days) for production sites.' => 'Analysedata vil lagres på ubestemt tid. Dette kan føre til stor databasestørrelse, tregere ytelse og økte lagringskostnader over tid. Vurder å angi en lagringsperiode (anbefalt: 90–365 dager) for produksjonsnettsteder.',
 
-    // =========================================================================
     // Geo Provider Settings (from base _partials/geo-settings, uses |t(pluginHandle))
-    // =========================================================================
-
     'Geographic Detection' => 'Geografisk registrering',
     'Geographic Analytics' => 'Geografisk analyse',
     'Geographic Distribution' => 'Geografisk fordeling',
@@ -363,27 +306,18 @@ return [
     'COPIED!' => 'KOPIERT!',
     'Failed to copy to clipboard' => 'Kunne ikke kopiere til utklippstavlen',
 
-    // =========================================================================
     // Device Detection Settings
-    // =========================================================================
-
     'Cache Device Detection' => 'Cache for enhetsregistrering',
     'Cache device detection results for better performance' => 'Lagre resultater fra enhetsregistrering i cache for bedre ytelse',
     'Device Detection Cache Duration (seconds)' => 'Cachevarighet for enhetsregistrering (sekunder)',
 
-    // =========================================================================
     // Language Detection Settings
-    // =========================================================================
-
     'Language Detection Method' => 'Metode for språkregistrering',
     'How to detect user language preference' => 'Slik registreres brukerens språkpreferanse',
     'Language Detection' => 'Språkregistrering',
     'Enable automatic language detection to redirect users based on their browser or location' => 'Aktiver automatisk språkregistrering for å viderestille brukere basert på nettleser eller posisjon',
 
-    // =========================================================================
     // Cache Settings
-    // =========================================================================
-
     'Cache Settings' => 'Cache-innstillinger',
     'Cache Storage Settings' => 'Innstillinger for cachelagring',
     'Cache Storage Method' => 'Metode for cachelagring',
@@ -404,10 +338,7 @@ return [
     'Device detection caching is only available when Analytics is enabled. Go to' => 'Caching for enhetsregistrering er bare tilgjengelig når analyse er aktivert. Gå til',
     'to enable analytics.' => 'for å aktivere analyse.',
 
-    // =========================================================================
     // Export Settings
-    // =========================================================================
-
     'Export Settings' => 'Eksportinnstillinger',
     'Analytics Export Options' => 'Eksportalternativer for analyse',
     'Include Disabled Links in Export' => 'Inkluder deaktiverte lenker i eksport',
@@ -418,10 +349,7 @@ return [
     'When enabled, analytics exports will include data from expired {pluginName}' => 'Når aktivert inkluderer analyseeksporter data fra utgåtte {pluginName}',
     'Export as CSV' => 'Eksporter som CSV',
 
-    // =========================================================================
     // Interface Settings
-    // =========================================================================
-
     'Interface Settings' => 'Grensesnittinnstillinger',
     'Items Per Page' => 'Elementer per side',
     'Number of {pluginName} to show per page' => 'Antall {pluginName} som skal vises per side',
@@ -430,10 +358,7 @@ return [
     'The maximum number of {pluginName} that can be selected.' => 'Det maksimale antallet {pluginName} som kan velges.',
     'Which sources should be available to select {pluginName} from?' => 'Hvilke kilder skal være tilgjengelige for å velge {pluginName} fra?',
 
-    // =========================================================================
     // Integration Settings
-    // =========================================================================
-
     'Third-Party Integrations' => 'Tredjepartsintegrasjoner',
     'Integrations Settings' => 'Integrasjonsinnstillinger',
     'Integrate {pluginName} with third-party analytics and tracking services to push click events to Google Tag Manager, Google Analytics, and other platforms.' => 'Integrer {pluginName} med tredjeparts analyse- og sporingstjenester for å sende klikkhendelser til Google Tag Manager, Google Analytics og andre plattformer.',
@@ -492,10 +417,7 @@ return [
     'Invalid {pluginName} format.' => 'Ugyldig {pluginName}-format.',
     '{pluginName} not found.' => '{pluginName} ble ikke funnet.',
 
-    // =========================================================================
     // Smart Link Fields (edit page)
-    // =========================================================================
-
     'Title' => 'Tittel',
     'The title of this {singularName}' => 'Tittelen på denne {singularName}',
     'Description' => 'Beskrivelse',
@@ -532,17 +454,11 @@ return [
     'URL copied to clipboard' => 'URL kopiert til utklippstavlen',
     'New {singularName}' => 'Ny {singularName}',
 
-    // =========================================================================
     // Field Layout
-    // =========================================================================
-
     'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => 'Legg til tilpassede felt i {singularName}-elementer. Alle felt du legger til her vises på redigeringsskjermen for {singularName}.',
     'No field layout available.' => 'Ingen feltoppsett tilgjengelig.',
 
-    // =========================================================================
     // Smart Link Element — Index & Actions
-    // =========================================================================
-
     'Slug' => 'Slug',
     'Redirect Page' => 'Viderestillingsside',
     'All {pluginName}' => 'Alle {pluginName}',
@@ -557,10 +473,7 @@ return [
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Du kan bare velge opptil {limit} {limit, plural, =1{smart link} other{smart links}}.',
     'Create a new smart link' => 'Opprett en ny smart link',
 
-    // =========================================================================
     // Analytics Dashboard — Overview Tab
-    // =========================================================================
-
     'View Analytics' => 'Vis analyse',
     'Traffic Overview' => 'Trafikkoverblick',
     'Traffic & Devices' => 'Trafikk og enheter',
@@ -584,10 +497,7 @@ return [
     'Failed to load countries data' => 'Kunne ikke laste landsdata',
     'No data for selected period' => 'Ingen data for valgt periode',
 
-    // =========================================================================
     // Analytics Dashboard — Traffic & Devices Tab
-    // =========================================================================
-
     'Device Analytics' => 'Enhetsanalyse',
     'Device Types' => 'Enhetstyper',
     'Device Brands' => 'Enhetsmerkevarer',
@@ -598,10 +508,7 @@ return [
     'Peak usage at {hour}' => 'Toppbruk ved {hour}',
     'Daily Clicks' => 'Daglige klikk',
 
-    // =========================================================================
     // Analytics Dashboard — Geographic Tab
-    // =========================================================================
-
     'Top Countries' => 'Toppland',
     'Top Cities' => 'Toppbyer',
     'Top Cities Worldwide' => 'Toppbyer verden over',
@@ -610,10 +517,7 @@ return [
     'Geographic detection is disabled.' => 'Geografisk registrering er deaktivert.',
     'Enable in Settings' => 'Aktiver i innstillinger',
 
-    // =========================================================================
     // Analytics Data — Table Columns & Labels
-    // =========================================================================
-
     'Date' => 'Dato',
     'Time' => 'Tid',
     'Device' => 'Enhet',
@@ -638,10 +542,7 @@ return [
     'Name' => 'Navn',
     'Percentage' => 'Prosent',
 
-    // =========================================================================
     // Analytics Dashboard — JS strings (passed to JavaScript)
-    // =========================================================================
-
     'No interaction data available for the selected filters.' => 'Ingen interaksjonsdata tilgjengelig for de valgte filtrene.',
     'No device data available for the selected filters.' => 'Ingen enhetsdata tilgjengelig for de valgte filtrene.',
     'No device brand data available for the selected filters.' => 'Ingen enhetsmerkedata tilgjengelig for de valgte filtrene.',
@@ -650,10 +551,7 @@ return [
     'No hourly data available for the selected filters.' => 'Ingen timedata tilgjengelig for de valgte filtrene.',
     'Peak usage at' => 'Toppbruk ved',
 
-    // =========================================================================
     // Interaction Types
-    // =========================================================================
-
     'Direct' => 'Direkte',
     'Direct Visits' => 'Direkte besøk',
     'QR' => 'QR',
@@ -661,10 +559,7 @@ return [
     'Button' => 'Knapp',
     'Landing' => 'Landing',
 
-    // =========================================================================
     // Analytics Export — CSV/Excel Column Headers
-    // =========================================================================
-
     'Date/Time' => 'Dato/tid',
     'Status' => 'Status',
     'Smart Link URL' => 'Smart Link URL',
@@ -677,10 +572,7 @@ return [
     'Language' => 'Språk',
     'User Agent' => 'User Agent',
 
-    // =========================================================================
     // Time Periods
-    // =========================================================================
-
     'Today' => 'I dag',
     'Yesterday' => 'I går',
     'Last 7 days' => 'Siste 7 dager',
@@ -689,10 +581,7 @@ return [
     'All time' => 'All tid',
     'Date Range' => 'Datoperiode',
 
-    // =========================================================================
     // Utilities
-    // =========================================================================
-
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Overvåk lenkeytelse, spor analyse og administrer cache for dine {singularName}-viderestillinger og QR-koder.',
     'Active {pluginName}' => 'Aktive {pluginName}',
     'Links Status' => 'Lenkestatus',
@@ -727,10 +616,7 @@ return [
     'Failed to clear caches' => 'Kunne ikke tømme cacher',
     'Failed to clear analytics' => 'Kunne ikke tømme analyse',
 
-    // =========================================================================
     // Widgets — Analytics Summary
-    // =========================================================================
-
     '{pluginName} - Analytics' => '{pluginName} – Analyse',
     'Top Performer' => 'Best presterende',
     'interactions' => 'interaksjoner',
@@ -738,10 +624,7 @@ return [
     'You don\'t have permission to view analytics.' => 'Du har ikke tillatelse til å se analyse.',
     'Analytics are disabled in plugin settings.' => 'Analyse er deaktivert i plugin-innstillingene.',
 
-    // =========================================================================
     // Widgets — Top Links
-    // =========================================================================
-
     '{pluginName} - Top Links' => '{pluginName} – Topplenker',
     'Link' => 'Lenke',
     'Number of Links' => 'Antall lenker',
@@ -750,10 +633,7 @@ return [
     'No {pluginName} yet' => 'Ingen {pluginName} ennå',
     'Create your first {singularName} to see it here.' => 'Opprett din første {singularName} for å se den her.',
 
-    // =========================================================================
     // Public Templates — Redirect Page (redirect.twig)
-    // =========================================================================
-
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',
@@ -762,16 +642,10 @@ return [
     'Mac App Store' => 'Mac App Store',
     'Continue to Website' => 'Fortsett til nettstedet',
 
-    // =========================================================================
     // Public Templates — QR Code Page (qr.twig)
-    // =========================================================================
-
     'Scan with your phone\'s camera to download' => 'Skann med telefonens kamera for å laste ned',
 
-    // =========================================================================
     // Controller Messages — Flash Notices & Errors
-    // =========================================================================
-
     // SmartlinksController
     'Smart link saved.' => 'Smart link lagret.',
     'Couldn\'t save smart link.' => 'Kunne ikke lagre smart link.',
@@ -807,18 +681,12 @@ return [
     'Please enter a valid size between 100 and 4096 pixels' => 'Angi en gyldig størrelse mellom 100 og 4096 piksler',
     'Reset QR code settings to plugin defaults?' => 'Tilbakestille QR Code-innstillinger til plugin-standarder?',
 
-    // =========================================================================
     // Job Messages
-    // =========================================================================
-
     '{pluginName}: Cleaning up old analytics' => '{pluginName}: Rydder opp gammel analysedata',
     'Deleting {count} old analytics records' => 'Sletter {count} gamle analyseposter',
     'Deleted {deleted} of {total} records' => 'Slettet {deleted} av {total} poster',
 
-    // =========================================================================
     // Validation Messages
-    // =========================================================================
-
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Kun bokstaver, tall, bindestreker og understreker er tillatt.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Kun bokstaver, tall, bindestreker, understreker og skråstreker er tillatt.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Kun små bokstaver, tall og understreker er tillatt.',
@@ -831,10 +699,7 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Smart link basis-URL kan ikke inneholde mellomrom.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token som ikke støttes i smart link basis-URL. Støttede tokens: {siteHandle}, {siteId}, {siteUid}.',
 
-    // =========================================================================
     // Config Override Warnings
-    // =========================================================================
-
     'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>pluginName</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enableAnalytics</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>enableAnalytics</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>analyticsRetention</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>analyticsRetention</code> i <code>config/smartlink-manager.php</code>.',
@@ -875,35 +740,23 @@ return [
     'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>logLevel</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dette overstyres av innstillingen <code>smartlinkBaseUrl</code> i <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // General Interface
-    // =========================================================================
-
     'Save Settings' => 'Lagre innstillinger',
     'Actions' => 'Handlinger',
     'Loading...' => 'Laster...',
     'Error' => 'Feil',
 
-    // =========================================================================
     // Behavior Settings — Select Options
-    // =========================================================================
-
     'Browser preference' => 'Nettleserpreferanse',
     'IP geolocation' => 'IP-geolokalisering',
     'Both' => 'Begge',
 
-    // =========================================================================
     // General Settings — URL Tips (Redirect Manager integration)
-    // =========================================================================
-
     'Changing will break existing URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard)' => 'Endring vil ødelegge eksisterende URL-er. Opprett en wildcard-viderestilling i {redirectPluginName} for å migrere: Kilde \'/old/*\' → Destinasjon \'/new/$1\' (Matchtype: Wildcard)',
     'Changing will break existing QR URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard). Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns.' => 'Endring vil ødelegge eksisterende QR-URL-er. Opprett en wildcard-viderestilling i {redirectPluginName} for å migrere: Kilde \'/old/*\' → Destinasjon \'/new/$1\' (Matchtype: Wildcard). Støtter frittstående (f.eks. \'qr\') eller nestete (f.eks. \'go/qr\') mønstre.',
     'Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns. Checked for conflicts with ShortLink Manager.' => 'Støtter frittstående (f.eks. \'qr\') eller nestete (f.eks. \'go/qr\') mønstre. Kontrollert for konflikter med ShortLink Manager.',
 
-    // =========================================================================
     // QR Code Settings — Select Options
-    // =========================================================================
-
     'Square' => 'Kvadrat',
     'Rounded' => 'Avrundet',
     'Dots' => 'Punkter',
@@ -914,25 +767,16 @@ return [
     'High (~30% correction)' => 'Høy (~30 % korreksjon)',
     'Failed to generate preview' => 'Kunne ikke generere forhåndsvisning',
 
-    // =========================================================================
     // Smart Link Fields — Image Size Options
-    // =========================================================================
-
     'Extra Large' => 'Ekstra stor',
     'Large' => 'Stor',
     'Medium' => 'Medium',
     'Small' => 'Liten',
 
-    // =========================================================================
     // Smart Link Field Input — Tooltip
-    // =========================================================================
-
     'Clicks:' => 'Klikk:',
 
-    // =========================================================================
     // Cache Settings — Info Boxes & Durations
-    // =========================================================================
-
     'Cache Location' => 'Cache-plassering',
     'Using Craft\'s configured Redis cache from <code>config/app.php</code>' => 'Bruker Crafts konfigurerte Redis-cache fra <code>config/app.php</code>',
     'Redis Not Configured' => 'Redis ikke konfigurert',
@@ -943,10 +787,7 @@ return [
     'Recommended to keep enabled for production sites' => 'Anbefales å holde aktivert for produksjonsnettsteder',
     'Cache duration in seconds. Current:' => 'Cachevarighet i sekunder. Gjeldende:',
 
-    // =========================================================================
     // Time Unit Strings (for JS secondsToHuman)
-    // =========================================================================
-
     '{count} second' => '{count} sekund',
     '{count} seconds' => '{count} sekunder',
     '{count} minute' => '{count} minutt',
@@ -956,17 +797,11 @@ return [
     '{count} day' => '{count} dag',
     '{count} days' => '{count} dager',
 
-    // =========================================================================
     // Template Settings — Copy hints
-    // =========================================================================
-
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>' => 'Påkrevd: kopier <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> til <code>templates/smartlink-manager/redirect.twig</code>',
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>' => 'Påkrevd: kopier <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> til <code>templates/smartlink-manager/qr.twig</code>',
 
-    // =========================================================================
     // Import/Export
-    // =========================================================================
-
     'Manage import/export' => 'Administrer import/export',
     'Import links' => 'Importer lenker',
     'Export links' => 'Eksporter lenker',

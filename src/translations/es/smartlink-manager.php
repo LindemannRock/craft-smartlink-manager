@@ -8,29 +8,20 @@
 
 return [
 
-    // =========================================================================
-    // Plugin Meta
-    // =========================================================================
-
+    // Plugin meta
     'SmartLink Manager' => 'SmartLink Manager',
     'Manage smart links, route users by device, and track engagement from one control panel workspace.' => 'Gestione sus smart links, dirija a los usuarios por dispositivo y realice seguimiento del engagement desde un único espacio de trabajo.',
     'Open SmartLink Manager' => 'Abrir SmartLink Manager',
     '{name} plugin loaded' => 'Plugin {name} cargado',
     '{displayName} caches' => 'Cachés de {displayName}',
 
-    // =========================================================================
     // Element Names
-    // =========================================================================
-
     'Smart Link' => 'Smart Link',
     'smart link' => 'smart link',
     'smart links' => 'smart links',
     'New smart link' => 'Nuevo smart link',
 
-    // =========================================================================
     // Permissions
-    // =========================================================================
-
     'Manage {plural}' => 'Gestionar {plural}',
     'Create {plural}' => 'Crear {plural}',
     'Edit {plural}' => 'Editar {plural}',
@@ -44,10 +35,7 @@ return [
     'Download system logs' => 'Descargar registros del sistema',
     'Manage settings' => 'Gestionar configuración',
 
-    // =========================================================================
     // Navigation & Breadcrumbs
-    // =========================================================================
-
     'Links' => 'Enlaces',
     'Analytics' => 'Analíticas',
     'Logs' => 'Registros',
@@ -65,10 +53,7 @@ return [
     'Overview' => 'Resumen',
     'Import/Export' => 'Importar/Exportar',
 
-    // =========================================================================
     // General Settings
-    // =========================================================================
-
     'General Settings' => 'Configuración general',
     'Plugin Name' => 'Nombre del plugin',
     'The name of the plugin as it appears in the Control Panel menu' => 'El nombre del plugin tal como aparece en el menú del panel de control',
@@ -112,18 +97,12 @@ return [
     'file' => 'archivo',
     'files' => 'archivos',
 
-    // =========================================================================
     // Site Settings
-    // =========================================================================
-
     'Site Settings' => 'Configuración del sitio',
     'Enabled Sites' => 'Sitios habilitados',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Seleccione para qué sitios debe habilitarse {pluginName}. Deje vacío para habilitar en todos los sitios.',
 
-    // =========================================================================
     // URL Settings
-    // =========================================================================
-
     'URL Settings' => 'Configuración de URL',
     'Smart Link URL Prefix' => 'Prefijo URL de Smart Link',
     '{singularName} URL Prefix' => 'Prefijo URL de {singularName}',
@@ -148,10 +127,7 @@ return [
     'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>slugPrefix</code> en <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>qrPrefix</code> en <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // Template Settings
-    // =========================================================================
-
     'Template Settings' => 'Configuración de plantillas',
     'Redirect Template' => 'Plantilla de redirección',
     'Custom Redirect Template' => 'Plantilla de redirección personalizada',
@@ -162,20 +138,14 @@ return [
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/qr)' => 'Ruta a la plantilla personalizada en su carpeta templates/ (p. ej., smartlink-manager/qr)',
     'These templates must exist in your site\'s <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed.' => 'Estas plantillas deben existir en la carpeta <code>templates/</code> de su sitio. Copie las plantillas de referencia desde <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> a <code>templates/smartlink-manager/</code> y personalícelas según sea necesario.',
 
-    // =========================================================================
     // Asset Settings
-    // =========================================================================
-
     'Asset Settings' => 'Configuración de recursos',
     'Image Volume' => 'Volumen de imágenes',
     '{singularName} Image Volume' => 'Volumen de imágenes de {singularName}',
     'Which asset volume should be used for {singularName} images' => 'Qué volumen de recursos debe usarse para las imágenes de {singularName}',
     'All asset volumes' => 'Todos los volúmenes de recursos',
 
-    // =========================================================================
     // QR Code Settings — Appearance
-    // =========================================================================
-
     'QR Code Settings' => 'Configuración de QR Code',
     'Appearance & Style' => 'Apariencia y estilo',
     'Enable QR Code' => 'Habilitar QR Code',
@@ -196,10 +166,7 @@ return [
     'Color for position markers (leave empty to use main color)' => 'Color para los marcadores de posición (deje vacío para usar el color principal)',
     'Size' => 'Tamaño',
 
-    // =========================================================================
     // QR Code Settings — Logo
-    // =========================================================================
-
     'Logo Settings' => 'Configuración de logo',
     'Enable QR Code Logo' => 'Habilitar logo de QR Code',
     'Enable Logo Overlay' => 'Habilitar superposición de logo',
@@ -221,10 +188,7 @@ return [
     'Please save settings to apply the volume change to the logo selection field.' => 'Guarde la configuración para aplicar el cambio de volumen al campo de selección de logo.',
     'Please save to apply the volume change' => 'Guarde para aplicar el cambio de volumen',
 
-    // =========================================================================
     // QR Code Settings — Technical
-    // =========================================================================
-
     'Technical Options' => 'Opciones técnicas',
     'Error Correction Level' => 'Nivel de corrección de errores',
     'Higher levels work better if QR code is damaged but create denser patterns' => 'Los niveles más altos funcionan mejor si el QR Code está dañado, pero crean patrones más densos',
@@ -236,10 +200,7 @@ return [
     'Eye Style' => 'Estilo de los marcadores',
     'Shape of the position markers (corners)' => 'Forma de los marcadores de posición (esquinas)',
 
-    // =========================================================================
     // QR Code Settings — Downloads
-    // =========================================================================
-
     'Download Settings' => 'Configuración de descarga',
     'Enable QR Code Downloads' => 'Habilitar descargas de QR Code',
     'Allow users to download QR codes' => 'Permitir a los usuarios descargar QR Codes',
@@ -252,10 +213,7 @@ return [
     'Extra Large (2048px)' => 'Extra grande (2048px)',
     'Custom Size...' => 'Tamaño personalizado...',
 
-    // =========================================================================
     // QR Code Settings — Actions & Preview
-    // =========================================================================
-
     'QR Code Actions' => 'Acciones de QR Code',
     'View QR Code' => 'Ver QR Code',
     'QR Code Image' => 'Imagen de QR Code',
@@ -271,20 +229,14 @@ return [
     'Configure QR code caching to improve performance and reduce server load.' => 'Configure la caché de QR Code para mejorar el rendimiento y reducir la carga del servidor.',
     'Go to Cache Settings' => 'Ir a la configuración de caché',
 
-    // =========================================================================
     // Behavior Settings
-    // =========================================================================
-
     'Behavior Settings' => 'Configuración de comportamiento',
     'Redirect Behavior' => 'Comportamiento de redirección',
     '404 Redirect URL' => 'URL de redirección 404',
     'Where to redirect when a {singularName} is not found or disabled' => 'A dónde redirigir cuando un {singularName} no se encuentra o está deshabilitado',
     'Can be a relative path (/) or full URL (https://example.com)' => 'Puede ser una ruta relativa (/) o una URL completa (https://example.com)',
 
-    // =========================================================================
     // Analytics Settings
-    // =========================================================================
-
     'Analytics Settings' => 'Configuración de analíticas',
     'Enable Analytics' => 'Habilitar analíticas',
     'Track Analytics' => 'Rastrear analíticas',
@@ -292,10 +244,7 @@ return [
     'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => 'Cuando esté habilitado, {pluginName} rastreará las interacciones de los visitantes, los tipos de dispositivos, los datos geográficos y otra información analítica.',
     'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => '¿Está seguro de que desea deshabilitar el seguimiento de analíticas para este {singularName}? Este {singularName} dejará de recopilar datos e interacciones de visitantes.',
 
-    // =========================================================================
     // Analytics Settings — IP Privacy
-    // =========================================================================
-
     'IP Address Privacy' => 'Privacidad de dirección IP',
     'Anonymize IP Addresses' => 'Anonimizar direcciones IP',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => 'Enmascare las direcciones IP antes del almacenamiento para máxima privacidad. <strong>IPv4</strong>: enmascara el último octeto (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: enmascara los últimos 80 bits. <strong>Compensación</strong>: reduce la precisión de visitantes únicos (los usuarios de la misma subred cuentan como un visitante). La geolocalización sigue funcionando normalmente.',
@@ -305,10 +254,7 @@ return [
     'Full IP hashed with salt (accurate unique visitors)' => 'IP completa con hash y sal (visitantes únicos precisos)',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'Subred enmascarada + hash con sal (privacidad máxima, menos preciso)',
 
-    // =========================================================================
     // Analytics Settings — Retention & Cleanup
-    // =========================================================================
-
     'Analytics Retention (days)' => 'Retención de analíticas (días)',
     'Analytics Retention' => 'Retención de analíticas',
     'How many days to keep analytics data (0 for unlimited, max 3650)' => 'Cuántos días conservar los datos analíticos (0 para ilimitado, máx. 3650)',
@@ -321,10 +267,7 @@ return [
     'Warning' => 'Advertencia',
     'Analytics data will be retained indefinitely. This could result in large database size, slower performance, and increased storage costs over time. Consider setting a retention period (recommended: 90-365 days) for production sites.' => 'Los datos analíticos se conservarán indefinidamente. Esto podría resultar en una base de datos de gran tamaño, rendimiento más lento y mayores costos de almacenamiento. Considere establecer un período de retención (recomendado: 90–365 días) para los sitios en producción.',
 
-    // =========================================================================
     // Geo Provider Settings (from base _partials/geo-settings, uses |t(pluginHandle))
-    // =========================================================================
-
     'Geographic Detection' => 'Detección geográfica',
     'Geographic Analytics' => 'Analíticas geográficas',
     'Geographic Distribution' => 'Distribución geográfica',
@@ -363,27 +306,18 @@ return [
     'COPIED!' => '¡COPIADO!',
     'Failed to copy to clipboard' => 'Error al copiar al portapapeles',
 
-    // =========================================================================
     // Device Detection Settings
-    // =========================================================================
-
     'Cache Device Detection' => 'Caché de detección de dispositivos',
     'Cache device detection results for better performance' => 'Guardar en caché los resultados de detección de dispositivos para mejor rendimiento',
     'Device Detection Cache Duration (seconds)' => 'Duración de caché de detección de dispositivos (segundos)',
 
-    // =========================================================================
     // Language Detection Settings
-    // =========================================================================
-
     'Language Detection Method' => 'Método de detección de idioma',
     'How to detect user language preference' => 'Cómo detectar la preferencia de idioma del usuario',
     'Language Detection' => 'Detección de idioma',
     'Enable automatic language detection to redirect users based on their browser or location' => 'Habilitar la detección automática de idioma para redirigir a los usuarios según su navegador o ubicación',
 
-    // =========================================================================
     // Cache Settings
-    // =========================================================================
-
     'Cache Settings' => 'Configuración de caché',
     'Cache Storage Settings' => 'Configuración de almacenamiento de caché',
     'Cache Storage Method' => 'Método de almacenamiento de caché',
@@ -404,10 +338,7 @@ return [
     'Device detection caching is only available when Analytics is enabled. Go to' => 'La caché de detección de dispositivos solo está disponible cuando las analíticas están habilitadas. Vaya a',
     'to enable analytics.' => 'para habilitar las analíticas.',
 
-    // =========================================================================
     // Export Settings
-    // =========================================================================
-
     'Export Settings' => 'Configuración de exportación',
     'Analytics Export Options' => 'Opciones de exportación de analíticas',
     'Include Disabled Links in Export' => 'Incluir enlaces deshabilitados en la exportación',
@@ -418,10 +349,7 @@ return [
     'When enabled, analytics exports will include data from expired {pluginName}' => 'Cuando esté habilitado, las exportaciones de analíticas incluirán datos de {pluginName} expirados',
     'Export as CSV' => 'Exportar como CSV',
 
-    // =========================================================================
     // Interface Settings
-    // =========================================================================
-
     'Interface Settings' => 'Configuración de interfaz',
     'Items Per Page' => 'Elementos por página',
     'Number of {pluginName} to show per page' => 'Número de {pluginName} a mostrar por página',
@@ -430,10 +358,7 @@ return [
     'The maximum number of {pluginName} that can be selected.' => 'El número máximo de {pluginName} que pueden seleccionarse.',
     'Which sources should be available to select {pluginName} from?' => '¿Qué fuentes deben estar disponibles para seleccionar {pluginName}?',
 
-    // =========================================================================
     // Integration Settings
-    // =========================================================================
-
     'Third-Party Integrations' => 'Integraciones de terceros',
     'Integrations Settings' => 'Configuración de integraciones',
     'Integrate {pluginName} with third-party analytics and tracking services to push click events to Google Tag Manager, Google Analytics, and other platforms.' => 'Integre {pluginName} con servicios de analíticas y seguimiento de terceros para enviar eventos de clic a Google Tag Manager, Google Analytics y otras plataformas.',
@@ -492,10 +417,7 @@ return [
     'Invalid {pluginName} format.' => 'Formato de {pluginName} no válido.',
     '{pluginName} not found.' => '{pluginName} no encontrado.',
 
-    // =========================================================================
     // Smart Link Fields (edit page)
-    // =========================================================================
-
     'Title' => 'Título',
     'The title of this {singularName}' => 'El título de este {singularName}',
     'Description' => 'Descripción',
@@ -532,17 +454,11 @@ return [
     'URL copied to clipboard' => 'URL copiada al portapapeles',
     'New {singularName}' => 'Nuevo {singularName}',
 
-    // =========================================================================
     // Field Layout
-    // =========================================================================
-
     'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => 'Agregue campos personalizados a los elementos {singularName}. Todos los campos que agregue aquí aparecerán en la pantalla de edición de {singularName}.',
     'No field layout available.' => 'No hay disposición de campos disponible.',
 
-    // =========================================================================
     // Smart Link Element — Index & Actions
-    // =========================================================================
-
     'Slug' => 'Slug',
     'Redirect Page' => 'Página de redirección',
     'All {pluginName}' => 'Todos los {pluginName}',
@@ -557,10 +473,7 @@ return [
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Solo puede seleccionar hasta {limit} {limit, plural, =1{smart link} other{smart links}}.',
     'Create a new smart link' => 'Crear un nuevo smart link',
 
-    // =========================================================================
     // Analytics Dashboard — Overview Tab
-    // =========================================================================
-
     'View Analytics' => 'Ver analíticas',
     'Traffic Overview' => 'Resumen de tráfico',
     'Traffic & Devices' => 'Tráfico y dispositivos',
@@ -584,10 +497,7 @@ return [
     'Failed to load countries data' => 'Error al cargar los datos de países',
     'No data for selected period' => 'No hay datos para el período seleccionado',
 
-    // =========================================================================
     // Analytics Dashboard — Traffic & Devices Tab
-    // =========================================================================
-
     'Device Analytics' => 'Analíticas de dispositivos',
     'Device Types' => 'Tipos de dispositivos',
     'Device Brands' => 'Marcas de dispositivos',
@@ -598,10 +508,7 @@ return [
     'Peak usage at {hour}' => 'Pico de uso a las {hour}',
     'Daily Clicks' => 'Clics diarios',
 
-    // =========================================================================
     // Analytics Dashboard — Geographic Tab
-    // =========================================================================
-
     'Top Countries' => 'Principales países',
     'Top Cities' => 'Principales ciudades',
     'Top Cities Worldwide' => 'Principales ciudades del mundo',
@@ -610,10 +517,7 @@ return [
     'Geographic detection is disabled.' => 'La detección geográfica está deshabilitada.',
     'Enable in Settings' => 'Habilitar en configuración',
 
-    // =========================================================================
     // Analytics Data — Table Columns & Labels
-    // =========================================================================
-
     'Date' => 'Fecha',
     'Time' => 'Hora',
     'Device' => 'Dispositivo',
@@ -638,10 +542,7 @@ return [
     'Name' => 'Nombre',
     'Percentage' => 'Porcentaje',
 
-    // =========================================================================
     // Analytics Dashboard — JS strings (passed to JavaScript)
-    // =========================================================================
-
     'No interaction data available for the selected filters.' => 'No hay datos de interacción disponibles para los filtros seleccionados.',
     'No device data available for the selected filters.' => 'No hay datos de dispositivo disponibles para los filtros seleccionados.',
     'No device brand data available for the selected filters.' => 'No hay datos de marca de dispositivo disponibles para los filtros seleccionados.',
@@ -650,10 +551,7 @@ return [
     'No hourly data available for the selected filters.' => 'No hay datos por hora disponibles para los filtros seleccionados.',
     'Peak usage at' => 'Pico de uso a las',
 
-    // =========================================================================
     // Interaction Types
-    // =========================================================================
-
     'Direct' => 'Directo',
     'Direct Visits' => 'Visitas directas',
     'QR' => 'QR',
@@ -661,10 +559,7 @@ return [
     'Button' => 'Botón',
     'Landing' => 'Aterrizaje',
 
-    // =========================================================================
     // Analytics Export — CSV/Excel Column Headers
-    // =========================================================================
-
     'Date/Time' => 'Fecha/Hora',
     'Status' => 'Estado',
     'Smart Link URL' => 'URL de Smart Link',
@@ -677,10 +572,7 @@ return [
     'Language' => 'Idioma',
     'User Agent' => 'User Agent',
 
-    // =========================================================================
     // Time Periods
-    // =========================================================================
-
     'Today' => 'Hoy',
     'Yesterday' => 'Ayer',
     'Last 7 days' => 'Últimos 7 días',
@@ -689,10 +581,7 @@ return [
     'All time' => 'Todo el tiempo',
     'Date Range' => 'Rango de fechas',
 
-    // =========================================================================
     // Utilities
-    // =========================================================================
-
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Supervise el rendimiento de los enlaces, realice seguimiento de analíticas y gestione la caché para sus redirecciones {singularName} y QR Codes.',
     'Active {pluginName}' => '{pluginName} activos',
     'Links Status' => 'Estado de los enlaces',
@@ -727,10 +616,7 @@ return [
     'Failed to clear caches' => 'Error al limpiar las cachés',
     'Failed to clear analytics' => 'Error al limpiar las analíticas',
 
-    // =========================================================================
     // Widgets — Analytics Summary
-    // =========================================================================
-
     '{pluginName} - Analytics' => '{pluginName} – Analíticas',
     'Top Performer' => 'Mejor rendimiento',
     'interactions' => 'interacciones',
@@ -738,10 +624,7 @@ return [
     'You don\'t have permission to view analytics.' => 'No tiene permiso para ver las analíticas.',
     'Analytics are disabled in plugin settings.' => 'Las analíticas están deshabilitadas en la configuración del plugin.',
 
-    // =========================================================================
     // Widgets — Top Links
-    // =========================================================================
-
     '{pluginName} - Top Links' => '{pluginName} – Mejores enlaces',
     'Link' => 'Enlace',
     'Number of Links' => 'Número de enlaces',
@@ -750,10 +633,7 @@ return [
     'No {pluginName} yet' => 'Aún no hay {pluginName}',
     'Create your first {singularName} to see it here.' => 'Cree su primer {singularName} para verlo aquí.',
 
-    // =========================================================================
     // Public Templates — Redirect Page (redirect.twig)
-    // =========================================================================
-
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',
@@ -762,16 +642,10 @@ return [
     'Mac App Store' => 'Mac App Store',
     'Continue to Website' => 'Continuar al sitio web',
 
-    // =========================================================================
     // Public Templates — QR Code Page (qr.twig)
-    // =========================================================================
-
     'Scan with your phone\'s camera to download' => 'Escanee con la cámara de su teléfono para descargar',
 
-    // =========================================================================
     // Controller Messages — Flash Notices & Errors
-    // =========================================================================
-
     // SmartlinksController
     'Smart link saved.' => 'Smart link guardado.',
     'Couldn\'t save smart link.' => 'No se pudo guardar el smart link.',
@@ -807,18 +681,12 @@ return [
     'Please enter a valid size between 100 and 4096 pixels' => 'Ingrese un tamaño válido entre 100 y 4096 píxeles',
     'Reset QR code settings to plugin defaults?' => '¿Restablecer la configuración del QR Code a los valores predeterminados del plugin?',
 
-    // =========================================================================
     // Job Messages
-    // =========================================================================
-
     '{pluginName}: Cleaning up old analytics' => '{pluginName}: Limpiando analíticas antiguas',
     'Deleting {count} old analytics records' => 'Eliminando {count} registros analíticos antiguos',
     'Deleted {deleted} of {total} records' => '{deleted} de {total} registros eliminados',
 
-    // =========================================================================
     // Validation Messages
-    // =========================================================================
-
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Solo se permiten letras, números, guiones y guiones bajos.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Solo se permiten letras, números, guiones, guiones bajos y barras.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Solo se permiten letras minúsculas, números y guiones bajos.',
@@ -831,10 +699,7 @@ return [
     'Smart link base URL cannot contain spaces.' => 'La URL base del smart link no puede contener espacios.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token no compatible en la URL base del smart link. Tokens compatibles: {siteHandle}, {siteId}, {siteUid}.',
 
-    // =========================================================================
     // Config Override Warnings
-    // =========================================================================
-
     'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>pluginName</code> en <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enableAnalytics</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>enableAnalytics</code> en <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>analyticsRetention</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>analyticsRetention</code> en <code>config/smartlink-manager.php</code>.',
@@ -875,35 +740,23 @@ return [
     'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>logLevel</code> en <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esto está siendo sobrescrito por el ajuste <code>smartlinkBaseUrl</code> en <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // General Interface
-    // =========================================================================
-
     'Save Settings' => 'Guardar configuración',
     'Actions' => 'Acciones',
     'Loading...' => 'Cargando...',
     'Error' => 'Error',
 
-    // =========================================================================
     // Behavior Settings — Select Options
-    // =========================================================================
-
     'Browser preference' => 'Preferencia del navegador',
     'IP geolocation' => 'Geolocalización IP',
     'Both' => 'Ambos',
 
-    // =========================================================================
     // General Settings — URL Tips (Redirect Manager integration)
-    // =========================================================================
-
     'Changing will break existing URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard)' => 'El cambio romperá las URL existentes. Para migrar, cree una redirección comodín en {redirectPluginName}: Origen \'/old/*\' → Destino \'/new/$1\' (Tipo de coincidencia: Comodín)',
     'Changing will break existing QR URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard). Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns.' => 'El cambio romperá las URL QR existentes. Para migrar, cree una redirección comodín en {redirectPluginName}: Origen \'/old/*\' → Destino \'/new/$1\' (Tipo de coincidencia: Comodín). Admite patrones independientes (p. ej., \'qr\') o anidados (p. ej., \'go/qr\').',
     'Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns. Checked for conflicts with ShortLink Manager.' => 'Admite patrones independientes (p. ej., \'qr\') o anidados (p. ej., \'go/qr\'). Verificado para conflictos con ShortLink Manager.',
 
-    // =========================================================================
     // QR Code Settings — Select Options
-    // =========================================================================
-
     'Square' => 'Cuadrado',
     'Rounded' => 'Redondeado',
     'Dots' => 'Puntos',
@@ -914,25 +767,16 @@ return [
     'High (~30% correction)' => 'Alto (~30 % de corrección)',
     'Failed to generate preview' => 'Error al generar la vista previa',
 
-    // =========================================================================
     // Smart Link Fields — Image Size Options
-    // =========================================================================
-
     'Extra Large' => 'Extra grande',
     'Large' => 'Grande',
     'Medium' => 'Mediano',
     'Small' => 'Pequeño',
 
-    // =========================================================================
     // Smart Link Field Input — Tooltip
-    // =========================================================================
-
     'Clicks:' => 'Clics:',
 
-    // =========================================================================
     // Cache Settings — Info Boxes & Durations
-    // =========================================================================
-
     'Cache Location' => 'Ubicación de la caché',
     'Using Craft\'s configured Redis cache from <code>config/app.php</code>' => 'Usando la caché Redis configurada de Craft desde <code>config/app.php</code>',
     'Redis Not Configured' => 'Redis no configurado',
@@ -943,10 +787,7 @@ return [
     'Recommended to keep enabled for production sites' => 'Se recomienda mantenerlo habilitado para los sitios en producción',
     'Cache duration in seconds. Current:' => 'Duración de la caché en segundos. Actual:',
 
-    // =========================================================================
     // Time Unit Strings (for JS secondsToHuman)
-    // =========================================================================
-
     '{count} second' => '{count} segundo',
     '{count} seconds' => '{count} segundos',
     '{count} minute' => '{count} minuto',
@@ -956,17 +797,11 @@ return [
     '{count} day' => '{count} día',
     '{count} days' => '{count} días',
 
-    // =========================================================================
     // Template Settings — Copy hints
-    // =========================================================================
-
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>' => 'Requerido: copie <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> a <code>templates/smartlink-manager/redirect.twig</code>',
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>' => 'Requerido: copie <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> a <code>templates/smartlink-manager/qr.twig</code>',
 
-    // =========================================================================
     // Import/Export
-    // =========================================================================
-
     'Manage import/export' => 'Gestionar importar/exportar',
     'Import links' => 'Importar enlaces',
     'Export links' => 'Exportar enlaces',

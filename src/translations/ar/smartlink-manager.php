@@ -8,29 +8,20 @@
 
 return [
 
-    // =========================================================================
-    // Plugin Meta
-    // =========================================================================
-
+    // Plugin meta
     'SmartLink Manager' => 'SmartLink Manager',
     'Manage smart links, route users by device, and track engagement from one control panel workspace.' => 'إدارة الروابط الذكية وتوجيه المستخدمين حسب الجهاز وتتبع التفاعل من مساحة عمل واحدة في لوحة التحكم.',
     'Open SmartLink Manager' => 'فتح SmartLink Manager',
     '{name} plugin loaded' => 'تم تحميل إضافة {name}',
     '{displayName} caches' => 'ذاكرة تخزين {displayName} المؤقتة',
 
-    // =========================================================================
     // Element Names
-    // =========================================================================
-
     'Smart Link' => 'رابط ذكي',
     'smart link' => 'رابط ذكي',
     'smart links' => 'روابط ذكية',
     'New smart link' => 'رابط ذكي جديد',
 
-    // =========================================================================
     // Permissions
-    // =========================================================================
-
     'Manage {plural}' => 'إدارة {plural}',
     'Create {plural}' => 'إنشاء {plural}',
     'Edit {plural}' => 'تعديل {plural}',
@@ -44,10 +35,7 @@ return [
     'Download system logs' => 'تحميل سجلات النظام',
     'Manage settings' => 'إدارة الإعدادات',
 
-    // =========================================================================
     // Navigation & Breadcrumbs
-    // =========================================================================
-
     'Links' => 'الروابط',
     'Analytics' => 'التحليلات',
     'Logs' => 'السجلات',
@@ -65,10 +53,7 @@ return [
     'Overview' => 'نظرة عامة',
     'Import/Export' => 'استيراد/تصدير',
 
-    // =========================================================================
     // General Settings
-    // =========================================================================
-
     'General Settings' => 'الإعدادات العامة',
     'Plugin Name' => 'اسم الإضافة',
     'The name of the plugin as it appears in the Control Panel menu' => 'اسم الإضافة كما يظهر في قائمة لوحة التحكم',
@@ -112,18 +97,12 @@ return [
     'file' => 'ملف',
     'files' => 'ملفات',
 
-    // =========================================================================
     // Site Settings
-    // =========================================================================
-
     'Site Settings' => 'إعدادات الموقع',
     'Enabled Sites' => 'المواقع المُفعَّلة',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'اختر المواقع التي يجب تفعيل {pluginName} فيها. اتركها فارغة للتفعيل في جميع المواقع.',
 
-    // =========================================================================
     // URL Settings
-    // =========================================================================
-
     'URL Settings' => 'إعدادات URL',
     'Smart Link URL Prefix' => 'بادئة URL للرابط الذكي',
     '{singularName} URL Prefix' => 'بادئة URL لـ {singularName}',
@@ -148,10 +127,7 @@ return [
     'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>slugPrefix</code> في <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>qrPrefix</code> في <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // Template Settings
-    // =========================================================================
-
     'Template Settings' => 'إعدادات القالب',
     'Redirect Template' => 'قالب إعادة التوجيه',
     'Custom Redirect Template' => 'قالب إعادة توجيه مخصص',
@@ -162,20 +138,14 @@ return [
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/qr)' => 'مسار القالب المخصص في مجلد templates/ (مثلاً، smartlink-manager/qr)',
     'These templates must exist in your site\'s <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed.' => 'يجب أن توجد هذه القوالب في مجلد <code>templates/</code> الخاص بموقعك. انسخ القوالب المرجعية من <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> إلى <code>templates/smartlink-manager/</code> وخصّصها حسب الحاجة.',
 
-    // =========================================================================
     // Asset Settings
-    // =========================================================================
-
     'Asset Settings' => 'إعدادات الملفات',
     'Image Volume' => 'مجلد الصور',
     '{singularName} Image Volume' => 'مجلد صور {singularName}',
     'Which asset volume should be used for {singularName} images' => 'أي مجلد ملفات يجب استخدامه لصور {singularName}',
     'All asset volumes' => 'جميع مجلدات الملفات',
 
-    // =========================================================================
     // QR Code Settings — Appearance
-    // =========================================================================
-
     'QR Code Settings' => 'إعدادات QR Code',
     'Appearance & Style' => 'المظهر والنمط',
     'Enable QR Code' => 'تفعيل QR Code',
@@ -196,10 +166,7 @@ return [
     'Color for position markers (leave empty to use main color)' => 'لون علامات الموضع (اتركه فارغاً لاستخدام اللون الرئيسي)',
     'Size' => 'الحجم',
 
-    // =========================================================================
     // QR Code Settings — Logo
-    // =========================================================================
-
     'Logo Settings' => 'إعدادات الشعار',
     'Enable QR Code Logo' => 'تفعيل شعار QR Code',
     'Enable Logo Overlay' => 'تفعيل طبقة الشعار',
@@ -221,10 +188,7 @@ return [
     'Please save settings to apply the volume change to the logo selection field.' => 'يرجى حفظ الإعدادات لتطبيق تغيير المجلد على حقل اختيار الشعار.',
     'Please save to apply the volume change' => 'يرجى الحفظ لتطبيق تغيير المجلد',
 
-    // =========================================================================
     // QR Code Settings — Technical
-    // =========================================================================
-
     'Technical Options' => 'خيارات تقنية',
     'Error Correction Level' => 'مستوى تصحيح الأخطاء',
     'Higher levels work better if QR code is damaged but create denser patterns' => 'المستويات الأعلى تعمل بشكل أفضل إذا تضرر QR Code لكنها تنشئ أنماطاً أكثر كثافة',
@@ -236,10 +200,7 @@ return [
     'Eye Style' => 'نمط العين',
     'Shape of the position markers (corners)' => 'شكل علامات الموضع (الزوايا)',
 
-    // =========================================================================
     // QR Code Settings — Downloads
-    // =========================================================================
-
     'Download Settings' => 'إعدادات التحميل',
     'Enable QR Code Downloads' => 'تفعيل تحميل QR Code',
     'Allow users to download QR codes' => 'السماح للمستخدمين بتحميل رموز QR',
@@ -252,10 +213,7 @@ return [
     'Extra Large (2048px)' => 'كبير جداً (2048 بكسل)',
     'Custom Size...' => 'حجم مخصص...',
 
-    // =========================================================================
     // QR Code Settings — Actions & Preview
-    // =========================================================================
-
     'QR Code Actions' => 'إجراءات QR Code',
     'View QR Code' => 'عرض QR Code',
     'QR Code Image' => 'صورة QR Code',
@@ -271,20 +229,14 @@ return [
     'Configure QR code caching to improve performance and reduce server load.' => 'كوّن تخزين QR Code المؤقت لتحسين الأداء وتقليل الحمل على الخادم.',
     'Go to Cache Settings' => 'الانتقال إلى إعدادات Cache',
 
-    // =========================================================================
     // Behavior Settings
-    // =========================================================================
-
     'Behavior Settings' => 'إعدادات السلوك',
     'Redirect Behavior' => 'سلوك إعادة التوجيه',
     '404 Redirect URL' => 'رابط إعادة توجيه 404',
     'Where to redirect when a {singularName} is not found or disabled' => 'إلى أين يتم التوجيه عندما لا يُعثر على {singularName} أو يكون معطلاً',
     'Can be a relative path (/) or full URL (https://example.com)' => 'يمكن أن يكون مساراً نسبياً (/) أو رابطاً كاملاً (https://example.com)',
 
-    // =========================================================================
     // Analytics Settings
-    // =========================================================================
-
     'Analytics Settings' => 'إعدادات التحليلات',
     'Enable Analytics' => 'تفعيل التحليلات',
     'Track Analytics' => 'تتبع التحليلات',
@@ -292,10 +244,7 @@ return [
     'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => 'عند التفعيل، ستتتبع {pluginName} تفاعلات الزوار وأنواع الأجهزة والبيانات الجغرافية ومعلومات تحليلية أخرى.',
     'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => 'هل أنت متأكد من تعطيل تتبع التحليلات لهذا {singularName}؟ لن يعود {singularName} يجمع بيانات الزوار والتفاعلات.',
 
-    // =========================================================================
     // Analytics Settings — IP Privacy
-    // =========================================================================
-
     'IP Address Privacy' => 'خصوصية عنوان IP',
     'Anonymize IP Addresses' => 'إخفاء هوية عناوين IP',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => 'إخفاء عناوين IP قبل التخزين لأقصى قدر من الخصوصية. <strong>IPv4</strong>: يخفي الجزء الأخير (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: يخفي آخر 80 بت. <strong>المقايضة</strong>: تقليل دقة الزوار الفريدين (يُحسب المستخدمون في نفس الشبكة الفرعية كزائر واحد). يعمل تحديد الموقع الجغرافي بشكل طبيعي.',
@@ -305,10 +254,7 @@ return [
     'Full IP hashed with salt (accurate unique visitors)' => 'IP كاملة مُجزَّأة مع salt (دقة عالية للزوار الفريدين)',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'شبكة فرعية مُخفاة + مُجزَّأة مع salt (أقصى خصوصية، أقل دقة)',
 
-    // =========================================================================
     // Analytics Settings — Retention & Cleanup
-    // =========================================================================
-
     'Analytics Retention (days)' => 'الاحتفاظ بالتحليلات (بالأيام)',
     'Analytics Retention' => 'الاحتفاظ بالتحليلات',
     'How many days to keep analytics data (0 for unlimited, max 3650)' => 'عدد الأيام للاحتفاظ ببيانات التحليلات (0 لغير محدود، الحد الأقصى 3650)',
@@ -321,10 +267,7 @@ return [
     'Warning' => 'تحذير',
     'Analytics data will be retained indefinitely. This could result in large database size, slower performance, and increased storage costs over time. Consider setting a retention period (recommended: 90-365 days) for production sites.' => 'سيتم الاحتفاظ ببيانات التحليلات إلى أجل غير مسمى. قد يؤدي هذا إلى حجم كبير لقاعدة البيانات وأداء أبطأ وزيادة تكاليف التخزين بمرور الوقت. فكر في تحديد فترة احتفاظ (مستحسن: 90-365 يوماً) لمواقع الإنتاج.',
 
-    // =========================================================================
     // Geo Provider Settings (from base _partials/geo-settings, uses |t(pluginHandle))
-    // =========================================================================
-
     'Geographic Detection' => 'الكشف الجغرافي',
     'Geographic Analytics' => 'التحليلات الجغرافية',
     'Geographic Distribution' => 'التوزيع الجغرافي',
@@ -363,27 +306,18 @@ return [
     'COPIED!' => 'تم النسخ!',
     'Failed to copy to clipboard' => 'فشل النسخ إلى الحافظة',
 
-    // =========================================================================
     // Device Detection Settings
-    // =========================================================================
-
     'Cache Device Detection' => 'تخزين كشف الجهاز مؤقتاً',
     'Cache device detection results for better performance' => 'تخزين نتائج كشف الجهاز مؤقتاً لأداء أفضل',
     'Device Detection Cache Duration (seconds)' => 'مدة تخزين كشف الجهاز المؤقت (بالثواني)',
 
-    // =========================================================================
     // Language Detection Settings
-    // =========================================================================
-
     'Language Detection Method' => 'طريقة كشف اللغة',
     'How to detect user language preference' => 'كيفية كشف تفضيل لغة المستخدم',
     'Language Detection' => 'كشف اللغة',
     'Enable automatic language detection to redirect users based on their browser or location' => 'تفعيل كشف اللغة التلقائي لإعادة توجيه المستخدمين بناءً على المتصفح أو الموقع',
 
-    // =========================================================================
     // Cache Settings
-    // =========================================================================
-
     'Cache Settings' => 'إعدادات Cache',
     'Cache Storage Settings' => 'إعدادات تخزين Cache',
     'Cache Storage Method' => 'طريقة تخزين Cache',
@@ -404,10 +338,7 @@ return [
     'Device detection caching is only available when Analytics is enabled. Go to' => 'تخزين كشف الجهاز المؤقت متاح فقط عند تفعيل التحليلات. انتقل إلى',
     'to enable analytics.' => 'لتفعيل التحليلات.',
 
-    // =========================================================================
     // Export Settings
-    // =========================================================================
-
     'Export Settings' => 'إعدادات التصدير',
     'Analytics Export Options' => 'خيارات تصدير التحليلات',
     'Include Disabled Links in Export' => 'تضمين الروابط المعطلة في التصدير',
@@ -418,10 +349,7 @@ return [
     'When enabled, analytics exports will include data from expired {pluginName}' => 'عند التفعيل، ستتضمن صادرات التحليلات بيانات من {pluginName} المنتهية',
     'Export as CSV' => 'تصدير كملف CSV',
 
-    // =========================================================================
     // Interface Settings
-    // =========================================================================
-
     'Interface Settings' => 'إعدادات الواجهة',
     'Items Per Page' => 'العناصر في الصفحة',
     'Number of {pluginName} to show per page' => 'عدد {pluginName} المعروضة في كل صفحة',
@@ -430,10 +358,7 @@ return [
     'The maximum number of {pluginName} that can be selected.' => 'الحد الأقصى لعدد {pluginName} التي يمكن تحديدها.',
     'Which sources should be available to select {pluginName} from?' => 'أي المصادر يجب أن تكون متاحة لتحديد {pluginName} منها؟',
 
-    // =========================================================================
     // Integration Settings
-    // =========================================================================
-
     'Third-Party Integrations' => 'تكاملات الطرف الثالث',
     'Integrations Settings' => 'إعدادات التكاملات',
     'Integrate {pluginName} with third-party analytics and tracking services to push click events to Google Tag Manager, Google Analytics, and other platforms.' => 'دمج {pluginName} مع خدمات التحليلات والتتبع من الطرف الثالث لإرسال أحداث النقرات إلى Google Tag Manager وGoogle Analytics ومنصات أخرى.',
@@ -492,10 +417,7 @@ return [
     'Invalid {pluginName} format.' => 'صيغة {pluginName} غير صالحة.',
     '{pluginName} not found.' => '{pluginName} غير موجود.',
 
-    // =========================================================================
     // Smart Link Fields (edit page)
-    // =========================================================================
-
     'Title' => 'العنوان',
     'The title of this {singularName}' => 'عنوان {singularName}',
     'Description' => 'الوصف',
@@ -532,17 +454,11 @@ return [
     'URL copied to clipboard' => 'تم نسخ URL إلى الحافظة',
     'New {singularName}' => '{singularName} جديد',
 
-    // =========================================================================
     // Field Layout
-    // =========================================================================
-
     'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => 'إضافة حقول مخصصة إلى عناصر {singularName}. أي حقول تضيفها هنا ستظهر في شاشة تحرير {singularName}.',
     'No field layout available.' => 'لا يوجد تخطيط حقول متاح.',
 
-    // =========================================================================
     // Smart Link Element — Index & Actions
-    // =========================================================================
-
     'Slug' => 'Slug',
     'Redirect Page' => 'صفحة إعادة التوجيه',
     'All {pluginName}' => 'جميع {pluginName}',
@@ -557,10 +473,7 @@ return [
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'يمكنك تحديد ما يصل إلى {limit} رابط ذكي.',
     'Create a new smart link' => 'إنشاء رابط ذكي جديد',
 
-    // =========================================================================
     // Analytics Dashboard — Overview Tab
-    // =========================================================================
-
 'View Analytics' => 'عرض التحليلات',
     'Traffic Overview' => 'نظرة عامة على الزيارات',
     'Traffic & Devices' => 'الزيارات والأجهزة',
@@ -584,10 +497,7 @@ return [
     'Failed to load countries data' => 'فشل تحميل بيانات الدول',
     'No data for selected period' => 'لا توجد بيانات للفترة المحددة',
 
-    // =========================================================================
     // Analytics Dashboard — Traffic & Devices Tab
-    // =========================================================================
-
     'Device Analytics' => 'تحليلات الأجهزة',
     'Device Types' => 'أنواع الأجهزة',
     'Device Brands' => 'ماركات الأجهزة',
@@ -598,10 +508,7 @@ return [
     'Peak usage at {hour}' => 'ذروة الاستخدام عند {hour}',
     'Daily Clicks' => 'النقرات اليومية',
 
-    // =========================================================================
     // Analytics Dashboard — Geographic Tab
-    // =========================================================================
-
     'Top Countries' => 'أفضل الدول',
     'Top Cities' => 'أفضل المدن',
     'Top Cities Worldwide' => 'أفضل المدن عالمياً',
@@ -610,10 +517,7 @@ return [
     'Geographic detection is disabled.' => 'الكشف الجغرافي معطَّل.',
     'Enable in Settings' => 'تفعيل في الإعدادات',
 
-    // =========================================================================
     // Analytics Data — Table Columns & Labels
-    // =========================================================================
-
     'Date' => 'التاريخ',
     'Time' => 'الوقت',
     'Device' => 'الجهاز',
@@ -638,10 +542,7 @@ return [
     'Name' => 'الاسم',
     'Percentage' => 'النسبة المئوية',
 
-    // =========================================================================
     // Analytics Dashboard — JS strings (passed to JavaScript)
-    // =========================================================================
-
     'No interaction data available for the selected filters.' => 'لا توجد بيانات تفاعل متاحة للفلاتر المحددة.',
     'No device data available for the selected filters.' => 'لا توجد بيانات أجهزة متاحة للفلاتر المحددة.',
     'No device brand data available for the selected filters.' => 'لا توجد بيانات ماركات أجهزة متاحة للفلاتر المحددة.',
@@ -650,10 +551,7 @@ return [
     'No hourly data available for the selected filters.' => 'لا توجد بيانات ساعية متاحة للفلاتر المحددة.',
     'Peak usage at' => 'ذروة الاستخدام عند',
 
-    // =========================================================================
     // Interaction Types
-    // =========================================================================
-
     'Direct' => 'مباشر',
     'Direct Visits' => 'زيارات مباشرة',
     'QR' => 'QR',
@@ -661,10 +559,7 @@ return [
     'Button' => 'زر',
     'Landing' => 'صفحة هبوط',
 
-    // =========================================================================
     // Analytics Export — CSV/Excel Column Headers
-    // =========================================================================
-
     'Date/Time' => 'التاريخ/الوقت',
     'Status' => 'الحالة',
     'Smart Link URL' => 'رابط Smart Link URL',
@@ -677,10 +572,7 @@ return [
     'Language' => 'اللغة',
     'User Agent' => 'User Agent',
 
-    // =========================================================================
     // Time Periods
-    // =========================================================================
-
     'Today' => 'اليوم',
     'Yesterday' => 'أمس',
     'Last 7 days' => 'آخر 7 أيام',
@@ -689,10 +581,7 @@ return [
     'All time' => 'كل الوقت',
     'Date Range' => 'نطاق التاريخ',
 
-    // =========================================================================
     // Utilities
-    // =========================================================================
-
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'راقب أداء الروابط وتتبع التحليلات وإدارة Cache لعمليات إعادة توجيه {singularName} ورموز QR.',
     'Active {pluginName}' => '{pluginName} النشطة',
     'Links Status' => 'حالة الروابط',
@@ -727,10 +616,7 @@ return [
     'Failed to clear caches' => 'فشل مسح الـ Cache',
     'Failed to clear analytics' => 'فشل مسح التحليلات',
 
-    // =========================================================================
     // Widgets — Analytics Summary
-    // =========================================================================
-
     '{pluginName} - Analytics' => '{pluginName} - التحليلات',
     'Top Performer' => 'الأفضل أداءً',
     'interactions' => 'تفاعلات',
@@ -738,10 +624,7 @@ return [
     'You don\'t have permission to view analytics.' => 'ليس لديك صلاحية عرض التحليلات.',
     'Analytics are disabled in plugin settings.' => 'التحليلات معطَّلة في إعدادات الإضافة.',
 
-    // =========================================================================
     // Widgets — Top Links
-    // =========================================================================
-
     '{pluginName} - Top Links' => '{pluginName} - أفضل الروابط',
     'Link' => 'رابط',
     'Number of Links' => 'عدد الروابط',
@@ -750,10 +633,7 @@ return [
     'No {pluginName} yet' => 'لا توجد {pluginName} بعد',
     'Create your first {singularName} to see it here.' => 'أنشئ أول {singularName} لعرضه هنا.',
 
-    // =========================================================================
     // Public Templates — Redirect Page (redirect.twig)
-    // =========================================================================
-
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',
@@ -762,16 +642,10 @@ return [
     'Mac App Store' => 'Mac App Store',
     'Continue to Website' => 'متابعة إلى الموقع',
 
-    // =========================================================================
     // Public Templates — QR Code Page (qr.twig)
-    // =========================================================================
-
     'Scan with your phone\'s camera to download' => 'امسح بكاميرا هاتفك للتحميل',
 
-    // =========================================================================
     // Controller Messages — Flash Notices & Errors
-    // =========================================================================
-
     // SmartlinksController
     'Smart link saved.' => 'تم حفظ الرابط الذكي.',
     'Couldn\'t save smart link.' => 'تعذّر حفظ الرابط الذكي.',
@@ -807,18 +681,12 @@ return [
     'Please enter a valid size between 100 and 4096 pixels' => 'يرجى إدخال حجم صالح بين 100 و4096 بكسل',
     'Reset QR code settings to plugin defaults?' => 'إعادة تعيين إعدادات QR Code إلى افتراضيات الإضافة؟',
 
-    // =========================================================================
     // Job Messages
-    // =========================================================================
-
     '{pluginName}: Cleaning up old analytics' => '{pluginName}: جاري تنظيف التحليلات القديمة',
     'Deleting {count} old analytics records' => 'جاري حذف {count} سجل تحليلات قديم',
     'Deleted {deleted} of {total} records' => 'تم حذف {deleted} من أصل {total} سجل',
 
-    // =========================================================================
     // Validation Messages
-    // =========================================================================
-
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'يُسمح فقط بالحروف والأرقام والشُرط والشُرط السفلية.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'يُسمح فقط بالحروف والأرقام والشُرط والشُرط السفلية والشرطات المائلة.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'يُسمح فقط بالحروف الصغيرة والأرقام والشُرط السفلية.',
@@ -831,10 +699,7 @@ return [
     'Smart link base URL cannot contain spaces.' => 'لا يمكن أن يحتوي عنوان URL الأساسي للرابط الذكي على مسافات.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'رمز غير مدعوم في عنوان URL الأساسي للرابط الذكي. الرموز المدعومة: {siteHandle}, {siteId}, {siteUid}.',
 
-    // =========================================================================
     // Config Override Warnings
-    // =========================================================================
-
     'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>pluginName</code> في <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enableAnalytics</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>enableAnalytics</code> في <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>analyticsRetention</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>analyticsRetention</code> في <code>config/smartlink-manager.php</code>.',
@@ -875,35 +740,23 @@ return [
     'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>logLevel</code> في <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا بواسطة إعداد <code>smartlinkBaseUrl</code> في <code>config/smartlink-manager.php</code>.',
 
-    // =========================================================================
     // General Interface
-    // =========================================================================
-
     'Save Settings' => 'حفظ الإعدادات',
     'Actions' => 'الإجراءات',
     'Loading...' => 'جاري التحميل...',
     'Error' => 'خطأ',
 
-    // =========================================================================
     // Behavior Settings — Select Options
-    // =========================================================================
-
     'Browser preference' => 'تفضيل المتصفح',
     'IP geolocation' => 'تحديد الموقع بعنوان IP',
     'Both' => 'كلاهما',
 
-    // =========================================================================
     // General Settings — URL Tips (Redirect Manager integration)
-    // =========================================================================
-
     'Changing will break existing URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard)' => 'التغيير سيُبطل عناوين URL الموجودة. للترحيل، أنشئ إعادة توجيه بدل في {redirectPluginName}: المصدر \'/old/*\' → الوجهة \'/new/$1\' (نوع المطابقة: Wildcard)',
     'Changing will break existing QR URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard). Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns.' => 'التغيير سيُبطل عناوين QR URL الموجودة. للترحيل، أنشئ إعادة توجيه بدل في {redirectPluginName}: المصدر \'/old/*\' → الوجهة \'/new/$1\' (نوع المطابقة: Wildcard). يدعم الأنماط المستقلة (مثلاً، \'qr\') أو المتداخلة (مثلاً، \'go/qr\').',
     'Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns. Checked for conflicts with ShortLink Manager.' => 'يدعم الأنماط المستقلة (مثلاً، \'qr\') أو المتداخلة (مثلاً، \'go/qr\'). يتم التحقق من التعارضات مع ShortLink Manager.',
 
-    // =========================================================================
     // QR Code Settings — Select Options
-    // =========================================================================
-
     'Square' => 'مربع',
     'Rounded' => 'مستدير',
     'Dots' => 'نقاط',
@@ -914,25 +767,16 @@ return [
     'High (~30% correction)' => 'مرتفع (~30% تصحيح)',
     'Failed to generate preview' => 'فشل إنشاء المعاينة',
 
-    // =========================================================================
     // Smart Link Fields — Image Size Options
-    // =========================================================================
-
     'Extra Large' => 'كبير جداً',
     'Large' => 'كبير',
     'Medium' => 'متوسط',
     'Small' => 'صغير',
 
-    // =========================================================================
     // Smart Link Field Input — Tooltip
-    // =========================================================================
-
     'Clicks:' => 'النقرات:',
 
-    // =========================================================================
     // Cache Settings — Info Boxes & Durations
-    // =========================================================================
-
     'Cache Location' => 'موقع Cache',
     'Using Craft\'s configured Redis cache from <code>config/app.php</code>' => 'استخدام Redis Cache المُهيَّأ من <code>config/app.php</code>',
     'Redis Not Configured' => 'Redis غير مُهيَّأ',
@@ -943,10 +787,7 @@ return [
     'Recommended to keep enabled for production sites' => 'يُنصح بإبقائه مُفعَّلاً لمواقع الإنتاج',
     'Cache duration in seconds. Current:' => 'مدة Cache بالثواني. الحالي:',
 
-    // =========================================================================
     // Time Unit Strings (for JS secondsToHuman)
-    // =========================================================================
-
     '{count} second' => '{count} ثانية',
     '{count} seconds' => '{count} ثوانٍ',
     '{count} minute' => '{count} دقيقة',
@@ -956,17 +797,11 @@ return [
     '{count} day' => '{count} يوم',
     '{count} days' => '{count} أيام',
 
-    // =========================================================================
     // Template Settings — Copy hints
-    // =========================================================================
-
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>' => 'مطلوب: انسخ <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> إلى <code>templates/smartlink-manager/redirect.twig</code>',
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>' => 'مطلوب: انسخ <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> إلى <code>templates/smartlink-manager/qr.twig</code>',
 
-    // =========================================================================
     // Import/Export
-    // =========================================================================
-
     'Manage import/export' => 'إدارة الاستيراد/التصدير',
     'Import links' => 'استيراد الروابط',
     'Export links' => 'تصدير الروابط',

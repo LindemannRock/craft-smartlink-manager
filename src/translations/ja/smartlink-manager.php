@@ -8,29 +8,20 @@
 
 return [
 
-    // =========================================================================
-    // Plugin Meta
-    // =========================================================================
-
+    // Plugin meta
     'SmartLink Manager' => 'SmartLink Manager',
     'Manage smart links, route users by device, and track engagement from one control panel workspace.' => 'スマートリンクを管理し、デバイスごとにユーザーを振り分け、一つのワークスペースでエンゲージメントを追跡します。',
     'Open SmartLink Manager' => 'SmartLink Manager を開く',
     '{name} plugin loaded' => '{name} プラグインが読み込まれました',
     '{displayName} caches' => '{displayName} キャッシュ',
 
-    // =========================================================================
     // Element Names
-    // =========================================================================
-
     'Smart Link' => 'スマートリンク',
     'smart link' => 'スマートリンク',
     'smart links' => 'スマートリンク',
     'New smart link' => '新しいスマートリンク',
 
-    // =========================================================================
     // Permissions
-    // =========================================================================
-
     'Manage {plural}' => '{plural} を管理する',
     'Create {plural}' => '{plural} を作成する',
     'Edit {plural}' => '{plural} を編集する',
@@ -44,10 +35,7 @@ return [
     'Download system logs' => 'システムログをダウンロードする',
     'Manage settings' => '設定を管理する',
 
-    // =========================================================================
     // Navigation & Breadcrumbs
-    // =========================================================================
-
     'Links' => 'リンク',
     'Analytics' => 'アナリティクス',
     'Logs' => 'ログ',
@@ -65,10 +53,7 @@ return [
     'Overview' => '概要',
     'Import/Export' => 'インポート/エクスポート',
 
-    // =========================================================================
     // General Settings
-    // =========================================================================
-
     'General Settings' => '一般設定',
     'Plugin Name' => 'プラグイン名',
     'The name of the plugin as it appears in the Control Panel menu' => 'コントロールパネルのメニューに表示されるプラグイン名',
@@ -112,18 +97,12 @@ return [
     'file' => 'ファイル',
     'files' => 'ファイル',
 
-    // =========================================================================
     // Site Settings
-    // =========================================================================
-
     'Site Settings' => 'サイト設定',
     'Enabled Sites' => '有効なサイト',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => '{pluginName} を有効にするサイトを選択してください。空白にするとすべてのサイトで有効になります。',
 
-    // =========================================================================
     // URL Settings
-    // =========================================================================
-
     'URL Settings' => 'URL 設定',
     'Smart Link URL Prefix' => 'スマートリンク URL プレフィックス',
     '{singularName} URL Prefix' => '{singularName} URL プレフィックス',
@@ -148,10 +127,7 @@ return [
     'This is being overridden by the <code>slugPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>slugPrefix</code> 設定によって上書きされています。',
     'This is being overridden by the <code>qrPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>qrPrefix</code> 設定によって上書きされています。',
 
-    // =========================================================================
     // Template Settings
-    // =========================================================================
-
     'Template Settings' => 'テンプレート設定',
     'Redirect Template' => 'リダイレクトテンプレート',
     'Custom Redirect Template' => 'カスタムリダイレクトテンプレート',
@@ -162,20 +138,14 @@ return [
     'Path to custom template in your templates/ folder (e.g., smartlink-manager/qr)' => 'templates/ フォルダー内のカスタムテンプレートのパス（例：smartlink-manager/qr）',
     'These templates must exist in your site\'s <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed.' => 'これらのテンプレートはサイトの <code>templates/</code> フォルダーに存在する必要があります。<code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> から <code>templates/smartlink-manager/</code> に参照テンプレートをコピーし、必要に応じてカスタマイズしてください。',
 
-    // =========================================================================
     // Asset Settings
-    // =========================================================================
-
     'Asset Settings' => 'アセット設定',
     'Image Volume' => '画像ボリューム',
     '{singularName} Image Volume' => '{singularName} 画像ボリューム',
     'Which asset volume should be used for {singularName} images' => '{singularName} の画像に使用するアセットボリューム',
     'All asset volumes' => 'すべてのアセットボリューム',
 
-    // =========================================================================
     // QR Code Settings — Appearance
-    // =========================================================================
-
     'QR Code Settings' => 'QR コード設定',
     'Appearance & Style' => '外観とスタイル',
     'Enable QR Code' => 'QR コードを有効にする',
@@ -196,10 +166,7 @@ return [
     'Color for position markers (leave empty to use main color)' => '位置マーカーの色（メインカラーを使用する場合は空白にしてください）',
     'Size' => 'サイズ',
 
-    // =========================================================================
     // QR Code Settings — Logo
-    // =========================================================================
-
     'Logo Settings' => 'ロゴ設定',
     'Enable QR Code Logo' => 'QR コードロゴを有効にする',
     'Enable Logo Overlay' => 'ロゴオーバーレイを有効にする',
@@ -221,10 +188,7 @@ return [
     'Please save settings to apply the volume change to the logo selection field.' => 'ロゴ選択フィールドにボリューム変更を適用するには設定を保存してください。',
     'Please save to apply the volume change' => 'ボリューム変更を適用するには保存してください',
 
-    // =========================================================================
     // QR Code Settings — Technical
-    // =========================================================================
-
     'Technical Options' => '技術オプション',
     'Error Correction Level' => 'エラー訂正レベル',
     'Higher levels work better if QR code is damaged but create denser patterns' => 'レベルが高いほど QR コードが損傷した場合に機能しやすくなりますが、パターンが密になります',
@@ -236,10 +200,7 @@ return [
     'Eye Style' => 'マーカースタイル',
     'Shape of the position markers (corners)' => '位置マーカーの形状（コーナー）',
 
-    // =========================================================================
     // QR Code Settings — Downloads
-    // =========================================================================
-
     'Download Settings' => 'ダウンロード設定',
     'Enable QR Code Downloads' => 'QR コードのダウンロードを有効にする',
     'Allow users to download QR codes' => 'ユーザーが QR コードをダウンロードできるようにする',
@@ -252,10 +213,7 @@ return [
     'Extra Large (2048px)' => '特大（2048px）',
     'Custom Size...' => 'カスタムサイズ...',
 
-    // =========================================================================
     // QR Code Settings — Actions & Preview
-    // =========================================================================
-
     'QR Code Actions' => 'QR コードアクション',
     'View QR Code' => 'QR コードを表示する',
     'QR Code Image' => 'QR コード画像',
@@ -271,20 +229,14 @@ return [
     'Configure QR code caching to improve performance and reduce server load.' => 'パフォーマンスを向上させ、サーバーの負荷を軽減するために QR コードキャッシュを設定してください。',
     'Go to Cache Settings' => 'キャッシュ設定へ移動する',
 
-    // =========================================================================
     // Behavior Settings
-    // =========================================================================
-
     'Behavior Settings' => '動作設定',
     'Redirect Behavior' => 'リダイレクト動作',
     '404 Redirect URL' => '404 リダイレクト URL',
     'Where to redirect when a {singularName} is not found or disabled' => '{singularName} が見つからないか無効な場合のリダイレクト先',
     'Can be a relative path (/) or full URL (https://example.com)' => '相対パス（/）または完全な URL（https://example.com）を指定できます',
 
-    // =========================================================================
     // Analytics Settings
-    // =========================================================================
-
     'Analytics Settings' => 'アナリティクス設定',
     'Enable Analytics' => 'アナリティクスを有効にする',
     'Track Analytics' => 'アナリティクスを追跡する',
@@ -292,10 +244,7 @@ return [
     'When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information.' => '有効にすると、{pluginName} は訪問者のインタラクション、デバイスの種類、地理データ、その他のアナリティクス情報を追跡します。',
     'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.' => 'この {singularName} のアナリティクス追跡を無効にしてよろしいですか？この {singularName} は訪問者データとインタラクションの収集を停止します。',
 
-    // =========================================================================
     // Analytics Settings — IP Privacy
-    // =========================================================================
-
     'IP Address Privacy' => 'IP アドレスのプライバシー',
     'Anonymize IP Addresses' => 'IP アドレスを匿名化する',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => '最大限のプライバシーのために保存前に IP アドレスをマスクします。<strong>IPv4</strong>：最後のオクテットをマスク（192.168.1.123 → 192.168.1.0）。<strong>IPv6</strong>：最後の 80 ビットをマスク。<strong>トレードオフ</strong>：ユニーク訪問者の精度が低下します（同じサブネットのユーザーが 1 人の訪問者としてカウント）。ジオロケーションは通常どおり機能します。',
@@ -305,10 +254,7 @@ return [
     'Full IP hashed with salt (accurate unique visitors)' => 'フル IP をソルトでハッシュ（正確なユニーク訪問者）',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'サブネットマスク + ソルトでハッシュ（最大プライバシー、精度が低い）',
 
-    // =========================================================================
     // Analytics Settings — Retention & Cleanup
-    // =========================================================================
-
     'Analytics Retention (days)' => 'アナリティクス保持期間（日）',
     'Analytics Retention' => 'アナリティクス保持期間',
     'How many days to keep analytics data (0 for unlimited, max 3650)' => 'アナリティクスデータの保持日数（0 は無制限、最大 3650）',
@@ -321,10 +267,7 @@ return [
     'Warning' => '警告',
     'Analytics data will be retained indefinitely. This could result in large database size, slower performance, and increased storage costs over time. Consider setting a retention period (recommended: 90-365 days) for production sites.' => 'アナリティクスデータは無期限に保持されます。これにより、データベースサイズが大きくなり、パフォーマンスが低下し、ストレージコストが増加する可能性があります。本番サイトでは保持期間の設定をご検討ください（推奨：90〜365 日）。',
 
-    // =========================================================================
     // Geo Provider Settings (from base _partials/geo-settings, uses |t(pluginHandle))
-    // =========================================================================
-
     'Geographic Detection' => '地理的検出',
     'Geographic Analytics' => '地理的アナリティクス',
     'Geographic Distribution' => '地理的分布',
@@ -363,27 +306,18 @@ return [
     'COPIED!' => 'コピーしました！',
     'Failed to copy to clipboard' => 'クリップボードへのコピーに失敗しました',
 
-    // =========================================================================
     // Device Detection Settings
-    // =========================================================================
-
     'Cache Device Detection' => 'デバイス検出をキャッシュする',
     'Cache device detection results for better performance' => 'パフォーマンス向上のためにデバイス検出結果をキャッシュする',
     'Device Detection Cache Duration (seconds)' => 'デバイス検出キャッシュの有効期間（秒）',
 
-    // =========================================================================
     // Language Detection Settings
-    // =========================================================================
-
     'Language Detection Method' => '言語検出方法',
     'How to detect user language preference' => 'ユーザーの言語設定を検出する方法',
     'Language Detection' => '言語検出',
     'Enable automatic language detection to redirect users based on their browser or location' => 'ブラウザーまたは位置情報に基づいてユーザーをリダイレクトするための自動言語検出を有効にする',
 
-    // =========================================================================
     // Cache Settings
-    // =========================================================================
-
     'Cache Settings' => 'キャッシュ設定',
     'Cache Storage Settings' => 'キャッシュストレージ設定',
     'Cache Storage Method' => 'キャッシュストレージ方式',
@@ -404,10 +338,7 @@ return [
     'Device detection caching is only available when Analytics is enabled. Go to' => 'デバイス検出キャッシュはアナリティクスが有効な場合にのみ使用できます。',
     'to enable analytics.' => 'アナリティクスを有効にするには移動してください。',
 
-    // =========================================================================
     // Export Settings
-    // =========================================================================
-
     'Export Settings' => 'エクスポート設定',
     'Analytics Export Options' => 'アナリティクスエクスポートオプション',
     'Include Disabled Links in Export' => '無効なリンクをエクスポートに含める',
@@ -418,10 +349,7 @@ return [
     'When enabled, analytics exports will include data from expired {pluginName}' => '有効にすると、アナリティクスのエクスポートに期限切れの {pluginName} のデータが含まれます',
     'Export as CSV' => 'CSV としてエクスポートする',
 
-    // =========================================================================
     // Interface Settings
-    // =========================================================================
-
     'Interface Settings' => 'インターフェース設定',
     'Items Per Page' => '1 ページあたりの項目数',
     'Number of {pluginName} to show per page' => '1 ページに表示する {pluginName} の数',
@@ -430,10 +358,7 @@ return [
     'The maximum number of {pluginName} that can be selected.' => '選択できる {pluginName} の最大数。',
     'Which sources should be available to select {pluginName} from?' => '{pluginName} を選択できるソースはどれですか？',
 
-    // =========================================================================
     // Integration Settings
-    // =========================================================================
-
     'Third-Party Integrations' => 'サードパーティインテグレーション',
     'Integrations Settings' => 'インテグレーション設定',
     'Integrate {pluginName} with third-party analytics and tracking services to push click events to Google Tag Manager, Google Analytics, and other platforms.' => '{pluginName} をサードパーティのアナリティクスおよびトラッキングサービスと統合し、クリックイベントを Google Tag Manager、Google Analytics、その他のプラットフォームに送信します。',
@@ -492,10 +417,7 @@ return [
     'Invalid {pluginName} format.' => '{pluginName} の形式が無効です。',
     '{pluginName} not found.' => '{pluginName} が見つかりません。',
 
-    // =========================================================================
     // Smart Link Fields (edit page)
-    // =========================================================================
-
     'Title' => 'タイトル',
     'The title of this {singularName}' => 'この {singularName} のタイトル',
     'Description' => '説明',
@@ -532,17 +454,11 @@ return [
     'URL copied to clipboard' => 'URL をクリップボードにコピーしました',
     'New {singularName}' => '新しい {singularName}',
 
-    // =========================================================================
     // Field Layout
-    // =========================================================================
-
     'Add custom fields to {singularName} elements. Any fields you add here will appear in the {singularName} edit screen.' => '{singularName} 要素にカスタムフィールドを追加します。ここで追加したフィールドは {singularName} の編集画面に表示されます。',
     'No field layout available.' => 'フィールドレイアウトはありません。',
 
-    // =========================================================================
     // Smart Link Element — Index & Actions
-    // =========================================================================
-
     'Slug' => 'スラッグ',
     'Redirect Page' => 'リダイレクトページ',
     'All {pluginName}' => 'すべての {pluginName}',
@@ -557,10 +473,7 @@ return [
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => '選択できるスマートリンクは最大 {limit} 件です。',
     'Create a new smart link' => '新しいスマートリンクを作成する',
 
-    // =========================================================================
     // Analytics Dashboard — Overview Tab
-    // =========================================================================
-
     'View Analytics' => 'アナリティクスを表示する',
     'Traffic Overview' => 'トラフィック概要',
     'Traffic & Devices' => 'トラフィックとデバイス',
@@ -584,10 +497,7 @@ return [
     'Failed to load countries data' => '国データの読み込みに失敗しました',
     'No data for selected period' => '選択した期間のデータがありません',
 
-    // =========================================================================
     // Analytics Dashboard — Traffic & Devices Tab
-    // =========================================================================
-
     'Device Analytics' => 'デバイスアナリティクス',
     'Device Types' => 'デバイスの種類',
     'Device Brands' => 'デバイスのブランド',
@@ -598,10 +508,7 @@ return [
     'Peak usage at {hour}' => '{hour} 時にピーク利用',
     'Daily Clicks' => '日別クリック数',
 
-    // =========================================================================
     // Analytics Dashboard — Geographic Tab
-    // =========================================================================
-
     'Top Countries' => 'トップ国',
     'Top Cities' => 'トップ都市',
     'Top Cities Worldwide' => '世界のトップ都市',
@@ -610,10 +517,7 @@ return [
     'Geographic detection is disabled.' => '地理的検出が無効です。',
     'Enable in Settings' => '設定で有効にする',
 
-    // =========================================================================
     // Analytics Data — Table Columns & Labels
-    // =========================================================================
-
     'Date' => '日付',
     'Time' => '時刻',
     'Device' => 'デバイス',
@@ -638,10 +542,7 @@ return [
     'Name' => '名前',
     'Percentage' => 'パーセンテージ',
 
-    // =========================================================================
     // Analytics Dashboard — JS strings (passed to JavaScript)
-    // =========================================================================
-
     'No interaction data available for the selected filters.' => '選択したフィルターのインタラクションデータがありません。',
     'No device data available for the selected filters.' => '選択したフィルターのデバイスデータがありません。',
     'No device brand data available for the selected filters.' => '選択したフィルターのデバイスブランドデータがありません。',
@@ -650,10 +551,7 @@ return [
     'No hourly data available for the selected filters.' => '選択したフィルターの時間別データがありません。',
     'Peak usage at' => 'ピーク利用：',
 
-    // =========================================================================
     // Interaction Types
-    // =========================================================================
-
     'Direct' => 'ダイレクト',
     'Direct Visits' => 'ダイレクト訪問',
     'QR' => 'QR',
@@ -661,10 +559,7 @@ return [
     'Button' => 'ボタン',
     'Landing' => 'ランディング',
 
-    // =========================================================================
     // Analytics Export — CSV/Excel Column Headers
-    // =========================================================================
-
     'Date/Time' => '日付/時刻',
     'Status' => 'ステータス',
     'Smart Link URL' => 'スマートリンク URL',
@@ -677,10 +572,7 @@ return [
     'Language' => '言語',
     'User Agent' => 'User Agent',
 
-    // =========================================================================
     // Time Periods
-    // =========================================================================
-
     'Today' => '今日',
     'Yesterday' => '昨日',
     'Last 7 days' => '過去 7 日間',
@@ -689,10 +581,7 @@ return [
     'All time' => '全期間',
     'Date Range' => '日付範囲',
 
-    // =========================================================================
     // Utilities
-    // =========================================================================
-
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => '{singularName} のリダイレクトと QR コードのリンクパフォーマンスを監視し、アナリティクスを追跡し、キャッシュを管理します。',
     'Active {pluginName}' => 'アクティブな {pluginName}',
     'Links Status' => 'リンクのステータス',
@@ -727,10 +616,7 @@ return [
     'Failed to clear caches' => 'キャッシュのクリアに失敗しました',
     'Failed to clear analytics' => 'アナリティクスのクリアに失敗しました',
 
-    // =========================================================================
     // Widgets — Analytics Summary
-    // =========================================================================
-
     '{pluginName} - Analytics' => '{pluginName} – アナリティクス',
     'Top Performer' => 'トップパフォーマー',
     'interactions' => 'インタラクション',
@@ -738,10 +624,7 @@ return [
     'You don\'t have permission to view analytics.' => 'アナリティクスを表示する権限がありません。',
     'Analytics are disabled in plugin settings.' => 'アナリティクスはプラグイン設定で無効になっています。',
 
-    // =========================================================================
     // Widgets — Top Links
-    // =========================================================================
-
     '{pluginName} - Top Links' => '{pluginName} – トップリンク',
     'Link' => 'リンク',
     'Number of Links' => 'リンク数',
@@ -750,10 +633,7 @@ return [
     'No {pluginName} yet' => 'まだ {pluginName} がありません',
     'Create your first {singularName} to see it here.' => '最初の {singularName} を作成してここで確認してください。',
 
-    // =========================================================================
     // Public Templates — Redirect Page (redirect.twig)
-    // =========================================================================
-
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',
@@ -762,16 +642,10 @@ return [
     'Mac App Store' => 'Mac App Store',
     'Continue to Website' => 'ウェブサイトに進む',
 
-    // =========================================================================
     // Public Templates — QR Code Page (qr.twig)
-    // =========================================================================
-
     'Scan with your phone\'s camera to download' => 'スマートフォンのカメラでスキャンしてダウンロードする',
 
-    // =========================================================================
     // Controller Messages — Flash Notices & Errors
-    // =========================================================================
-
     // SmartlinksController
     'Smart link saved.' => 'スマートリンクを保存しました。',
     'Couldn\'t save smart link.' => 'スマートリンクを保存できませんでした。',
@@ -807,18 +681,12 @@ return [
     'Please enter a valid size between 100 and 4096 pixels' => '100〜4096 ピクセルの有効なサイズを入力してください',
     'Reset QR code settings to plugin defaults?' => 'QR コード設定をプラグインのデフォルトにリセットしますか？',
 
-    // =========================================================================
     // Job Messages
-    // =========================================================================
-
     '{pluginName}: Cleaning up old analytics' => '{pluginName}：古いアナリティクスをクリーンアップ中',
     'Deleting {count} old analytics records' => '{count} 件の古いアナリティクスレコードを削除中',
     'Deleted {deleted} of {total} records' => '{total} 件中 {deleted} 件のレコードを削除しました',
 
-    // =========================================================================
     // Validation Messages
-    // =========================================================================
-
     'Only letters, numbers, hyphens, and underscores are allowed.' => '文字、数字、ハイフン、アンダースコアのみ使用できます。',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => '文字、数字、ハイフン、アンダースコア、スラッシュのみ使用できます。',
     'Only lowercase letters, numbers, and underscores are allowed.' => '小文字、数字、アンダースコアのみ使用できます。',
@@ -831,10 +699,7 @@ return [
     'Smart link base URL cannot contain spaces.' => 'スマートリンクのベース URL にはスペースを含めることができません。',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'スマートリンクのベース URL にサポートされていないトークンがあります。サポートされているトークン：{siteHandle}、{siteId}、{siteUid}。',
 
-    // =========================================================================
     // Config Override Warnings
-    // =========================================================================
-
     'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>pluginName</code> 設定によって上書きされています。',
     'This is being overridden by the <code>enableAnalytics</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>enableAnalytics</code> 設定によって上書きされています。',
     'This is being overridden by the <code>analyticsRetention</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>analyticsRetention</code> 設定によって上書きされています。',
@@ -875,35 +740,23 @@ return [
     'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>logLevel</code> 設定によって上書きされています。',
     'This is being overridden by the <code>smartlinkBaseUrl</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>smartlinkBaseUrl</code> 設定によって上書きされています。',
 
-    // =========================================================================
     // General Interface
-    // =========================================================================
-
     'Save Settings' => '設定を保存する',
     'Actions' => 'アクション',
     'Loading...' => '読み込み中...',
     'Error' => 'エラー',
 
-    // =========================================================================
     // Behavior Settings — Select Options
-    // =========================================================================
-
     'Browser preference' => 'ブラウザーの設定',
     'IP geolocation' => 'IP ジオロケーション',
     'Both' => '両方',
 
-    // =========================================================================
     // General Settings — URL Tips (Redirect Manager integration)
-    // =========================================================================
-
     'Changing will break existing URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard)' => '変更すると既存の URL が機能しなくなります。移行するには {redirectPluginName} でワイルドカードリダイレクトを作成してください：ソース \'/old/*\' → 宛先 \'/new/$1\'（マッチタイプ：ワイルドカード）',
     'Changing will break existing QR URLs. To migrate, create wildcard redirect in {redirectPluginName}: Source \'/old/*\' → Destination \'/new/$1\' (Match Type: Wildcard). Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns.' => '変更すると既存の QR URL が機能しなくなります。移行するには {redirectPluginName} でワイルドカードリダイレクトを作成してください：ソース \'/old/*\' → 宛先 \'/new/$1\'（マッチタイプ：ワイルドカード）。スタンドアロン（例：\'qr\'）またはネスト（例：\'go/qr\'）パターンをサポートします。',
     'Supports standalone (e.g., \'qr\') or nested (e.g., \'go/qr\') patterns. Checked for conflicts with ShortLink Manager.' => 'スタンドアロン（例：\'qr\'）またはネスト（例：\'go/qr\'）パターンをサポートします。ShortLink Manager との競合を確認済みです。',
 
-    // =========================================================================
     // QR Code Settings — Select Options
-    // =========================================================================
-
     'Square' => '正方形',
     'Rounded' => '丸み',
     'Dots' => 'ドット',
@@ -914,25 +767,16 @@ return [
     'High (~30% correction)' => '高（約 30% 訂正）',
     'Failed to generate preview' => 'プレビューの生成に失敗しました',
 
-    // =========================================================================
     // Smart Link Fields — Image Size Options
-    // =========================================================================
-
     'Extra Large' => '特大',
     'Large' => '大',
     'Medium' => '中',
     'Small' => '小',
 
-    // =========================================================================
     // Smart Link Field Input — Tooltip
-    // =========================================================================
-
     'Clicks:' => 'クリック数：',
 
-    // =========================================================================
     // Cache Settings — Info Boxes & Durations
-    // =========================================================================
-
     'Cache Location' => 'キャッシュの場所',
     'Using Craft\'s configured Redis cache from <code>config/app.php</code>' => '<code>config/app.php</code> から Craft で設定された Redis キャッシュを使用しています',
     'Redis Not Configured' => 'Redis が設定されていません',
@@ -943,10 +787,7 @@ return [
     'Recommended to keep enabled for production sites' => '本番サイトでは有効のままにすることを推奨します',
     'Cache duration in seconds. Current:' => 'キャッシュの有効期間（秒）。現在：',
 
-    // =========================================================================
     // Time Unit Strings (for JS secondsToHuman)
-    // =========================================================================
-
     '{count} second' => '{count} 秒',
     '{count} seconds' => '{count} 秒',
     '{count} minute' => '{count} 分',
@@ -956,17 +797,11 @@ return [
     '{count} day' => '{count} 日',
     '{count} days' => '{count} 日',
 
-    // =========================================================================
     // Template Settings — Copy hints
-    // =========================================================================
-
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>' => '必須：<code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> を <code>templates/smartlink-manager/redirect.twig</code> にコピーしてください',
     'Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>' => '必須：<code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> を <code>templates/smartlink-manager/qr.twig</code> にコピーしてください',
 
-    // =========================================================================
     // Import/Export
-    // =========================================================================
-
     'Manage import/export' => 'インポート/エクスポートを管理する',
     'Import links' => 'リンクをインポートする',
     'Export links' => 'リンクをエクスポートする',
