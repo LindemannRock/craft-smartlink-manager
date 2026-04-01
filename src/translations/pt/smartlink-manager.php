@@ -81,6 +81,37 @@ return [
     'Debug (Detailed debugging)' => 'Debug (depuração detalhada)',
     'Logging Settings' => 'Configurações de registro',
 
+    // Logs viewer (logging-library)
+    'All Levels' => 'Todos os níveis',
+    'Info' => 'Info',
+    'Debug' => 'Debug',
+    'Select File' => 'Selecionar arquivo',
+    'Select Date' => 'Selecionar data',
+    'All Sources' => 'Todas as fontes',
+    'Search messages and context...' => 'Pesquisar mensagens e contexto...',
+    'System Logs' => 'Registros do sistema',
+    'System' => 'Sistema',
+    'Current log level' => 'Nível de registro atual',
+    'No log files found. Log files are created when plugin activities occur.' => 'Nenhum arquivo de registro encontrado. Os arquivos de registro são criados quando ocorrem atividades do plugin.',
+    'No log entries found for the selected filters.' => 'Nenhuma entrada de registro encontrada para os filtros selecionados.',
+    'No context data available.' => 'Nenhum dado de contexto disponível.',
+    'Level' => 'Nível',
+    'User' => 'Usuário',
+    'Message' => 'Mensagem',
+    'entry' => 'entrada',
+    'entries' => 'entradas',
+    'Available Logs' => 'Registros disponíveis',
+    'Current File' => 'Arquivo atual',
+    'Download File' => 'Baixar arquivo',
+    'Log Location' => 'Localização do registro',
+    'Current Level' => 'Nível atual',
+    'Retention' => 'Retenção',
+    'days' => 'dias',
+    'Context' => 'Contexto',
+    'Entries' => 'Entradas',
+    'file' => 'arquivo',
+    'files' => 'arquivos',
+
     // =========================================================================
     // Site Settings
     // =========================================================================

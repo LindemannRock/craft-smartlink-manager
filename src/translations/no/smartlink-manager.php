@@ -81,6 +81,37 @@ return [
     'Debug (Detailed debugging)' => 'Debug (detaljert feilsøking)',
     'Logging Settings' => 'Logginnstillinger',
 
+    // Logs viewer (logging-library)
+    'All Levels' => 'Alle nivåer',
+    'Info' => 'Info',
+    'Debug' => 'Debug',
+    'Select File' => 'Velg fil',
+    'Select Date' => 'Velg dato',
+    'All Sources' => 'Alle kilder',
+    'Search messages and context...' => 'Søk i meldinger og kontekst...',
+    'System Logs' => 'Systemlogger',
+    'System' => 'System',
+    'Current log level' => 'Gjeldende loggnivå',
+    'No log files found. Log files are created when plugin activities occur.' => 'Ingen loggfiler funnet. Loggfiler opprettes når plugin-aktiviteter oppstår.',
+    'No log entries found for the selected filters.' => 'Ingen loggoppføringer funnet for de valgte filtrene.',
+    'No context data available.' => 'Ingen kontekstdata tilgjengelig.',
+    'Level' => 'Nivå',
+    'User' => 'Bruker',
+    'Message' => 'Melding',
+    'entry' => 'oppføring',
+    'entries' => 'oppføringer',
+    'Available Logs' => 'Tilgjengelige logger',
+    'Current File' => 'Gjeldende fil',
+    'Download File' => 'Last ned fil',
+    'Log Location' => 'Loggplassering',
+    'Current Level' => 'Gjeldende nivå',
+    'Retention' => 'Oppbevaring',
+    'days' => 'dager',
+    'Context' => 'Kontekst',
+    'Entries' => 'Oppføringer',
+    'file' => 'fil',
+    'files' => 'filer',
+
     // =========================================================================
     // Site Settings
     // =========================================================================

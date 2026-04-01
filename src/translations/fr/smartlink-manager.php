@@ -81,6 +81,37 @@ return [
     'Debug (Detailed debugging)' => 'Debug (débogage détaillé)',
     'Logging Settings' => 'Paramètres de journalisation',
 
+    // Logs viewer (logging-library)
+    'All Levels' => 'Tous les niveaux',
+    'Info' => 'Info',
+    'Debug' => 'Debug',
+    'Select File' => 'Sélectionner un fichier',
+    'Select Date' => 'Sélectionner une date',
+    'All Sources' => 'Toutes les sources',
+    'Search messages and context...' => 'Rechercher dans les messages et le contexte...',
+    'System Logs' => 'Journaux système',
+    'System' => 'Système',
+    'Current log level' => 'Niveau de journalisation actuel',
+    'No log files found. Log files are created when plugin activities occur.' => 'Aucun fichier journal trouvé. Les fichiers journaux sont créés lors des activités du plugin.',
+    'No log entries found for the selected filters.' => 'Aucune entrée de journal trouvée pour les filtres sélectionnés.',
+    'No context data available.' => 'Aucune donnée de contexte disponible.',
+    'Level' => 'Niveau',
+    'User' => 'Utilisateur',
+    'Message' => 'Message',
+    'entry' => 'entrée',
+    'entries' => 'entrées',
+    'Available Logs' => 'Journaux disponibles',
+    'Current File' => 'Fichier actuel',
+    'Download File' => 'Télécharger le fichier',
+    'Log Location' => 'Emplacement du journal',
+    'Current Level' => 'Niveau actuel',
+    'Retention' => 'Rétention',
+    'days' => 'jours',
+    'Context' => 'Contexte',
+    'Entries' => 'Entrées',
+    'file' => 'fichier',
+    'files' => 'fichiers',
+
     // =========================================================================
     // Site Settings
     // =========================================================================

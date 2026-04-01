@@ -81,6 +81,37 @@ return [
     'Debug (Detailed debugging)' => 'Debug (Detailed debugging)',
     'Logging Settings' => 'Logging Settings',
 
+    // Logs viewer (logging-library)
+    'All Levels' => 'All Levels',
+    'Info' => 'Info',
+    'Debug' => 'Debug',
+    'Select File' => 'Select File',
+    'Select Date' => 'Select Date',
+    'All Sources' => 'All Sources',
+    'Search messages and context...' => 'Search messages and context...',
+    'System Logs' => 'System Logs',
+    'System' => 'System',
+    'Current log level' => 'Current log level',
+    'No log files found. Log files are created when plugin activities occur.' => 'No log files found. Log files are created when plugin activities occur.',
+    'No log entries found for the selected filters.' => 'No log entries found for the selected filters.',
+    'No context data available.' => 'No context data available.',
+    'Level' => 'Level',
+    'User' => 'User',
+    'Message' => 'Message',
+    'entry' => 'entry',
+    'entries' => 'entries',
+    'Available Logs' => 'Available Logs',
+    'Current File' => 'Current File',
+    'Download File' => 'Download File',
+    'Log Location' => 'Log Location',
+    'Current Level' => 'Current Level',
+    'Retention' => 'Retention',
+    'days' => 'days',
+    'Context' => 'Context',
+    'Entries' => 'Entries',
+    'file' => 'file',
+    'files' => 'files',
+
     // =========================================================================
     // Site Settings
     // =========================================================================

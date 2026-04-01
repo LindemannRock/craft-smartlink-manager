@@ -81,6 +81,37 @@ return [
     'Debug (Detailed debugging)' => 'デバッグ（詳細なデバッグ情報）',
     'Logging Settings' => 'ログ設定',
 
+    // Logs viewer (logging-library)
+    'All Levels' => 'すべてのレベル',
+    'Info' => '情報',
+    'Debug' => 'デバッグ',
+    'Select File' => 'ファイルを選択',
+    'Select Date' => '日付を選択',
+    'All Sources' => 'すべてのソース',
+    'Search messages and context...' => 'メッセージとコンテキストを検索...',
+    'System Logs' => 'システムログ',
+    'System' => 'システム',
+    'Current log level' => '現在のログレベル',
+    'No log files found. Log files are created when plugin activities occur.' => 'ログファイルが見つかりません。プラグインのアクティビティが発生するとログファイルが作成されます。',
+    'No log entries found for the selected filters.' => '選択したフィルターに一致するログエントリが見つかりません。',
+    'No context data available.' => 'コンテキストデータがありません。',
+    'Level' => 'レベル',
+    'User' => 'ユーザー',
+    'Message' => 'メッセージ',
+    'entry' => 'エントリ',
+    'entries' => 'エントリ',
+    'Available Logs' => '利用可能なログ',
+    'Current File' => '現在のファイル',
+    'Download File' => 'ファイルをダウンロード',
+    'Log Location' => 'ログの場所',
+    'Current Level' => '現在のレベル',
+    'Retention' => '保持期間',
+    'days' => '日',
+    'Context' => 'コンテキスト',
+    'Entries' => 'エントリ',
+    'file' => 'ファイル',
+    'files' => 'ファイル',
+
     // =========================================================================
     // Site Settings
     // =========================================================================

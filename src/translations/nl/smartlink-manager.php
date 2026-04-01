@@ -81,6 +81,37 @@ return [
     'Debug (Detailed debugging)' => 'Debug (gedetailleerde foutopsporing)',
     'Logging Settings' => 'Loginstellingen',
 
+    // Logs viewer (logging-library)
+    'All Levels' => 'Alle niveaus',
+    'Info' => 'Info',
+    'Debug' => 'Debug',
+    'Select File' => 'Bestand selecteren',
+    'Select Date' => 'Datum selecteren',
+    'All Sources' => 'Alle bronnen',
+    'Search messages and context...' => 'Berichten en context doorzoeken...',
+    'System Logs' => 'Systeemlogboeken',
+    'System' => 'Systeem',
+    'Current log level' => 'Huidig logniveau',
+    'No log files found. Log files are created when plugin activities occur.' => 'Geen logbestanden gevonden. Logbestanden worden aangemaakt wanneer plugin-activiteiten plaatsvinden.',
+    'No log entries found for the selected filters.' => 'Geen logvermeldingen gevonden voor de geselecteerde filters.',
+    'No context data available.' => 'Geen contextgegevens beschikbaar.',
+    'Level' => 'Niveau',
+    'User' => 'Gebruiker',
+    'Message' => 'Bericht',
+    'entry' => 'vermelding',
+    'entries' => 'vermeldingen',
+    'Available Logs' => 'Beschikbare logboeken',
+    'Current File' => 'Huidig bestand',
+    'Download File' => 'Bestand downloaden',
+    'Log Location' => 'Loglocatie',
+    'Current Level' => 'Huidig niveau',
+    'Retention' => 'Retentie',
+    'days' => 'dagen',
+    'Context' => 'Context',
+    'Entries' => 'Vermeldingen',
+    'file' => 'bestand',
+    'files' => 'bestanden',
+
     // =========================================================================
     // Site Settings
     // =========================================================================
