@@ -692,7 +692,8 @@ return [
     'Deleting {count} old analytics records' => '{count} alte Analyse-Datensätze werden gelöscht',
     'Deleted {deleted} of {total} records' => '{deleted} von {total} Datensätzen gelöscht',
 
-    // Validierungsmeldungen
+    // Validierung
+    'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Es wurde {count, number} {count, plural, =1{Fehler} other{Fehler}} gefunden',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Nur Buchstaben, Zahlen, Bindestriche und Unterstriche sind erlaubt.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Nur Buchstaben, Zahlen, Bindestriche, Unterstriche und Schrägstriche sind erlaubt.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Nur Kleinbuchstaben, Zahlen und Unterstriche sind erlaubt.',

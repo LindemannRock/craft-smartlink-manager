@@ -687,6 +687,7 @@ return [
     'Deleted {deleted} of {total} records' => '{deleted} enregistrement(s) sur {total} supprimé(s)',
 
     // Validation Messages
+    'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{erreur trouvée} other{erreurs trouvées}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Seuls les lettres, chiffres, tirets et underscores sont autorisés.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Seuls les lettres, chiffres, tirets, underscores et barres obliques sont autorisés.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Seules les lettres minuscules, les chiffres et les underscores sont autorisés.',

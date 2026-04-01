@@ -687,6 +687,7 @@ return [
     'Deleted {deleted} of {total} records' => '{deleted} van {total} records verwijderd',
 
     // Validation Messages
+    'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{fout} other{fouten}} gevonden',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Alleen letters, cijfers, koppeltekens en underscores zijn toegestaan.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Alleen letters, cijfers, koppeltekens, underscores en slashes zijn toegestaan.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Alleen kleine letters, cijfers en underscores zijn toegestaan.',

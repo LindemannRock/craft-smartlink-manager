@@ -687,6 +687,7 @@ return [
     'Deleted {deleted} of {total} records' => 'Borttagna {deleted} av {total} poster',
 
     // Validation Messages
+    'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{fel} other{fel}} hittades',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Endast bokstäver, siffror, bindestreck och understreck är tillåtna.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Endast bokstäver, siffror, bindestreck, understreck och snedstreck är tillåtna.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Endast gemener, siffror och understreck är tillåtna.',
