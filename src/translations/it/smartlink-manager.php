@@ -470,7 +470,7 @@ return [
     'Smart links not restored.' => 'Smart link non ripristinati.',
     'Add a smart link' => 'Aggiungi un smart link',
     'No smart links selected' => 'Nessun smart link selezionato',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart link}}.' => 'È possibile selezionare al massimo {limit} {limit, plural, =1{smart link} other{smart link}}.',
+    'You can only select up to {limit} {label}.' => 'È possibile selezionare al massimo {limit} {label}.',
     'Create a new smart link' => 'Crea un nuovo smart link',
 
     // Analytics Dashboard — Overview Tab
