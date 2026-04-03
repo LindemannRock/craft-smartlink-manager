@@ -62,7 +62,7 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
      */
     public static function icon(): string
     {
-        return '@appicons/link.svg';
+        return '@lindemannrock/smartlinkmanager/icon-mask.svg';
     }
 
     /**
