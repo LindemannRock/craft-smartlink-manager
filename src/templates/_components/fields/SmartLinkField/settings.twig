@@ -29,14 +29,3 @@
         min: 1,
     }) }}
 </div>
-
-{{ forms.checkboxSelectField({
-    label: "Sources"|t('app'),
-    instructions: "Which sources should be available to select {pluginName} from?"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
-    id: 'sources',
-    name: 'sources',
-    options: [
-        { label: "All"|t('app'), value: '*' },
-    ],
-    values: field.sources == '*' ? ['*'] : field.sources,
-}) }}

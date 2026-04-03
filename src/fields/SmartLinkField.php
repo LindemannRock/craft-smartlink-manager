@@ -26,10 +26,10 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 class SmartLinkField extends Field implements PreviewableFieldInterface
 {
     /**
-     * @var string|null The source keys that the field should be restricted to
+     * @var string|string[]|null The source keys that the field should be restricted to
      * @since 5.0.0
      */
-    public ?string $sources = '*';
+    public string|array|null $sources = '*';
 
     /**
      * @var int|null The maximum number of relations this field can have
@@ -153,7 +153,8 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
             return $value;
         }
 
-        $query = SmartLink::find();
+        $query = SmartLink::find()
+            ->status(null);
 
         // Set the field context
         $query->fieldId = $this->id;
@@ -243,11 +244,17 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
 
         if ($count > $this->limit) {
             if (method_exists($element, 'addError')) {
+                $label = Craft::t(
+                    'smartlink-manager',
+                    $this->limit === 1 ? 'smart link' : 'smart links'
+                );
+
                 /** @var \craft\base\Element $element */
                 $element->addError(
                     $this->handle,
-                    Craft::t('smartlink-manager', 'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.', [
+                    Craft::t('smartlink-manager', 'You can only select up to {limit} {label}.', [
                         'limit' => $this->limit,
+                        'label' => $label,
                     ])
                 );
             }

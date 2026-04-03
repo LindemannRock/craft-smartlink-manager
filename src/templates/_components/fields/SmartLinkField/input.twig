@@ -1,9 +1,9 @@
 {% import "_includes/forms" as forms %}
 
 <div id="{{ id }}-field">
-    {{ forms.elementSelectField({
+{{ forms.elementSelectField({
         id: id,
-        name: name ~ '[]',
+        name: name,
         elementType: elementType,
         sources: sources,
         limit: limit,
@@ -29,7 +29,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: {{ elements[0].active ? '#27ae60' : '#e74c3c' }};
+            background-color: {{ elements[0].enabled ? '#27ae60' : '#e74c3c' }};
         }
     {% endcss %}
     
