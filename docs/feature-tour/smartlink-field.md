@@ -17,7 +17,6 @@ When you add a SmartLink Field to an entry's field layout, editors can pick from
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| **Sources** | `string\|null` | `'*'` | Source key filter for selectable smart links (`'*'` = all) |
 | **Limit** | `int\|null` | `null` | Maximum number of smart links that can be selected (null = unlimited) |
 | **Allow Multiple** | `bool` | `false` | Whether multiple smart links can be selected |
 | **Selection Label** | `string` | `'Add a smart link'` | The label text shown on the "Add" button |
@@ -59,6 +58,18 @@ A common pattern is rendering a download button on a product entry using a Smart
 
 > [!TIP]
 > The `getUrl()` method always returns the smart link's public redirect URL. Visitors who click it are automatically detected and routed to the correct platform. You don't need to write device-detection logic in your template.
+
+## Frontend Rendering Example
+
+If your field allows multiple selections, render the related smart links just like any other Craft relation field:
+
+```twig
+{% for smartLink in entry.smartTest.all() if smartLink.status == 'enabled' and smartLink.url %}
+    <a href="{{ smartLink.url }}">{{ smartLink.title }}</a>
+{% endfor %}
+```
+
+Use `smartLink.url` when you only want live links. If you need the public redirect URL regardless of current status, use `smartLink.redirectUrl`.
 
 ## Craft Link Field
 

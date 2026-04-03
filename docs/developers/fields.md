@@ -10,7 +10,6 @@ The SmartLinkField is a standard Craft element relation field. Add it to any fie
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| **Sources** | `string\|null` | `'*'` | Source key filter for selectable smart links (`'*'` = all) |
 | **Limit** | `int\|null` | `null` | Maximum number of smart links that can be selected (null = unlimited) |
 | **Allow Multiple** | `bool` | `false` | Whether multiple smart links can be selected |
 | **Selection Label** | `string` | `'Add a smart link'` | The label text shown on the "Add" button |
@@ -31,6 +30,36 @@ The field returns a `SmartLinkQuery` in Twig. Use `.one()` to get a single eleme
 {% for smartLink in smartLinks %}
     <a href="{{ smartLink.getUrl() }}">{{ smartLink.title }}</a>
 {% endfor %}
+```
+
+### Frontend Rendering
+
+`SmartLinkField` returns related `SmartLink` elements, so you can render their URLs, images, and QR helpers directly:
+
+```twig
+{% for smartLink in entry.smartLinkField.all() %}
+    {% if smartLink.status == 'enabled' and smartLink.url %}
+        <a href="{{ smartLink.url }}">{{ smartLink.title }}</a>
+    {% endif %}
+{% endfor %}
+```
+
+### Status-Aware URLs
+
+Use `smartLink.url` for a frontend link only when the smart link is enabled. Expired or disabled smart links return `null` for `url`.
+
+If you need the public redirect path regardless of status, use `smartLink.redirectUrl` instead:
+
+```twig
+{% set smartLink = entry.smartLinkField.one() %}
+
+{% if smartLink %}
+    {% if smartLink.url %}
+        <a href="{{ smartLink.url }}">{{ smartLink.title }}</a>
+    {% endif %}
+
+    <code>{{ smartLink.redirectUrl }}</code>
+{% endif %}
 ```
 
 ### Checking if a Field is Set
