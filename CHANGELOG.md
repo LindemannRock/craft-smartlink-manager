@@ -1,5 +1,23 @@
 # Changelog
 
+## [5.26.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.3...v5.26.0) (2026-04-05)
+
+
+### Features
+
+* Add 9 new language translations (FR, NL, ES,, IT, PT, JA, SV, DA, NO) ([1c81d6b](https://github.com/LindemannRock/craft-smartlink-manager/commit/1c81d6bfb4e121af109d32ceff71917fcadc8856))
+
+
+### Bug Fixes
+
+* **icon:** update SVG paths for icon rendering ([b183d85](https://github.com/LindemannRock/craft-smartlink-manager/commit/b183d85f63800e92f2e47b19b6b85a1c46a2dc0b))
+* **import-export:** streamline permissions and remove view history option ([2cf2936](https://github.com/LindemannRock/craft-smartlink-manager/commit/2cf293684f7fc6295ac90d6eb83af614720fe61c))
+* **permissions:** restore view analytics permissions structure ([4efa43c](https://github.com/LindemannRock/craft-smartlink-manager/commit/4efa43c8b96793ccb07cacf6f7150647ed3c1bb1))
+* **SmartLinkField:** update icon path for SmartLinkField class ([7cdfc7f](https://github.com/LindemannRock/craft-smartlink-manager/commit/7cdfc7f629005cbeca188cbafaa3f9d8da8ed9af))
+* **SmartLinkField:** update sources type and improve error messaging ([a5e2063](https://github.com/LindemannRock/craft-smartlink-manager/commit/a5e206330b20b5657a6d6589bfaa5e56faaec672))
+* **SmartLinkManager:** read-only settings accessibility flag ([c4ed0d3](https://github.com/LindemannRock/craft-smartlink-manager/commit/c4ed0d32211d268c4f3ba2447a21341751ace64b))
+* update install experience text to use Craft translation ([f475946](https://github.com/LindemannRock/craft-smartlink-manager/commit/f475946c2cbb122327c6a389bd2b88979d8868a3))
+
 ## [5.25.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.2...v5.25.3) (2026-03-26)
 
 
