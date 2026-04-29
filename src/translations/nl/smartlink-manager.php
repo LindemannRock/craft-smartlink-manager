@@ -17,7 +17,7 @@ return [
 
     // Navigation
     'Links' => 'Links',
-    'Analytics' => 'Analyse',
+    'Analytics' => 'Analyses',
     'Logs' => 'Logboeken',
     'Settings' => 'Instellingen',
     'General' => 'Algemeen',
@@ -147,7 +147,7 @@ return [
 
     // Settings: General
     'General Settings' => 'Algemene instellingen',
-    'Plugin Name' => 'Plugin-naam',
+    'Plugin Name' => 'Pluginnaam',
     'The name of the plugin as it appears in the Control Panel menu' => 'De naam van de plugin zoals deze verschijnt in het configuratiescherm',
     'Plugin Settings' => 'Plugin-instellingen',
     'Log Level' => 'Logboekniveau',

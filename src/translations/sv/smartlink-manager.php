@@ -17,7 +17,7 @@ return [
 
     // Navigation
     'Links' => 'Länkar',
-    'Analytics' => 'Analytics',
+    'Analytics' => 'Analys',
     'Logs' => 'Loggar',
     'Settings' => 'Inställningar',
     'General' => 'Allmänt',
@@ -147,7 +147,7 @@ return [
 
     // Settings: General
     'General Settings' => 'Allmänna inställningar',
-    'Plugin Name' => 'Pluginnamn',
+    'Plugin Name' => 'Plugin-namn',
     'The name of the plugin as it appears in the Control Panel menu' => 'Pluginets namn som det visas i kontrollpanelens meny',
     'Plugin Settings' => 'Plugininställningar',
     'Log Level' => 'Loggnivå',

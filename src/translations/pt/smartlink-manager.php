@@ -17,7 +17,7 @@ return [
 
     // Navigation
     'Links' => 'Links',
-    'Analytics' => 'Analytics',
+    'Analytics' => 'Análises',
     'Logs' => 'Registos',
     'Settings' => 'Definições',
     'General' => 'Geral',
@@ -49,7 +49,7 @@ return [
 
     // Common
     'Save Settings' => 'Guardar definições',
-    'Actions' => 'Acções',
+    'Actions' => 'Ações',
     'Loading...' => 'A carregar...',
     'Error' => 'Erro',
     'Cancel' => 'Cancelar',
@@ -74,7 +74,7 @@ return [
     'No smart links selected' => 'Nenhum smart link seleccionado',
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Só é possível seleccionar até {limit} {limit, plural, =1{smart link} other{smart links}}.',
     'Create a new smart link' => 'Criar um novo smart link',
-    'Active' => 'Activo',
+    'Active' => 'Ativo',
     'Pending' => 'Pendente',
     'Expired' => 'Expirado',
     'Disabled' => 'Desactivado',
@@ -370,7 +370,7 @@ return [
     'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Esta definição está a ser substituída pela definição <code>languageDetectionMethod</code> em <code>config/smartlink-manager.php</code>.',
 
     // Settings: Cache
-    'Cache Settings' => 'Definições de Cache',
+    'Cache Settings' => 'Definições de cache',
     'Cache Storage Settings' => 'Definições de armazenamento de Cache',
     'Cache Storage Method' => 'Método de armazenamento de Cache',
     'How to store cache data. Use Redis/Database for load-balanced or multi-server environments.' => 'Como armazenar os dados de Cache. Use Redis/Base de dados para ambientes com balanceamento de carga ou multi-servidor.',

@@ -17,7 +17,7 @@ return [
 
     // Navigation
     'Links' => 'Link',
-    'Analytics' => 'Analytics',
+    'Analytics' => 'Analisi',
     'Logs' => 'Log',
     'Settings' => 'Impostazioni',
     'General' => 'Generale',
@@ -147,7 +147,7 @@ return [
 
     // Settings: General
     'General Settings' => 'Impostazioni generali',
-    'Plugin Name' => 'Nome plugin',
+    'Plugin Name' => 'Nome del plugin',
     'The name of the plugin as it appears in the Control Panel menu' => 'Il nome del plugin come appare nel menu del pannello di controllo',
     'Plugin Settings' => 'Impostazioni plugin',
     'Log Level' => 'Livello di log',
@@ -370,7 +370,7 @@ return [
     'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Questa impostazione è sovrascritta dall\'impostazione <code>languageDetectionMethod</code> in <code>config/smartlink-manager.php</code>.',
 
     // Settings: Cache
-    'Cache Settings' => 'Impostazioni Cache',
+    'Cache Settings' => 'Impostazioni cache',
     'Cache Storage Settings' => 'Impostazioni archiviazione Cache',
     'Cache Storage Method' => 'Metodo di archiviazione Cache',
     'How to store cache data. Use Redis/Database for load-balanced or multi-server environments.' => 'Come archiviare i dati della Cache. Usare Redis/Database per ambienti con bilanciamento del carico o multi-server.',

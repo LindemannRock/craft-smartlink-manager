@@ -17,7 +17,7 @@ return [
 
     // Navigation
     'Links' => 'Links',
-    'Analytics' => 'Analytics',
+    'Analytics' => 'Analyser',
     'Logs' => 'Logfiler',
     'Settings' => 'Indstillinger',
     'General' => 'Generelt',
@@ -370,7 +370,7 @@ return [
     'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Denne indstilling tilsidesættes af indstillingen <code>languageDetectionMethod</code> i <code>config/smartlink-manager.php</code>.',
 
     // Settings: Cache
-    'Cache Settings' => 'Cacheindstillinger',
+    'Cache Settings' => 'Cache-indstillinger',
     'Cache Storage Settings' => 'Indstillinger for cachelagring',
     'Cache Storage Method' => 'Cachelagringsmetode',
     'How to store cache data. Use Redis/Database for load-balanced or multi-server environments.' => 'Sådan lagres cache-data. Brug Redis/Database til load-balancerede eller flerserver-miljøer.',

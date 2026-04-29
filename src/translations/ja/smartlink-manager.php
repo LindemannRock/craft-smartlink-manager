@@ -74,7 +74,7 @@ return [
     'No smart links selected' => 'スマートリンクが選択されていません',
     'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'スマートリンクは最大 {limit} 件まで選択できます。',
     'Create a new smart link' => '新しいスマートリンクを作成する',
-    'Active' => '有効',
+    'Active' => 'アクティブ',
     'Pending' => '保留中',
     'Expired' => '期限切れ',
     'Disabled' => '無効',
@@ -423,7 +423,7 @@ return [
 
     // Settings: Interface
     'Interface Settings' => 'インターフェース設定',
-    'Items Per Page' => '1 ページあたりのアイテム数',
+    'Items Per Page' => '1 ページあたりの件数',
     'Number of {pluginName} to show per page' => '1 ページに表示する {pluginName} の件数',
     'Allow Multiple' => '複数を許可する',
     'Whether to allow multiple {pluginName} to be selected' => '複数の {pluginName} の選択を許可するかどうか',
