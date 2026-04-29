@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'Scansionare con la fotocamera del telefono per scaricare',
 
     // Base partials
-    'Geo Provider' => 'Provider Geo',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'Selezionare il provider di ricerca geo IP. I provider HTTPS sono consigliati per la privacy.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP gratuito, HTTPS a pagamento)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS, 1k/giorno gratuito)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS, 50k/mese gratuito)',
-    'API Key' => 'API Key',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'Opzionale. Obbligatorio per i livelli a pagamento (abilita HTTPS per ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'Il livello gratuito di ip-api.com usa HTTP. Gli indirizzi IP verranno trasmessi non cifrati. Aggiungere una API Key per HTTPS (livello Pro) o passare a ipapi.co/ipinfo.io.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: livello gratuito HTTP (45 richieste/min). Aggiungere una API Key per HTTPS (livello Pro, $13/mese). Indirizzi IP trasmessi non cifrati senza API Key.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS con 1.000 richieste gratuite/giorno. API Key opzionale (aumenta i limiti di frequenza).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS con 50.000 richieste gratuite/mese. API Key opzionale (aumenta i limiti di frequenza).',
     'error' => 'errore',
     'Configuration Required' => 'Configurazione richiesta',
     'IP hash salt is missing.' => 'Il salt hash IP è mancante.',

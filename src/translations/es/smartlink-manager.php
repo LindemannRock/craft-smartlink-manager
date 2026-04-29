@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'Escanee con la cámara de su teléfono para descargar',
 
     // Base partials
-    'Geo Provider' => 'Proveedor de geolocalización',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'Seleccione el proveedor de búsqueda de geolocalización IP. Se recomiendan proveedores HTTPS para mayor privacidad.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP gratuito, HTTPS de pago)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS, 1k/día gratuito)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS, 50k/mes gratuito)',
-    'API Key' => 'Clave API',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'Opcional. Requerida para niveles de pago (habilita HTTPS para ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'El nivel gratuito de ip-api.com usa HTTP. Las direcciones IP se transmitirán sin cifrar. Añada una clave API para HTTPS (nivel Pro) o cambie a ipapi.co/ipinfo.io.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: nivel HTTP gratuito (45 solicitudes/min). Añada clave API para HTTPS (nivel Pro, $13/mes). Sin clave API, las direcciones IP se transmiten sin cifrar.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS con 1.000 solicitudes gratuitas/día. Clave API opcional (aumenta los límites de velocidad).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS con 50.000 solicitudes gratuitas/mes. Clave API opcional (aumenta los límites de velocidad).',
     'error' => 'error',
     'Configuration Required' => 'Configuración requerida',
     'IP hash salt is missing.' => 'Falta el salt de hash de IP.',

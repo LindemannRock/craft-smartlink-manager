@@ -3,7 +3,7 @@
  * SmartLink Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
+ * @copyright Copyright (c) 2026 LindemannRock
  */
 
 return [
@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'Mit der Kamera Ihres Telefons scannen, um herunterzuladen',
 
     // Base partials
-    'Geo Provider' => 'Geo-Anbieter',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'Den Geo-IP-Lookup-Anbieter auswählen. HTTPS-Anbieter werden aus Datenschutzgründen empfohlen.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP kostenlos, HTTPS kostenpflichtig)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS, 1k/Tag kostenlos)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS, 50k/Monat kostenlos)',
-    'API Key' => 'API-Schlüssel',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'Optional. Erforderlich für kostenpflichtige Tarife (aktiviert HTTPS für ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'ip-api.com Gratisversion verwendet HTTP. IP-Adressen werden unverschlüsselt übertragen. API-Schlüssel für HTTPS (Pro-Tarif) hinzufügen oder zu ipapi.co/ipinfo.io wechseln.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: HTTP-Gratisversion (45 Anfragen/Min.). API-Schlüssel für HTTPS (Pro-Tarif, 13 $/Monat) hinzufügen. Ohne API-Schlüssel werden IP-Adressen unverschlüsselt übertragen.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS mit 1.000 kostenlosen Anfragen/Tag. API-Schlüssel optional (erhöht Ratenlimits).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS mit 50.000 kostenlosen Anfragen/Monat. API-Schlüssel optional (erhöht Ratenlimits).',
     'error' => 'Fehler',
     'Configuration Required' => 'Konfiguration erforderlich',
     'IP hash salt is missing.' => 'IP-Hash-Salt fehlt.',

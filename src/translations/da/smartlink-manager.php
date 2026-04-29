@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'Skan med telefonens kamera for at downloade',
 
     // Base partials
-    'Geo Provider' => 'Geo-udbyder',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'Vælg udbyderen til geo-IP-opslag. HTTPS-udbydere anbefales af hensyn til privatlivsbeskyttelse.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP gratis, HTTPS betalt)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS, 1.000/dag gratis)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS, 50.000/måned gratis)',
-    'API Key' => 'API Key',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'Valgfrit. Påkrævet for betalte niveauer (aktiverer HTTPS for ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'ip-api.coms gratisniveau bruger HTTP. IP-adresser transmitteres ukrypteret. Tilføj en API Key for HTTPS (Pro-niveau) eller skift til ipapi.co/ipinfo.io.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: HTTP gratisniveau (45 forespørgsler/min). Tilføj API Key for HTTPS (Pro-niveau, $13/md.). IP-adresser transmitteres ukrypteret uden API Key.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS med 1.000 gratis forespørgsler/dag. API Key valgfrit (øger hastighedsgrænser).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS med 50.000 gratis forespørgsler/md. API Key valgfrit (øger hastighedsgrænser).',
     'error' => 'fejl',
     'Configuration Required' => 'Konfiguration påkrævet',
     'IP hash salt is missing.' => 'IP-hash-salt mangler.',

@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'Scan met de camera van uw telefoon om te downloaden',
 
     // Base partials
-    'Geo Provider' => 'Geo-provider',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'Selecteer de geo-IP-lookupprovider. HTTPS-providers worden aanbevolen voor privacy.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP gratis, HTTPS betaald)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS, 1k/dag gratis)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS, 50k/maand gratis)',
-    'API Key' => 'API-sleutel',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'Optioneel. Vereist voor betaalde niveaus (schakelt HTTPS in voor ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'Gratis niveau van ip-api.com gebruikt HTTP. IP-adressen worden onversleuteld verzonden. Voeg een API-sleutel toe voor HTTPS (Pro-niveau) of schakel over naar ipapi.co/ipinfo.io.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: gratis HTTP-niveau (45 verzoeken/min). Voeg API-sleutel toe voor HTTPS (Pro-niveau, $13/maand). Zonder API-sleutel worden IP-adressen onversleuteld verzonden.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS met 1.000 gratis verzoeken/dag. API-sleutel optioneel (verhoogt snelheidslimieten).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS met 50.000 gratis verzoeken/maand. API-sleutel optioneel (verhoogt snelheidslimieten).',
     'error' => 'fout',
     'Configuration Required' => 'Configuratie vereist',
     'IP hash salt is missing.' => 'IP-hash-salt ontbreekt.',

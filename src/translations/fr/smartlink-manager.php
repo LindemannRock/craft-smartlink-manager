@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'Scannez avec l\'appareil photo de votre téléphone pour télécharger',
 
     // Base partials
-    'Geo Provider' => 'Fournisseur de géolocalisation',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'Sélectionnez le fournisseur de géolocalisation IP. Les fournisseurs HTTPS sont recommandés pour la confidentialité.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP gratuit, HTTPS payant)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS, 1k/jour gratuit)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS, 50k/mois gratuit)',
-    'API Key' => 'Clé API',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'Optionnel. Requis pour les offres payantes (active HTTPS pour ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'L\'offre gratuite ip-api.com utilise HTTP. Les adresses IP seront transmises sans chiffrement. Ajoutez une clé API pour HTTPS (offre Pro) ou passez à ipapi.co/ipinfo.io.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com : offre gratuite HTTP (45 requêtes/min). Ajoutez une clé API pour HTTPS (offre Pro, 13 $/mois). Sans clé API, les adresses IP sont transmises sans chiffrement.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co : HTTPS avec 1 000 requêtes gratuites/jour. Clé API optionnelle (augmente les limites de débit).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io : HTTPS avec 50 000 requêtes gratuites/mois. Clé API optionnelle (augmente les limites de débit).',
     'error' => 'erreur',
     'Configuration Required' => 'Configuration requise',
     'IP hash salt is missing.' => 'Le sel de hachage IP est manquant.',

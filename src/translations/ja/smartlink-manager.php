@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'ダウンロードするには携帯のカメラでスキャンしてください',
 
     // Base partials
-    'Geo Provider' => 'ジオプロバイダー',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'ジオ IP ルックアッププロバイダーを選択してください。プライバシーのため HTTPS プロバイダーをお勧めします。',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP 無料、HTTPS 有料)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS、1k / 日無料)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS、50k / 月無料)',
-    'API Key' => 'API Key',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => '任意。有料プランに必要です (ip-api.com Pro の HTTPS を有効にします)。',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'ip-api.com の無料プランは HTTP を使用します。IP アドレスは暗号化されずに送信されます。HTTPS には API Key を追加 (Pro プラン)、または ipapi.co / ipinfo.io に切り替えてください。',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: HTTP 無料プラン (45 リクエスト / 分)。HTTPS には API Key を追加 (Pro プラン、月 $13)。API Key なしでは IP アドレスが暗号化されずに送信されます。',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS で 1,000 リクエスト / 日無料。API Key は任意 (レート制限が増加)。',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS で 50,000 リクエスト / 月無料。API Key は任意 (レート制限が増加)。',
     'error' => 'エラー',
     'Configuration Required' => '設定が必要です',
     'IP hash salt is missing.' => 'IP ハッシュソルトがありません。',

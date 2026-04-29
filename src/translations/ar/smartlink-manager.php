@@ -3,7 +3,7 @@
  * SmartLink Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
+ * @copyright Copyright (c) 2026 LindemannRock
  */
 
 return [
@@ -771,17 +771,6 @@ return [
     'Scan with your phone\'s camera to download' => 'امسح بكاميرا هاتفك للتنزيل',
 
     // Base partials
-    'Geo Provider' => 'مزود الجغرافيا',
-    'Select the geo IP lookup provider. HTTPS providers recommended for privacy.' => 'اختر مزود البحث عن الموقع الجغرافي بـ IP. يُنصح بمزودي HTTPS للخصوصية.',
-    'ip-api.com (HTTP free, HTTPS paid)' => 'ip-api.com (HTTP مجاني، HTTPS مدفوع)',
-    'ipapi.co (HTTPS, 1k/day free)' => 'ipapi.co (HTTPS، 1k/يوم مجاناً)',
-    'ipinfo.io (HTTPS, 50k/month free)' => 'ipinfo.io (HTTPS، 50k/شهر مجاناً)',
-    'API Key' => 'مفتاح API',
-    'Optional. Required for paid tiers (enables HTTPS for ip-api.com Pro).' => 'اختياري. مطلوب للخطط المدفوعة (يفعّل HTTPS لـ ip-api.com Pro).',
-    'ip-api.com free tier uses HTTP. IP addresses will be transmitted unencrypted. Add an API key for HTTPS (Pro tier) or switch to ipapi.co/ipinfo.io.' => 'الخطة المجانية لـ ip-api.com تستخدم HTTP. سيتم إرسال عناوين IP بدون تشفير. أضف مفتاح API لـ HTTPS (الخطة Pro) أو انتقل إلى ipapi.co/ipinfo.io.',
-    'ip-api.com: HTTP free tier (45 requests/min). Add API key for HTTPS (Pro tier, $13/month). IP addresses transmitted unencrypted without API key.' => 'ip-api.com: خطة HTTP مجانية (45 طلباً/دقيقة). أضف مفتاح API لـ HTTPS (خطة Pro، 13$/شهر). بدون مفتاح API، تُرسل عناوين IP بدون تشفير.',
-    'ipapi.co: HTTPS with 1,000 free requests/day. API key optional (increases rate limits).' => 'ipapi.co: HTTPS مع 1,000 طلب مجاني/يوم. مفتاح API اختياري (يزيد حدود المعدل).',
-    'ipinfo.io: HTTPS with 50,000 free requests/month. API key optional (increases rate limits).' => 'ipinfo.io: HTTPS مع 50,000 طلب مجاني/شهر. مفتاح API اختياري (يزيد حدود المعدل).',
     'error' => 'خطأ',
     'Configuration Required' => 'مطلوب تهيئة',
     'IP hash salt is missing.' => 'مفتاح التشفير IP hash salt مفقود.',
