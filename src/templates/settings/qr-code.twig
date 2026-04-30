@@ -49,13 +49,11 @@
         </div>
     </div>
 
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('smartlink-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('smartlink-manager/settings/qr-code') }}
-        {{ hiddenInput('section', 'qr-code') }}
+    {{ actionInput('smartlink-manager/settings/save') }}
+    {{ redirectInput('smartlink-manager/settings/qr-code') }}
+    {{ hiddenInput('section', 'qr-code') }}
 
-        <h2 style="margin-top: 0px;">{{ "Appearance & Style"|t('smartlink-manager') }}</h2>
+        <h2 class="first">{{ "Appearance & Style"|t('smartlink-manager') }}</h2>
 
         {{ forms.textField({
             label: "Size"|t('smartlink-manager'),
@@ -306,8 +304,6 @@
                 <a href="{{ url('smartlink-manager/settings/cache') }}">{{ "Go to Cache Settings"|t('smartlink-manager') }}</a>
             </p>
         </div>
-
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

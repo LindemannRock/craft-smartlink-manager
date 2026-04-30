@@ -22,13 +22,11 @@
 
 {% block content %}
 
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('smartlink-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('smartlink-manager/settings/general') }}
-        {{ hiddenInput('section', 'general') }}
+    {{ actionInput('smartlink-manager/settings/save') }}
+    {{ redirectInput('smartlink-manager/settings/general') }}
+    {{ hiddenInput('section', 'general') }}
 
-        <h2 style="margin-top: 0px;">{{ "General Settings"|t('smartlink-manager') }}</h2>
+        <h2 class="first">{{ "General Settings"|t('smartlink-manager') }}</h2>
 
         {{ forms.textField({
             label: "Plugin Name"|t('smartlink-manager'),
@@ -381,8 +379,6 @@
             warning: settings.isOverriddenByConfig('logLevel') ?
                 "This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
-
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

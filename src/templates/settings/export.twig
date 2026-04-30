@@ -22,13 +22,11 @@
 
 {% block content %}
 
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('smartlink-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('smartlink-manager/settings/export') }}
-        {{ hiddenInput('section', 'export') }}
+    {{ actionInput('smartlink-manager/settings/save') }}
+    {{ redirectInput('smartlink-manager/settings/export') }}
+    {{ hiddenInput('section', 'export') }}
 
-        <h2 style="margin-top: 0px;">{{ "Analytics Export Options"|t('smartlink-manager') }}</h2>
+        <h2 class="first">{{ "Analytics Export Options"|t('smartlink-manager') }}</h2>
 
         {{ forms.lightswitchField({
             label: "Include Disabled {pluginName} in Export"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}),
@@ -51,8 +49,6 @@
             warning: settings.isOverriddenByConfig('includeExpiredInExport') ?
                 "This is being overridden by the <code>includeExpiredInExport</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
         }) }}
-
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

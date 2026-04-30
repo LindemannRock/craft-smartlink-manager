@@ -22,13 +22,11 @@
 
 {% block content %}
 
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('smartlink-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('smartlink-manager/settings/behavior') }}
-        {{ hiddenInput('section', 'behavior') }}
+    {{ actionInput('smartlink-manager/settings/save') }}
+    {{ redirectInput('smartlink-manager/settings/behavior') }}
+    {{ hiddenInput('section', 'behavior') }}
 
-        <h2 style="margin-top: 0px;">{{ "Redirect Behavior"|t('smartlink-manager') }}</h2>
+        <h2 class="first">{{ "Redirect Behavior"|t('smartlink-manager') }}</h2>
 
         {{ forms.selectField({
             label: "Language Detection Method"|t('smartlink-manager'),
@@ -63,8 +61,6 @@
         <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
             {{ "Can be a relative path (/) or full URL (https://example.com)"|t('smartlink-manager') }}
         </p>
-
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

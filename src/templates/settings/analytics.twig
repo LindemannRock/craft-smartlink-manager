@@ -22,13 +22,11 @@
 
 {% block content %}
 
-    <form method="post" accept-charset="UTF-8">
-        {{ actionInput('smartlink-manager/settings/save') }}
-        {{ csrfInput() }}
-        {{ redirectInput('smartlink-manager/settings/analytics') }}
-        {{ hiddenInput('section', 'analytics') }}
+    {{ actionInput('smartlink-manager/settings/save') }}
+    {{ redirectInput('smartlink-manager/settings/analytics') }}
+    {{ hiddenInput('section', 'analytics') }}
 
-        <h2 style="margin-top: 0px;">{{ "Analytics"|t('smartlink-manager') }}</h2>
+        <h2 class="first">{{ "Analytics"|t('smartlink-manager') }}</h2>
 
         {{ forms.lightswitchField({
             label: "Enable Analytics"|t('smartlink-manager'),
@@ -135,8 +133,6 @@
         {% endif %}
 
         </div>{# end #analytics-settings #}
-
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}
