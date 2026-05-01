@@ -18,7 +18,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
  * Abstract base class for all third-party integrations
  * Provides common functionality and helpers
  *
- * @since 1.1.0
+ * @since 1.23.0
  */
 abstract class BaseIntegration implements IntegrationInterface
 {

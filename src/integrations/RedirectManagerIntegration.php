@@ -27,7 +27,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
  * - handleSlugChange() -> calls redirect-manager service methods with runtime checks
  * - handleDeletedSmartLink() -> calls redirect-manager service methods with runtime checks
  *
- * @since 1.1.0
+ * @since 5.4.0
  */
 class RedirectManagerIntegration extends BaseIntegration
 {

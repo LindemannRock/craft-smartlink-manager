@@ -15,7 +15,7 @@ use craft\web\AssetBundle;
  *
  * Provides SmartLink Manager analytics wiring for cp-analytics pages.
  *
- * @since 5.22.0
+ * @since 5.20.0
  */
 class AnalyticsAsset extends AssetBundle
 {

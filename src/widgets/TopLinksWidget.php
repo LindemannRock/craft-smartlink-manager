@@ -15,7 +15,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 /**
  * SmartLink Manager Top Performing Links Widget
  *
- * @since 1.0.0
+ * @since 5.3.0
  */
 class TopLinksWidget extends Widget
 {

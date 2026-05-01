@@ -19,7 +19,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 /**
  * SmartLink Manager Utility
  *
- * @since 1.0.0
+ * @since 5.21.0
  */
 class SmartLinkManagerUtility extends Utility
 {

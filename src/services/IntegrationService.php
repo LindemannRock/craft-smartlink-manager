@@ -15,7 +15,7 @@ use lindemannrock\smartlinkmanager\integrations\SeomaticIntegration;
  * Central manager for all third-party analytics integrations
  * Handles loading, initialization, and routing of events to enabled integrations
  *
- * @since 1.1.0
+ * @since 1.23.0
  */
 class IntegrationService extends Component
 {
@@ -32,9 +32,7 @@ class IntegrationService extends Component
     private bool $initialized = false;
 
     /**
-     * Initialize all available integrations
-     *
-     * @since 5.0.0
+     * @inheritdoc
      */
     public function init(): void
     {
@@ -305,7 +303,6 @@ class IntegrationService extends Component
      * @param \lindemannrock\smartlinkmanager\elements\SmartLink $smartLink
      * @param string $eventType Event type: 'qr_scan' or 'redirect'
      * @return \Twig\Markup|null HTML script tag or null if SEOmatic is not enabled
-     * @since 1.23.0
      */
     public function renderSeomaticTracking($smartLink, string $eventType = 'qr_scan'): ?\Twig\Markup
     {

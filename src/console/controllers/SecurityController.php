@@ -16,7 +16,7 @@ use yii\console\ExitCode;
 /**
  * Security utilities for SmartLink Manager
  *
- * @since 1.0.0
+ * @since 5.1.0
  */
 class SecurityController extends Controller
 {
@@ -24,7 +24,6 @@ class SecurityController extends Controller
      * Generate a secure salt for IP hashing and optionally update .env file
      *
      * @return int
-     * @since 5.1.0
      */
     public function actionGenerateSalt(): int
     {
