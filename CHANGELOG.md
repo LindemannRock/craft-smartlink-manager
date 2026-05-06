@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.27.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.26.0...v5.27.0) (2026-05-06)
+
+
+### Features
+
+* Add 12-language translation support with 1,250 keys across EN, DE, FR, NL, ES, AR, IT, PT, JA, SV, DA, NO ([777885c](https://github.com/LindemannRock/craft-smartlink-manager/commit/777885ca5c7f91b338ccbcbad61d3365d479a144))
+
+
+### Bug Fixes
+
+* apply config overrides through shared settings helper ([b01b0be](https://github.com/LindemannRock/craft-smartlink-manager/commit/b01b0be46202054d66aa776867267e44214cffc1))
+* drop PAT requirement for release-please — use built-in GITHUB_TOKEN ([32f5dff](https://github.com/LindemannRock/craft-smartlink-manager/commit/32f5dffae3ff05ab344d672c69dd4edc19c59fe4))
+* **translations:** correct various translations in multiple languages ([04ebc14](https://github.com/LindemannRock/craft-smartlink-manager/commit/04ebc1492116d1aa3aa7dac73d5eb13fcd49c344))
+* **translations:** update copyright year and remove geo provider strings ([aee4784](https://github.com/LindemannRock/craft-smartlink-manager/commit/aee4784f1dcdb7ef58bd291964084c187f786c36))
+
+
+### Miscellaneous Chores
+
+* update version annotations across multiple files ([7e52f4a](https://github.com/LindemannRock/craft-smartlink-manager/commit/7e52f4a736881a273f3c1885ca5c7b261562ba66))
+
 ## [5.26.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.3...v5.26.0) (2026-04-05)
 
 
