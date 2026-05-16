@@ -1,4 +1,10 @@
 <?php
+/**
+ * LindemannRock SmartLink Manager
+ *
+ * @link      https://lindemannrock.com
+ * @copyright Copyright (c) 2026 LindemannRock
+ */
 
 declare(strict_types=1);
 
