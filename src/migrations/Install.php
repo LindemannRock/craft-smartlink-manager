@@ -212,6 +212,16 @@ class Install extends Migration
                 'seomaticEventPrefix' => $this->string(50)->defaultValue('smart_links')->comment('Event prefix for GTM/GA events'),
                 // Logging
                 'logLevel' => $this->string(20)->notNull()->defaultValue('error'),
+                // Base plugin overrides — nullable. Null = inherit from config/lindemannrock-base.php.
+                'timeFormat' => $this->string(2)->null(),
+                'monthFormat' => $this->string(20)->null(),
+                'dateOrder' => $this->string(3)->null(),
+                'dateSeparator' => $this->string(1)->null(),
+                'showSeconds' => $this->boolean()->null(),
+                'defaultDateRange' => $this->string(15)->null(),
+                'exportsCsv' => $this->boolean()->null(),
+                'exportsJson' => $this->boolean()->null(),
+                'exportsExcel' => $this->boolean()->null(),
                 // Timestamps
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
@@ -229,6 +239,16 @@ class Install extends Migration
             // Insert default settings row
             $this->insert('{{%smartlinkmanager_settings}}', [
                 'usePrefix' => true,
+                // Base plugin overrides — seeded null so cascade falls through to base config / defaults.
+                'timeFormat' => null,
+                'monthFormat' => null,
+                'dateOrder' => null,
+                'dateSeparator' => null,
+                'showSeconds' => null,
+                'defaultDateRange' => null,
+                'exportsCsv' => null,
+                'exportsJson' => null,
+                'exportsExcel' => null,
                 'dateCreated' => Db::prepareDateForDb(new \DateTime()),
                 'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
                 'uid' => StringHelper::UUID(),
