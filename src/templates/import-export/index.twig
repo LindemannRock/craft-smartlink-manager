@@ -88,7 +88,7 @@ my-app-launch,My App Launch,https://example.com/fallback,https://apps.apple.com/
         {% endif %}
     </div>
 
-    {% include 'lindemannrock-base/_partials/import-history' with {
+    {% include 'lindemannrock-base/_partials/section-import-history' with {
         sectionId: 'import-history',
         title: 'Import History'|t('smartlink-manager'),
         importHistory: importHistory,
@@ -103,7 +103,7 @@ my-app-launch,My App Launch,https://example.com/fallback,https://apps.apple.com/
 {% endblock %}
 
 {% js %}
-    {% include 'lindemannrock-base/_partials/import-history-js' with {
+    {% include 'lindemannrock-base/_partials/js-import-history' with {
         tabStorageKey: 'showHistoryTab',
         tabSelector: 'a[href="#import-history"]',
         clearButtonId: 'clear-logs-btn',
