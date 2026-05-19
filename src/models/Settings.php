@@ -17,6 +17,7 @@ use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\traits\DateFormatSettingsTrait;
 use lindemannrock\base\traits\DateRangeSettingsTrait;
 use lindemannrock\base\traits\ExportFormatSettingsTrait;
+use lindemannrock\base\traits\GeoSettingsTrait;
 use lindemannrock\base\traits\ItemsPerPageSettingsTrait;
 use lindemannrock\base\traits\LogLevelSettingsTrait;
 use lindemannrock\base\traits\PluginNameSettingsTrait;
@@ -38,6 +39,7 @@ class Settings extends Model
     use DateFormatSettingsTrait;
     use DateRangeSettingsTrait;
     use ExportFormatSettingsTrait;
+    use GeoSettingsTrait;
     use ItemsPerPageSettingsTrait;
     use LogLevelSettingsTrait;
     use LoggingTrait;
@@ -430,8 +432,6 @@ class Settings extends Model
             [['defaultQrFormat'], 'in', 'range' => ['png', 'svg']],
             [['defaultQrErrorCorrection'], 'in', 'range' => ['L', 'M', 'Q', 'H']],
             [['cacheStorageMethod'], 'in', 'range' => ['file', 'redis']],
-            [['geoProvider'], 'in', 'range' => ['ip-api.com', 'ipapi.co', 'ipinfo.io']],
-            [['geoApiKey'], 'string', 'max' => 255, 'skipOnEmpty' => true],
             [['qrModuleStyle'], 'in', 'range' => ['square', 'rounded', 'dots']],
             [['qrEyeStyle'], 'in', 'range' => ['square', 'rounded', 'leaf']],
             [['qrLogoSize'], 'integer', 'min' => 10, 'max' => 30],
@@ -453,7 +453,7 @@ class Settings extends Model
             [['enabledIntegrations', 'seomaticTrackingEvents'], 'each', 'rule' => ['string']],
             [['seomaticEventPrefix'], 'string', 'max' => 50],
             [['seomaticEventPrefix'], 'match', 'pattern' => '/^[a-z0-9\_]+$/', 'message' => Craft::t('smartlink-manager', 'Only lowercase letters, numbers, and underscores are allowed.')],
-        ], $this->pluginNameSettingsRules(), $this->logLevelSettingsRules(), $this->dateFormatSettingsRules(), $this->dateRangeSettingsRules(), $this->exportFormatSettingsRules(), $this->itemsPerPageSettingsRules());
+        ], $this->pluginNameSettingsRules(), $this->logLevelSettingsRules(), $this->dateFormatSettingsRules(), $this->dateRangeSettingsRules(), $this->exportFormatSettingsRules(), $this->geoSettingsRules(), $this->itemsPerPageSettingsRules());
     }
 
     /**
@@ -822,6 +822,6 @@ class Settings extends Model
             'enabledIntegrations' => Craft::t('smartlink-manager', 'Enabled Integrations'),
             'seomaticTrackingEvents' => Craft::t('smartlink-manager', 'Tracking Events'),
             'seomaticEventPrefix' => Craft::t('smartlink-manager', 'Event Prefix'),
-        ], $this->pluginNameSettingsLabel(), $this->logLevelSettingsLabel(), $this->dateFormatSettingsLabels(), $this->dateRangeSettingsLabel(), $this->exportFormatSettingsLabels(), $this->itemsPerPageSettingsLabel());
+        ], $this->pluginNameSettingsLabel(), $this->logLevelSettingsLabel(), $this->dateFormatSettingsLabels(), $this->dateRangeSettingsLabel(), $this->exportFormatSettingsLabels(), $this->geoSettingsLabel(), $this->itemsPerPageSettingsLabel());
     }
 }
