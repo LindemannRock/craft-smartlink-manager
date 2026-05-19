@@ -415,6 +415,14 @@ class SettingsController extends Controller
         // Only update fields that were posted and are not overridden by config
         foreach ($settingsData as $key => $value) {
             if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {
+                // Multi-state selects (e.g. "Use global default" = '') need '' → null
+                // so nullable properties hold null, not a coerced false / 0 / ''.
+                if ($value === '') {
+                    $type = (new \ReflectionProperty($settings, $key))->getType();
+                    if ($type instanceof \ReflectionNamedType && $type->allowsNull()) {
+                        $value = null;
+                    }
+                }
                 // Handle special array field conversions
                 if ($key === 'enabledIntegrations') {
                     // Decode JSON string from hidden field
@@ -855,6 +863,15 @@ class SettingsController extends Controller
             ],
             'interface' => [
                 'itemsPerPage',
+                'timeFormat',
+                'monthFormat',
+                'dateOrder',
+                'dateSeparator',
+                'showSeconds',
+                'defaultDateRange',
+                'exportsCsv',
+                'exportsJson',
+                'exportsExcel',
             ],
             'cache' => [
                 'cacheStorageMethod',
