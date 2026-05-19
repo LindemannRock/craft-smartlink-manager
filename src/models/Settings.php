@@ -14,6 +14,12 @@ use craft\behaviors\EnvAttributeParserBehavior;
 use craft\helpers\App;
 use craft\helpers\UrlHelper;
 use lindemannrock\base\helpers\PluginHelper;
+use lindemannrock\base\traits\DateFormatSettingsTrait;
+use lindemannrock\base\traits\DateRangeSettingsTrait;
+use lindemannrock\base\traits\ExportFormatSettingsTrait;
+use lindemannrock\base\traits\ItemsPerPageSettingsTrait;
+use lindemannrock\base\traits\LogLevelSettingsTrait;
+use lindemannrock\base\traits\PluginNameSettingsTrait;
 use lindemannrock\base\traits\SettingsConfigTrait;
 use lindemannrock\base\traits\SettingsDisplayNameTrait;
 use lindemannrock\base\traits\SettingsPersistenceTrait;
@@ -29,7 +35,13 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
  */
 class Settings extends Model
 {
+    use DateFormatSettingsTrait;
+    use DateRangeSettingsTrait;
+    use ExportFormatSettingsTrait;
+    use ItemsPerPageSettingsTrait;
+    use LogLevelSettingsTrait;
     use LoggingTrait;
+    use PluginNameSettingsTrait;
     use SettingsConfigTrait;
     use SettingsDisplayNameTrait;
     use SettingsPersistenceTrait;
@@ -215,11 +227,6 @@ class Settings extends Model
     public string $languageDetectionMethod = 'browser';
 
     /**
-     * @var int Items per page in element index
-     */
-    public int $itemsPerPage = 100;
-
-    /**
      * @var string URL prefix for smart links (default: 'go')
      */
     public string $slugPrefix = 'go';
@@ -250,11 +257,6 @@ class Settings extends Model
      * @var array Site IDs where SmartLink Manager should be enabled
      */
     public array $enabledSites = [];
-
-    /**
-     * @var string Log level (error, warning, info, debug)
-     */
-    public string $logLevel = 'error';
 
     /**
      * @var array Enabled integration handles (e.g., ['seomatic'])
@@ -313,6 +315,10 @@ class Settings extends Model
             'cacheDeviceDetection',
             'enableQrLogo',
             'enableQrDownload',
+            'showSeconds',
+            'exportsCsv',
+            'exportsJson',
+            'exportsExcel',
         ];
     }
 
@@ -402,9 +408,8 @@ class Settings extends Model
      */
     protected function defineRules(): array
     {
-        return [
-            [['pluginName', 'slugPrefix', 'qrPrefix'], 'required'],
-            [['pluginName'], 'string', 'max' => 255],
+        return array_merge([
+            [['slugPrefix', 'qrPrefix'], 'required'],
             [['slugPrefix', 'qrPrefix'], 'string', 'max' => 50],
             [['usePrefix'], 'boolean'],
             [['smartlinkBaseUrl'], 'string', 'max' => 500],
@@ -415,11 +420,10 @@ class Settings extends Model
             [['slugPrefix'], 'validateSlugPrefix'],
             [['qrPrefix'], 'validateQrPrefix'],
             [['enableAnalytics', 'enableGeoDetection', 'cacheDeviceDetection', 'includeDisabledInExport', 'includeExpiredInExport', 'anonymizeIpAddress'], 'boolean'],
-            [['analyticsRetention', 'defaultQrSize', 'qrCodeCacheDuration', 'deviceDetectionCacheDuration', 'itemsPerPage'], 'integer'],
+            [['analyticsRetention', 'defaultQrSize', 'qrCodeCacheDuration', 'deviceDetectionCacheDuration'], 'integer'],
             [['analyticsRetention'], 'integer', 'min' => 0, 'max' => 3650], // 0 for unlimited, up to 10 years
             [['defaultQrSize'], 'integer', 'min' => 100, 'max' => 1000],
             [['qrCodeCacheDuration', 'deviceDetectionCacheDuration'], 'integer', 'min' => 60, 'max' => 604800],
-            [['itemsPerPage'], 'integer', 'min' => 10, 'max' => 500],
             [['defaultQrColor', 'defaultQrBgColor', 'qrEyeColor'], 'string'],
             [['defaultQrColor', 'defaultQrBgColor'], 'match', 'pattern' => '/^#[0-9A-F]{6}$/i'],
             [['qrEyeColor'], 'match', 'pattern' => '/^#[0-9A-F]{6}$/i', 'skipOnEmpty' => true],
@@ -446,12 +450,10 @@ class Settings extends Model
             [['redirectTemplate', 'qrTemplate'], TemplatePathValidator::class, 'translationCategory' => 'smartlink-manager', 'checkTemplateExists' => true],
             [['languageDetectionMethod'], 'in', 'range' => ['browser', 'ip', 'both']],
             [['enabledSites'], 'each', 'rule' => ['integer']],
-            [['logLevel'], 'in', 'range' => ['debug', 'info', 'warning', 'error']],
-            [['logLevel'], 'validateLogLevel'],
             [['enabledIntegrations', 'seomaticTrackingEvents'], 'each', 'rule' => ['string']],
             [['seomaticEventPrefix'], 'string', 'max' => 50],
             [['seomaticEventPrefix'], 'match', 'pattern' => '/^[a-z0-9\_]+$/', 'message' => Craft::t('smartlink-manager', 'Only lowercase letters, numbers, and underscores are allowed.')],
-        ];
+        ], $this->pluginNameSettingsRules(), $this->logLevelSettingsRules(), $this->dateFormatSettingsRules(), $this->dateRangeSettingsRules(), $this->exportFormatSettingsRules(), $this->itemsPerPageSettingsRules());
     }
 
     /**
@@ -489,42 +491,6 @@ class Settings extends Model
             $this->defaultQrLogoId = $value !== '' ? (int) $value : null;
         } else {
             $this->defaultQrLogoId = $value !== null ? (int) $value : null;
-        }
-    }
-
-    /**
-     * Validate log level - debug requires devMode
-     */
-    public function validateLogLevel($attribute, $params, $validator)
-    {
-        $logLevel = $this->$attribute;
-
-        // Reset session warning when devMode is true - allows warning to show again if devMode changes
-        if (Craft::$app->getConfig()->getGeneral()->devMode && !Craft::$app->getRequest()->getIsConsoleRequest()) {
-            Craft::$app->getSession()->remove('sl_debug_config_warning');
-        }
-
-        // Debug level is only allowed when devMode is enabled
-        if ($logLevel === 'debug' && !Craft::$app->getConfig()->getGeneral()->devMode) {
-            $this->$attribute = 'info';
-
-            if ($this->isOverriddenByConfig('logLevel')) {
-                if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
-                    if (Craft::$app->getSession()->get('sl_debug_config_warning') === null) {
-                        $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
-                            'configFile' => 'config/smartlink-manager.php',
-                        ]);
-                        Craft::$app->getSession()->set('sl_debug_config_warning', true);
-                    }
-                } else {
-                    $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
-                        'configFile' => 'config/smartlink-manager.php',
-                    ]);
-                }
-            } else {
-                $this->logWarning('Log level automatically changed from "debug" to "info" because devMode is disabled');
-                $this->saveToDatabase();
-            }
         }
     }
 
@@ -818,8 +784,7 @@ class Settings extends Model
      */
     public function attributeLabels(): array
     {
-        return [
-            'pluginName' => Craft::t('smartlink-manager', 'Plugin Name'),
+        return array_merge([
             'usePrefix' => Craft::t('smartlink-manager', 'Use URL Prefix'),
             'slugPrefix' => Craft::t('smartlink-manager', 'Smart Link URL Prefix'),
             'qrPrefix' => Craft::t('smartlink-manager', 'QR Code URL Prefix'),
@@ -852,13 +817,11 @@ class Settings extends Model
             'cacheDeviceDetection' => Craft::t('smartlink-manager', 'Cache Device Detection'),
             'deviceDetectionCacheDuration' => Craft::t('smartlink-manager', 'Device Detection Cache Duration (seconds)'),
             'languageDetectionMethod' => Craft::t('smartlink-manager', 'Language Detection Method'),
-            'itemsPerPage' => Craft::t('smartlink-manager', 'Items Per Page'),
             'notFoundRedirectUrl' => Craft::t('smartlink-manager', '404 Redirect URL'),
             'enabledSites' => Craft::t('smartlink-manager', 'Enabled Sites'),
-            'logLevel' => Craft::t('smartlink-manager', 'Log Level'),
             'enabledIntegrations' => Craft::t('smartlink-manager', 'Enabled Integrations'),
             'seomaticTrackingEvents' => Craft::t('smartlink-manager', 'Tracking Events'),
             'seomaticEventPrefix' => Craft::t('smartlink-manager', 'Event Prefix'),
-        ];
+        ], $this->pluginNameSettingsLabel(), $this->logLevelSettingsLabel(), $this->dateFormatSettingsLabels(), $this->dateRangeSettingsLabel(), $this->exportFormatSettingsLabels(), $this->itemsPerPageSettingsLabel());
     }
 }
