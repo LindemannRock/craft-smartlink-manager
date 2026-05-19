@@ -147,18 +147,8 @@ return [
 
     // Settings: General
     'General Settings' => '一般設定',
-    'Plugin Name' => 'プラグイン名',
-    'The name of the plugin as it appears in the Control Panel menu' => 'コントロールパネルメニューに表示されるプラグイン名',
     'Plugin Settings' => 'プラグイン設定',
-    'Log Level' => 'ログレベル',
-    'Choose what types of messages to log. Debug level requires devMode to be enabled.' => '記録するメッセージの種類を選択してください。デバッグレベルは devMode の有効化が必要です。',
-    'Error (Critical errors only)' => 'エラー (重大なエラーのみ)',
-    'Warning (Errors and warnings)' => '警告 (エラーと警告)',
-    'Info (General information)' => '情報 (一般情報)',
-    'Debug (Detailed debugging)' => 'デバッグ (詳細なデバッグ情報)',
     'Logging Settings' => 'ログ設定',
-    'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>pluginName</code> 設定で上書きされています。',
-    'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>logLevel</code> 設定で上書きされています。',
     'Site Settings' => 'サイト設定',
     'Enabled Sites' => '有効なサイト',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => '{pluginName} を有効にするサイトを選択してください。空白にするとすべてのサイトで有効になります。',
@@ -423,13 +413,10 @@ return [
 
     // Settings: Interface
     'Interface Settings' => 'インターフェース設定',
-    'Items Per Page' => '1 ページあたりの件数',
-    'Number of {pluginName} to show per page' => '1 ページに表示する {pluginName} の件数',
     'Allow Multiple' => '複数を許可する',
     'Whether to allow multiple {pluginName} to be selected' => '複数の {pluginName} の選択を許可するかどうか',
     'The maximum number of {pluginName} that can be selected.' => '選択できる {pluginName} の最大件数。',
     'Which sources should be available to select {pluginName} from?' => '{pluginName} を選択できるソースはどれですか？',
-    'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>itemsPerPage</code> 設定で上書きされています。',
 
     // Settings: Integrations
     'Third-Party Integrations' => 'サードパーティインテグレーション',

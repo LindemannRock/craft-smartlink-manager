@@ -147,18 +147,8 @@ return [
 
     // Settings: General
     'General Settings' => 'Generelle indstillinger',
-    'Plugin Name' => 'Plugin-navn',
-    'The name of the plugin as it appears in the Control Panel menu' => 'Plugin-navnets udseende i kontrolpanel-menuen',
     'Plugin Settings' => 'Plugin-indstillinger',
-    'Log Level' => 'Logniveau',
-    'Choose what types of messages to log. Debug level requires devMode to be enabled.' => 'Vælg hvilke typer meddelelser der skal logges. Fejlfindingsniveau kræver, at devMode er aktiveret.',
-    'Error (Critical errors only)' => 'Fejl (kun kritiske fejl)',
-    'Warning (Errors and warnings)' => 'Advarsel (fejl og advarsler)',
-    'Info (General information)' => 'Info (generel information)',
-    'Debug (Detailed debugging)' => 'Fejlfinding (detaljeret fejlfinding)',
     'Logging Settings' => 'Logindstillinger',
-    'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'Denne indstilling tilsidesættes af indstillingen <code>pluginName</code> i <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'Denne indstilling tilsidesættes af indstillingen <code>logLevel</code> i <code>config/smartlink-manager.php</code>.',
     'Site Settings' => 'Webstedsindstillinger',
     'Enabled Sites' => 'Aktiverede websteder',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Vælg hvilke websteder {pluginName} skal aktiveres for. Lad feltet være tomt for at aktivere for alle websteder.',
@@ -423,13 +413,10 @@ return [
 
     // Settings: Interface
     'Interface Settings' => 'Brugerfladeindstillinger',
-    'Items Per Page' => 'Elementer pr. side',
-    'Number of {pluginName} to show per page' => 'Antal {pluginName} der skal vises pr. side',
     'Allow Multiple' => 'Tillad flere',
     'Whether to allow multiple {pluginName} to be selected' => 'Om der skal tillades valg af flere {pluginName}',
     'The maximum number of {pluginName} that can be selected.' => 'Det maksimale antal {pluginName}, der kan vælges.',
     'Which sources should be available to select {pluginName} from?' => 'Hvilke kilder skal være tilgængelige til valg af {pluginName} fra?',
-    'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/smartlink-manager.php</code>.' => 'Denne indstilling tilsidesættes af indstillingen <code>itemsPerPage</code> i <code>config/smartlink-manager.php</code>.',
 
     // Settings: Integrations
     'Third-Party Integrations' => 'Tredjepartsintegrationer',

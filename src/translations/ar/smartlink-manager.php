@@ -147,18 +147,8 @@ return [
 
     // Settings: General
     'General Settings' => 'الإعدادات العامة',
-    'Plugin Name' => 'اسم الإضافة',
-    'The name of the plugin as it appears in the Control Panel menu' => 'اسم الإضافة كما يظهر في قائمة لوحة التحكم',
     'Plugin Settings' => 'إعدادات الإضافة',
-    'Log Level' => 'مستوى السجل',
-    'Choose what types of messages to log. Debug level requires devMode to be enabled.' => 'اختر أنواع الرسائل التي سيتم تسجيلها. يتطلب مستوى Debug تفعيل devMode.',
-    'Error (Critical errors only)' => 'خطأ (الأخطاء الحرجة فقط)',
-    'Warning (Errors and warnings)' => 'تحذير (الأخطاء والتحذيرات)',
-    'Info (General information)' => 'معلومات (معلومات عامة)',
-    'Debug (Detailed debugging)' => 'Debug (تصحيح أخطاء تفصيلي)',
     'Logging Settings' => 'إعدادات التسجيل',
-    'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا الإعداد بواسطة <code>pluginName</code> في <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا الإعداد بواسطة <code>logLevel</code> في <code>config/smartlink-manager.php</code>.',
     'Site Settings' => 'إعدادات الموقع',
     'Enabled Sites' => 'المواقع المفعّلة',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'حدد المواقع التي يجب تفعيل {pluginName} لها. اتركه فارغاً للتفعيل على جميع المواقع.',
@@ -423,13 +413,10 @@ return [
 
     // Settings: Interface
     'Interface Settings' => 'إعدادات الواجهة',
-    'Items Per Page' => 'العناصر في الصفحة',
-    'Number of {pluginName} to show per page' => 'عدد {pluginName} المعروضة في الصفحة',
     'Allow Multiple' => 'السماح بتحديد متعدد',
     'Whether to allow multiple {pluginName} to be selected' => 'ما إذا كان يُسمح بتحديد عدة {pluginName}',
     'The maximum number of {pluginName} that can be selected.' => 'الحد الأقصى لعدد {pluginName} التي يمكن تحديدها.',
     'Which sources should be available to select {pluginName} from?' => 'ما المصادر التي يجب أن تكون متاحة لاختيار {pluginName} منها؟',
-    'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/smartlink-manager.php</code>.' => 'يتم تجاوز هذا الإعداد بواسطة <code>itemsPerPage</code> في <code>config/smartlink-manager.php</code>.',
 
     // Settings: Integrations
     'Third-Party Integrations' => 'تكاملات الطرف الثالث',

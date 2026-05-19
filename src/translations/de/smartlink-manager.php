@@ -147,18 +147,8 @@ return [
 
     // Settings: General
     'General Settings' => 'Allgemeine Einstellungen',
-    'Plugin Name' => 'Plugin-Name',
-    'The name of the plugin as it appears in the Control Panel menu' => 'Der Name des Plugins, wie er im Control-Panel-Menü angezeigt wird',
     'Plugin Settings' => 'Plugin-Einstellungen',
-    'Log Level' => 'Protokollierungsstufe',
-    'Choose what types of messages to log. Debug level requires devMode to be enabled.' => 'Wählen Sie, welche Nachrichtentypen protokolliert werden sollen. Die Debug-Stufe erfordert aktivierten devMode.',
-    'Error (Critical errors only)' => 'Fehler (nur kritische Fehler)',
-    'Warning (Errors and warnings)' => 'Warnung (Fehler und Warnungen)',
-    'Info (General information)' => 'Info (Allgemeine Informationen)',
-    'Debug (Detailed debugging)' => 'Debug (Detailliertes Debugging)',
     'Logging Settings' => 'Protokollierungseinstellungen',
-    'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'Wird durch die Einstellung <code>pluginName</code> in <code>config/smartlink-manager.php</code> überschrieben.',
-    'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'Wird durch die Einstellung <code>logLevel</code> in <code>config/smartlink-manager.php</code> überschrieben.',
     'Site Settings' => 'Website-Einstellungen',
     'Enabled Sites' => 'Aktivierte Websites',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Wählen Sie, für welche Websites {pluginName} aktiviert werden soll. Leer lassen, um für alle Websites zu aktivieren.',
@@ -423,13 +413,10 @@ return [
 
     // Settings: Interface
     'Interface Settings' => 'Oberflächeneinstellungen',
-    'Items Per Page' => 'Einträge pro Seite',
-    'Number of {pluginName} to show per page' => 'Anzahl der {pluginName} pro Seite',
     'Allow Multiple' => 'Mehrfachauswahl erlauben',
     'Whether to allow multiple {pluginName} to be selected' => 'Ob mehrere {pluginName} ausgewählt werden dürfen',
     'The maximum number of {pluginName} that can be selected.' => 'Die maximale Anzahl auswählbarer {pluginName}.',
     'Which sources should be available to select {pluginName} from?' => 'Welche Quellen sollen für die Auswahl von {pluginName} verfügbar sein?',
-    'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/smartlink-manager.php</code>.' => 'Wird durch die Einstellung <code>itemsPerPage</code> in <code>config/smartlink-manager.php</code> überschrieben.',
 
     // Settings: Integrations
     'Third-Party Integrations' => 'Drittanbieter-Integrationen',

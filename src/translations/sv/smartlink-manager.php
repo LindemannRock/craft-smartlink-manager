@@ -147,18 +147,8 @@ return [
 
     // Settings: General
     'General Settings' => 'Allmänna inställningar',
-    'Plugin Name' => 'Plugin-namn',
-    'The name of the plugin as it appears in the Control Panel menu' => 'Pluginets namn som det visas i kontrollpanelens meny',
     'Plugin Settings' => 'Plugininställningar',
-    'Log Level' => 'Loggnivå',
-    'Choose what types of messages to log. Debug level requires devMode to be enabled.' => 'Välj vilka typer av meddelanden som ska loggas. Felsökningsnivå kräver att devMode är aktiverat.',
-    'Error (Critical errors only)' => 'Fel (endast kritiska fel)',
-    'Warning (Errors and warnings)' => 'Varning (fel och varningar)',
-    'Info (General information)' => 'Info (allmän information)',
-    'Debug (Detailed debugging)' => 'Felsökning (detaljerad felsökning)',
     'Logging Settings' => 'Logginställningar',
-    'This is being overridden by the <code>pluginName</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>pluginName</code> i <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>logLevel</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>logLevel</code> i <code>config/smartlink-manager.php</code>.',
     'Site Settings' => 'Webbplatsinställningar',
     'Enabled Sites' => 'Aktiverade webbplatser',
     'Select which sites {pluginName} should be enabled for. Leave empty to enable for all sites.' => 'Välj för vilka webbplatser {pluginName} ska aktiveras. Lämna tomt för att aktivera för alla webbplatser.',
@@ -423,13 +413,10 @@ return [
 
     // Settings: Interface
     'Interface Settings' => 'Gränssnittsinställningar',
-    'Items Per Page' => 'Objekt per sida',
-    'Number of {pluginName} to show per page' => 'Antal {pluginName} att visa per sida',
     'Allow Multiple' => 'Tillåt flera',
     'Whether to allow multiple {pluginName} to be selected' => 'Om flera {pluginName} ska kunna väljas',
     'The maximum number of {pluginName} that can be selected.' => 'Det maximala antalet {pluginName} som kan väljas.',
     'Which sources should be available to select {pluginName} from?' => 'Vilka källor ska vara tillgängliga för att välja {pluginName} från?',
-    'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>itemsPerPage</code> i <code>config/smartlink-manager.php</code>.',
 
     // Settings: Integrations
     'Third-Party Integrations' => 'Tredjepartsintegrationer',
