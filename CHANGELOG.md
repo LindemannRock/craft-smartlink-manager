@@ -1,5 +1,26 @@
 # Changelog
 
+## [5.28.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.27.0...v5.28.0) (2026-05-21)
+
+
+### Added
+
+* add pre-commit hook for ECS and PHPStan code quality checks ([0f675ea](https://github.com/LindemannRock/craft-smartlink-manager/commit/0f675ea22644643f3295886834ca065b26b26d7c))
+* **analytics:** add logCategory to geo lookup settings ([9202601](https://github.com/LindemannRock/craft-smartlink-manager/commit/9202601acda0ced05e450164f478bcf3fff53084))
+* **i18n:** add translation issue template for reporting language problems ([5e6f9e1](https://github.com/LindemannRock/craft-smartlink-manager/commit/5e6f9e1f41fbbbd861762320eda3cb6a8850eeaf))
+* **i18n:** remove unused translation keys from multiple locales ([f4ff4d1](https://github.com/LindemannRock/craft-smartlink-manager/commit/f4ff4d11f5557dd126d2993abbec35f516886532))
+* **i18n:** update translations for multiple languages, removing unused keys ([1d5cfeb](https://github.com/LindemannRock/craft-smartlink-manager/commit/1d5cfebd2857377906c5dc5f7aa63f6c33a1a980))
+* **migrations:** add nullable settings for plugin configuration overrides ([04a48bc](https://github.com/LindemannRock/craft-smartlink-manager/commit/04a48bc59ff4d7bc139f907d594db2c8f3ffcc7f))
+* **settings:** handle nullable properties for multi-state selects ([9df5f7c](https://github.com/LindemannRock/craft-smartlink-manager/commit/9df5f7c111488770b8a8a0f3a9f271662913e6d7))
+* **tests:** add integration tests for analytics tracking and hit counting ([3ef8ac9](https://github.com/LindemannRock/craft-smartlink-manager/commit/3ef8ac910150e9295499e188b3e2e2569a02cf30))
+* **tests:** add QrCodeService integration tests for SVG and PNG generation ([d1a100b](https://github.com/LindemannRock/craft-smartlink-manager/commit/d1a100bb56c0f46c0787f9ca7cecaae547dab299))
+
+
+### Fixed
+
+* **integrations:** prevent fatal in Link type on console runs ([7019517](https://github.com/LindemannRock/craft-smartlink-manager/commit/7019517868589718a0f693c5e956b6a4de066c7b))
+* replace vendor path with rootDir reference in phpstan configuration ([c009954](https://github.com/LindemannRock/craft-smartlink-manager/commit/c009954fe2d327399f212866ffe73d7464b6f240))
+
 ## [5.27.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.26.0...v5.27.0) (2026-05-06)
 
 
