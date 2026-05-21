@@ -389,6 +389,7 @@ class AnalyticsService extends Component
         return [
             'provider' => $settings->geoProvider ?? 'ip-api.com',
             'apiKey' => $settings->geoApiKey ?? null,
+            'logCategory' => SmartLinkManager::$plugin->id,
         ];
     }
 }
