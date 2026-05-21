@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.28.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.27.0...v5.28.0) (2026-05-21)
+## [5.28.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.27.0...v5.28.0) - 2026-05-21
 
 
 ### Added
@@ -21,7 +21,7 @@
 * **integrations:** prevent fatal in Link type on console runs ([7019517](https://github.com/LindemannRock/craft-smartlink-manager/commit/7019517868589718a0f693c5e956b6a4de066c7b))
 * replace vendor path with rootDir reference in phpstan configuration ([c009954](https://github.com/LindemannRock/craft-smartlink-manager/commit/c009954fe2d327399f212866ffe73d7464b6f240))
 
-## [5.27.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.26.0...v5.27.0) (2026-05-06)
+## [5.27.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.26.0...v5.27.0) - 2026-05-06
 
 
 ### Features
@@ -41,7 +41,7 @@
 
 * update version annotations across multiple files ([7e52f4a](https://github.com/LindemannRock/craft-smartlink-manager/commit/7e52f4a736881a273f3c1885ca5c7b261562ba66))
 
-## [5.26.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.3...v5.26.0) (2026-04-05)
+## [5.26.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.3...v5.26.0) - 2026-04-05
 
 
 ### Features
@@ -59,7 +59,7 @@
 * **SmartLinkManager:** read-only settings accessibility flag ([c4ed0d3](https://github.com/LindemannRock/craft-smartlink-manager/commit/c4ed0d32211d268c4f3ba2447a21341751ace64b))
 * update install experience text to use Craft translation ([f475946](https://github.com/LindemannRock/craft-smartlink-manager/commit/f475946c2cbb122327c6a389bd2b88979d8868a3))
 
-## [5.25.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.2...v5.25.3) (2026-03-26)
+## [5.25.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.2...v5.25.3) - 2026-03-26
 
 
 ### Bug Fixes
@@ -71,28 +71,28 @@
 
 * **release-please:** remove issues permission and skip-labeling option ([3c5a9a3](https://github.com/LindemannRock/craft-smartlink-manager/commit/3c5a9a314cbdb1dd86cc9996287f468c7fc01b3f))
 
-## [5.25.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.1...v5.25.2) (2026-03-18)
+## [5.25.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.1...v5.25.2) - 2026-03-18
 
 
 ### Bug Fixes
 
 * **redirect:** apply no-store headers for cached responses ([3fe36b6](https://github.com/LindemannRock/craft-smartlink-manager/commit/3fe36b6c8f48fbf4b611333006e0ee6d7a9628cc))
 
-## [5.25.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.0...v5.25.1) (2026-03-17)
+## [5.25.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.25.0...v5.25.1) - 2026-03-17
 
 
 ### Miscellaneous Chores
 
 * **workflows:** update permissions in release-please workflow ([01e30a2](https://github.com/LindemannRock/craft-smartlink-manager/commit/01e30a2f48f7b07d1b555c938b3c4b33d14a0d3a))
 
-## [5.25.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.24.0...v5.25.0) (2026-03-17)
+## [5.25.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.24.0...v5.25.0) - 2026-03-17
 
 
 ### Features
 
 * **analytics:** improve IP handling and remove anonymization method ([cd61e77](https://github.com/LindemannRock/craft-smartlink-manager/commit/cd61e77cd04c694a54894b79b7532f86d9f011b3))
 
-## [5.24.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.23.0...v5.24.0) (2026-03-17)
+## [5.24.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.23.0...v5.24.0) - 2026-03-17
 
 
 ### Features
@@ -111,7 +111,7 @@
 * **QrCodeController, RedirectController:** enhance smart link retrieval logic ([febfba4](https://github.com/LindemannRock/craft-smartlink-manager/commit/febfba41ddfc5316add0841d48d720ac96ee491b))
 * **settings:** remove redundant save buttons from settings templates ([265f8ca](https://github.com/LindemannRock/craft-smartlink-manager/commit/265f8ca8d93643ced46a930f008fe6bc321d166f))
 
-## [5.23.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.1...v5.23.0) (2026-03-04)
+## [5.23.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.1...v5.23.0) - 2026-03-04
 
 
 ### Features
@@ -125,14 +125,14 @@
 * **settings:** improve error handling and translations in settings templates ([f02389a](https://github.com/LindemannRock/craft-smartlink-manager/commit/f02389a4102c1e024703deaf848a153e3c4e018a))
 * **settings:** URL building logic in buildPublicUrl method ([ada47bf](https://github.com/LindemannRock/craft-smartlink-manager/commit/ada47bff8da67153cfef513253d6a49e0a70bfb1))
 
-## [5.22.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.0...v5.22.1) (2026-02-22)
+## [5.22.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.22.0...v5.22.1) - 2026-02-22
 
 
 ### Bug Fixes
 
 * **config, migrations, models, templates:** rename shortlink to smartlink in settings ([be12d16](https://github.com/LindemannRock/craft-smartlink-manager/commit/be12d16d2abbd92025331cbcb77dbc78f381031e))
 
-## [5.22.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.21.0...v5.22.0) (2026-02-22)
+## [5.22.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.21.0...v5.22.0) - 2026-02-22
 
 
 ### Features
@@ -150,7 +150,7 @@
 * add .gitattributes with export-ignore for Packagist distribution ([c5dd3c3](https://github.com/LindemannRock/craft-smartlink-manager/commit/c5dd3c38664a4bed87a5900c021b0fff85001415))
 * switch to Craft License for commercial release ([1d3c676](https://github.com/LindemannRock/craft-smartlink-manager/commit/1d3c6760ab764d828c0eb12ed7e5d180058bb4c6))
 
-## [5.21.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.20.0...v5.21.0) (2026-02-07)
+## [5.21.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.20.0...v5.21.0) - 2026-02-07
 
 
 ### Features
@@ -162,7 +162,7 @@
 
 * **templates:** improve message display in analytics partials ([a29d2b6](https://github.com/LindemannRock/craft-smartlink-manager/commit/a29d2b6c528d04c09f01c1f35731d29e54cbe6b0))
 
-## [5.20.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.19.0...v5.20.0) (2026-02-05)
+## [5.20.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.19.0...v5.20.0) - 2026-02-05
 
 
 ### Features
@@ -180,7 +180,7 @@
 * **dependencies:** Remove matomo/device-detector from composer.json ([6c1d244](https://github.com/LindemannRock/craft-smartlink-manager/commit/6c1d24465999c5c2c7b48203d3ea7f9680fa26fb))
 * update package-lock.json and package.json for dependency management ([af7f66f](https://github.com/LindemannRock/craft-smartlink-manager/commit/af7f66f870ca8dcc0af628083cc36d78248121bf))
 
-## [5.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.18.0...v5.19.0) (2026-01-26)
+## [5.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.18.0...v5.19.0) - 2026-01-26
 
 
 ### Features
@@ -192,7 +192,7 @@
 
 * **jobs:** prevent duplicate scheduling of CleanupAnalyticsJob ([afa64e1](https://github.com/LindemannRock/craft-smartlink-manager/commit/afa64e1973e045f04598b6826942c70c1a2afbfd))
 
-## [5.18.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.17.0...v5.18.0) (2026-01-21)
+## [5.18.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.17.0...v5.18.0) - 2026-01-21
 
 
 ### Features
@@ -204,14 +204,14 @@
 
 * correct header title from "Plugin Settings" to "General Settings" ([450acff](https://github.com/LindemannRock/craft-smartlink-manager/commit/450acff76e4764eb1a090576e8016babd0078baa))
 
-## [5.17.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.16.1...v5.17.0) (2026-01-17)
+## [5.17.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.16.1...v5.17.0) - 2026-01-17
 
 
 ### Features
 
 * enhance searchable attributes with image title and filename ([7a8e9fe](https://github.com/LindemannRock/craft-smartlink-manager/commit/7a8e9fea1b0c3f48b3ef5550486b2793b64bc369))
 
-## [5.16.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.16.0...v5.16.1) (2026-01-16)
+## [5.16.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.16.0...v5.16.1) - 2026-01-16
 
 
 ### Bug Fixes
@@ -223,7 +223,7 @@
 * update hardcoded cache paths with PluginHelper for consistency ([73352ab](https://github.com/LindemannRock/craft-smartlink-manager/commit/73352ab023f5cdaabc53350b2f2e5ed1dfc3359a))
 * update PluginHelper bootstrap to include download permissions for logging ([a858d0a](https://github.com/LindemannRock/craft-smartlink-manager/commit/a858d0a382a2c49619be74fb9208c94171e6ee53))
 
-## [5.16.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.15.1...v5.16.0) (2026-01-12)
+## [5.16.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.15.1...v5.16.0) - 2026-01-12
 
 
 ### Features
@@ -236,7 +236,7 @@
 
 * Format cache file counts and total clicks in cache management buttons ([cc6e401](https://github.com/LindemannRock/craft-smartlink-manager/commit/cc6e4017e7f83888312c7cd30fa02dfac9ddebf1))
 
-## [5.15.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.15.0...v5.15.1) (2026-01-11)
+## [5.15.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.15.0...v5.15.1) - 2026-01-11
 
 
 ### Bug Fixes
@@ -248,21 +248,21 @@
 
 * Update README with enhanced multi-site support and clarify smart link fields ([9d5ace9](https://github.com/LindemannRock/craft-smartlink-manager/commit/9d5ace9d778cf8e253e7e9950c21e4c010a4de79))
 
-## [5.15.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.14.0...v5.15.0) (2026-01-10)
+## [5.15.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.14.0...v5.15.0) - 2026-01-10
 
 
 ### Features
 
 * Replace custom country name retrieval with GeoHelper utility ([31ea2f3](https://github.com/LindemannRock/craft-smartlink-manager/commit/31ea2f3e1fb4490ee08a95f4071376fb359e9a7b))
 
-## [5.14.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.13.0...v5.14.0) (2026-01-09)
+## [5.14.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.13.0...v5.14.0) - 2026-01-09
 
 
 ### Features
 
 * update filename format for exports and add JSON export option in analytics ([b30637e](https://github.com/LindemannRock/craft-smartlink-manager/commit/b30637e953490a47e807754992f172869fcefdf1))
 
-## [5.13.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.12.2...v5.13.0) (2026-01-08)
+## [5.13.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.12.2...v5.13.0) - 2026-01-08
 
 
 ### Features
@@ -274,21 +274,21 @@
 
 * CP nav visibility and index routing for non-primary enabled sites ([f8803a6](https://github.com/LindemannRock/craft-smartlink-manager/commit/f8803a64c9d77b08c5bcc188c908bd77d1ef834c))
 
-## [5.12.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.12.1...v5.12.2) (2026-01-07)
+## [5.12.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.12.1...v5.12.2) - 2026-01-07
 
 
 ### Bug Fixes
 
 * rename SmartLinksController to SmartlinksController for Linux compatibility ([d3d03bd](https://github.com/LindemannRock/craft-smartlink-manager/commit/d3d03bd087132ed31d15bfe258cd2bc2f4f092d2))
 
-## [5.12.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.12.0...v5.12.1) (2026-01-07)
+## [5.12.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.12.0...v5.12.1) - 2026-01-07
 
 
 ### Bug Fixes
 
 * remove unnecessary blank lines in SmartLinksController ([d6da71c](https://github.com/LindemannRock/craft-smartlink-manager/commit/d6da71c3ad729b09e2d5e269ad00cb31af04dfd3))
 
-## [5.12.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.11.1...v5.12.0) (2026-01-06)
+## [5.12.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.11.1...v5.12.0) - 2026-01-06
 
 
 ### Features
@@ -296,14 +296,14 @@
 * rename plugin from Smart Links to SmartLink Manager ([e87e641](https://github.com/LindemannRock/craft-smartlink-manager/commit/e87e64115d6f485f4a986485ec772bd525224cc8))
 * rename plugin from Smart Links to SmartLink Manager ([0b0633a](https://github.com/LindemannRock/craft-smartlink-manager/commit/0b0633aeda093828b6db4c5c28c3e203cfe32a2b))
 
-## [5.11.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.11.0...v5.11.1) (2026-01-06)
+## [5.11.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.11.0...v5.11.1) - 2026-01-06
 
 
 ### Bug Fixes
 
 * add craftcms/ecs to require-dev for enhanced development tools ([24402e3](https://github.com/LindemannRock/craft-smartlink-manager/commit/24402e3d412dcf6e818b07a4210274af5dadf2e7))
 
-## [5.11.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.10.2...v5.11.0) (2026-01-06)
+## [5.11.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.10.2...v5.11.0) - 2026-01-06
 
 
 ### Features
@@ -315,21 +315,21 @@
 
 * change URL fields to text type for better data handling ([96c8087](https://github.com/LindemannRock/craft-smartlink-manager/commit/96c80871af95f9a0d494d6f9975c0841857a20fa))
 
-## [5.10.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.10.1...v5.10.2) (2026-01-05)
+## [5.10.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.10.1...v5.10.2) - 2026-01-05
 
 
 ### Bug Fixes
 
 * add tab-content class to analytics sections for improved styling ([76de310](https://github.com/LindemannRock/craft-smartlink-manager/commit/76de3103e3e2c0ca8b1f796cd010fcadd23f0fef))
 
-## [5.10.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.10.0...v5.10.1) (2025-12-19)
+## [5.10.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.10.0...v5.10.1) - 2025-12-19
 
 
 ### Bug Fixes
 
 * filter sites for selector to respect enabledSites setting ([0407773](https://github.com/LindemannRock/craft-smartlink-manager/commit/0407773ea8b953f712ec65ea14f5339236abd7c7))
 
-## [5.10.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.5...v5.10.0) (2025-12-19)
+## [5.10.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.5...v5.10.0) - 2025-12-19
 
 
 ### Features
@@ -344,42 +344,42 @@
 * reorder default table attributes to include 'status' for better clarity ([b472235](https://github.com/LindemannRock/craft-smartlink-manager/commit/b472235bb5236c878fe8a5ae93fd3263c5b89a9e))
 * update display name handling to trim whitespace and improve clarity ([cb35971](https://github.com/LindemannRock/craft-smartlink-manager/commit/cb35971e3eba8162289662755980cb02c8cd6119))
 
-## [5.9.5](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.4...v5.9.5) (2025-12-16)
+## [5.9.5](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.4...v5.9.5) - 2025-12-16
 
 
 ### Bug Fixes
 
 * update time formatting in analytics dashboard to use locale settings ([b2ce9ee](https://github.com/LindemannRock/craft-smartlink-manager/commit/b2ce9ee520e32176d14fa861ee1873fcbdacdc66))
 
-## [5.9.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.3...v5.9.4) (2025-12-16)
+## [5.9.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.3...v5.9.4) - 2025-12-16
 
 
 ### Bug Fixes
 
 * update redirect manager events to only include slug-change ([2e7a31f](https://github.com/LindemannRock/craft-smartlink-manager/commit/2e7a31f26562e15c6c3f8209b4dfbec957bfd4f1))
 
-## [5.9.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.2...v5.9.3) (2025-12-16)
+## [5.9.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.2...v5.9.3) - 2025-12-16
 
 
 ### Bug Fixes
 
 * update QR code handling to redirect when disabled and conditionally display options ([13b8cb8](https://github.com/LindemannRock/craft-smartlink-manager/commit/13b8cb892cbafc5f84ddc5573172f62ef5a28758))
 
-## [5.9.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.1...v5.9.2) (2025-12-16)
+## [5.9.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.1...v5.9.2) - 2025-12-16
 
 
 ### Bug Fixes
 
 * correct anchor tag formatting in settings layout sidebar ([6e8a8c4](https://github.com/LindemannRock/craft-smartlink-manager/commit/6e8a8c4227e63a1eea86869eba87d85d00da884e))
 
-## [5.9.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.0...v5.9.1) (2025-12-16)
+## [5.9.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.9.0...v5.9.1) - 2025-12-16
 
 
 ### Bug Fixes
 
 * correct variable name and improve sidebar markup in settings layout ([80bf6f0](https://github.com/LindemannRock/craft-smartlink-manager/commit/80bf6f02c500d2b5a748c02e5ad2bca9793a57cf))
 
-## [5.9.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.8.0...v5.9.0) (2025-12-16)
+## [5.9.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.8.0...v5.9.0) - 2025-12-16
 
 
 ### Features
@@ -396,7 +396,7 @@
 
 * update Redis cache display by removing redundant text and adjusting styles ([b9fbb45](https://github.com/LindemannRock/craft-smartlink-manager/commit/b9fbb459d34c41da3f02dd49cfdd132fc1813f67))
 
-## [5.8.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.7.2...v5.8.0) (2025-12-03)
+## [5.8.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.7.2...v5.8.0) - 2025-12-03
 
 
 ### Features
@@ -415,21 +415,21 @@
 
 * add [@since](https://github.com/since) 1.0.0 annotations to various files for version tracking ([4f0373c](https://github.com/LindemannRock/craft-smartlink-manager/commit/4f0373cc702ff2c5c7ef54d3776a9a5d6a98f8c0))
 
-## [5.7.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.7.1...v5.7.2) (2025-11-23)
+## [5.7.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.7.1...v5.7.2) - 2025-11-23
 
 
 ### Bug Fixes
 
 * date range parameter for getRecentClicks method and update template usage ([aae76ad](https://github.com/LindemannRock/craft-smartlink-manager/commit/aae76ad478c187342b9371ccbb05b6cc87b5784a))
 
-## [5.7.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.7.0...v5.7.1) (2025-11-23)
+## [5.7.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.7.0...v5.7.1) - 2025-11-23
 
 
 ### Bug Fixes
 
 * 404 handling through Redirect Manager integration ([9d9c233](https://github.com/LindemannRock/craft-smartlink-manager/commit/9d9c233748d436a210a719dfad4504870f632b56))
 
-## [5.7.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.6.2...v5.7.0) (2025-11-23)
+## [5.7.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.6.2...v5.7.0) - 2025-11-23
 
 
 ### Features
@@ -441,21 +441,21 @@
 
 * **docs:** clarify cache duration and detection method descriptions ([e66285b](https://github.com/LindemannRock/craft-smartlink-manager/commit/e66285b0200774208042dd1bd7d967f7b8490625))
 
-## [5.6.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.6.1...v5.6.2) (2025-11-15)
+## [5.6.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.6.1...v5.6.2) - 2025-11-15
 
 
 ### Miscellaneous Chores
 
 * **license:** add MIT License file ([e4962e1](https://github.com/LindemannRock/craft-smartlink-manager/commit/e4962e1c4deb48d9b0085d7e6699f4c00b8e0515))
 
-## [5.6.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.6.0...v5.6.1) (2025-11-14)
+## [5.6.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.6.0...v5.6.1) - 2025-11-14
 
 
 ### Bug Fixes
 
 * **analytics:** improve site name display for clicks by checking site ID ([d27ce51](https://github.com/LindemannRock/craft-smartlink-manager/commit/d27ce511301939b2981f1511bcfa8d34428ce372))
 
-## [5.6.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.3...v5.6.0) (2025-11-14)
+## [5.6.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.3...v5.6.0) - 2025-11-14
 
 
 ### Features
@@ -469,42 +469,42 @@
 
 * **migrations:** add redirect manager events field to smartlinks settings ([86779fb](https://github.com/LindemannRock/craft-smartlink-manager/commit/86779fbb4b9063189b778e18ddef009349c82b16))
 
-## [5.5.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.2...v5.5.3) (2025-11-11)
+## [5.5.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.2...v5.5.3) - 2025-11-11
 
 
 ### Bug Fixes
 
 * **ip-salt-error:** enhance error message with copyable commands for generating IP hash salt ([b19129c](https://github.com/LindemannRock/craft-smartlink-manager/commit/b19129c5b18b6110d68b7664caeba71e5ce9f243))
 
-## [5.5.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.1...v5.5.2) (2025-11-11)
+## [5.5.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.1...v5.5.2) - 2025-11-11
 
 
 ### Bug Fixes
 
 * **qrPrefix:** Update QR code URL prefix to support nested patterns ([401a642](https://github.com/LindemannRock/craft-smartlink-manager/commit/401a642ed15a60f225221d9626b1d6fb45a0f2f3))
 
-## [5.5.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.0...v5.5.1) (2025-11-10)
+## [5.5.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.5.0...v5.5.1) - 2025-11-10
 
 
 ### Bug Fixes
 
 * **analytics:** Update export link handling and streamline export functionality ([bcf960b](https://github.com/LindemannRock/craft-smartlink-manager/commit/bcf960bb209c49f95297ce9b2410844d8c423f8e))
 
-## [5.5.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.4.1...v5.5.0) (2025-11-10)
+## [5.5.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.4.1...v5.5.0) - 2025-11-10
 
 
 ### Features
 
 * **SEOMaticIntegration:** Enhance QR Code and Redirect Templates with SEOmatic Integration ([2fb9fdf](https://github.com/LindemannRock/craft-smartlink-manager/commit/2fb9fdf9e4f832bac3ae4e131e06dcf2230750f4))
 
-## [5.4.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.4.0...v5.4.1) (2025-11-07)
+## [5.4.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.4.0...v5.4.1) - 2025-11-07
 
 
 ### Bug Fixes
 
 * CleanupAnalyticsJob with next run time calculation and display ([ff1beb4](https://github.com/LindemannRock/craft-smartlink-manager/commit/ff1beb4d264d5ccc5283feee2af7e9eb9262ecf4))
 
-## [5.4.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.3...v5.4.0) (2025-11-06)
+## [5.4.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.3...v5.4.0) - 2025-11-06
 
 
 ### Features
@@ -519,14 +519,14 @@
 * integration status display and rename Redirect settings to Behavior ([3566537](https://github.com/LindemannRock/craft-smartlink-manager/commit/356653756cfc2aec0b916555f12bbccc4db7a403))
 * SEOmatic integration display with dynamic plugin name and updated description ([c73c8b5](https://github.com/LindemannRock/craft-smartlink-manager/commit/c73c8b58a2e1907af0fb37f00c1d90d4c7714329))
 
-## [5.3.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.2...v5.3.3) (2025-10-26)
+## [5.3.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.2...v5.3.3) - 2025-10-26
 
 
 ### Bug Fixes
 
 * reset session warning when devMode is enabled to allow re-display of warnings ([3c11269](https://github.com/LindemannRock/craft-smartlink-manager/commit/3c11269e321e298296b81b88c39287351b67e46c))
 
-## [5.3.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.1...v5.3.2) (2025-10-26)
+## [5.3.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.1...v5.3.2) - 2025-10-26
 
 
 ### Bug Fixes
@@ -534,14 +534,14 @@
 * improve configuration file structure for better readability and organization ([d1deaa2](https://github.com/LindemannRock/craft-smartlink-manager/commit/d1deaa2c1555c8b556ea7a70f0ea23795661737c))
 * reorganize configuration settings for clarity and maintainability ([f98f534](https://github.com/LindemannRock/craft-smartlink-manager/commit/f98f534a64f212630f0306fa0f3d8aa055382751))
 
-## [5.3.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.0...v5.3.1) (2025-10-26)
+## [5.3.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.3.0...v5.3.1) - 2025-10-26
 
 
 ### Bug Fixes
 
 * update QR code preview width to max-width for better responsiveness ([56140ac](https://github.com/LindemannRock/craft-smartlink-manager/commit/56140ac846407e3638b36f9ea4c2aff6889fda4e))
 
-## [5.3.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.2.0...v5.3.0) (2025-10-26)
+## [5.3.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.2.0...v5.3.0) - 2025-10-26
 
 
 ### Features
@@ -563,7 +563,7 @@
 * update QR code preview dimensions and adjust padding for improved layout ([1e41165](https://github.com/LindemannRock/craft-smartlink-manager/commit/1e411652bca56c5fa5bf1ad60cde1db297aebf70))
 * update subnav label to a static value for clarity ([7ee4682](https://github.com/LindemannRock/craft-smartlink-manager/commit/7ee468264c4f986e3427ca6222cb6efba81a4913))
 
-## [5.2.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.1.0...v5.2.0) (2025-10-22)
+## [5.2.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.1.0...v5.2.0) - 2025-10-22
 
 
 ### Features
@@ -575,7 +575,7 @@
 
 * Remove backup template for smart links index ([68a5f57](https://github.com/LindemannRock/craft-smartlink-manager/commit/68a5f5757796c5d6e9a2c70f45971adb61e02f46))
 
-## [5.1.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.0.1...v5.1.0) (2025-10-22)
+## [5.1.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.0.1...v5.1.0) - 2025-10-22
 
 
 ### Features
@@ -587,28 +587,28 @@
 
 * Improve IP salt validation and update to App::env() pattern ([70d3858](https://github.com/LindemannRock/craft-smartlink-manager/commit/70d3858ef318dfc0edadf0cf57eea407bb55cbf9))
 
-## [5.0.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.0.0...v5.0.1) (2025-10-20)
+## [5.0.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.0.0...v5.0.1) - 2025-10-20
 
 
 ### Miscellaneous Chores
 
 * update logging library dependency to version 5.0 and enhance README with additional badges ([ca3e21d](https://github.com/LindemannRock/craft-smartlink-manager/commit/ca3e21db208577b6789164b56eeb2c2b72b53368))
 
-## [5.0.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.24.0...v5.0.0) (2025-10-20)
+## [5.0.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.24.0...v5.0.0) - 2025-10-20
 
 
 ### Miscellaneous Chores
 
 * bump version scheme to match Craft 5 ([447ef00](https://github.com/LindemannRock/craft-smartlink-manager/commit/447ef00dc7bdbeb1fdb757e7cdba1d4434600307))
 
-## [1.24.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.23.0...v1.24.0) (2025-10-17)
+## [1.24.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.23.0...v1.24.0) - 2025-10-17
 
 
 ### Features
 
 * Use dynamic plugin name from settings for logging configuration ([081a9a0](https://github.com/LindemannRock/craft-smartlink-manager/commit/081a9a0185b90ffe967028a4e55499b461ea3bf2))
 
-## [1.23.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.22.1...v1.23.0) (2025-10-17)
+## [1.23.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.22.1...v1.23.0) - 2025-10-17
 
 
 ### Features
@@ -631,56 +631,56 @@
   - Zero performance impact when disabled or SEOmatic not installed
   - Fully documented with README section and GTM trigger examples
 
-## [1.22.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.22.0...v1.22.1) (2025-10-16)
+## [1.22.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.22.0...v1.22.1) - 2025-10-16
 
 
 ### Bug Fixes
 
 * update installation instructions for Composer and DDEV ([e544109](https://github.com/LindemannRock/craft-smartlink-manager/commit/e5441096ee51895df0d91dc19e2b194e73cac03f))
 
-## [1.22.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.21.0...v1.22.0) (2025-10-16)
+## [1.22.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.21.0...v1.22.0) - 2025-10-16
 
 
 ### Features
 
 * **dependencies:** add lindemannrock/craft-logging-library as a requirement ([93338df](https://github.com/LindemannRock/craft-smartlink-manager/commit/93338df51294a2ddd23a11b81ff01728e49a0183))
 
-## [1.21.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.20.0...v1.21.0) (2025-10-16)
+## [1.21.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.20.0...v1.21.0) - 2025-10-16
 
 
 ### Features
 
 * **logging:** add detailed logging configuration and documentation ([be6f11a](https://github.com/LindemannRock/craft-smartlink-manager/commit/be6f11a18ab8705578119abebef941158711a327))
 
-## [1.20.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.4...v1.20.0) (2025-10-16)
+## [1.20.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.4...v1.20.0) - 2025-10-16
 
 
 ### Features
 
 * integrate LindemannRock Logging Library with structured PSR-3 logging across all controllers and services ([3cd09c5](https://github.com/LindemannRock/craft-smartlink-manager/commit/3cd09c59e752ddd052740c968c14a008d90117f5))
 
-## [1.19.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.3...v1.19.4) (2025-10-02)
+## [1.19.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.3...v1.19.4) - 2025-10-02
 
 
 ### Bug Fixes
 
 * remove random salt from IP hashing to accurately count unique visitors ([02f1c8b](https://github.com/LindemannRock/craft-smartlink-manager/commit/02f1c8b80f8cf23eec3fe25200ee50b0d8a341ec))
 
-## [1.19.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.2...v1.19.3) (2025-10-02)
+## [1.19.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.2...v1.19.3) - 2025-10-02
 
 
 ### Bug Fixes
 
 * remove clicks column references and resolve duplicate analytics entries ([78b933a](https://github.com/LindemannRock/craft-smartlink-manager/commit/78b933a2cae7c78bb30e1697e4e61d6823c09600))
 
-## [1.19.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.1...v1.19.2) (2025-10-02)
+## [1.19.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.1...v1.19.2) - 2025-10-02
 
 
 ### Bug Fixes
 
 * handle NULL and incorrect platform values in analytics chart and cleanup ([4cf21be](https://github.com/LindemannRock/craft-smartlink-manager/commit/4cf21be8971d5ba7f010fc96cd708cbb97729ad3))
 
-## [1.19.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.0...v1.19.1) (2025-10-02)
+## [1.19.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.19.0...v1.19.1) - 2025-10-02
 
 
 ### Features
@@ -829,7 +829,7 @@
 * **main:** release 1.9.2 ([310abf8](https://github.com/LindemannRock/craft-smartlink-manager/commit/310abf8a302c6d96cbd0bbd73667bf675ec8534e))
 * release 1.19.1 ([c1fc18e](https://github.com/LindemannRock/craft-smartlink-manager/commit/c1fc18e529c115fd52c4e465b1cb35d06c9fe2e4))
 
-## [1.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.18.0...v1.19.0) (2025-10-02)
+## [1.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.18.0...v1.19.0) - 2025-10-02
 
 
 ### Features
@@ -843,7 +843,7 @@
 * enabled status requiring two saves to work ([19a7723](https://github.com/LindemannRock/craft-smartlink-manager/commit/19a77233e4ce6add702e903c453217b4d0392fd5))
 * enabled status requiring two saves to work ([1106a02](https://github.com/LindemannRock/craft-smartlink-manager/commit/1106a028603c6c0886800ad78cc0822ba66f3b2f))
 
-## [1.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.18.0...v1.19.0) (2025-10-01)
+## [1.19.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.18.0...v1.19.0) - 2025-10-01
 
 
 ### Features
@@ -851,7 +851,7 @@
 * Add interaction type breakdown to Performance card ([9c47423](https://github.com/LindemannRock/craft-smartlink-manager/commit/9c47423dc73360e24710ff79fcf001badf0d5de9))
 * remove redundant enabled and clicks columns from smartlinks table ([ec79d43](https://github.com/LindemannRock/craft-smartlink-manager/commit/ec79d43e4a0b28e4415150a3d6297cdbbe4c069e))
 
-## [1.18.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.17.2...v1.18.0) (2025-10-01)
+## [1.18.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.17.2...v1.18.0) - 2025-10-01
 
 
 ### Features
@@ -864,119 +864,119 @@
 * multi-site analytics tracking ([493bbc4](https://github.com/LindemannRock/craft-smartlink-manager/commit/493bbc427bca5b0ba4e4575f88c4d98ef1405ac9))
 * Update URL assignment to check both redirectUrl and buttonUrl formats ([832f196](https://github.com/LindemannRock/craft-smartlink-manager/commit/832f1962242a6be8ac206f21e5d27ea8b1f212bd))
 
-## [1.17.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.17.1...v1.17.2) (2025-10-01)
+## [1.17.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.17.1...v1.17.2) - 2025-10-01
 
 
 ### Bug Fixes
 
 * Show read-only notice only on Field Layout settings page ([049d7ca](https://github.com/LindemannRock/craft-smartlink-manager/commit/049d7ca021d451ccf7756a1e06af4c4b73949924))
 
-## [1.17.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.17.0...v1.17.1) (2025-10-01)
+## [1.17.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.17.0...v1.17.1) - 2025-10-01
 
 
 ### Bug Fixes
 
 * Preserve QR source parameter and display destination URLs in analytics ([a579481](https://github.com/LindemannRock/craft-smartlink-manager/commit/a579481cb2fc65772a47fc380405b8c106527f78))
 
-## [1.17.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.16.0...v1.17.0) (2025-10-01)
+## [1.17.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.16.0...v1.17.0) - 2025-10-01
 
 
 ### Features
 
 * Add read-only mode for Smart Links settings when allowAdminChanges is disabled ([a9ad703](https://github.com/LindemannRock/craft-smartlink-manager/commit/a9ad70344ceaf8b304b848de739600a2d0d00e90))
 
-## [1.16.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.15.0...v1.16.0) (2025-10-01)
+## [1.16.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.15.0...v1.16.0) - 2025-10-01
 
 
 ### Features
 
 * Add field layout support with project config sync ([21e0ba8](https://github.com/LindemannRock/craft-smartlink-manager/commit/21e0ba8551bd5a7c58e603e93db3651cadcac3cc))
 
-## [1.15.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.14.0...v1.15.0) (2025-10-01)
+## [1.15.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.14.0...v1.15.0) - 2025-10-01
 
 
 ### Features
 
 * Register project config event handlers and save field layout UID ([3490026](https://github.com/LindemannRock/craft-smartlink-manager/commit/34900265fa6609fd8fbc092d67fa53100dab01dc))
 
-## [1.14.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.7...v1.14.0) (2025-10-01)
+## [1.14.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.7...v1.14.0) - 2025-10-01
 
 
 ### Features
 
 * Add Field Layout support to Smart Links element type ([7b77015](https://github.com/LindemannRock/craft-smartlink-manager/commit/7b77015311250dd08af76b7069c8bb3e0d8377eb))
 
-## [1.13.7](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.6...v1.13.7) (2025-10-01)
+## [1.13.7](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.6...v1.13.7) - 2025-10-01
 
 
 ### Bug Fixes
 
 * smart link tracking to work with static page caching ([1fb2774](https://github.com/LindemannRock/craft-smartlink-manager/commit/1fb2774df9761bd8b8c5c7aaad9cf925ed969add))
 
-## [1.13.6](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.5...v1.13.6) (2025-09-30)
+## [1.13.6](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.5...v1.13.6) - 2025-09-30
 
 
 ### Bug Fixes
 
 * wait for tracking to complete before redirect ([4400b5e](https://github.com/LindemannRock/craft-smartlink-manager/commit/4400b5e7196541cb65ceaa86b40bbc570594be60))
 
-## [1.13.5](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.4...v1.13.5) (2025-09-30)
+## [1.13.5](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.4...v1.13.5) - 2025-09-30
 
 
 ### Bug Fixes
 
 * replace sendBeacon with fetch POST for CDN compatibility ([71a62dd](https://github.com/LindemannRock/craft-smartlink-manager/commit/71a62dd917f1a1d8ec8d4b9bf97b8ac11708af59))
 
-## [1.13.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.3...v1.13.4) (2025-09-30)
+## [1.13.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.3...v1.13.4) - 2025-09-30
 
 
 ### Bug Fixes
 
 * use action URLs for tracking endpoints to bypass CDN caching ([67fb674](https://github.com/LindemannRock/craft-smartlink-manager/commit/67fb674273cd8649e817fb45a20ba7d4e765bac4))
 
-## [1.13.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.2...v1.13.3) (2025-09-30)
+## [1.13.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.2...v1.13.3) - 2025-09-30
 
 
 ### Bug Fixes
 
 * use action URLs for tracking endpoints to bypass CDN caching ([44ba917](https://github.com/LindemannRock/craft-smartlink-manager/commit/44ba917e05622ac04902e6ac4426bccbf675e207))
 
-## [1.13.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.1...v1.13.2) (2025-09-30)
+## [1.13.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.1...v1.13.2) - 2025-09-30
 
 
 ### Bug Fixes
 
 * make redirects truly cache-safe by moving URL selection to client-side ([bdbfa15](https://github.com/LindemannRock/craft-smartlink-manager/commit/bdbfa15bacdaf5484602b10e623f935420c509d9))
 
-## [1.13.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.0...v1.13.1) (2025-09-30)
+## [1.13.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.13.0...v1.13.1) - 2025-09-30
 
 
 ### Bug Fixes
 
 * improve tracking and analytics display ([d94701c](https://github.com/LindemannRock/craft-smartlink-manager/commit/d94701c5290c2323bc811a7b1acdf0fd5a8a6f48))
 
-## [1.13.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.12.0...v1.13.0) (2025-09-30)
+## [1.13.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.12.0...v1.13.0) - 2025-09-30
 
 
 ### Features
 
 * refactor analytics tracking to client-side JavaScript for CDN compatibility ([edfd7a9](https://github.com/LindemannRock/craft-smartlink-manager/commit/edfd7a91bccb7bacc0caeba9ea805e59c2b3cf42))
 
-## [1.12.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.11.0...v1.12.0) (2025-09-30)
+## [1.12.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.11.0...v1.12.0) - 2025-09-30
 
 
 ### Features
 
 * add QR code cache busting setting to fix tracking with CDN caching ([72eac94](https://github.com/LindemannRock/craft-smartlink-manager/commit/72eac947123e427262617346103543810347fb4d))
 
-## [1.11.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.10.0...v1.11.0) (2025-09-30)
+## [1.11.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.10.0...v1.11.0) - 2025-09-30
 
 
 ### Features
 
 * enhance settings UI with URL and template configuration options for smart links and QR codes ([239219d](https://github.com/LindemannRock/craft-smartlink-manager/commit/239219d1c4449067f558148b5bab2d1ca0ae7d88))
 
-## [1.10.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.9.2...v1.10.0) (2025-09-30)
+## [1.10.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.9.2...v1.10.0) - 2025-09-30
 
 
 ### Features
@@ -985,42 +985,42 @@
 * add custom QR code template settings and update related translations ([c362642](https://github.com/LindemannRock/craft-smartlink-manager/commit/c362642eb71a064e27da7cbc360225efe100ae3e))
 * add customizable URL prefixes and templates for smart links and QR codes ([eff264d](https://github.com/LindemannRock/craft-smartlink-manager/commit/eff264d7cc39d6d81d622f1628978a6d261ef28f))
 
-## [1.9.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.9.1...v1.9.2) (2025-09-30)
+## [1.9.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.9.1...v1.9.2) - 2025-09-30
 
 
 ### Bug Fixes
 
 * update device detection method in RedirectController ([198fc1a](https://github.com/LindemannRock/craft-smartlink-manager/commit/198fc1acadd5a050052b2c1ca8db9343bfea914e))
 
-## [1.9.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.9.0...v1.9.1) (2025-09-30)
+## [1.9.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.9.0...v1.9.1) - 2025-09-30
 
 
 ### Bug Fixes
 
 * update device detection method in RedirectController ([3e7fb1a](https://github.com/LindemannRock/craft-smartlink-manager/commit/3e7fb1abcfd76bbbbecd9fb4bfca2706edbf47c9))
 
-## [1.9.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.8.0...v1.9.0) (2025-09-30)
+## [1.9.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.8.0...v1.9.0) - 2025-09-30
 
 
 ### Features
 
 * update caching strategy in RedirectController to vary by device type ([9bb8e4b](https://github.com/LindemannRock/craft-smartlink-manager/commit/9bb8e4bd881509e72fb5f8f60f2c8d9726ddfbc1))
 
-## [1.8.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.7.1...v1.8.0) (2025-09-30)
+## [1.8.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.7.1...v1.8.0) - 2025-09-30
 
 
 ### Features
 
 * enhance CSRF token response with device detection information ([5af440b](https://github.com/LindemannRock/craft-smartlink-manager/commit/5af440ba912c25b3e97df877cf8f60de1747af26))
 
-## [1.7.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.7.0...v1.7.1) (2025-09-30)
+## [1.7.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.7.0...v1.7.1) - 2025-09-30
 
 
 ### Bug Fixes
 
 * update site selection logic in multi-site configuration ([d2bd97b](https://github.com/LindemannRock/craft-smartlink-manager/commit/d2bd97baae4bd6f865f9da53621e581f12e36cca))
 
-## [1.7.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.6.0...v1.7.0) (2025-09-30)
+## [1.7.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.6.0...v1.7.0) - 2025-09-30
 
 
 ### Features
@@ -1034,42 +1034,42 @@
 * update PHP requirement from ^8.0.2 to ^8.2 in composer.json ([29d375d](https://github.com/LindemannRock/craft-smartlink-manager/commit/29d375d857f2f3eb9277318c24150ac3034e1120))
 * use array_key_exists for attribute checks in settings configuration ([31e8b40](https://github.com/LindemannRock/craft-smartlink-manager/commit/31e8b40191b9c7f1d689e86e97a10f26f401a347))
 
-## [1.6.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.5.0...v1.6.0) (2025-09-25)
+## [1.6.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.5.0...v1.6.0) - 2025-09-25
 
 
 ### Features
 
 * add Smart Links utility template with link statistics and recent analytics ([acf62c7](https://github.com/LindemannRock/craft-smartlink-manager/commit/acf62c7ad344275381fdce7cfbefa74b8f674591))
 
-## [1.5.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.4.2...v1.5.0) (2025-09-24)
+## [1.5.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.4.2...v1.5.0) - 2025-09-24
 
 
 ### Features
 
 * enhance settings handling with additional debug logging and auto-setting for qrLogoVolumeUid ([a3b7d71](https://github.com/LindemannRock/craft-smartlink-manager/commit/a3b7d7112493de5c0c56a27c29914bf02c87768a))
 
-## [1.4.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.4.1...v1.4.2) (2025-09-24)
+## [1.4.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.4.1...v1.4.2) - 2025-09-24
 
 
 ### Bug Fixes
 
 * update repository links in README and composer.json to reflect new naming ([a239296](https://github.com/LindemannRock/craft-smartlink-manager/commit/a239296fbe4e9cc70bd86863bd89fbcec3031043))
 
-## [1.4.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.4.0...v1.4.1) (2025-09-24)
+## [1.4.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.4.0...v1.4.1) - 2025-09-24
 
 
 ### Bug Fixes
 
 * improve description in CleanupAnalyticsJob and format .gitignore entries ([3a58cbc](https://github.com/LindemannRock/craft-smartlink-manager/commit/3a58cbc9cd5403b2413e9a644ec7b7026baab72f))
 
-## [1.4.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.3.0...v1.4.0) (2025-09-15)
+## [1.4.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.3.0...v1.4.0) - 2025-09-15
 
 
 ### Features
 
 * update README and migration for site settings in Smart Links ([c309b1b](https://github.com/LindemannRock/craft-smartlink-manager/commit/c309b1b98e1a00b75f09c039b6054c736e0ed1b5))
 
-## [1.3.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.2.2...v1.3.0) (2025-09-15)
+## [1.3.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.2.2...v1.3.0) - 2025-09-15
 
 
 ### Features
@@ -1080,28 +1080,28 @@
 * add site settings and default settings row to smartlinks_settings table ([c143d41](https://github.com/LindemannRock/craft-smartlink-manager/commit/c143d41a1fb7d5b2cd0c2d8deb254284a5bff4e2))
 * implement site-specific Smart Links functionality and enable site selection in templates ([6c87105](https://github.com/LindemannRock/craft-smartlink-manager/commit/6c871052fcfa89f39611b97ed62c4bd2d1a04d60))
 
-## [1.2.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.2.1...v1.2.2) (2025-09-15)
+## [1.2.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.2.1...v1.2.2) - 2025-09-15
 
 
 ### Bug Fixes
 
 * handle empty QR logo and image IDs in SmartLinksController ([d9a7e65](https://github.com/LindemannRock/craft-smartlink-manager/commit/d9a7e65055ca27534f382ad29aec7a95eeaa10e7))
 
-## [1.2.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.2.0...v1.2.1) (2025-09-15)
+## [1.2.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.2.0...v1.2.1) - 2025-09-15
 
 
 ### Bug Fixes
 
 * update copyright notice in LICENSE file ([3a2531c](https://github.com/LindemannRock/craft-smartlink-manager/commit/3a2531cd2086d5dddc2e7a16905ed3ae6fa35f05))
 
-## [1.2.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.1.0...v1.2.0) (2025-09-14)
+## [1.2.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.1.0...v1.2.0) - 2025-09-14
 
 
 ### Features
 
 * add plugin credit component to settings and analytics templates ([c22cf96](https://github.com/LindemannRock/craft-smartlink-manager/commit/c22cf96fde791c79b1e650964985cf44f8beeba6))
 
-## [1.1.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.4...v1.1.0) (2025-09-11)
+## [1.1.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.4...v1.1.0) - 2025-09-11
 
 
 ### Features
@@ -1113,28 +1113,28 @@
 
 * Smart Links database schema to match working installation ([03fe1dd](https://github.com/LindemannRock/craft-smartlink-manager/commit/03fe1dd45e8985bafe8996f3b38dde2d01740057))
 
-## [1.0.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.3...v1.0.4) (2025-09-10)
+## [1.0.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.3...v1.0.4) - 2025-09-10
 
 
 ### Bug Fixes
 
 * update requirements in README for clarity and consistency ([a17ca25](https://github.com/LindemannRock/craft-smartlink-manager/commit/a17ca2501f162c2c60df0f82449f142f5337d7e3))
 
-## [1.0.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.2...v1.0.3) (2025-09-10)
+## [1.0.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.2...v1.0.3) - 2025-09-10
 
 
 ### Bug Fixes
 
 * update displayName method to return plugin name and rename iconPath to icon ([aca60a0](https://github.com/LindemannRock/craft-smartlink-manager/commit/aca60a06bc689820a2d407270541e1c4222d5853))
 
-## [1.0.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.1...v1.0.2) (2025-09-02)
+## [1.0.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v1.0.1...v1.0.2) - 2025-09-02
 
 
 ### Bug Fixes
 
 * remove development backups and IDE files ([f078fdb](https://github.com/LindemannRock/craft-smartlink-manager/commit/f078fdb024b40398b2ad93c9d9499ffc9172a021))
 
-## 1.0.1 (2025-09-02)
+## 1.0.1 - 2025-09-02
 
 
 ### Features
