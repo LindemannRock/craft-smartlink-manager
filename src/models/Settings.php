@@ -791,6 +791,7 @@ class Settings extends Model
             'smartlinkBaseUrl' => Craft::t('smartlink-manager', 'Smart Link Base URL'),
             'enableAnalytics' => Craft::t('smartlink-manager', 'Enable Analytics'),
             'analyticsRetention' => Craft::t('smartlink-manager', 'Analytics Retention (days)'),
+            'anonymizeIpAddress' => Craft::t('smartlink-manager', 'Anonymize IP Addresses'),
             'includeDisabledInExport' => Craft::t('smartlink-manager', 'Include Disabled Links in Export'),
             'includeExpiredInExport' => Craft::t('smartlink-manager', 'Include Expired Links in Export'),
             'defaultQrSize' => Craft::t('smartlink-manager', 'Default QR Code Size'),
@@ -798,6 +799,7 @@ class Settings extends Model
             'defaultQrBgColor' => Craft::t('smartlink-manager', 'Default QR Background Color'),
             'defaultQrFormat' => Craft::t('smartlink-manager', 'Default QR Code Format'),
             'qrCodeCacheDuration' => Craft::t('smartlink-manager', 'QR Code Cache Duration (seconds)'),
+            'enableQrCodeCache' => Craft::t('smartlink-manager', 'Enable QR Code Cache'),
             'cacheStorageMethod' => Craft::t('smartlink-manager', 'Cache Storage Method'),
             'defaultQrErrorCorrection' => Craft::t('smartlink-manager', 'Error Correction Level'),
             'defaultQrMargin' => Craft::t('smartlink-manager', 'QR Code Margin'),
@@ -820,6 +822,7 @@ class Settings extends Model
             'notFoundRedirectUrl' => Craft::t('smartlink-manager', '404 Redirect URL'),
             'enabledSites' => Craft::t('smartlink-manager', 'Enabled Sites'),
             'enabledIntegrations' => Craft::t('smartlink-manager', 'Enabled Integrations'),
+            'redirectManagerEvents' => Craft::t('smartlink-manager', 'Automatic Redirect Creation'),
             'seomaticTrackingEvents' => Craft::t('smartlink-manager', 'Tracking Events'),
             'seomaticEventPrefix' => Craft::t('smartlink-manager', 'Event Prefix'),
         ], $this->pluginNameSettingsLabel(), $this->logLevelSettingsLabel(), $this->dateFormatSettingsLabels(), $this->dateRangeSettingsLabel(), $this->exportFormatSettingsLabels(), $this->geoSettingsLabel(), $this->itemsPerPageSettingsLabel());
