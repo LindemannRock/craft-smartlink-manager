@@ -64,7 +64,7 @@
                                 </td>
                                 <td>{{ link.siteName ?? '-' }}</td>
                                 <td>{{ link.clicks|number }}</td>
-                                <td>{{ link.lastClick ? link.lastClick|lrDatetime('short') : '-' }}</td>
+                                <td>{{ link.lastClick ? link.lastClick|lrDatetime : '-' }}</td>
                                 <td>{{ link.lastInteractionType ?? '-' }}</td>
                                 <td>
                                     {% if link.lastDestinationUrl %}
