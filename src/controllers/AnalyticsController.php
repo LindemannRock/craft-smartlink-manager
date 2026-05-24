@@ -374,8 +374,8 @@ class AnalyticsController extends Controller
             $timeFormatted = '';
             if (!empty($click['dateCreated'])) {
                 // dateCreated is already converted to local timezone by getAllRecentClicks()
-                $dateFormatted = DateFormatHelper::formatDate($click['dateCreated'], 'short', true, false) ?? '';
-                $timeFormatted = DateFormatHelper::formatTime($click['dateCreated'], 'short', null, false) ?? '';
+                $dateFormatted = DateFormatHelper::formatDate($click['dateCreated'], 'cascade', true, false) ?? '';
+                $timeFormatted = DateFormatHelper::formatTime($click['dateCreated'], 'cascade', null, false) ?? '';
             }
 
             $platformLabel = '';
