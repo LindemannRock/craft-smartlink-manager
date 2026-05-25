@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-    label: "Selection Label"|t('app'),
-    instructions: "The text to display on the Add button."|t('app'),
+    label: "Selection Label"|t('smartlink-manager'),
+    instructions: "The text to display on the Add button."|t('smartlink-manager'),
     id: 'selectionLabel',
     name: 'selectionLabel',
     value: field.selectionLabel,
@@ -20,7 +20,7 @@
 
 <div id="limit-container" class="{{ not field.allowMultiple ? 'hidden' }}">
     {{ forms.textField({
-        label: "Limit"|t('app'),
+        label: "Limit"|t('smartlink-manager'),
         instructions: "The maximum number of {pluginName} that can be selected."|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
         id: 'limit',
         name: 'limit',

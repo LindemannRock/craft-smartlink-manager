@@ -1,7 +1,7 @@
 {% extends "smartlink-manager/_layouts/cp" %}
 
 {% set selectedSubnavItem = 'links' %}
-{% set title = smartLink.title ~ " - " ~ "Revisions"|t('app') %}
+{% set title = smartLink.title ~ " - " ~ "Revisions"|t('smartlink-manager') %}
 
 {% set crumbs = [] %}
 
@@ -25,7 +25,7 @@
         label: currentSite.name|t('site'),
         menu: {
             items: siteMenuItems,
-            label: 'Select site'|t('app')
+            label: 'Select site'|t('smartlink-manager')
         }
     }] %}
 {% endif %}
@@ -41,7 +41,7 @@
         url: url('smartlink-manager/smartlinks/' ~ smartLink.id)
     },
     {
-        label: "Revisions"|t('app')
+        label: "Revisions"|t('smartlink-manager')
     }
 ]) %}
 
@@ -53,26 +53,26 @@
         <div class="main tablepane">
             <table id="revisions" class="data fullwidth">
                 <thead>
-                    <th scope="col">{{ 'Revision'|t('app') }}</th>
-                    <th scope="col">{{ 'Created at'|t('app') }}</th>
-                    <th scope="col">{{ 'Created by'|t('app') }}</th>
-                    <th scope="col">{{ 'Notes'|t('app') }}</th>
+                    <th scope="col">{{ 'Revision'|t('smartlink-manager') }}</th>
+                    <th scope="col">{{ 'Created at'|t('smartlink-manager') }}</th>
+                    <th scope="col">{{ 'Created by'|t('smartlink-manager') }}</th>
+                    <th scope="col">{{ 'Notes'|t('smartlink-manager') }}</th>
                 </thead>
                 <tbody>
                     {% for revision in revisions %}
                         {% set creator = revision.getCreator() %}
                         {% set revisionLabel = revision.revisionLabel %}
                         <tr data-id="{{ revision.id }}" tabindex="0">
-                            <th data-title="{{ "Revision"|t('app') }}">
+                            <th data-title="{{ "Revision"|t('smartlink-manager') }}">
                                 <a href="{{ url('smartlink-manager/smartlinks/' ~ revision.id, {site: smartLink.site.handle}) }}">{{ revisionLabel }}</a>
                             </th>
-                            <td data-title="{{ "Created at"|t('app') }}">{{ revision.dateCreated|timestamp('short', withPreposition=false) }}</td>
-                            <td data-title="{{ "Created by"|t('app') }}">
+                            <td data-title="{{ "Created at"|t('smartlink-manager') }}">{{ revision.dateCreated|timestamp('short', withPreposition=false) }}</td>
+                            <td data-title="{{ "Created by"|t('smartlink-manager') }}">
                                 {% if creator %}
                                     {{ cp.elementChip(creator) }}
                                 {% endif %}
                             </td>
-                            <td data-title="{{ 'Notes'|t('app') }}">{{ revision.revisionNotes }}</td>
+                            <td data-title="{{ 'Notes'|t('smartlink-manager') }}">{{ revision.revisionNotes }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -83,8 +83,8 @@
             <div id="count-container" class="light flex-grow">
                 {% include '_includes/pagination' with {
                     'pageInfo' : pageInfo,
-                    'itemLabel' : 'revision'|t('app'),
-                    'itemsLabel': 'revisions'|t('app')
+                    'itemLabel' : 'revision'|t('smartlink-manager'),
+                    'itemsLabel': 'revisions'|t('smartlink-manager')
                 } %}
             </div>
         </div>
