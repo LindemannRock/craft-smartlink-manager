@@ -340,12 +340,10 @@ class AnalyticsSummaryService
                 $topLinkSite = $smartLink->getSite();
 
                 $lastClick = null;
-                $lastClickFormatted = null;
                 if (!empty($row['lastClick'])) {
                     $utcDate = new \DateTime($row['lastClick'], new \DateTimeZone('UTC'));
                     $utcDate->setTimezone(new \DateTimeZone(Craft::$app->getTimeZone()));
                     $lastClick = $utcDate;
-                    $lastClickFormatted = Craft::$app->getFormatter()->asDatetime($utcDate, 'short');
                 }
 
                 $topLinks[] = [
@@ -356,7 +354,6 @@ class AnalyticsSummaryService
                     'siteName' => $topLinkSite->name ?? '-',
                     'clicks' => (int) $row['clicks'],
                     'lastClick' => $lastClick,
-                    'lastClickFormatted' => $lastClickFormatted,
                     'lastInteractionType' => $lastInteractionType,
                     'lastDestinationUrl' => $lastDestinationUrl,
                     'qrScans' => (int) $row['qrScans'],
@@ -449,12 +446,10 @@ class AnalyticsSummaryService
             $site = !empty($row['siteId']) ? Craft::$app->getSites()->getSiteById($row['siteId']) : null;
 
             $dateCreated = null;
-            $dateCreatedFormatted = null;
             if (!empty($row['dateCreated'])) {
                 $utcDate = new \DateTime($row['dateCreated'], new \DateTimeZone('UTC'));
                 $utcDate->setTimezone(new \DateTimeZone(Craft::$app->getTimeZone()));
                 $dateCreated = $utcDate;
-                $dateCreatedFormatted = Craft::$app->getFormatter()->asDatetime($utcDate, 'short');
             }
 
             $clicks[] = [
@@ -464,7 +459,6 @@ class AnalyticsSummaryService
                 'smartLinkSlug' => $row['smartLinkSlug'],
                 'siteName' => $site ? $site->name : '-',
                 'dateCreated' => $dateCreated,
-                'dateCreatedFormatted' => $dateCreatedFormatted,
                 'siteId' => $row['siteId'],
                 'deviceType' => $row['deviceType'],
                 'browser' => $row['browser'],
