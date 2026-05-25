@@ -88,6 +88,19 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 ---
 
+## Date Format Changes Do Not Appear in the Smart Links Index
+
+The SmartLink Manager index uses the plugin date/time settings for its date columns, including **Post Date**, **Expiry Date**, **Date Created**, and **Date Updated**.
+
+If a date-format setting does not appear to change the index:
+
+1. Make sure you are changing **SmartLink Manager → Settings → Interface**, not only Craft's global locale preferences.
+2. Check whether `config/smartlink-manager.php` sets `timeFormat`, `monthFormat`, `dateOrder`, `dateSeparator`, or `showSeconds`; config-file values override the CP settings.
+3. Clear caches and reload the index.
+4. Confirm the relevant column is enabled in the index column settings.
+
+---
+
 ## Geo-Detection Not Working
 
 **Symptom:** Country and city are blank in analytics even though clicks are recording.
