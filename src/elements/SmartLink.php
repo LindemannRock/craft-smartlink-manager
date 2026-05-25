@@ -356,10 +356,10 @@ class SmartLink extends Element
     public static function statuses(): array
     {
         return [
-            self::STATUS_ENABLED => Craft::t('app', 'Enabled'),
-            self::STATUS_DISABLED => Craft::t('app', 'Disabled'),
-            self::STATUS_PENDING => Craft::t('app', 'Pending'),
-            self::STATUS_EXPIRED => Craft::t('app', 'Expired'),
+            self::STATUS_ENABLED => Craft::t('smartlink-manager', 'Enabled'),
+            self::STATUS_DISABLED => Craft::t('smartlink-manager', 'Disabled'),
+            self::STATUS_PENDING => Craft::t('smartlink-manager', 'Pending'),
+            self::STATUS_EXPIRED => Craft::t('smartlink-manager', 'Expired'),
         ];
     }
 
@@ -452,31 +452,31 @@ class SmartLink extends Element
             'title' => Craft::t('smartlink-manager', 'Title'),
             'slug' => Craft::t('smartlink-manager', 'Slug'),
             [
-                'label' => Craft::t('app', 'Post Date'),
+                'label' => Craft::t('smartlink-manager', 'Post Date'),
                 'orderBy' => 'smartlinkmanager.postDate',
                 'attribute' => 'postDate',
                 'defaultDir' => 'desc',
             ],
             [
-                'label' => Craft::t('app', 'Expiry Date'),
+                'label' => Craft::t('smartlink-manager', 'Expiry Date'),
                 'orderBy' => 'smartlinkmanager.dateExpired',
                 'attribute' => 'dateExpired',
                 'defaultDir' => 'asc',
             ],
             [
-                'label' => Craft::t('app', 'Date Created'),
+                'label' => Craft::t('smartlink-manager', 'Date Created'),
                 'orderBy' => 'elements.dateCreated',
                 'attribute' => 'dateCreated',
                 'defaultDir' => 'desc',
             ],
             [
-                'label' => Craft::t('app', 'Date Updated'),
+                'label' => Craft::t('smartlink-manager', 'Date Updated'),
                 'orderBy' => 'elements.dateUpdated',
                 'attribute' => 'dateUpdated',
                 'defaultDir' => 'desc',
             ],
             [
-                'label' => Craft::t('app', 'ID'),
+                'label' => Craft::t('smartlink-manager', 'ID'),
                 'orderBy' => 'elements.id',
                 'attribute' => 'id',
             ],
@@ -491,12 +491,12 @@ class SmartLink extends Element
         return [
             'title' => ['label' => Craft::t('smartlink-manager', 'Title')],
             'slug' => ['label' => Craft::t('smartlink-manager', 'Slug')],
-            'status' => ['label' => Craft::t('app', 'Status')],
-            'postDate' => ['label' => Craft::t('app', 'Post Date')],
-            'dateExpired' => ['label' => Craft::t('app', 'Expiry Date')],
+            'status' => ['label' => Craft::t('smartlink-manager', 'Status')],
+            'postDate' => ['label' => Craft::t('smartlink-manager', 'Post Date')],
+            'dateExpired' => ['label' => Craft::t('smartlink-manager', 'Expiry Date')],
             'clicks' => ['label' => Craft::t('smartlink-manager', 'Interactions')],
-            'dateCreated' => ['label' => Craft::t('app', 'Date Created')],
-            'dateUpdated' => ['label' => Craft::t('app', 'Date Updated')],
+            'dateCreated' => ['label' => Craft::t('smartlink-manager', 'Date Created')],
+            'dateUpdated' => ['label' => Craft::t('smartlink-manager', 'Date Updated')],
         ];
     }
 
