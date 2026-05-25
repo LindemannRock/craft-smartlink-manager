@@ -43,6 +43,8 @@ class SmartLink extends Element
 {
     use LoggingTrait;
 
+    private const DATE_FORMAT_PLUGIN_HANDLE = 'smartlink-manager';
+
     // Properties
     // =========================================================================
 
@@ -1110,19 +1112,19 @@ class SmartLink extends Element
                 return $count > 0 ? number_format($count) : '—';
             
             case 'postDate':
-                return $this->postDate ? Html::tag('span', DateFormatHelper::formatDate($this->postDate, 'medium'), [
-                    'title' => DateFormatHelper::formatDatetime($this->postDate, 'long'),
-                ]) : '—';
+                return $this->renderDateAttributeHtml($this->postDate);
 
             case 'dateExpired':
-                if (!$this->dateExpired) {
-                    return '—';
-                }
-                $isPast = $this->dateExpired < new \DateTime();
-                return Html::tag('span', DateFormatHelper::formatDate($this->dateExpired, 'medium'), [
-                    'title' => DateFormatHelper::formatDatetime($this->dateExpired, 'long'),
-                    'class' => $isPast ? 'error' : '',
-                ]);
+                return $this->renderDateAttributeHtml(
+                    $this->dateExpired,
+                    $this->dateExpired !== null && $this->dateExpired < new \DateTime() ? 'error' : '',
+                );
+
+            case 'dateCreated':
+                return $this->renderDateAttributeHtml($this->dateCreated);
+
+            case 'dateUpdated':
+                return $this->renderDateAttributeHtml($this->dateUpdated);
         }
 
         return (string)$this->$attribute;
@@ -1409,7 +1411,37 @@ class SmartLink extends Element
             $this->loadContent();
         }
         
-        return parent::attributeHtml($attribute);
+        return match ($attribute) {
+            'postDate' => $this->renderDateAttributeHtml($this->postDate),
+            'dateExpired' => $this->renderDateAttributeHtml(
+                $this->dateExpired,
+                $this->dateExpired !== null && $this->dateExpired < new \DateTime() ? 'error' : '',
+            ),
+            'dateCreated' => $this->renderDateAttributeHtml($this->dateCreated),
+            'dateUpdated' => $this->renderDateAttributeHtml($this->dateUpdated),
+            default => parent::attributeHtml($attribute),
+        };
+    }
+
+    private function renderDateAttributeHtml(?\DateTime $date, string $class = ''): string
+    {
+        if ($date === null) {
+            return '—';
+        }
+
+        $attributes = [
+            'title' => DateFormatHelper::formatDatetime($date, pluginHandle: self::DATE_FORMAT_PLUGIN_HANDLE) ?? '',
+        ];
+
+        if ($class !== '') {
+            $attributes['class'] = $class;
+        }
+
+        return Html::tag(
+            'span',
+            DateFormatHelper::formatDate($date, pluginHandle: self::DATE_FORMAT_PLUGIN_HANDLE) ?? '',
+            $attributes,
+        );
     }
     
     /**
