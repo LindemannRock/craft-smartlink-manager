@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'إدارة الإعدادات',
 
     // Common
-    'Save Settings' => 'حفظ الإعدادات',
     'Actions' => 'الإجراءات',
     'Loading...' => 'جارٍ التحميل...',
     'Error' => 'خطأ',

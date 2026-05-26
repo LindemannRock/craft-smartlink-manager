@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Gérer les paramètres',
 
     // Common
-    'Save Settings' => 'Enregistrer les paramètres',
     'Actions' => 'Actions',
     'Loading...' => 'Chargement...',
     'Error' => 'Erreur',

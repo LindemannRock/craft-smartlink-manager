@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Hantera inställningar',
 
     // Common
-    'Save Settings' => 'Spara inställningar',
     'Actions' => 'Åtgärder',
     'Loading...' => 'Laddar...',
     'Error' => 'Fel',

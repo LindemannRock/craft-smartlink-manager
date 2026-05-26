@@ -48,7 +48,6 @@ return [
     'Manage settings' => '設定を管理する',
 
     // Common
-    'Save Settings' => '設定を保存する',
     'Actions' => 'アクション',
     'Loading...' => '読み込み中...',
     'Error' => 'エラー',

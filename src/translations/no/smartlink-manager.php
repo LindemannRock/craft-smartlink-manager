@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Administrer innstillinger',
 
     // Common
-    'Save Settings' => 'Lagre innstillinger',
     'Actions' => 'Handlinger',
     'Loading...' => 'Laster...',
     'Error' => 'Feil',

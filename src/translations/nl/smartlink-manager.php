@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Instellingen beheren',
 
     // Common
-    'Save Settings' => 'Instellingen opslaan',
     'Actions' => 'Acties',
     'Loading...' => 'Laden...',
     'Error' => 'Fout',

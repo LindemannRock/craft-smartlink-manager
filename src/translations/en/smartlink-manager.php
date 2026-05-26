@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Manage settings',
 
     // Common
-    'Save Settings' => 'Save Settings',
     'Actions' => 'Actions',
     'Loading...' => 'Loading...',
     'Error' => 'Error',

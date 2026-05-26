@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Administrer indstillinger',
 
     // Common
-    'Save Settings' => 'Gem indstillinger',
     'Actions' => 'Handlinger',
     'Loading...' => 'Indlæser...',
     'Error' => 'Fejl',

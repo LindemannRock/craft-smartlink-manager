@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Gerir definições',
 
     // Common
-    'Save Settings' => 'Guardar definições',
     'Actions' => 'Ações',
     'Loading...' => 'A carregar...',
     'Error' => 'Erro',

@@ -48,7 +48,6 @@ return [
     'Manage settings' => 'Gestisci impostazioni',
 
     // Common
-    'Save Settings' => 'Salva impostazioni',
     'Actions' => 'Azioni',
     'Loading...' => 'Caricamento...',
     'Error' => 'Errore',
