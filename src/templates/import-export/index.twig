@@ -90,13 +90,9 @@ my-app-launch,My App Launch,https://example.com/fallback,https://apps.apple.com/
 
     {% include 'lindemannrock-base/_partials/import-history' with {
         sectionId: 'import-history',
-        title: 'Import History'|t('smartlink-manager'),
         importHistory: importHistory,
         canClearHistory: canClearHistory,
         clearButtonId: 'clear-logs-btn',
-        clearLabel: 'Clear history'|t('smartlink-manager'),
-        emptyMessage: 'No import history yet.'|t('smartlink-manager'),
-        translationCategory: 'smartlink-manager',
     } only %}
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
