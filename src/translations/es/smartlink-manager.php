@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Barra vertical (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'El tamaño máximo del archivo es {size} y la importación está limitada a {rows} filas por archivo.',
     'Upload & Map Columns' => 'Cargar y mapear columnas',
-    'Clear history' => 'Limpiar historial',
-    'No import history yet.' => 'Aún no hay historial de importación.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => '¿Está seguro de que desea limpiar todos los registros de importación? Esta acción no se puede deshacer.',
     'Failed to clear history.' => 'No se pudo limpiar el historial.',
     'Map CSV Columns' => 'Mapear columnas CSV',

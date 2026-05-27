@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'شريط (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'الحجم الأقصى للملف {size} والاستيراد محدود بـ {rows} صفاً في كل ملف.',
     'Upload & Map Columns' => 'رفع وتعيين الأعمدة',
-    'Clear history' => 'مسح السجل',
-    'No import history yet.' => 'لا يوجد سجل استيراد بعد.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'هل أنت متأكد من أنك تريد مسح جميع سجلات الاستيراد؟ لا يمكن التراجع عن هذا الإجراء.',
     'Failed to clear history.' => 'فشل في مسح السجل.',
     'Map CSV Columns' => 'تعيين أعمدة CSV',

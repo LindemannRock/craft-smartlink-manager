@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Pipe (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'Die maximale Dateigröße beträgt {size} und der Import ist auf {rows} Zeilen pro Datei begrenzt.',
     'Upload & Map Columns' => 'Hochladen & Spalten zuordnen',
-    'Clear history' => 'Verlauf löschen',
-    'No import history yet.' => 'Noch kein Import-Verlauf vorhanden.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Möchten Sie alle Importprotokolle wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
     'Failed to clear history.' => 'Verlauf konnte nicht gelöscht werden.',
     'Map CSV Columns' => 'CSV-Spalten zuordnen',

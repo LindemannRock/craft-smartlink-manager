@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Pijp (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'De maximale bestandsgrootte is {size} en het importeren is beperkt tot {rows} rijen per bestand.',
     'Upload & Map Columns' => 'Uploaden en kolommen toewijzen',
-    'Clear history' => 'Geschiedenis wissen',
-    'No import history yet.' => 'Nog geen importgeschiedenis.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Weet u zeker dat u alle importlogboeken wilt wissen? Deze actie kan niet ongedaan worden gemaakt.',
     'Failed to clear history.' => 'Geschiedenis kon niet worden gewist.',
     'Map CSV Columns' => 'CSV-kolommen toewijzen',

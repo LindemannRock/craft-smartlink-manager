@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'パイプ（|）',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => '最大ファイルサイズは {size} で、インポートはファイルあたり {rows} 行に制限されています。',
     'Upload & Map Columns' => 'アップロードしてカラムをマッピングする',
-    'Clear history' => '履歴を削除する',
-    'No import history yet.' => 'インポート履歴がまだありません。',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'すべてのインポートログを削除しますか？この操作は取り消せません。',
     'Failed to clear history.' => '履歴の削除に失敗しました。',
     'Map CSV Columns' => 'CSV カラムをマッピングする',

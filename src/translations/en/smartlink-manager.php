@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Pipe (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'The maximum file size is {size} and the import is limited to {rows} rows per file.',
     'Upload & Map Columns' => 'Upload & Map Columns',
-    'Clear history' => 'Clear history',
-    'No import history yet.' => 'No import history yet.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Are you sure you want to clear all import logs? This action cannot be undone.',
     'Failed to clear history.' => 'Failed to clear history.',
     'Map CSV Columns' => 'Map CSV Columns',

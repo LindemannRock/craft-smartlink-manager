@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Vertikalstreck (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'Den maximala filstorleken är {size} och importen är begränsad till {rows} rader per fil.',
     'Upload & Map Columns' => 'Ladda upp och mappa kolumner',
-    'Clear history' => 'Rensa historik',
-    'No import history yet.' => 'Ingen importhistorik ännu.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Vill du rensa alla importloggar? Denna åtgärd kan inte ångras.',
     'Failed to clear history.' => 'Det gick inte att rensa historiken.',
     'Map CSV Columns' => 'Mappa CSV-kolumner',

@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Pipe (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'Maksimal filstørrelse er {size} og importen er begrenset til {rows} rader per fil.',
     'Upload & Map Columns' => 'Last opp og kartlegg kolonner',
-    'Clear history' => 'Tøm logg',
-    'No import history yet.' => 'Ingen importlogg ennå.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Er du sikker på at du vil tømme alle importlogger? Denne handlingen kan ikke angres.',
     'Failed to clear history.' => 'Kunne ikke tømme loggen.',
     'Map CSV Columns' => 'Kartlegg CSV-kolonner',

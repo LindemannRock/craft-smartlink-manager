@@ -615,8 +615,6 @@ return [
     'Pipe (|)' => 'Pipe (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'La dimensione massima del file è {size} e l\'importazione è limitata a {rows} righe per file.',
     'Upload & Map Columns' => 'Carica e mappa colonne',
-    'Clear history' => 'Cancella cronologia',
-    'No import history yet.' => 'Nessuna cronologia di importazione ancora.',
     'Are you sure you want to clear all import logs? This action cannot be undone.' => 'Cancellare tutti i log di importazione? Questa azione non può essere annullata.',
     'Failed to clear history.' => 'Impossibile cancellare la cronologia.',
     'Map CSV Columns' => 'Mappa colonne CSV',
