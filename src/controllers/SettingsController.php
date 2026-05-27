@@ -539,8 +539,8 @@ class SettingsController extends Controller
 
             if ($settings->cacheStorageMethod === 'redis') {
                 // Clear Redis cache
-                $cache = Craft::$app->cache;
-                if ($cache instanceof \yii\redis\Cache) {
+                $cache = PluginHelper::getRedisCacheOrLog(SmartLinkManager::$plugin->id);
+                if ($cache !== null) {
                     $redis = $cache->redis;
 
                     // Get all QR cache keys from tracking set
@@ -604,8 +604,8 @@ class SettingsController extends Controller
 
             if ($settings->cacheStorageMethod === 'redis') {
                 // Clear Redis cache
-                $cache = Craft::$app->cache;
-                if ($cache instanceof \yii\redis\Cache) {
+                $cache = PluginHelper::getRedisCacheOrLog(SmartLinkManager::$plugin->id);
+                if ($cache !== null) {
                     $redis = $cache->redis;
 
                     // Get all device cache keys from tracking set
@@ -669,8 +669,8 @@ class SettingsController extends Controller
 
             if ($settings->cacheStorageMethod === 'redis') {
                 // Clear Redis cache
-                $cache = Craft::$app->cache;
-                if ($cache instanceof \yii\redis\Cache) {
+                $cache = PluginHelper::getRedisCacheOrLog(SmartLinkManager::$plugin->id);
+                if ($cache !== null) {
                     $redis = $cache->redis;
 
                     // Get all QR cache keys from tracking set
