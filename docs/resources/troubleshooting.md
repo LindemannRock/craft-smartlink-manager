@@ -88,6 +88,19 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 ---
 
+## Scheduled Analytics Cleanup Does Not Reappear
+
+SmartLink Manager schedules a recurring queue job for analytics cleanup. If the queue is empty after the cleanup job runs:
+
+1. Confirm the queue worker is running.
+2. Visit any CP page to let SmartLink Manager bootstrap the initial job.
+3. Check that **Enable Analytics** is on.
+4. Check that analytics retention is greater than `0`.
+
+The queued job description shows when that specific queued row is due to run.
+
+---
+
 ## Date Format Changes Do Not Appear in the Smart Links Index
 
 The SmartLink Manager index uses the plugin date/time settings for its date columns, including **Post Date**, **Expiry Date**, **Date Created**, and **Date Updated**.
