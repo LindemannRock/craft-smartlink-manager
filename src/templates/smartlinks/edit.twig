@@ -7,6 +7,7 @@
 {% set selectedSubnavItem = 'links' %}
 {% set saveShortcutRedirect = 'smartlink-manager/smartlinks/{id}' %}
 {% set retainScrollOnSaveShortcut = true %}
+{% set canViewAnalytics = currentUser.can('smartLinkManager:viewAnalytics') %}
 
 {% set tabs = {
     fields: {
@@ -31,8 +32,8 @@
     {% endfor %}
 {% endif %}
 
-{# Only show analytics tab if globally enabled, smart link exists, AND tracking is enabled for this smart link #}
-{% if craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
+{# Only show analytics tab if globally enabled, permitted, smart link exists, AND tracking is enabled for this smart link #}
+{% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
     {% set tabs = tabs|merge({
         analytics: {
             label: 'Analytics'|t('smartlink-manager'),
@@ -188,7 +189,7 @@
         {% endfor %}
     {% endif %}
 
-    {% if craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
+    {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
         <div id="analytics" class="hidden">
             {% include "smartlink-manager/smartlinks/_partials/analytics" with {
                 smartLink: smartLink,
@@ -279,14 +280,14 @@
             on: smartLink.enabled
         }) }}
 
-        {% if craft.smartLinks.settings.enableAnalytics %}
+        {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics %}
             {{ forms.lightswitchField({
                 label: "Track Analytics"|t('smartlink-manager'),
                 id: 'trackAnalytics',
                 name: 'trackAnalytics',
                 on: smartLink.trackAnalytics ?? true
             }) }}
-        {% else %}
+        {% elseif not craft.smartLinks.settings.enableAnalytics %}
             {# Hidden field to ensure trackAnalytics is set to false when analytics are disabled #}
             <input type="hidden" name="trackAnalytics" value="0">
         {% endif %}
@@ -478,7 +479,7 @@
                     {% endif %}
                 </dd>
             </div>
-            {% if craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
+    {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
                 <div class="data">
                     <dt class="heading">{{ "Interactions"|t('smartlink-manager') }}</dt>
                     <dd class="value">{{ smartLink.clicks|number }}</dd>
@@ -894,7 +895,7 @@
         }
     });
 
-    {% if craft.smartLinks.settings.enableAnalytics %}
+    {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics %}
         // Confirm when disabling analytics tracking
         $('#trackAnalytics').on('change', function() {
             const $toggle = $(this);
