@@ -167,7 +167,7 @@ If a date-format setting does not appear to change the index:
     ddev exec ls -la storage/runtime/
     ```
 
-2. **For Redis cache** — confirm the Redis connection is active. Check `config/app.php` or `config/app.web.php` for the Redis component configuration and verify the host/port are reachable.
+2. **For Redis cache** — confirm the Redis connection is active. Check `config/app.php` or `config/app.web.php` for the Redis component configuration and verify the host/port are reachable. If SmartLink Manager is set to Redis but Craft is not using a Redis-backed cache component, the plugin logs a cache-component warning and skips Redis-specific cache operations until the component is fixed.
 
 3. **Clear manually** — go to **Utilities → SmartLink Manager** and use the **Clear Cache** button. Alternatively, use **Utilities → Caches → Clear All Caches** to flush all Craft caches.
 
