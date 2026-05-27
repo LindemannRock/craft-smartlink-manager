@@ -756,7 +756,6 @@ return [
     'Navigation' => 'Navigasjon',
     'Access main plugin sections' => 'Tilgang til plugin-ets hovedseksjoner',
     'Manage {pluginName}' => 'Administrer {pluginName}',
-    'View Settings' => 'Vis innstillinger',
     'Cache Management' => 'Cacheadministrasjon',
     'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Tøm cachede data for å tvinge regenerering. Nyttig etter endring av QR Code-innstillinger eller ved feilsøking.',
     'Clear QR Cache' => 'Fjern QR-cache',

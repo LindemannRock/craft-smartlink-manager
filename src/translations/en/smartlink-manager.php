@@ -756,7 +756,6 @@ return [
     'Navigation' => 'Navigation',
     'Access main plugin sections' => 'Access main plugin sections',
     'Manage {pluginName}' => 'Manage {pluginName}',
-    'View Settings' => 'View Settings',
     'Cache Management' => 'Cache Management',
     'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.',
     'Clear QR Cache' => 'Clear QR Cache',

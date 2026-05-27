@@ -756,7 +756,6 @@ return [
     'Navigation' => 'ナビゲーション',
     'Access main plugin sections' => 'プラグインのメインセクションにアクセスする',
     'Manage {pluginName}' => '{pluginName} を管理する',
-    'View Settings' => '設定を表示する',
     'Cache Management' => 'キャッシュ管理',
     'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'キャッシュされたデータを削除して強制的に再生成します。QR コードの設定変更後やトラブルシューティング時に役立ちます。',
     'Clear QR Cache' => 'QR キャッシュを削除する',

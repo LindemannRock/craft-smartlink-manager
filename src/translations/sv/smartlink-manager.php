@@ -756,7 +756,6 @@ return [
     'Navigation' => 'Navigering',
     'Access main plugin sections' => 'Åtkomst till pluginets huvudsektioner',
     'Manage {pluginName}' => 'Hantera {pluginName}',
-    'View Settings' => 'Visa inställningar',
     'Cache Management' => 'Cachehantering',
     'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Rensa cachad data för att framtvinga omgenerering. Användbart efter ändring av QR Code-inställningar eller vid felsökning.',
     'Clear QR Cache' => 'Rensa QR-cache',

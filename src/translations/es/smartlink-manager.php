@@ -756,7 +756,6 @@ return [
     'Navigation' => 'Navegación',
     'Access main plugin sections' => 'Acceder a las secciones principales del plugin',
     'Manage {pluginName}' => 'Gestionar {pluginName}',
-    'View Settings' => 'Ver configuración',
     'Cache Management' => 'Gestión de caché',
     'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Vacíe los datos en caché para forzar la regeneración. Útil tras cambiar la configuración de QR Code o al solucionar problemas.',
     'Clear QR Cache' => 'Vaciar caché de QR',
