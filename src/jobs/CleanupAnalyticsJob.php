@@ -13,6 +13,8 @@ use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\queue\BaseJob;
+use lindemannrock\base\helpers\DateFormatHelper;
+use lindemannrock\base\helpers\ScheduleHelper;
 use lindemannrock\base\traits\QueueTtrTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -54,12 +56,16 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
         parent::init();
         $this->setLoggingHandle(SmartLinkManager::$plugin->id);
 
-        // Calculate and set next run time if not already set
         if ($this->reschedule && !$this->nextRunTime) {
-            $delay = $this->calculateNextRunDelay();
-            if ($delay > 0) {
-                // Short format: "Nov 8, 12:00am"
-                $this->nextRunTime = date('M j, g:ia', time() + $delay);
+            $settings = SmartLinkManager::$plugin->getSettings();
+            $nextRun = ScheduleHelper::calculateNext('daily');
+            if ($nextRun !== null) {
+                $this->nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
+                    $nextRun,
+                    $settings,
+                    false,
+                    false,
+                );
             }
         }
     }
@@ -165,25 +171,16 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
             return;
         }
 
-        // Prevent duplicate scheduling - check if another cleanup job already exists
-        // This prevents fan-out if multiple jobs end up in the queue (manual runs, retries, etc.)
-        $existingJob = (new \craft\db\Query())
-            ->from('{{%queue}}')
-            ->where(['like', 'job', 'smartlinkmanager'])
-            ->andWhere(['like', 'job', 'CleanupAnalyticsJob'])
-            ->exists();
+        $nextRun = ScheduleHelper::calculateNext('daily');
 
-        if ($existingJob) {
-            $this->logDebug('Skipping reschedule - cleanup job already exists');
-            return;
-        }
-
-        $delay = $this->calculateNextRunDelay();
-
-        if ($delay > 0) {
-            // Calculate next run time for display
-            $nextRunTime = date('M j, g:ia', time() + $delay);
-
+        if ($nextRun !== null) {
+            $delay = max(0, $nextRun->getTimestamp() - DateFormatHelper::now()->getTimestamp());
+            $nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
+                $nextRun,
+                $settings,
+                false,
+                false,
+            );
             $job = new self([
                 'reschedule' => true,
                 'nextRunTime' => $nextRunTime,
@@ -196,13 +193,5 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
                 'nextRun' => $nextRunTime,
             ]);
         }
-    }
-
-    /**
-     * Calculate the delay in seconds for the next cleanup (24 hours)
-     */
-    private function calculateNextRunDelay(): int
-    {
-        return 86400; // 24 hours
     }
 }

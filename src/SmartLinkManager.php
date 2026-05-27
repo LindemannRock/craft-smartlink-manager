@@ -29,6 +29,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
 use lindemannrock\base\helpers\CpNavHelper;
+use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\logginglibrary\LoggingLibrary;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -304,28 +305,6 @@ class SmartLinkManager extends Plugin
                         ]);
                     },
                 ];
-            }
-        );
-
-        // Listen for settings changes to reschedule cleanup
-        Event::on(
-            Settings::class,
-            Settings::EVENT_AFTER_SAVE_SETTINGS,
-            function(Event $event) {
-                /** @var Settings $settings */
-                $settings = $event->sender;
-
-                // The cleanup job will check the current settings when it runs
-                // No need to clear existing jobs as they will adapt to new settings
-
-                // If retention was just enabled (from 0), schedule a new cleanup
-                if ($settings->analyticsRetention > 0) {
-                    // Check if we need to schedule a new cleanup
-                    // The job will handle re-queuing itself after each run
-                    $this->scheduleAnalyticsCleanup();
-                }
-
-                $this->logInfo('Analytics cleanup settings updated');
             }
         );
 
@@ -668,14 +647,19 @@ class SmartLinkManager extends Plugin
                 ->exists();
 
             if (!$existingJob) {
-                // Create cleanup job
+                $initialDelay = 5 * 60;
+                $initialRun = (clone DateFormatHelper::now())->modify("+{$initialDelay} seconds");
                 $job = new CleanupAnalyticsJob([
                     'reschedule' => true,
+                    'nextRunTime' => DateFormatHelper::formatCompactDatetimeFromSettings(
+                        $initialRun,
+                        $settings,
+                        false,
+                        false,
+                    ),
                 ]);
 
-                // Add to queue with a small initial delay
-                // The job will re-queue itself to run every 24 hours
-                Craft::$app->queue->delay(5 * 60)->push($job);
+                Craft::$app->queue->delay($initialDelay)->push($job);
 
                 $this->logInfo('Scheduled initial analytics cleanup job', ['interval' => '24 hours']);
             }
