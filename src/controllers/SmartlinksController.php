@@ -256,7 +256,10 @@ class SmartlinksController extends Controller
             // Handle authorId - elementSelectField returns an array
             $authorIds = $request->getBodyParam('authorId');
             $smartLink->authorId = is_array($authorIds) ? ($authorIds[0] ?? null) : $authorIds;
-            $smartLink->trackAnalytics = (bool)$request->getBodyParam('trackAnalytics');
+            $trackAnalytics = $request->getBodyParam('trackAnalytics');
+            if ($trackAnalytics !== null) {
+                $smartLink->trackAnalytics = (bool)$trackAnalytics;
+            }
             $smartLink->hideTitle = (bool)$request->getBodyParam('hideTitle');
 
             $smartLink->qrCodeEnabled = (bool)$request->getBodyParam('qrCodeEnabled');
