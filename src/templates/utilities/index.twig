@@ -103,11 +103,11 @@
             {% if canViewLinks %}
                 {% set navButtons = navButtons|merge([{type: 'link', label: 'Manage {pluginName}'|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}), url: url('smartlink-manager')}]) %}
             {% endif %}
+            {% if canManageSettings %}
+                {% set navButtons = navButtons|merge([{type: 'link', label: 'Manage settings'|t('smartlink-manager'), url: url('smartlink-manager/settings')}]) %}
+            {% endif %}
             {% if settings.enableAnalytics and canViewAnalytics %}
                 {% set navButtons = navButtons|merge([{type: 'link', label: 'View Analytics'|t('smartlink-manager'), url: url('smartlink-manager/analytics')}]) %}
-            {% endif %}
-            {% if canManageSettings %}
-                {% set navButtons = navButtons|merge([{type: 'link', label: 'View Settings'|t('smartlink-manager'), url: url('smartlink-manager/settings')}]) %}
             {% endif %}
 
             {% include 'lindemannrock-base/_layouts/cp-utilities/_action-section' with {
