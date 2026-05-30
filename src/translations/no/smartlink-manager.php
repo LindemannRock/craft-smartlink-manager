@@ -99,7 +99,7 @@ return [
     'Smart links not restored.' => 'Smarte lenker ble ikke gjenopprettet.',
     'Add a smart link' => 'Legg til en smart lenke',
     'No smart links selected' => 'Ingen smarte lenker valgt',
-    'You can only select up to {limit} {limit, plural, =1{smart lenke} other{smarte lenker}}.' => 'Du kan bare velge opptil {limit} {limit, plural, =1{smart lenke} other{smarte lenker}}.',
+    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Du kan bare velge opptil {limit} {limit, plural, =1{smart lenke} other{smarte lenker}}.',
     'Create a new smart link' => 'Opprett en ny smart lenke',
     'Active' => 'Aktiv',
     'Pending' => 'Venter',

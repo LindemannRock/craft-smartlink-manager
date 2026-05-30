@@ -99,7 +99,7 @@ return [
     'Smart links not restored.' => 'Smarta länkar återställdes inte.',
     'Add a smart link' => 'Lägg till en smart link',
     'No smart links selected' => 'Inga smarta länkar valda',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smarta länkar}}.' => 'Du kan bara välja upp till {limit} {limit, plural, =1{smart link} other{smarta länkar}}.',
+    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Du kan bara välja upp till {limit} {limit, plural, =1{smart link} other{smarta länkar}}.',
     'Create a new smart link' => 'Skapa en ny smart link',
     'Active' => 'Aktiv',
     'Pending' => 'Väntande',
