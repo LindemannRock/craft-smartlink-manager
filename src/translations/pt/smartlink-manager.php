@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisões',
     'revision' => 'revisão',
     'revisions' => 'revisões',
+    'This {type} doesn\'t have revisions.' => 'Este {type} não tem revisões.',
     'This field is translated for each site.' => 'Este campo é traduzido para cada site.',
     'Are you sure you want to delete this entry?' => 'Eliminar esta entrada?',
     'Selection Label' => 'Etiqueta de seleção',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} registos de análise eliminados e todos os contadores de cliques reiniciados.',
     'An unexpected error occurred.' => 'Ocorreu um erro inesperado.',
     'No analytics data to export.' => 'Sem dados de análise para exportar.',
+    'Analytics tracking is disabled for this smart link.' => 'A monitorização de análise está desativada para este smart link.',
     'Enter custom size (100-4096 pixels):' => 'Introduzir tamanho personalizado (100-4096 píxeis):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Introduza um tamanho válido entre 100 e 4096 píxeis',
     'Reset QR code settings to plugin defaults?' => 'Repor as definições do QR Code para os valores predefinidos do plugin?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} não está ativo para este site.',
+    'Administrative changes are disallowed in this environment.' => 'As alterações administrativas não são permitidas neste ambiente.',
+    'User does not have permission to import smart links.' => 'O utilizador não tem permissão para importar smart links.',
+    'User does not have permission to export smart links.' => 'O utilizador não tem permissão para exportar smart links.',
+    'User does not have permission to clear import history.' => 'O utilizador não tem permissão para limpar o histórico de importações.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Encontrado(s) {count, number} {count, plural, =1{erro} other{erros}}',

@@ -62,7 +62,7 @@ class SettingsController extends Controller
         // All other settings are operational and should always be editable
         if ($action->id === 'save-field-layout') {
             if (!Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
-                throw new ForbiddenHttpException('Administrative changes are disallowed in this environment.');
+                throw new ForbiddenHttpException(Craft::t('smartlink-manager', 'Administrative changes are disallowed in this environment.'));
             }
         }
 

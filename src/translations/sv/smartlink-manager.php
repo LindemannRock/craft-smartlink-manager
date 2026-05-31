@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisioner',
     'revision' => 'revision',
     'revisions' => 'revisioner',
+    'This {type} doesn\'t have revisions.' => 'Den här {type} har inga revisioner.',
     'This field is translated for each site.' => 'Det här fältet översätts för varje webbplats.',
     'Are you sure you want to delete this entry?' => 'Vill du verkligen ta bort den här posten?',
     'Selection Label' => 'Urvalsetikett',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} analysposter rensades och alla klickräknare nollställdes.',
     'An unexpected error occurred.' => 'Ett oväntat fel uppstod.',
     'No analytics data to export.' => 'Inga analysdata att exportera.',
+    'Analytics tracking is disabled for this smart link.' => 'Analysspårning är inaktiverad för denna smart link.',
     'Enter custom size (100-4096 pixels):' => 'Ange anpassad storlek (100–4096 pixlar):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Ange en giltig storlek mellan 100 och 4096 pixlar',
     'Reset QR code settings to plugin defaults?' => 'Återställa QR Code-inställningarna till pluginens standardvärden?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} är inte aktiverat för den här webbplatsen.',
+    'Administrative changes are disallowed in this environment.' => 'Administrativa ändringar är inte tillåtna i denna miljö.',
+    'User does not have permission to import smart links.' => 'Användaren har inte behörighet att importera smarta länkar.',
+    'User does not have permission to export smart links.' => 'Användaren har inte behörighet att exportera smarta länkar.',
+    'User does not have permission to clear import history.' => 'Användaren har inte behörighet att rensa importhistoriken.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Hittade {count, number} {count, plural, =1{fel} other{fel}}',

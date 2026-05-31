@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisionen',
     'revision' => 'Revision',
     'revisions' => 'Revisionen',
+    'This {type} doesn\'t have revisions.' => 'Dieser {type} hat keine Revisionen.',
     'This field is translated for each site.' => 'Dieses Feld wird für jede Website übersetzt.',
     'Are you sure you want to delete this entry?' => 'Möchten Sie diesen Eintrag wirklich löschen?',
     'Selection Label' => 'Auswahlbezeichnung',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} Analysedatensätze gelöscht und alle Klickzähler zurückgesetzt.',
     'An unexpected error occurred.' => 'Ein unerwarteter Fehler ist aufgetreten.',
     'No analytics data to export.' => 'Keine Analysedaten zum Exportieren.',
+    'Analytics tracking is disabled for this smart link.' => 'Analytics-Tracking ist für diesen Smart Link deaktiviert.',
     'Enter custom size (100-4096 pixels):' => 'Benutzerdefinierte Größe eingeben (100–4096 Pixel):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Bitte geben Sie eine gültige Größe zwischen 100 und 4096 Pixeln ein',
     'Reset QR code settings to plugin defaults?' => 'QR Code Einstellungen auf Plugin-Standardwerte zurücksetzen?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} ist für diese Website nicht aktiviert.',
+    'Administrative changes are disallowed in this environment.' => 'Administrative Änderungen sind in dieser Umgebung nicht erlaubt.',
+    'User does not have permission to import smart links.' => 'Der Benutzer hat keine Berechtigung, Smart Links zu importieren.',
+    'User does not have permission to export smart links.' => 'Der Benutzer hat keine Berechtigung, Smart Links zu exportieren.',
+    'User does not have permission to clear import history.' => 'Der Benutzer hat keine Berechtigung, den Import-Verlauf zu leeren.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{Fehler} other{Fehler}} gefunden',

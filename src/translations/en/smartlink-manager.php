@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisions',
     'revision' => 'revision',
     'revisions' => 'revisions',
+    'This {type} doesn\'t have revisions.' => 'This {type} doesn\'t have revisions.',
     'This field is translated for each site.' => 'This field is translated for each site.',
     'Are you sure you want to delete this entry?' => 'Are you sure you want to delete this entry?',
     'Selection Label' => 'Selection Label',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => 'Cleared {count} analytics records and reset all click counts.',
     'An unexpected error occurred.' => 'An unexpected error occurred.',
     'No analytics data to export.' => 'No analytics data to export.',
+    'Analytics tracking is disabled for this smart link.' => 'Analytics tracking is disabled for this smart link.',
     'Enter custom size (100-4096 pixels):' => 'Enter custom size (100-4096 pixels):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Please enter a valid size between 100 and 4096 pixels',
     'Reset QR code settings to plugin defaults?' => 'Reset QR code settings to plugin defaults?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} is not enabled for this site.',
+    'Administrative changes are disallowed in this environment.' => 'Administrative changes are disallowed in this environment.',
+    'User does not have permission to import smart links.' => 'User does not have permission to import smart links.',
+    'User does not have permission to export smart links.' => 'User does not have permission to export smart links.',
+    'User does not have permission to clear import history.' => 'User does not have permission to clear import history.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Found {count, number} {count, plural, =1{error} other{errors}}',

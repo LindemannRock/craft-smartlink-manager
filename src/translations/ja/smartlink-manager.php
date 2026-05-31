@@ -78,6 +78,7 @@ return [
     'Revisions' => 'リビジョン',
     'revision' => 'リビジョン',
     'revisions' => 'リビジョン',
+    'This {type} doesn\'t have revisions.' => 'この{type}にはリビジョンがありません。',
     'This field is translated for each site.' => 'このフィールドはサイトごとに翻訳されます。',
     'Are you sure you want to delete this entry?' => 'このエントリを削除しますか？',
     'Selection Label' => '選択ラベル',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => 'アナリティクスレコードを {count} 件削除し、すべてのクリック数をリセットしました。',
     'An unexpected error occurred.' => '予期しないエラーが発生しました。',
     'No analytics data to export.' => 'エクスポートするアナリティクスデータがありません。',
+    'Analytics tracking is disabled for this smart link.' => 'このスマートリンクではアナリティクスのトラッキングが無効になっています。',
     'Enter custom size (100-4096 pixels):' => 'カスタムサイズを入力してください (100〜4096 ピクセル):',
     'Please enter a valid size between 100 and 4096 pixels' => '100〜4096 ピクセルの有効なサイズを入力してください',
     'Reset QR code settings to plugin defaults?' => 'QR コードの設定をプラグインのデフォルト値にリセットしますか？',
+    '{pluginName} is not enabled for this site.' => '{pluginName} はこのサイトで有効になっていません。',
+    'Administrative changes are disallowed in this environment.' => 'この環境では管理者による変更は許可されていません。',
+    'User does not have permission to import smart links.' => 'ユーザーにスマートリンクをインポートする権限がありません。',
+    'User does not have permission to export smart links.' => 'ユーザーにスマートリンクをエクスポートする権限がありません。',
+    'User does not have permission to clear import history.' => 'ユーザーにインポート履歴を削除する権限がありません。',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} 件のエラーが見つかりました',

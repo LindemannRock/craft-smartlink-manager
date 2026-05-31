@@ -50,7 +50,7 @@ class AnalyticsController extends Controller
 
         // Check if analytics are globally enabled
         if (!SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
-            throw new \yii\web\ForbiddenHttpException('Analytics are disabled in plugin settings.');
+            throw new \yii\web\ForbiddenHttpException(Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.'));
         }
 
         $variables = [
@@ -97,7 +97,7 @@ class AnalyticsController extends Controller
         if (!SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
             return $this->asJson([
                 'success' => false,
-                'error' => 'Analytics are disabled in plugin settings.',
+                'error' => Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.'),
             ]);
         }
 
@@ -125,14 +125,14 @@ class AnalyticsController extends Controller
             if (!$smartLink) {
                 return $this->asJson([
                     'success' => false,
-                    'error' => 'Smart link not found',
+                    'error' => Craft::t('smartlink-manager', 'Smart link not found'),
                 ]);
             }
 
             if (!($smartLink->trackAnalytics ?? true)) {
                 return $this->asJson([
                     'success' => false,
-                    'error' => 'Analytics tracking is disabled for this smart link',
+                    'error' => Craft::t('smartlink-manager', 'Analytics tracking is disabled for this smart link.'),
                 ]);
             }
         }
@@ -187,7 +187,7 @@ class AnalyticsController extends Controller
 
         // Check if analytics are globally enabled
         if (!SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
-            Craft::$app->getSession()->setError('Analytics are disabled in plugin settings.');
+            Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.'));
             return $this->redirect('smartlink-manager');
         }
 
@@ -212,12 +212,12 @@ class AnalyticsController extends Controller
                 ->one();
 
             if (!$smartLink) {
-                Craft::$app->getSession()->setError('Smart link not found.');
+                Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Smart link not found'));
                 return $this->redirect('smartlink-manager');
             }
 
             if (!($smartLink->trackAnalytics ?? true)) {
-                Craft::$app->getSession()->setError('Analytics tracking is disabled for this smart link.');
+                Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Analytics tracking is disabled for this smart link.'));
                 return $this->redirect('smartlink-manager/smartlinks/' . $smartLinkId);
             }
         }

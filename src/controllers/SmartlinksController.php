@@ -120,7 +120,7 @@ class SmartlinksController extends Controller
         // Check if SmartLink Manager is enabled for this site
         $settings = SmartLinkManager::getInstance()->getSettings();
         if (!$settings->isSiteEnabled($site->id)) {
-            throw new \yii\web\ForbiddenHttpException('SmartLink Manager is not enabled for this site.');
+            throw new \yii\web\ForbiddenHttpException(Craft::t('smartlink-manager', '{pluginName} is not enabled for this site.', ['pluginName' => SmartLinkManager::$plugin->getSettings()->getFullName()]));
         }
 
         // Enforce site edit permission (multi-site only)
@@ -140,7 +140,7 @@ class SmartlinksController extends Controller
                     ->one();
 
                 if (!$smartLink) {
-                    throw new \yii\web\NotFoundHttpException('Smart link not found');
+                    throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
                 }
 
                 // Don't allow editing trashed elements
@@ -225,7 +225,7 @@ class SmartlinksController extends Controller
             // Validate site is enabled for this plugin
             $settings = SmartLinkManager::$plugin->getSettings();
             if (!$settings->isSiteEnabled($siteId)) {
-                throw new \yii\web\ForbiddenHttpException('SmartLink Manager is not enabled for this site.');
+                throw new \yii\web\ForbiddenHttpException(Craft::t('smartlink-manager', '{pluginName} is not enabled for this site.', ['pluginName' => SmartLinkManager::$plugin->getSettings()->getFullName()]));
             }
 
             // Enforce site edit permission (multi-site only)
@@ -238,7 +238,7 @@ class SmartlinksController extends Controller
                 $smartLink = SmartLinkManager::$plugin->smartLinks->getSmartLinkById($smartLinkId, $siteId);
 
                 if (!$smartLink) {
-                    throw new \yii\web\NotFoundHttpException('Smart link not found');
+                    throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
                 }
 
                 $this->requirePermission('smartLinkManager:editLinks');
@@ -400,7 +400,7 @@ class SmartlinksController extends Controller
         $smartLink = SmartLinkManager::$plugin->smartLinks->getSmartLinkById($smartLinkId);
 
         if (!$smartLink) {
-            throw new \yii\web\NotFoundHttpException('Smart link not found');
+            throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
         }
 
         // Enforce site edit permission (multi-site only)
@@ -440,7 +440,7 @@ class SmartlinksController extends Controller
             ->one();
 
         if (!$smartLink) {
-            throw new \yii\web\NotFoundHttpException('Smart link not found');
+            throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
         }
 
         // Enforce site edit permission (multi-site only)
@@ -480,7 +480,7 @@ class SmartlinksController extends Controller
             ->one();
 
         if (!$smartLink) {
-            throw new \yii\web\NotFoundHttpException('Smart link not found');
+            throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
         }
 
         // Enforce site edit permission (multi-site only)
@@ -600,7 +600,7 @@ class SmartlinksController extends Controller
             ->one();
 
         if (!$smartLink) {
-            throw new \yii\web\NotFoundHttpException('Smart link not found');
+            throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
         }
 
         return $this->renderTemplate('smartlink-manager/smartlinks/revisions', [

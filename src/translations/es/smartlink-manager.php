@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisiones',
     'revision' => 'revisión',
     'revisions' => 'revisiones',
+    'This {type} doesn\'t have revisions.' => 'Este {type} no tiene revisiones.',
     'This field is translated for each site.' => 'Este campo se traduce para cada sitio.',
     'Are you sure you want to delete this entry?' => '¿Está seguro de que desea eliminar esta entrada?',
     'Selection Label' => 'Etiqueta de selección',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} registros analíticos limpiados y todos los contadores de clics restablecidos.',
     'An unexpected error occurred.' => 'Se produjo un error inesperado.',
     'No analytics data to export.' => 'No hay datos analíticos para exportar.',
+    'Analytics tracking is disabled for this smart link.' => 'El seguimiento de analíticas está desactivado para este smart link.',
     'Enter custom size (100-4096 pixels):' => 'Ingrese un tamaño personalizado (100-4096 píxeles):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Ingrese un tamaño válido entre 100 y 4096 píxeles',
     'Reset QR code settings to plugin defaults?' => '¿Restablecer la configuración del QR Code a los valores predeterminados del plugin?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} no está habilitado para este sitio.',
+    'Administrative changes are disallowed in this environment.' => 'Los cambios administrativos no están permitidos en este entorno.',
+    'User does not have permission to import smart links.' => 'El usuario no tiene permiso para importar smart links.',
+    'User does not have permission to export smart links.' => 'El usuario no tiene permiso para exportar smart links.',
+    'User does not have permission to clear import history.' => 'El usuario no tiene permiso para borrar el historial de importaciones.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Se encontró {count, number} {count, plural, =1{error} other{errores}}',

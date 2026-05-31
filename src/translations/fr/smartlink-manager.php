@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Révisions',
     'revision' => 'révision',
     'revisions' => 'révisions',
+    'This {type} doesn\'t have revisions.' => 'Ce {type} n\'a aucune révision.',
     'This field is translated for each site.' => 'Ce champ est traduit pour chaque site.',
     'Are you sure you want to delete this entry?' => 'Voulez-vous vraiment supprimer cette entrée ?',
     'Selection Label' => 'Libellé de la sélection',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} enregistrement(s) analytique(s) supprimé(s) et tous les compteurs de clics réinitialisés.',
     'An unexpected error occurred.' => 'Une erreur inattendue s\'est produite.',
     'No analytics data to export.' => 'Aucune donnée analytique à exporter.',
+    'Analytics tracking is disabled for this smart link.' => 'Le suivi analytique est désactivé pour ce smart link.',
     'Enter custom size (100-4096 pixels):' => 'Entrez une taille personnalisée (100-4096 pixels) :',
     'Please enter a valid size between 100 and 4096 pixels' => 'Veuillez entrer une taille valide entre 100 et 4096 pixels',
     'Reset QR code settings to plugin defaults?' => 'Réinitialiser les paramètres QR Code aux valeurs par défaut du plugin ?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} n\'est pas activé pour ce site.',
+    'Administrative changes are disallowed in this environment.' => 'Les modifications administratives ne sont pas autorisées dans cet environnement.',
+    'User does not have permission to import smart links.' => 'L\'utilisateur n\'a pas la permission d\'importer des smart links.',
+    'User does not have permission to export smart links.' => 'L\'utilisateur n\'a pas la permission d\'exporter des smart links.',
+    'User does not have permission to clear import history.' => 'L\'utilisateur n\'a pas la permission d\'effacer l\'historique des imports.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{erreur} other{erreurs}} trouvée(s)',

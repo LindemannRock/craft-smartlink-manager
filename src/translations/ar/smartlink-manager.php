@@ -78,6 +78,7 @@ return [
     'Revisions' => 'المراجعات',
     'revision' => 'مراجعة',
     'revisions' => 'مراجعات',
+    'This {type} doesn\'t have revisions.' => 'لا يحتوي هذا {type} على مراجعات.',
     'This field is translated for each site.' => 'تتم ترجمة هذا الحقل لكل موقع.',
     'Are you sure you want to delete this entry?' => 'هل أنت متأكد أنك تريد حذف هذا الإدخال؟',
     'Selection Label' => 'تسمية الاختيار',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => 'تم مسح {count} سجل تحليلات وإعادة ضبط جميع عدادات النقرات.',
     'An unexpected error occurred.' => 'حدث خطأ غير متوقع.',
     'No analytics data to export.' => 'لا توجد بيانات تحليلات للتصدير.',
+    'Analytics tracking is disabled for this smart link.' => 'تتبّع التحليلات معطّل لهذا smart link.',
     'Enter custom size (100-4096 pixels):' => 'أدخل حجماً مخصصاً (100-4096 بكسل):',
     'Please enter a valid size between 100 and 4096 pixels' => 'يرجى إدخال حجم صالح بين 100 و4096 بكسل',
     'Reset QR code settings to plugin defaults?' => 'هل تريد إعادة ضبط إعدادات QR Code إلى الإعدادات الافتراضية للإضافة؟',
+    '{pluginName} is not enabled for this site.' => '{pluginName} غير مُفعَّل لهذا الموقع.',
+    'Administrative changes are disallowed in this environment.' => 'التغييرات الإدارية غير مسموح بها في هذه البيئة.',
+    'User does not have permission to import smart links.' => 'ليس لدى المستخدم صلاحية لاستيراد smart links.',
+    'User does not have permission to export smart links.' => 'ليس لدى المستخدم صلاحية لتصدير smart links.',
+    'User does not have permission to clear import history.' => 'ليس لدى المستخدم صلاحية لمسح سجل الاستيراد.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'تم العثور على {count, number} {count, plural, =1{خطأ} other{أخطاء}}',

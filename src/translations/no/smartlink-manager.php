@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisjoner',
     'revision' => 'revisjon',
     'revisions' => 'revisjoner',
+    'This {type} doesn\'t have revisions.' => 'Denne {type} har ingen revisjoner.',
     'This field is translated for each site.' => 'Dette feltet oversettes for hvert nettsted.',
     'Are you sure you want to delete this entry?' => 'Vil du virkelig slette denne oppføringen?',
     'Selection Label' => 'Utvalgsetikett',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} analyser fjernet og alle klikktellere ble nullstilt.',
     'An unexpected error occurred.' => 'Det oppstod en uventet feil.',
     'No analytics data to export.' => 'Ingen analysedata å eksportere.',
+    'Analytics tracking is disabled for this smart link.' => 'Analysesporing er deaktivert for denne smart lenken.',
     'Enter custom size (100-4096 pixels):' => 'Angi tilpasset størrelse (100–4096 piksler):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Angi en gyldig størrelse mellom 100 og 4096 piksler',
     'Reset QR code settings to plugin defaults?' => 'Tilbakestille QR Code-innstillingene til plugin-standardverdiene?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} er ikke aktivert for dette nettstedet.',
+    'Administrative changes are disallowed in this environment.' => 'Administrative endringer er ikke tillatt i dette miljøet.',
+    'User does not have permission to import smart links.' => 'Brukeren har ikke tillatelse til å importere smarte lenker.',
+    'User does not have permission to export smart links.' => 'Brukeren har ikke tillatelse til å eksportere smarte lenker.',
+    'User does not have permission to clear import history.' => 'Brukeren har ikke tillatelse til å tømme importhistorikken.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Fant {count, number} {count, plural, =1{feil} other{feil}}',

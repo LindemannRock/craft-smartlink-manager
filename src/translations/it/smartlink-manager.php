@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisioni',
     'revision' => 'revisione',
     'revisions' => 'revisioni',
+    'This {type} doesn\'t have revisions.' => 'Questo {type} non ha revisioni.',
     'This field is translated for each site.' => 'Questo campo viene tradotto per ogni sito.',
     'Are you sure you want to delete this entry?' => 'Eliminare questa voce?',
     'Selection Label' => 'Etichetta di selezione',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} record Analytics cancellati e tutti i conteggi clic azzerati.',
     'An unexpected error occurred.' => 'Si è verificato un errore imprevisto.',
     'No analytics data to export.' => 'Nessun dato Analytics da esportare.',
+    'Analytics tracking is disabled for this smart link.' => 'Il tracciamento delle analisi è disabilitato per questo smart link.',
     'Enter custom size (100-4096 pixels):' => 'Inserire dimensione personalizzata (100-4096 pixel):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Inserire una dimensione valida tra 100 e 4096 pixel',
     'Reset QR code settings to plugin defaults?' => 'Ripristinare le impostazioni del QR Code ai valori predefiniti del plugin?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} non è abilitato per questo sito.',
+    'Administrative changes are disallowed in this environment.' => 'Le modifiche amministrative non sono consentite in questo ambiente.',
+    'User does not have permission to import smart links.' => 'L\'utente non dispone dell\'autorizzazione per importare smart link.',
+    'User does not have permission to export smart links.' => 'L\'utente non dispone dell\'autorizzazione per esportare smart link.',
+    'User does not have permission to clear import history.' => 'L\'utente non dispone dell\'autorizzazione per cancellare la cronologia importazioni.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Trovati {count, number} {count, plural, =1{errore} other{errori}}',

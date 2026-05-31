@@ -605,21 +605,21 @@ class ImportExportController extends Controller
     private function requireImportPermission(): void
     {
         if (!$this->canImport()) {
-            throw new ForbiddenHttpException('User does not have permission to import smart links.');
+            throw new ForbiddenHttpException(Craft::t('smartlink-manager', 'User does not have permission to import smart links.'));
         }
     }
 
     private function requireExportPermission(): void
     {
         if (!$this->canExport()) {
-            throw new ForbiddenHttpException('User does not have permission to export smart links.');
+            throw new ForbiddenHttpException(Craft::t('smartlink-manager', 'User does not have permission to export smart links.'));
         }
     }
 
     private function requireClearImportHistoryPermission(): void
     {
         if (!$this->canClearHistory()) {
-            throw new ForbiddenHttpException('User does not have permission to clear import history.');
+            throw new ForbiddenHttpException(Craft::t('smartlink-manager', 'User does not have permission to clear import history.'));
         }
     }
 

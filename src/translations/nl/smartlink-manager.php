@@ -78,6 +78,7 @@ return [
     'Revisions' => 'Revisies',
     'revision' => 'revisie',
     'revisions' => 'revisies',
+    'This {type} doesn\'t have revisions.' => 'Deze {type} heeft geen revisies.',
     'This field is translated for each site.' => 'Dit veld wordt voor elke site vertaald.',
     'Are you sure you want to delete this entry?' => 'Weet u zeker dat u dit item wilt verwijderen?',
     'Selection Label' => 'Selectielabel',
@@ -154,9 +155,15 @@ return [
     'Cleared {count} analytics records and reset all click counts.' => '{count} analyserecords gewist en alle kliktellingen gereset.',
     'An unexpected error occurred.' => 'Er is een onverwachte fout opgetreden.',
     'No analytics data to export.' => 'Geen analysegegevens om te exporteren.',
+    'Analytics tracking is disabled for this smart link.' => 'Analytics-tracking is uitgeschakeld voor deze smart link.',
     'Enter custom size (100-4096 pixels):' => 'Voer een aangepaste grootte in (100-4096 pixels):',
     'Please enter a valid size between 100 and 4096 pixels' => 'Voer een geldige grootte in tussen 100 en 4096 pixels',
     'Reset QR code settings to plugin defaults?' => 'QR Code-instellingen terugzetten naar standaardwaarden van de plugin?',
+    '{pluginName} is not enabled for this site.' => '{pluginName} is niet ingeschakeld voor deze site.',
+    'Administrative changes are disallowed in this environment.' => 'Beheerwijzigingen zijn niet toegestaan in deze omgeving.',
+    'User does not have permission to import smart links.' => 'De gebruiker heeft geen toestemming om smart links te importeren.',
+    'User does not have permission to export smart links.' => 'De gebruiker heeft geen toestemming om smart links te exporteren.',
+    'User does not have permission to clear import history.' => 'De gebruiker heeft geen toestemming om de importgeschiedenis te wissen.',
 
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{fout} other{fouten}} gevonden',
