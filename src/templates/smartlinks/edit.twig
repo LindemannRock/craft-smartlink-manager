@@ -464,19 +464,18 @@
                 <dt class="heading">{{ "Status"|t('smartlink-manager') }}</dt>
                 <dd class="value">
                     {% set status = smartLink.getStatus() %}
-                    {% if status == 'expired' %}
-                        <span class="status expired"></span>
-                        <span>{{ 'Expired'|t('smartlink-manager') }}</span>
-                    {% elseif status == 'pending' %}
-                        <span class="status pending"></span>
-                        <span>{{ 'Pending'|t('smartlink-manager') }}</span>
-                    {% elseif status == 'disabled' %}
-                        <span class="status disabled"></span>
-                        <span>{{ 'Disabled'|t('smartlink-manager') }}</span>
-                    {% else %}
-                        <span class="status live"></span>
-                        <span>{{ 'Live'|t('smartlink-manager') }}</span>
-                    {% endif %}
+                    {% set statusColorKey = status in ['disabled', 'expired', 'pending'] ? status : 'enabled' %}
+                    {% set statusLabel = {
+                        enabled: 'Enabled'|t('smartlink-manager'),
+                        disabled: 'Disabled'|t('smartlink-manager'),
+                        expired: 'Expired'|t('smartlink-manager'),
+                        pending: 'Pending'|t('smartlink-manager'),
+                    }[statusColorKey] %}
+                    {% include 'lindemannrock-base/_components/status-dot' with {
+                        value: statusColorKey,
+                        colorSet: 'status',
+                    } only %}
+                    <span>{{ statusLabel }}</span>
                 </dd>
             </div>
     {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
