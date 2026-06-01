@@ -64,7 +64,6 @@ return [
     'Content' => 'Inhoud',
     'Notes' => 'Notities',
     'Limit' => 'Limiet',
-    'Live' => 'Live',
     'Select site' => 'Site kiezen',
     'ID' => 'ID',
     'Created at' => 'Gemaakt op',

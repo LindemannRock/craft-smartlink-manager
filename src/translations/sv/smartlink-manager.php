@@ -64,7 +64,6 @@ return [
     'Content' => 'Innehåll',
     'Notes' => 'Anteckningar',
     'Limit' => 'Gräns',
-    'Live' => 'Live',
     'Select site' => 'Välj webbplats',
     'ID' => 'ID',
     'Created at' => 'Skapad',

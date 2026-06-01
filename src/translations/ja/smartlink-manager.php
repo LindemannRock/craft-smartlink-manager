@@ -64,7 +64,6 @@ return [
     'Content' => 'コンテンツ',
     'Notes' => 'メモ',
     'Limit' => '上限',
-    'Live' => 'ライブ',
     'Select site' => 'サイトを選択する',
     'ID' => 'ID',
     'Created at' => '作成日時',

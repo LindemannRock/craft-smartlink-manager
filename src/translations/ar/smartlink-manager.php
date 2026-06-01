@@ -64,7 +64,6 @@ return [
     'Content' => 'المحتوى',
     'Notes' => 'الملاحظات',
     'Limit' => 'الحد',
-    'Live' => 'Live',
     'Select site' => 'اختيار الموقع',
     'ID' => 'ID',
     'Created at' => 'تم الإنشاء في',

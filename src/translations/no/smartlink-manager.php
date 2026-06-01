@@ -64,7 +64,6 @@ return [
     'Content' => 'Innhold',
     'Notes' => 'Notater',
     'Limit' => 'Grense',
-    'Live' => 'Live',
     'Select site' => 'Velg nettsted',
     'ID' => 'ID',
     'Created at' => 'Opprettet',

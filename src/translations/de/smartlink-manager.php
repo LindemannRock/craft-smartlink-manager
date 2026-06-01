@@ -64,7 +64,6 @@ return [
     'Content' => 'Inhalt',
     'Notes' => 'Notizen',
     'Limit' => 'Limit',
-    'Live' => 'Live',
     'Select site' => 'Website auswählen',
     'ID' => 'ID',
     'Created at' => 'Erstellt am',
