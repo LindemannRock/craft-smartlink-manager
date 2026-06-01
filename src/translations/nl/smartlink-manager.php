@@ -717,7 +717,7 @@ return [
     'Performance' => 'Prestaties',
     'Total interactions tracked' => 'Totaal bijgehouden interacties',
     'Redirects' => 'Doorverwijzingen',
-    'QR Codes' => 'QR Codes',
+    'QR Codes' => 'QR-codes',
     'Devices' => 'Apparaten',
     'Cache Status' => 'Cache-status',
     'Total cached entries' => 'Totaal gecachte vermeldingen',
