@@ -3,7 +3,7 @@
  * SmartLink Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
+ * @copyright Copyright (c) 2025-2026 LindemannRock
  */
 
 namespace lindemannrock\smartlinkmanager\elements;
@@ -21,6 +21,7 @@ use craft\helpers\Html;
 use craft\models\FieldLayout;
 use craft\validators\UniqueValidator;
 use lindemannrock\base\helpers\DateFormatHelper;
+use lindemannrock\base\helpers\SlugHandleHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\db\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\records\SmartLinkContentRecord;
@@ -1135,38 +1136,15 @@ class SmartLink extends Element
      */
     public function beforeValidate(): bool
     {
+        $this->slug = SlugHandleHelper::normalizeSlug($this->slug, (string)$this->title);
+
         // Handle new SmartLinks or duplication
         if (!$this->id) {
             $primarySiteId = Craft::$app->sites->getPrimarySite()->id;
             
             // For new SmartLinks (not duplications), ensure unique slug
             if (!$this->duplicateOf && $this->slug && ($this->siteId === $primarySiteId || !$this->propagating)) {
-                $baseSlug = $this->slug;
-                $testSlug = $baseSlug;
-                $num = 1;
-                
-                // Keep trying until we find a unique slug
-                while (true) {
-                    // Check ALL elements regardless of status (enabled, disabled, pending, expired, trashed)
-                    $exists = (new \craft\db\Query())
-                        ->from('{{%smartlinkmanager}}')
-                        ->where(['slug' => $testSlug])
-                        ->exists();
-                    
-                    if (!$exists) {
-                        break;
-                    }
-                    
-                    $testSlug = $baseSlug . '-' . $num;
-                    $num++;
-                    
-                    // Safety check to prevent infinite loop
-                    if ($num > 100) {
-                        break;
-                    }
-                }
-                
-                $this->slug = $testSlug;
+                $this->slug = SlugHandleHelper::makeUnique(SmartLinkRecord::tableName(), 'slug', $this->slug);
             }
         }
         
@@ -1230,35 +1208,11 @@ class SmartLink extends Element
                 
                 // Generate unique slug only on primary site
                 if ($this->siteId === $primarySiteId) {
-                    $baseSlug = $this->duplicateOf->slug ?: $this->slug;
-                    $testSlug = $baseSlug;
-                    $num = 1;
-                    
-                    // Keep trying until we find a unique slug
-                    while (true) {
-                        // Check ALL elements regardless of status (enabled, disabled, pending, expired, trashed)
-                        $exists = (new \craft\db\Query())
-                            ->from('{{%smartlinkmanager}}')
-                            ->where(['slug' => $testSlug])
-                            ->exists();
-                        
-                        if (!$exists) {
-                            break;
-                        }
-                        
-                        $testSlug = $baseSlug . '-' . $num;
-                        $num++;
-                        
-                        // Safety check to prevent infinite loop
-                        if ($num > 100) {
-                            break;
-                        }
-                    }
-                    
-                    $this->slug = $testSlug;
+                    $baseSlug = SlugHandleHelper::normalizeSlug($this->duplicateOf->slug ?: $this->slug, (string)$this->title);
+                    $this->slug = SlugHandleHelper::makeUnique(SmartLinkRecord::tableName(), 'slug', $baseSlug);
                     
                     // Store the generated slug so other sites can use it
-                    self::$_generatedSlug = $testSlug;
+                    self::$_generatedSlug = $this->slug;
                 }
             } else {
                 // For non-primary sites during propagation, use the generated slug
