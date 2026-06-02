@@ -41,7 +41,7 @@ abstract class TestCase extends IntegrationTestCase
      * table is FK-linked to {{%smartlinkmanager}}.id; deleting the element
      * rows drains the rest via FK CASCADE.
      */
-    protected const MARKER = '__smartlink_test_';
+    protected const MARKER = 'smartlink-test-';
 
     protected SmartLinksService $smartLinks;
     protected AnalyticsService $analytics;
@@ -77,7 +77,7 @@ abstract class TestCase extends IntegrationTestCase
     protected function seedSmartLink(array $overrides = []): SmartLink
     {
         $this->seedCounter++;
-        $marker = self::MARKER . $this->seedCounter . '_' . substr(uniqid('', true), -8);
+        $marker = self::MARKER . $this->seedCounter . '-' . substr(uniqid('', true), -8);
 
         $element = new SmartLink();
         $element->title = $overrides['title'] ?? 'Test SmartLink ' . $this->seedCounter;
@@ -110,7 +110,7 @@ abstract class TestCase extends IntegrationTestCase
     }
 
     /**
-     * DELETE FROM {%smartlinkmanager} WHERE slug LIKE '__smartlink_test_%' —
+     * DELETE FROM {%smartlinkmanager} WHERE slug LIKE 'smartlink-test-%' —
      * the FK CASCADE drains the rest. We route deletion through the elements
      * service so soft-deleted rows in {{%elements}} stay consistent.
      */
