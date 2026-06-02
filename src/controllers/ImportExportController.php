@@ -13,6 +13,7 @@ use craft\web\UploadedFile;
 use lindemannrock\base\helpers\CsvImportHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\ExportHelper;
+use lindemannrock\base\helpers\SlugHandleHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\records\ImportHistoryRecord;
@@ -645,11 +646,7 @@ class ImportExportController extends Controller
 
     private function normalizeSlug(string $slug): string
     {
-        $slug = strtolower(trim($slug));
-        $slug = preg_replace('/[^a-z0-9\-_]/', '-', $slug) ?? '';
-        $slug = preg_replace('/-+/', '-', $slug) ?? '';
-
-        return trim($slug, '-');
+        return SlugHandleHelper::normalizeSlug($slug, '');
     }
 
     private function parseDateOrNull(string $value): ?\DateTime
