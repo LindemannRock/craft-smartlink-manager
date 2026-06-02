@@ -1,5 +1,6 @@
 {% extends "smartlink-manager/_layouts/cp" %}
 {% import "_includes/forms" as forms %}
+{% do view.registerAssetBundle('lindemannrock\\base\\web\\assets\\components\\ComponentsAsset') %}
 {% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
 
 {% set title = smartLink.id ? smartLink.title : "New {singularName}"|t('smartlink-manager', {singularName: smartlinkHelper.displayName}) %}
@@ -510,17 +511,7 @@
         $slugInput.on('blur', function() {
             let slug = $(this).val();
             if (slug) {
-                // Convert to lowercase
-                slug = slug.toLowerCase();
-                // Replace spaces and underscores with hyphens
-                slug = slug.replace(/[\s_]+/g, '-');
-                // Remove any characters that aren't letters, numbers, or hyphens
-                slug = slug.replace(/[^a-z0-9\-]/g, '');
-                // Remove multiple consecutive hyphens
-                slug = slug.replace(/-+/g, '-');
-                // Trim leading/trailing hyphens
-                slug = slug.replace(/^-+|-+$/g, '');
-                $(this).val(slug);
+                $(this).val(window.lrIdentifiers?.normalizeSlug(slug, '') ?? slug);
             }
         });
     });
