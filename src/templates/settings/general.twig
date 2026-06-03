@@ -161,7 +161,7 @@
             {% include 'lindemannrock-base/_components/info-box' with {
                 type: 'warning',
                 margin: 'both',
-                message: "Both {smartName} and {shortName} are set to root URLs (no prefix) and share at least one host. Redirect routes can collide (e.g., <code>/slug</code>), and QR routes can also collide when both plugins use the same QR prefix (e.g., <code>/qr/slug</code>)."|t('smartlink-manager', {smartName: smartlinkHelper.fullName, shortName: shortlinkNameForWarning})|raw
+                message: "Both {smartName} and {shortName} are set to root URLs (no prefix) and share at least one host. Redirect routes can collide (e.g., <code>/slug</code>), and QR routes can also collide when both plugins use the same QR prefix (e.g., <code>/qr/slug</code>)."|t('smartlink-manager', {smartName: smartlinkHelper.fullName|e, shortName: shortlinkNameForWarning|e})|raw
             } %}
         {% elseif possibleHostCollision %}
             {% include 'lindemannrock-base/_components/info-box' with {
@@ -191,7 +191,7 @@
         {% if not currentUsePrefix %}
             {% include 'lindemannrock-base/_components/info-box' with {
                 type: 'info',
-                message: "URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>."|t('smartlink-manager', {singularName: smartlinkHelper.displayName})|raw
+                message: "URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>."|t('smartlink-manager', {singularName: smartlinkHelper.displayName|e})|raw
             } %}
         {% endif %}
 
@@ -270,7 +270,7 @@
         {% if hasMultipleSites and smartlinkBaseUrlValue|trim is not empty and not hasSiteToken %}
             {% include 'lindemannrock-base/_components/info-box' with {
                 type: 'warning',
-                message: "Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing."|t('smartlink-manager', {singularName: smartlinkHelper.displayName, siteHandle: '{siteHandle}'})|raw
+                message: "Multisite detected: <code>{singularName} Base URL</code> is set without a site token. Generated URLs may resolve to only one site. Use a tokenized URL like <code>https://go.example.com/{siteHandle}</code> to preserve site-specific routing."|t('smartlink-manager', {singularName: smartlinkHelper.displayName|e, siteHandle: '{siteHandle}'})|raw
             } %}
         {% endif %}
 
