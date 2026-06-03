@@ -490,7 +490,6 @@ class SmartLink extends Element
     protected static function defineTableAttributes(): array
     {
         return [
-            'title' => ['label' => Craft::t('smartlink-manager', 'Title')],
             'slug' => ['label' => Craft::t('smartlink-manager', 'Slug')],
             'status' => ['label' => Craft::t('smartlink-manager', 'Status')],
             'postDate' => ['label' => Craft::t('smartlink-manager', 'Post Date')],
