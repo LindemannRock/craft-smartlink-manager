@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Não foi possível limpar as análises',
 
     // Frontend
+    'Download our app for the best experience' => 'Transfira a nossa aplicação para obter a melhor experiência',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

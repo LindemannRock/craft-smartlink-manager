@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'فشل في مسح التحليلات',
 
     // Frontend
+    'Download our app for the best experience' => 'نزّل تطبيقنا للحصول على أفضل تجربة',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

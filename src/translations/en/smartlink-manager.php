@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Failed to clear analytics',
 
     // Frontend
+    'Download our app for the best experience' => 'Download our app for the best experience',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

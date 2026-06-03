@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'アナリティクスの削除に失敗しました',
 
     // Frontend
+    'Download our app for the best experience' => '最高の体験のために、アプリをダウンロードしてください',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

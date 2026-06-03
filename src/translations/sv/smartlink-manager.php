@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Det gick inte att rensa analys',
 
     // Frontend
+    'Download our app for the best experience' => 'Ladda ner vår app för bästa upplevelse',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

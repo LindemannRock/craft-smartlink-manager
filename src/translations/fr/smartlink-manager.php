@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Échec de l\'effacement des analytiques',
 
     // Frontend
+    'Download our app for the best experience' => 'Téléchargez notre application pour une expérience optimale',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

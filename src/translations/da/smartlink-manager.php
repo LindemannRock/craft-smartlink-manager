@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Kunne ikke rydde analyserne',
 
     // Frontend
+    'Download our app for the best experience' => 'Download vores app for den bedste oplevelse',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

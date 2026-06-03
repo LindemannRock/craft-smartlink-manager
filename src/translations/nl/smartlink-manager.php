@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Analysegegevens konden niet worden gewist',
 
     // Frontend
+    'Download our app for the best experience' => 'Download onze app voor de beste ervaring',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

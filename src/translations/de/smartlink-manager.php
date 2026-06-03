@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Analysedaten konnten nicht gelöscht werden',
 
     // Frontend
+    'Download our app for the best experience' => 'Laden Sie unsere App für das beste Erlebnis herunter',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',

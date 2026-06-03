@@ -732,6 +732,7 @@ return [
     'Failed to clear analytics' => 'Impossibile svuotare i dati analisi',
 
     // Frontend
+    'Download our app for the best experience' => 'Scarichi la nostra app per un\'esperienza ottimale',
     'App Store' => 'App Store',
     'Google Play' => 'Google Play',
     'AppGallery' => 'AppGallery',
