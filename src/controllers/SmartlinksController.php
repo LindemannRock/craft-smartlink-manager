@@ -570,41 +570,4 @@ class SmartlinksController extends Controller
             );
         }
     }
-
-    /**
-     * View revisions for a smart link
-     *
-     * @param int $smartLinkId
-     * @return Response
-     */
-    public function actionRevisions(int $smartLinkId): Response
-    {
-        $this->requirePermission('smartLinkManager:manageLinks');
-
-        // Get the site
-        $siteParam = Craft::$app->getRequest()->getQueryParam('site');
-        if ($siteParam) {
-            $site = is_numeric($siteParam) ? Craft::$app->getSites()->getSiteById($siteParam) : Craft::$app->getSites()->getSiteByHandle($siteParam);
-            if (!$site) {
-                throw new \yii\web\BadRequestHttpException('Invalid site.');
-            }
-        } else {
-            $site = Craft::$app->getSites()->getCurrentSite();
-        }
-
-        // Get the smart link
-        $smartLink = SmartLink::find()
-            ->id($smartLinkId)
-            ->siteId($site->id)
-            ->status(null)
-            ->one();
-
-        if (!$smartLink) {
-            throw new \yii\web\NotFoundHttpException(Craft::t('smartlink-manager', 'Smart link not found'));
-        }
-
-        return $this->renderTemplate('smartlink-manager/smartlinks/revisions', [
-            'smartLink' => $smartLink,
-        ]);
-    }
 }
