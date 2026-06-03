@@ -81,7 +81,7 @@
 				{% if smartLink.description %}
 					<p class="text-gray-600 mb-8 leading-relaxed">{{ smartLink.description }}</p>
 					{% else %}
-					{# <p class="text-gray-600 mb-8 leading-relaxed">{{ "Download our app for the best experience"|t('smartlink-manager') }}</p> #}
+					<p class="text-gray-600 mb-8 leading-relaxed">{{ "Download our app for the best experience"|t('smartlink-manager') }}</p>
 				{% endif %}
 
 				{# App store buttons #}
@@ -149,13 +149,9 @@
 				{# QR Code section #}
 				{% if smartLink.qrCodeEnabled %}
 					<div class="mt-12 pt-12 border-t border-gray-200">
-						{# <h2 class="text-xl font-semibold mb-6 text-gray-900">{{ "Scan to Download"|t('smartlink-manager') }}</h2> #}
-
 						<div class="">
 							<img src="{{ smartLink.getQrCodeUrl() }}" alt="QR Code" width="180" height="180" class="mx-auto">
 						</div>
-
-						{# <p class="text-sm text-gray-600">{{ "Scan this QR code with your phone to download the app"|t('smartlink-manager') }}</p> #}
 					</div>
 				{% endif %}
 			</div>
