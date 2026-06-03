@@ -86,6 +86,12 @@ class AnalyticsExportService
             }
         }
 
+        // Pre-fetch all sites keyed by ID (cached by Craft's Sites service)
+        $sitesById = [];
+        foreach (Craft::$app->getSites()->getAllSites() as $site) {
+            $sitesById[$site->id] = $site;
+        }
+
         $exportData = [];
         foreach ($results as $row) {
             $smartLink = $smartLinks[$row['linkId']] ?? null;
@@ -106,7 +112,7 @@ class AnalyticsExportService
             $siteName = '';
             $smartLinkUrl = '';
             if (!empty($row['siteId'])) {
-                $site = Craft::$app->getSites()->getSiteById($row['siteId']);
+                $site = $sitesById[$row['siteId']] ?? null;
                 $siteName = $site ? $site->name : '';
                 $path = $usePrefix ? "{$slugPrefix}/{$smartLink->slug}" : $smartLink->slug;
                 $smartLinkUrl = $settings->buildPublicUrl($path, (int) $row['siteId']);
