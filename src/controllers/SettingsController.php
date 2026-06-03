@@ -91,21 +91,11 @@ class SettingsController extends Controller
         $plugin = SmartLinkManager::getInstance();
         $settings = $plugin->getSettings();
 
-        // Debug: Make absolutely sure we have a settings object
-        if (!$settings instanceof Settings) {
-            throw new \Exception('Settings is not an instance of Settings class');
-        }
-
-        // Minimal test
-        try {
-            return $this->renderTemplate('smartlink-manager/settings/general', [
-                'settings' => $settings,
-                'plugin' => $plugin,
-                'readOnly' => $this->readOnly,
-            ]);
-        } catch (\Exception $e) {
-            throw new \Exception('Template render error: ' . $e->getMessage());
-        }
+        return $this->renderTemplate('smartlink-manager/settings/general', [
+            'settings' => $settings,
+            'plugin' => $plugin,
+            'readOnly' => $this->readOnly,
+        ]);
     }
 
     /**
