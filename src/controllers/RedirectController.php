@@ -188,7 +188,7 @@ class RedirectController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
         if (!$settings->isSiteEnabled($siteId)) {
             $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $siteId, 'slug' => $slug]);
-            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
+            $redirectUrl = $this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl());
             return $this->redirect($redirectUrl);
         }
 
@@ -210,7 +210,7 @@ class RedirectController extends Controller
 
         if (!$smartLink) {
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
+            $redirectUrl = $this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl());
             return $this->redirect($redirectUrl);
         }
 
@@ -220,7 +220,7 @@ class RedirectController extends Controller
                 'siteId' => $smartLink->siteId,
                 'slug' => $slug,
             ]);
-            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
+            $redirectUrl = $this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl());
             return $this->redirect($redirectUrl);
         }
 
@@ -228,7 +228,7 @@ class RedirectController extends Controller
         if ($smartLink->getStatus() === SmartLink::STATUS_DISABLED) {
             $this->logInfo('Smart link disabled', ['slug' => $slug]);
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
+            $redirectUrl = $this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl());
             return $this->redirect($redirectUrl);
         }
 
@@ -237,7 +237,7 @@ class RedirectController extends Controller
             $this->logInfo('Smart link expired', ['slug' => $slug]);
             // Redirect to not found
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
+            $redirectUrl = $this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl());
             return $this->redirect($redirectUrl);
         }
 
@@ -245,7 +245,7 @@ class RedirectController extends Controller
         if ($smartLink->getStatus() === SmartLink::STATUS_PENDING) {
             $this->logInfo('Smart link pending', ['slug' => $slug]);
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
+            $redirectUrl = $this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl());
             return $this->redirect($redirectUrl);
         }
 
@@ -363,7 +363,7 @@ class RedirectController extends Controller
     {
         $settings = SmartLinkManager::$plugin->getSettings();
 
-        return $this->redirect($this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/'));
+        return $this->redirect($this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl()));
     }
 
     /**

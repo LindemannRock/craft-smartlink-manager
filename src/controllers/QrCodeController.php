@@ -375,7 +375,7 @@ class QrCodeController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
 
         return $this->redirect(
-            UrlSafetyHelper::sanitizeRedirectUrl($settings->notFoundRedirectUrl ?: '/')
+            UrlSafetyHelper::sanitizeRedirectUrl($settings->getResolvedNotFoundRedirectUrl())
         );
     }
 }
