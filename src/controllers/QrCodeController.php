@@ -3,7 +3,7 @@
  * SmartLink Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
+ * @copyright Copyright (c) 2025-2026 LindemannRock
  */
 
 namespace lindemannrock\smartlinkmanager\controllers;
@@ -12,6 +12,7 @@ use Craft;
 use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\SafeSegmentHelper;
+use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -372,12 +373,9 @@ class QrCodeController extends Controller
     private function redirectToNotFound(): Response
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
 
-        if (strpos($redirectUrl, '://') === false && strpos($redirectUrl, '/') !== 0) {
-            $redirectUrl = '/' . $redirectUrl;
-        }
-
-        return $this->redirect($redirectUrl);
+        return $this->redirect(
+            UrlSafetyHelper::sanitizeRedirectUrl($settings->notFoundRedirectUrl ?: '/')
+        );
     }
 }

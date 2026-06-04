@@ -3,7 +3,7 @@
  * SmartLink Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
+ * @copyright Copyright (c) 2025-2026 LindemannRock
  */
 
 namespace lindemannrock\smartlinkmanager\controllers;
@@ -12,6 +12,7 @@ use Craft;
 use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
+use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -187,7 +188,7 @@ class RedirectController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
         if (!$settings->isSiteEnabled($siteId)) {
             $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $siteId, 'slug' => $slug]);
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
             return $this->redirect($redirectUrl);
         }
 
@@ -209,7 +210,7 @@ class RedirectController extends Controller
 
         if (!$smartLink) {
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
             return $this->redirect($redirectUrl);
         }
 
@@ -219,7 +220,7 @@ class RedirectController extends Controller
                 'siteId' => $smartLink->siteId,
                 'slug' => $slug,
             ]);
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
             return $this->redirect($redirectUrl);
         }
 
@@ -227,7 +228,7 @@ class RedirectController extends Controller
         if ($smartLink->getStatus() === SmartLink::STATUS_DISABLED) {
             $this->logInfo('Smart link disabled', ['slug' => $slug]);
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
             return $this->redirect($redirectUrl);
         }
 
@@ -236,7 +237,7 @@ class RedirectController extends Controller
             $this->logInfo('Smart link expired', ['slug' => $slug]);
             // Redirect to not found
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
             return $this->redirect($redirectUrl);
         }
 
@@ -244,7 +245,7 @@ class RedirectController extends Controller
         if ($smartLink->getStatus() === SmartLink::STATUS_PENDING) {
             $this->logInfo('Smart link pending', ['slug' => $slug]);
             $settings = SmartLinkManager::$plugin->getSettings();
-            $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
+            $redirectUrl = $this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/');
             return $this->redirect($redirectUrl);
         }
 
@@ -361,13 +362,8 @@ class RedirectController extends Controller
     private function redirectToNotFound(): Response
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $redirectUrl = $settings->notFoundRedirectUrl ?: '/';
 
-        if (strpos($redirectUrl, '://') === false && strpos($redirectUrl, '/') !== 0) {
-            $redirectUrl = '/' . $redirectUrl;
-        }
-
-        return $this->redirect($redirectUrl);
+        return $this->redirect($this->_sanitizeUrl($settings->notFoundRedirectUrl ?: '/'));
     }
 
     /**
@@ -447,20 +443,10 @@ class RedirectController extends Controller
      */
     private function _sanitizeUrl(string $url): string
     {
-        $url = trim($url);
-
-        // Allow relative URLs
-        if (str_starts_with($url, '/')) {
-            return $url;
+        if (!UrlSafetyHelper::isSafeRedirectUrl($url)) {
+            $this->logWarning('Blocked unsafe URL scheme', ['url' => $url]);
         }
 
-        // Allow http and https
-        if (preg_match('#^https?://#i', $url)) {
-            return $url;
-        }
-
-        // Reject everything else (javascript:, data:, vbscript:, etc.)
-        $this->logWarning('Blocked unsafe URL scheme', ['url' => $url]);
-        return '/';
+        return UrlSafetyHelper::sanitizeRedirectUrl($url);
     }
 }

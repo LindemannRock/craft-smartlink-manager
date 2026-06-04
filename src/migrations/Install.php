@@ -3,7 +3,7 @@
  * SmartLink Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
+ * @copyright Copyright (c) 2025-2026 LindemannRock
  */
 
 namespace lindemannrock\smartlinkmanager\migrations;
@@ -125,7 +125,7 @@ class Install extends Migration
                 'latitude' => $this->decimal(10, 8)->null(),
                 'longitude' => $this->decimal(11, 8)->null(),
                 'language' => $this->string(10)->null(),
-                'referrer' => $this->string()->null(),
+                'referrer' => $this->text()->null(),
                 'ip' => $this->string(64)->null(),
                 'userAgent' => $this->text()->null(),
                 'metadata' => $this->text()->null(),
