@@ -11,6 +11,7 @@ namespace lindemannrock\smartlinkmanager\controllers;
 use Craft;
 use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
+use lindemannrock\base\helpers\AssetVolumeHelper;
 use lindemannrock\base\helpers\CpNavHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -280,13 +281,21 @@ class SmartlinksController extends Controller
             $qrCodeFormat = $request->getBodyParam('qrCodeFormat');
             $smartLink->qrCodeFormat = $qrCodeFormat ? $qrCodeFormat : null;
 
-            // QR logo (elementSelectField returns an array)
-            $qrLogoIds = $request->getBodyParam('qrLogoId');
-            $smartLink->qrLogoId = is_array($qrLogoIds) ? ($qrLogoIds[0] ?? null) : (empty($qrLogoIds) ? null : (int)$qrLogoIds);
+            // Validate qrLogoId server-side against the configured volume + the user's
+            // viewAssets permission. The field's source restriction is client-side only,
+            // so a crafted POST could otherwise embed any asset as the QR logo.
+            $smartLink->qrLogoId = AssetVolumeHelper::validateAssetId(
+                $request->getBodyParam('qrLogoId'),
+                SmartLinkManager::$plugin->getSettings()->qrLogoVolumeUid,
+            );
 
-            // Smart Link image (elementSelectField returns an array)
-            $imageIds = $request->getBodyParam('imageId');
-            $smartLink->imageId = is_array($imageIds) ? ($imageIds[0] ?? null) : (empty($imageIds) ? null : (int)$imageIds);
+            // Validate imageId server-side against the configured image volume + the
+            // user's viewAssets permission. The field's source restriction is
+            // client-side only, and the image renders on the public landing page.
+            $smartLink->imageId = AssetVolumeHelper::validateAssetId(
+                $request->getBodyParam('imageId'),
+                SmartLinkManager::$plugin->getSettings()->imageVolumeUid,
+            );
 
             // Smart Link image size
             $smartLink->imageSize = $request->getBodyParam('imageSize', 'xl');

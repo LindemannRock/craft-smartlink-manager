@@ -10,6 +10,7 @@ use craft\helpers\Db;
 use craft\helpers\StringHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
+use lindemannrock\base\helpers\AssetVolumeHelper;
 use lindemannrock\base\helpers\CsvImportHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\ExportHelper;
@@ -579,7 +580,12 @@ class ImportExportController extends Controller
         $smartLink->windowsUrl = (string)($row['windowsUrl'] ?? '');
         $smartLink->macUrl = (string)($row['macUrl'] ?? '');
         $smartLink->fallbackUrl = (string)($row['fallbackUrl'] ?? '');
-        $smartLink->imageId = !empty($row['imageId']) ? (int)$row['imageId'] : null;
+        // Validate the imported image against the configured volume + the importing
+        // user's viewAssets permission, rather than trusting the raw asset ID.
+        $smartLink->imageId = AssetVolumeHelper::validateAssetId(
+            $row['imageId'] ?? null,
+            SmartLinkManager::$plugin->getSettings()->imageVolumeUid,
+        );
         $smartLink->imageSize = in_array((string)($row['imageSize'] ?? ''), ['xl', 'lg', 'md', 'sm'], true)
             ? (string)$row['imageSize']
             : 'xl';
@@ -595,7 +601,13 @@ class ImportExportController extends Controller
             $smartLink->qrCodeFormat = in_array((string)($row['qrCodeFormat'] ?? ''), ['png', 'svg'], true)
                 ? (string)$row['qrCodeFormat']
                 : null;
-            $smartLink->qrLogoId = !empty($row['qrLogoId']) ? (int)$row['qrLogoId'] : null;
+            // Validate the imported logo against the configured volume + the
+            // importing user's viewAssets permission, rather than trusting the
+            // raw asset ID from the CSV row.
+            $smartLink->qrLogoId = AssetVolumeHelper::validateAssetId(
+                $row['qrLogoId'] ?? null,
+                SmartLinkManager::$plugin->getSettings()->qrLogoVolumeUid,
+            );
             $smartLink->hideTitle = (bool)($row['hideTitle'] ?? false);
             $smartLink->languageDetection = (bool)($row['languageDetection'] ?? false);
             $smartLink->postDate = $row['postDate'] instanceof \DateTime ? $row['postDate'] : null;
