@@ -2,6 +2,23 @@
 
 SmartLink Manager provides console commands for security setup and testing.
 
+## Console Help
+
+Use the plugin-level help command to see the available SmartLink Manager commands and focused guidance for each workflow:
+
+```bash title="DDEV"
+ddev craft smartlink-manager/help
+ddev craft smartlink-manager/help security/generate-salt
+ddev craft smartlink-manager/help demo/add-qr-click
+```
+
+Craft's native command help is still available when you need the exact Yii option signature:
+
+```bash title="DDEV"
+ddev craft help smartlink-manager/security/generate-salt
+ddev craft help smartlink-manager/demo/add-qr-click
+```
+
 ## Generate IP Hash Salt @since(5.1.0)
 
 Generates a cryptographically secure 64-character hex salt for IP address hashing and optionally writes it to your `.env` file.
@@ -29,6 +46,9 @@ The command will:
 ## Add Demo QR Click
 
 Adds a simulated QR code scan to a smart link's analytics. Useful for testing analytics tracking and QR scan reporting during development.
+
+> [!WARNING]
+> This command writes analytics data. Use it in development or test environments unless you intentionally want demo rows in production analytics.
 
 ```bash title="PHP"
 php craft smartlink-manager/demo/add-qr-click --id=42
