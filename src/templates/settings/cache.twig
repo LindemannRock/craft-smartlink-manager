@@ -47,7 +47,9 @@
 
         <div id="cache-location-file" class="{{ (settings.cacheStorageMethod ?? 'file') == 'redis' ? 'hidden' }}">
             {% include 'lindemannrock-base/_components/info-box' with {
-                message: '<strong>' ~ 'Cache Location'|t('smartlink-manager') ~ ':</strong> <code>' ~ smartlinkHelper.cacheBasePath ~ '</code>',
+                message: '<strong>Cache Location:</strong> <code>{path}</code>'|t('smartlink-manager', {
+                    path: smartlinkHelper.cacheBasePath
+                }),
                 type: 'info'
             } %}
         </div>
@@ -56,12 +58,12 @@
             {% if craftUsesRedis %}
                 {% include 'lindemannrock-base/_components/info-box' with {
                     type: 'success',
-                    message: '<strong>' ~ 'Cache Location'|t('smartlink-manager') ~ ':</strong> ' ~ "Using Craft's configured Redis cache from <code>config/app.php</code>"|t('smartlink-manager')
+                    message: "<strong>Cache Location:</strong> Using Craft's configured Redis cache from <code>config/app.php</code>"|t('smartlink-manager')
                 } %}
             {% else %}
                 {% include 'lindemannrock-base/_components/info-box' with {
                     type: 'warning',
-                    message: '<strong>' ~ 'Redis Not Configured'|t('smartlink-manager') ~ ':</strong> ' ~ "To use Redis caching, install <code>yiisoft/yii2-redis</code> and configure it in <code>config/app.php</code>."|t('smartlink-manager') ~ ' <a href="https://craftcms.com/docs/5.x/reference/config/app.html#cache" target="_blank" rel="noopener">' ~ 'Learn more'|t('smartlink-manager') ~ '</a>'
+                    message: '<strong>Redis Not Configured:</strong> To use Redis caching, install <code>yiisoft/yii2-redis</code> and configure it in <code>config/app.php</code>. <a href="https://craftcms.com/docs/5.x/reference/config/app.html#cache" target="_blank" rel="noopener">Learn more</a>'|t('smartlink-manager')
                 } %}
             {% endif %}
         </div>
@@ -85,7 +87,7 @@
         <div id="qr-cache-settings" class="{{ not (settings.enableQrCodeCache ?? true) ? 'hidden' }}">
             {{ forms.textField({
                 label: "QR Code Cache Duration"|t('smartlink-manager'),
-                instructions: ('Cache duration in seconds. Current:'|t('smartlink-manager') ~ ' <strong id="qrCodeCacheDuration-human"></strong>')|raw,
+                instructions: 'Cache duration in seconds. Current: <strong id="qrCodeCacheDuration-human"></strong>'|t('smartlink-manager')|raw,
                 id: 'qrCodeCacheDuration',
                 name: 'settings[qrCodeCacheDuration]',
                 value: settings.qrCodeCacheDuration ?? 86400,
@@ -120,7 +122,7 @@
             <div id="device-cache-settings" class="{{ not (settings.cacheDeviceDetection ?? true) ? 'hidden' }}">
                 {{ forms.textField({
                     label: "Device Detection Cache Duration"|t('smartlink-manager'),
-                    instructions: ('Cache duration in seconds. Current:'|t('smartlink-manager') ~ ' <strong id="deviceDetectionCacheDuration-human"></strong>')|raw,
+                    instructions: 'Cache duration in seconds. Current: <strong id="deviceDetectionCacheDuration-human"></strong>'|t('smartlink-manager')|raw,
                     id: 'deviceDetectionCacheDuration',
                     name: 'settings[deviceDetectionCacheDuration]',
                     value: settings.deviceDetectionCacheDuration ?? 3600,
@@ -135,10 +137,10 @@
                 }) }}
 
                 {% include 'lindemannrock-base/_components/info-box' with {
-                    message: '<strong>' ~ 'How it works'|t('smartlink-manager') ~ ':</strong><br>'
-                        ~ '• ' ~ 'Device detection parses user-agent strings to identify devices, browsers, and operating systems'|t('smartlink-manager') ~ '<br>'
-                        ~ '• ' ~ 'Results are cached to avoid re-parsing the same user-agent repeatedly'|t('smartlink-manager') ~ '<br>'
-                        ~ '• ' ~ 'Recommended to keep enabled for production sites'|t('smartlink-manager')
+                    message: '<strong>How it works:</strong><br>
+• Device detection parses user-agent strings to identify devices, browsers, and operating systems<br>
+• Results are cached to avoid re-parsing the same user-agent repeatedly<br>
+• Recommended to keep enabled for production sites'|t('smartlink-manager')
                 } %}
             </div>
         {% else %}
@@ -148,9 +150,9 @@
 
             <div class="field">
                 <p class="light" style="color: #999;">
-                    {{ "Device detection caching is only available when Analytics is enabled. Go to"|t('smartlink-manager') }}
-                    <a href="{{ url('smartlink-manager/settings/analytics') }}">{{ "Analytics Settings"|t('smartlink-manager') }}</a>
-                    {{ "to enable analytics."|t('smartlink-manager') }}
+                    {{ 'Device detection caching is only available when Analytics is enabled. Go to {link} to enable analytics.'|t('smartlink-manager', {
+                        link: '<a href="' ~ url('smartlink-manager/settings/analytics') ~ '">' ~ 'Analytics Settings'|t('smartlink-manager') ~ '</a>'
+                    })|raw }}
                 </p>
             </div>
         {% endif %}
@@ -160,14 +162,18 @@
 
 {% js %}
 // Toggle cache location info boxes based on storage method selection
-$('#cacheStorageMethod').on('change', function() {
-    const value = $(this).val();
+const cacheStorageMethod = document.getElementById('cacheStorageMethod');
+const cacheLocationFile = document.getElementById('cache-location-file');
+const cacheLocationRedis = document.getElementById('cache-location-redis');
+
+cacheStorageMethod?.addEventListener('change', function() {
+    const value = this.value;
     if (value === 'redis') {
-        $('#cache-location-file').addClass('hidden');
-        $('#cache-location-redis').removeClass('hidden');
+        cacheLocationFile?.classList.add('hidden');
+        cacheLocationRedis?.classList.remove('hidden');
     } else {
-        $('#cache-location-redis').addClass('hidden');
-        $('#cache-location-file').removeClass('hidden');
+        cacheLocationRedis?.classList.add('hidden');
+        cacheLocationFile?.classList.remove('hidden');
     }
 });
 
@@ -199,15 +205,28 @@ function secondsToHuman(seconds) {
 }
 
 // Update human-readable duration on input change
-$('#qrCodeCacheDuration').on('input', function() {
-    $('#qrCodeCacheDuration-human').text(secondsToHuman($(this).val()));
+const qrCodeCacheDuration = document.getElementById('qrCodeCacheDuration');
+const qrCodeCacheDurationHuman = document.getElementById('qrCodeCacheDuration-human');
+const deviceDetectionCacheDuration = document.getElementById('deviceDetectionCacheDuration');
+const deviceDetectionCacheDurationHuman = document.getElementById('deviceDetectionCacheDuration-human');
+
+qrCodeCacheDuration?.addEventListener('input', function() {
+    if (qrCodeCacheDurationHuman) {
+        qrCodeCacheDurationHuman.textContent = secondsToHuman(this.value);
+    }
 });
 
-$('#deviceDetectionCacheDuration').on('input', function() {
-    $('#deviceDetectionCacheDuration-human').text(secondsToHuman($(this).val()));
+deviceDetectionCacheDuration?.addEventListener('input', function() {
+    if (deviceDetectionCacheDurationHuman) {
+        deviceDetectionCacheDurationHuman.textContent = secondsToHuman(this.value);
+    }
 });
 
 // Initialize on page load
-$('#qrCodeCacheDuration-human').text(secondsToHuman($('#qrCodeCacheDuration').val()));
-$('#deviceDetectionCacheDuration-human').text(secondsToHuman($('#deviceDetectionCacheDuration').val()));
+if (qrCodeCacheDurationHuman && qrCodeCacheDuration) {
+    qrCodeCacheDurationHuman.textContent = secondsToHuman(qrCodeCacheDuration.value);
+}
+if (deviceDetectionCacheDurationHuman && deviceDetectionCacheDuration) {
+    deviceDetectionCacheDurationHuman.textContent = secondsToHuman(deviceDetectionCacheDuration.value);
+}
 {% endjs %}
