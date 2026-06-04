@@ -31,15 +31,15 @@ The command will:
 Adds a simulated QR code scan to a smart link's analytics. Useful for testing analytics tracking and QR scan reporting during development.
 
 ```bash title="PHP"
-php craft smartlink-manager/demo/add-qr-click [id]
+php craft smartlink-manager/demo/add-qr-click --id=42
 ```
 
 ```bash title="DDEV"
-ddev craft smartlink-manager/demo/add-qr-click [id]
+ddev craft smartlink-manager/demo/add-qr-click --id=42
 ```
 
-| Argument | Type | Description |
-|----------|------|-------------|
-| `id` | `int` | Smart link ID. If omitted, uses the first smart link found |
+| Option | Type | Description |
+|--------|------|-------------|
+| `--id` | `int` | Optional smart link ID. If omitted, uses the first smart link found |
 
 The command creates a simulated iPhone/iOS QR scan event with device info and saves it to analytics.

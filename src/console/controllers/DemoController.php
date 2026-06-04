@@ -21,15 +21,44 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 class DemoController extends Controller
 {
     /**
+     * @var int|null Smart link ID to receive the demo QR click.
+     * @since 5.29.0
+     */
+    public ?int $smartLinkId = null;
+
+    /**
+     * @inheritdoc
+     */
+    public function options($actionID): array
+    {
+        $options = parent::options($actionID);
+
+        if ($actionID === 'add-qr-click') {
+            $options[] = 'smartLinkId';
+        }
+
+        return $options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function optionAliases(): array
+    {
+        $aliases = parent::optionAliases();
+        $aliases['id'] = 'smartLinkId';
+        return $aliases;
+    }
+
+    /**
      * Add a demo QR code click
      *
-     * @param int|null $id Smart link ID
      * @return int
      */
-    public function actionAddQrClick($id = null): int
+    public function actionAddQrClick(): int
     {
-        if ($id) {
-            $smartLink = SmartLink::find()->id($id)->one();
+        if ($this->smartLinkId) {
+            $smartLink = SmartLink::find()->id($this->smartLinkId)->one();
         } else {
             $smartLink = SmartLink::find()->one();
         }
@@ -71,7 +100,7 @@ class DemoController extends Controller
             ]
         );
         
-        $this->stdout("✅ Demo QR code click added successfully!\n", Console::FG_GREEN);
+        $this->stdout("Demo QR code click added successfully!\n", Console::FG_GREEN);
         $this->stdout("Go to SmartLink Manager > {$smartLink->title} > Analytics tab to see it\n");
         
         return self::EXIT_CODE_NORMAL;
