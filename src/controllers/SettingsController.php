@@ -11,6 +11,7 @@ namespace lindemannrock\smartlinkmanager\controllers;
 use Craft;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
+use lindemannrock\base\helpers\SettingsPostHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\jobs\CleanupAnalyticsJob;
@@ -352,7 +353,7 @@ class SettingsController extends Controller
         // Load current settings from database
         $settings = Settings::loadFromDatabase();
 
-        $settingsData = Craft::$app->getRequest()->getBodyParam('settings');
+        $settingsData = (array)Craft::$app->getRequest()->getBodyParam('settings', []);
 
         // Handle enabledSites checkbox group
         if (isset($settingsData['enabledSites'])) {
@@ -379,13 +380,13 @@ class SettingsController extends Controller
         }
 
         // Fix color fields - add # if missing
-        if (isset($settingsData['defaultQrColor']) && !str_starts_with($settingsData['defaultQrColor'], '#')) {
+        if (isset($settingsData['defaultQrColor']) && is_string($settingsData['defaultQrColor']) && !str_starts_with($settingsData['defaultQrColor'], '#')) {
             $settingsData['defaultQrColor'] = '#' . $settingsData['defaultQrColor'];
         }
-        if (isset($settingsData['defaultQrBgColor']) && !str_starts_with($settingsData['defaultQrBgColor'], '#')) {
+        if (isset($settingsData['defaultQrBgColor']) && is_string($settingsData['defaultQrBgColor']) && !str_starts_with($settingsData['defaultQrBgColor'], '#')) {
             $settingsData['defaultQrBgColor'] = '#' . $settingsData['defaultQrBgColor'];
         }
-        if (isset($settingsData['qrEyeColor'])) {
+        if (isset($settingsData['qrEyeColor']) && is_string($settingsData['qrEyeColor'])) {
             if (empty($settingsData['qrEyeColor'])) {
                 // If empty, set to null
                 $settingsData['qrEyeColor'] = null;
@@ -395,54 +396,28 @@ class SettingsController extends Controller
             }
         }
 
-        // Restrict to attributes belonging to the current settings section
         $section = $this->_validSettingsSection();
-        $allowedAttributes = $this->_validationAttributesForSection($section);
-        if ($allowedAttributes) {
-            $settingsData = array_intersect_key($settingsData, array_flip($allowedAttributes));
-        }
-
-        // Only update fields that were posted and are not overridden by config
-        foreach ($settingsData as $key => $value) {
-            if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {
-                // Multi-state selects (e.g. "Use global default" = '') need '' → null
-                // so nullable properties hold null, not a coerced false / 0 / ''.
-                if ($value === '') {
-                    $type = (new \ReflectionProperty($settings, $key))->getType();
-                    if ($type instanceof \ReflectionNamedType && $type->allowsNull()) {
-                        $value = null;
-                    }
-                }
-                // Handle special array field conversions
-                if ($key === 'enabledIntegrations') {
-                    // Decode JSON string from hidden field
-                    $settings->enabledIntegrations = is_string($value) ? json_decode($value, true) : (is_array($value) ? $value : []);
-                } elseif ($key === 'redirectManagerEvents') {
-                    // Already an array from checkbox fields
-                    $settings->redirectManagerEvents = is_array($value) ? $value : [];
-                } else {
-                    // Check for setter method first (handles array conversions, etc.)
-                    $setterMethod = 'set' . ucfirst($key);
-                    if (method_exists($settings, $setterMethod)) {
-                        $settings->$setterMethod($value);
-                    } else {
-                        $settings->$key = $value;
-                    }
-                }
-            }
-        }
+        $result = SettingsPostHelper::apply(
+            model: $settings,
+            postedValues: $settingsData,
+            allowedAttributes: $this->_validationAttributesForSection($section),
+            isOverridden: fn(string $attribute): bool => $settings->isOverriddenByConfig($attribute),
+            adapters: [
+                'enabledIntegrations' => static fn(mixed $value): array => is_string($value)
+                    ? (json_decode($value, true) ?: [])
+                    : (is_array($value) ? $value : []),
+                'redirectManagerEvents' => static fn(mixed $value): array => is_array($value) ? $value : [],
+                'seomaticTrackingEvents' => static fn(mixed $value): array => is_array($value) ? $value : [],
+            ],
+        );
 
         // Debug: Log what's in settings after updates
         $this->logDebug('Settings after updates', ['enabledSites' => $settings->enabledSites]);
 
         // Validate only fields belonging to the current settings section.
         // This prevents unrelated tabs from blocking save with non-inline errors.
-        $attributesToValidate = $allowedAttributes;
-        $attributesToValidate = array_values(array_filter(
-            $attributesToValidate,
-            fn(string $attribute): bool => !$settings->isOverriddenByConfig($attribute),
-        ));
-        if (!$settings->validate($attributesToValidate)) {
+        $attributesToValidate = $result->attributesToValidate;
+        if ($result->hasErrors || !$settings->validate($attributesToValidate)) {
             // Log validation errors for debugging
             $this->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
 

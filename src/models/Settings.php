@@ -421,7 +421,7 @@ class Settings extends Model
             [['qrPrefix'], RoutePrefixValidator::class, 'translationCategory' => 'smartlink-manager'],
             [['slugPrefix'], 'validateSlugPrefix'],
             [['qrPrefix'], 'validateQrPrefix'],
-            [['enableAnalytics', 'enableGeoDetection', 'cacheDeviceDetection', 'includeDisabledInExport', 'includeExpiredInExport', 'anonymizeIpAddress'], 'boolean'],
+            [['enableAnalytics', 'enableGeoDetection', 'enableQrCodeCache', 'cacheDeviceDetection', 'includeDisabledInExport', 'includeExpiredInExport', 'anonymizeIpAddress'], 'boolean'],
             [['analyticsRetention', 'defaultQrSize', 'qrCodeCacheDuration', 'deviceDetectionCacheDuration'], 'integer'],
             [['analyticsRetention'], 'integer', 'min' => 0, 'max' => 3650], // 0 for unlimited, up to 10 years
             [['defaultQrSize'], 'integer', 'min' => 100, 'max' => 1000],

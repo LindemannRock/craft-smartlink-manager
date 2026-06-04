@@ -175,6 +175,14 @@ If a date-format setting does not appear to change the index:
 
 ---
 
+## Settings Save Shows Numeric Field Errors
+
+Numeric settings such as QR cache duration, device detection cache duration, QR size, logo size, and analytics retention must be whole numbers within the range shown in the field instructions.
+
+If a settings save fails, keep the submitted form open and check the inline field errors. SmartLink Manager validates posted values before saving and does not partially save invalid settings.
+
+---
+
 ## Multisite Custom Domain Resolves to Wrong Site
 
 **Symptom:** In multisite, generated SmartLink URLs all resolve to one site unless the URL contains a site segment.
