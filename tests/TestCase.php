@@ -12,6 +12,7 @@ namespace lindemannrock\smartlinkmanager\tests;
 
 use Craft;
 use lindemannrock\base\testing\IntegrationTestCase;
+use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\services\AnalyticsService;
 use lindemannrock\smartlinkmanager\services\SmartLinksService;
@@ -127,12 +128,16 @@ abstract class TestCase extends IntegrationTestCase
             $settings->{$attribute} = $value;
         }
 
+        DateFormatHelper::clearConfigCache('smartlink-manager');
+
         try {
             return $callback();
         } finally {
             foreach ($previous as $attribute => $value) {
                 $settings->{$attribute} = $value;
             }
+
+            DateFormatHelper::clearConfigCache('smartlink-manager');
         }
     }
 
