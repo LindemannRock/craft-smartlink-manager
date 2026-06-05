@@ -96,8 +96,9 @@ class SmartLinkType extends BaseElementLinkType
             }
         }
 
-        // Get site for the field
-        $currentSite = Craft::$app->sites->getSiteById($siteId);
+        // Get site for the field, falling back to the current site if the requested
+        // site id is stale/deleted (avoids a fatal on the null dereferences below).
+        $currentSite = Craft::$app->sites->getSiteById($siteId) ?? Craft::$app->sites->getCurrentSite();
 
         // If site is not enabled, show warning
         if (!$siteEnabled) {
