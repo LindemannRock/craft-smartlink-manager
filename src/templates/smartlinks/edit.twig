@@ -190,6 +190,8 @@
         {% endfor %}
     {% endif %}
 
+    {% include 'lindemannrock-base/_components/plugin-credit' %}
+
     {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
         <div id="analytics" class="hidden">
             {% include "smartlink-manager/smartlinks/_partials/analytics" with {
