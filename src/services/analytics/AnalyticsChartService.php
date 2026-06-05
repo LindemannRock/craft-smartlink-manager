@@ -26,6 +26,8 @@ class AnalyticsChartService
 {
     use AnalyticsQueryTrait;
 
+    private const DATE_FORMAT_PLUGIN_HANDLE = 'smartlink-manager';
+
     /**
      * Get clicks data for charts
      *
@@ -89,14 +91,15 @@ class AnalyticsChartService
 
         $dataMap = [];
         foreach ($results as $row) {
-            $dataMap[date('M j', strtotime($row['date']))] = (int) $row['count'];
+            $label = $this->formatChartDateLabel((string) $row['date']);
+            $dataMap[$label] = (int) $row['count'];
         }
 
         $filledLabels = [];
         $filledValues = [];
 
         for ($timestamp = $startTimestamp; $timestamp <= $endTimestamp; $timestamp += 86400) {
-            $label = date('M j', $timestamp);
+            $label = $this->formatChartDateLabel(date('Y-m-d', $timestamp));
             $filledLabels[] = $label;
             $filledValues[] = $dataMap[$label] ?? 0;
         }
@@ -151,8 +154,38 @@ class AnalyticsChartService
         return [
             'data' => $hourlyData,
             'peakHour' => $peakHour,
-            'peakHourFormatted' => date('g A', strtotime("{$peakHour}:00")),
+            'peakHourFormatted' => $this->formatHourLabel((int) $peakHour),
         ];
+    }
+
+    /**
+     * Format a local date bucket for chart display.
+     */
+    private function formatChartDateLabel(string $date): string
+    {
+        return DateFormatHelper::formatDate(
+            $date,
+            'cascade',
+            false,
+            false,
+            self::DATE_FORMAT_PLUGIN_HANDLE,
+        ) ?? $date;
+    }
+
+    /**
+     * Format a local hour bucket for chart display.
+     */
+    private function formatHourLabel(int $hour): string
+    {
+        $time = sprintf('%02d:00:00', $hour);
+
+        return DateFormatHelper::formatTime(
+            $time,
+            'cascade',
+            false,
+            false,
+            self::DATE_FORMAT_PLUGIN_HANDLE,
+        ) ?? $time;
     }
 
     /**
