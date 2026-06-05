@@ -110,6 +110,33 @@ abstract class TestCase extends IntegrationTestCase
     }
 
     /**
+     * Temporarily override plugin settings on the live settings model.
+     *
+     * @param array<string, mixed> $overrides
+     * @template T
+     * @param callable(): T $callback
+     * @return T
+     */
+    protected function withSettings(array $overrides, callable $callback): mixed
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $previous = [];
+
+        foreach ($overrides as $attribute => $value) {
+            $previous[$attribute] = $settings->{$attribute};
+            $settings->{$attribute} = $value;
+        }
+
+        try {
+            return $callback();
+        } finally {
+            foreach ($previous as $attribute => $value) {
+                $settings->{$attribute} = $value;
+            }
+        }
+    }
+
+    /**
      * DELETE FROM {%smartlinkmanager} WHERE slug LIKE 'smartlink-test-%' —
      * the FK CASCADE drains the rest. We route deletion through the elements
      * service so soft-deleted rows in {{%elements}} stay consistent.
