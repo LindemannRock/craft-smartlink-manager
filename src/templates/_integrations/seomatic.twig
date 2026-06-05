@@ -67,13 +67,6 @@
         })();
 
         document.addEventListener('DOMContentLoaded', function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var debugMode = urlParams.get('debug') === '1';
-
-            if (debugMode) {
-                console.log('🐛 DEBUG MODE ENABLED - Redirects are disabled for testing');
-            }
-
             var appLinks = document.querySelectorAll('a[href*="smartlink-manager/redirect/go"]');
 
             appLinks.forEach(function(link) {
@@ -85,13 +78,9 @@
                     var source = urlParams.get('src') || 'direct';
                     pushSmartLinkEvent('button_click', platform, source);
 
-                    if (!debugMode) {
-                        setTimeout(function() {
-                            window.location.href = link.href;
-                        }, 300);
-                    } else {
-                        console.log('🐛 DEBUG: Redirect prevented. Event was pushed to dataLayer.');
-                    }
+                    setTimeout(function() {
+                        window.location.href = link.href;
+                    }, 300);
                 });
             });
         });
