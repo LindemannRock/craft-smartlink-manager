@@ -41,7 +41,7 @@
                             <td>{{ row.title }}</td>
                             <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{% if row.imageId %}{{ row.imageId }}{% else %}-{% endif %}</td>
-                            <td>{{ row.enabled ? 'Yes' : 'No' }}</td>
+                            <td>{{ row.enabled ? 'Yes'|t('smartlink-manager') : 'No'|t('smartlink-manager') }}</td>
                             <td>
                                 {% if row.siteId %}
                                     {% set importSite = craft.app.sites.getSiteById(row.siteId) %}
@@ -164,8 +164,8 @@ if (!document.getElementById(noWrapStyleId)) {
 const importForm = document.getElementById('importForm');
 if (importForm) {
     importForm.addEventListener('submit', function(e) {
-        const count = {{ summary.validRows }};
-        if (!confirm('Import ' + count + ' smart link(s)?')) {
+        const confirmMessage = {{ 'Import {count} smart link(s)?'|t('smartlink-manager', {count: summary.validRows})|json_encode|raw }};
+        if (!confirm(confirmMessage)) {
             e.preventDefault();
         }
     });

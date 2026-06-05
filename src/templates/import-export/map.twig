@@ -172,6 +172,8 @@ if (!document.getElementById(noWrapStyleId)) {
 const mappingForm = document.getElementById('mapping-form');
 const mappingErrorDiv = document.getElementById('mappingErrors');
 const mappingErrorText = document.getElementById('mappingErrorText');
+const requiredSlugMessage = {{ 'Required field not mapped: Slug'|t('smartlink-manager')|json_encode|raw }};
+const duplicateMappingMessage = {{ 'Error: You cannot map multiple CSV columns to the same field'|t('smartlink-manager')|json_encode|raw }};
 
 mappingForm?.addEventListener('submit', function(e) {
     const mappings = Array.from(document.querySelectorAll('.column-mapping')).map(m => m.value);
@@ -180,7 +182,7 @@ mappingForm?.addEventListener('submit', function(e) {
     if (!hasSlug) {
         e.preventDefault();
         mappingErrorDiv.style.display = 'block';
-        mappingErrorText.innerHTML = '<strong>Required field not mapped: Slug</strong>';
+        mappingErrorText.textContent = requiredSlugMessage;
         mappingErrorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return false;
     }
@@ -189,7 +191,7 @@ mappingForm?.addEventListener('submit', function(e) {
     if (nonEmpty.length !== new Set(nonEmpty).size) {
         e.preventDefault();
         mappingErrorDiv.style.display = 'block';
-        mappingErrorText.innerHTML = '<strong>Error: You cannot map multiple CSV columns to the same field</strong>';
+        mappingErrorText.textContent = duplicateMappingMessage;
         mappingErrorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return false;
     }
