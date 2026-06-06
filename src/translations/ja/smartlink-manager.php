@@ -150,7 +150,7 @@ return [
     'An unexpected error occurred.' => '予期しないエラーが発生しました。',
     'No analytics data to export.' => 'エクスポートするアナリティクスデータがありません。',
     'Analytics tracking is disabled for this smart link.' => 'このスマートリンクではアナリティクスのトラッキングが無効になっています。',
-    'Enter custom size (100-4096 pixels):' => 'カスタムサイズを入力してください (100〜4096 ピクセル):',
+    'Enter custom size (100-4096 pixels):' => 'カスタムサイズを入力してください (100〜4096 ピクセル) :',
     'Please enter a valid size between 100 and 4096 pixels' => '100〜4096 ピクセルの有効なサイズを入力してください',
     'Reset QR code settings to plugin defaults?' => 'QR コードの設定をプラグインのデフォルト値にリセットしますか？',
     '{pluginName} is not enabled for this site.' => '{pluginName} はこのサイトで有効になっていません。',
@@ -475,7 +475,7 @@ return [
 
     // Smartlinks: Index
     'View Analytics' => 'アナリティクスを表示する',
-    'Clicks:' => 'クリック:',
+    'Clicks:' => 'クリック :',
 
     // Smartlinks: Edit
     'Title' => 'タイトル',
@@ -569,8 +569,8 @@ return [
     'Import session expired. Please upload the file again.' => 'インポートセッションが期限切れです。ファイルを再度アップロードしてください。',
     'Import History' => 'インポート履歴',
     'CSV Format' => 'CSV フォーマット',
-    'Required columns:' => '必須カラム:',
-    'Optional columns:' => '任意カラム:',
+    'Required columns:' => '必須カラム :',
+    'Optional columns:' => '任意カラム :',
     'Import from CSV' => 'CSV からインポートする',
     'CSV File' => 'CSV ファイル',
     'CSV Delimiter' => 'CSV 区切り文字',
@@ -681,7 +681,7 @@ return [
     'No OS data available for the selected filters.' => '選択したフィルターの OS データがありません。',
     'No browser data available for the selected filters.' => '選択したフィルターのブラウザデータがありません。',
     'No hourly data available for the selected filters.' => '選択したフィルターの時間別データがありません。',
-    'Peak usage at' => 'ピーク使用時間:',
+    'Peak usage at' => 'ピーク使用時間 :',
     'Direct' => 'ダイレクト',
     'Direct Visits' => 'ダイレクト訪問',
     'QR' => 'QR',
