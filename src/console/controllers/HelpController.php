@@ -25,7 +25,10 @@ final class HelpController extends AbstractHelpController
         return [
             'title' => 'SmartLink Manager',
             'pluginHandle' => 'smartlink-manager',
-            'commandPrefix' => 'ddev craft',
+            'commandPrefixes' => [
+                'php craft',
+                'ddev craft',
+            ],
             'summary' => 'Use these commands to generate the IP hash salt used for privacy-safe SmartLink analytics and add demo QR click data during development.',
             'common' => [
                 'security/generate-salt',
