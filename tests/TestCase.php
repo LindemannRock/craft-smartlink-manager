@@ -47,20 +47,16 @@ abstract class TestCase extends IntegrationTestCase
     protected SmartLinksService $smartLinks;
     protected AnalyticsService $analytics;
 
-    private int $seedCounter = 0;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->smartLinks = SmartLinkManager::$plugin->smartLinks;
         $this->analytics = SmartLinkManager::$plugin->analytics;
-        $this->seedCounter = 0;
         $this->purgeTestSmartLinks();
     }
 
     protected function tearDown(): void
     {
-        $this->purgeTestSmartLinks();
         parent::tearDown();
     }
 
@@ -70,18 +66,17 @@ abstract class TestCase extends IntegrationTestCase
      * full validation pipeline, which we want, but we still need the marker on
      * the column so `purgeTestSmartLinks()` can find the row by LIKE prefix.
      *
-     * Slugs are constrained to `[a-zA-Z0-9_\-]+`; the marker prefix satisfies
-     * that pattern so the underscore-friendly form is safe.
+     * Slugs are constrained to `[a-zA-Z0-9_\-]+`; base helper underscores are
+     * normalized to hyphens to keep the marker in the plugin's usual slug shape.
      *
      * @param array<string, mixed> $overrides
      */
     protected function seedSmartLink(array $overrides = []): SmartLink
     {
-        $this->seedCounter++;
-        $marker = self::MARKER . $this->seedCounter . '-' . substr(uniqid('', true), -8);
+        $marker = str_replace('_', '-', $this->nextTestMarker(self::MARKER, 'link'));
 
         $element = new SmartLink();
-        $element->title = $overrides['title'] ?? 'Test SmartLink ' . $this->seedCounter;
+        $element->title = $overrides['title'] ?? 'Test SmartLink ' . $marker;
         $element->slug = $overrides['slug'] ?? $marker;
         $element->fallbackUrl = $overrides['fallbackUrl'] ?? 'https://example.com/fallback';
         $element->iosUrl = $overrides['iosUrl'] ?? null;
@@ -94,6 +89,10 @@ abstract class TestCase extends IntegrationTestCase
             $this->smartLinks->saveSmartLink($element),
             'Seeded smart link must save — errors: ' . json_encode($element->getErrors()),
         );
+
+        if ($element->id !== null) {
+            $this->trackElementForCleanup((int) $element->id);
+        }
 
         return $element;
     }
