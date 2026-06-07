@@ -173,8 +173,10 @@
         <input type="hidden" name="siteId" value="{{ smartLink.siteId }}">
     {% endif %}
 
-        <div id="fields">
+    <div id="fields">
         {% include "smartlink-manager/smartlinks/_partials/fields" %}
+
+        {% include 'lindemannrock-base/_components/plugin-credit' %}
     </div>
 
     {# Render field layout tabs #}
@@ -189,8 +191,6 @@
             </div>
         {% endfor %}
     {% endif %}
-
-    {% include 'lindemannrock-base/_components/plugin-credit' %}
 
     {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics and smartLink.id and (smartLink.trackAnalytics ?? true) %}
         <div id="analytics" class="hidden">
