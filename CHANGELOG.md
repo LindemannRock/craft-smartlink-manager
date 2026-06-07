@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.29.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.29.1...v5.29.2) (2026-06-07)
+
+
+### Fixed
+
+* plugin credit in edit template ([dbfb2de](https://github.com/LindemannRock/craft-smartlink-manager/commit/dbfb2de2d128316b9d548837842520390fb93811))
+
 ## [5.29.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.29.0...v5.29.1) - 2026-06-07
 
 
