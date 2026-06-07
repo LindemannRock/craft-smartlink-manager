@@ -188,6 +188,8 @@
                 {% for element in tab.getElements() %}
                     {{ element.formHtml(smartLink, smartLink.getIsRevision())|raw }}
                 {% endfor %}
+
+                {% include 'lindemannrock-base/_components/plugin-credit' %}
             </div>
         {% endfor %}
     {% endif %}
@@ -199,6 +201,8 @@
                 analyticsService: analyticsService ?? null,
                 settings: craft.smartLinks.settings
             } %}
+
+            {% include 'lindemannrock-base/_components/plugin-credit' %}
         </div>
     {% endif %}
 {% endblock %}
