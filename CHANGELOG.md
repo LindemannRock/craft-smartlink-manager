@@ -1,5 +1,57 @@
 # Changelog
 
+## [5.29.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.28.0...v5.29.0) (2026-06-07)
+
+
+### Added
+
+* add act-static-analysis script for CI integration ([984f18c](https://github.com/LindemannRock/craft-smartlink-manager/commit/984f18c9f7ebed640a1b201d8aff35eb99ad01e4))
+* add date rendering helper for SmartLink attributes ([c836dd1](https://github.com/LindemannRock/craft-smartlink-manager/commit/c836dd1078c250cd584decc487b9d725d07644dc))
+* add plugin credit component to edit template ([48fe859](https://github.com/LindemannRock/craft-smartlink-manager/commit/48fe859e75708618c1769d99567be0d74441b0f0))
+* add settings management link to navigation ([f617ec1](https://github.com/LindemannRock/craft-smartlink-manager/commit/f617ec149b2de7dc50281f07011750d28247808e))
+* **analytics:** add date formatting for chart labels and peak hour display ([8de9ba2](https://github.com/LindemannRock/craft-smartlink-manager/commit/8de9ba248a91fe78612c111d505f577ae3208d5e))
+* **cli:** add HelpController for cli command assistance ([62dc932](https://github.com/LindemannRock/craft-smartlink-manager/commit/62dc9325f6a69739390c344ffcd8b920cfd14f87))
+* **cli:** add option for smart link ID in demo QR click command ([7e86c2d](https://github.com/LindemannRock/craft-smartlink-manager/commit/7e86c2d9e291ba9c2889497a895bc104febcfdb0))
+* **i18n:** add "Download our app for the best experience" translation ([dce40e7](https://github.com/LindemannRock/craft-smartlink-manager/commit/dce40e7a0fb0280ba81bfda5245ee080a9f906e9))
+* **i18n:** add localized messages for required slug and duplicate mapping errors ([71f12e0](https://github.com/LindemannRock/craft-smartlink-manager/commit/71f12e0c9f222fcb5b43b5c0224e5916042714c1))
+* **i18n:** add new settings for anonymizing IP addresses and QR code caching ([f75bfdd](https://github.com/LindemannRock/craft-smartlink-manager/commit/f75bfddaa5a980b2d222a8e39f1429b97a25cda8))
+* **i18n:** add new translation keys ([2a5cf2e](https://github.com/LindemannRock/craft-smartlink-manager/commit/2a5cf2e0855e509c6d4fb87d45a4d2a86f405c0a))
+* **i18n:** add new translation keys for user notifications, ([12049b7](https://github.com/LindemannRock/craft-smartlink-manager/commit/12049b7314c15edb213d508a0f335a4e21344288))
+* **i18n:** update analytics terminology from "Analytik" to "Analytics" ([e1598b6](https://github.com/LindemannRock/craft-smartlink-manager/commit/e1598b6420be81d6521d0012647f4ce1f2c189e9))
+* **import-export:** add slug field mapping and update error messages ([c1bebfe](https://github.com/LindemannRock/craft-smartlink-manager/commit/c1bebfee33a0ffa8f308cdf6368489923187462a))
+* **redirects:** resolve environment variables for notFoundRedirectUrl ([87c8524](https://github.com/LindemannRock/craft-smartlink-manager/commit/87c852494bf038c2117f10e18fea704d538e7d6d))
+* **templates:** replace app store and play store icons with new SVGs ([f0d67a9](https://github.com/LindemannRock/craft-smartlink-manager/commit/f0d67a960a8e7d550a1152b01062b12cea853e6e))
+* **tests:** add integration tests for analytics display/export formatting ([f5d0c09](https://github.com/LindemannRock/craft-smartlink-manager/commit/f5d0c09a5f487b1f8d3a5a2b967e99934638431c))
+* **tests:** add integration tests for public URL generation and redirects ([e0a5a6d](https://github.com/LindemannRock/craft-smartlink-manager/commit/e0a5a6d2e9228a197f9a67eb3ccc34626fc8b32f))
+* **tests:** add integration tests for site route registration ([e979232](https://github.com/LindemannRock/craft-smartlink-manager/commit/e9792323a69a1e1db7d527157b67e185eee4788e))
+* **tests:** add test for generating PNG QR code with logo overlay ([519e6ec](https://github.com/LindemannRock/craft-smartlink-manager/commit/519e6ec413489afc10f28462c6e45614ddd57c31))
+* **tests:** add withSettings method to temporarily override plugin settings ([9886a3b](https://github.com/LindemannRock/craft-smartlink-manager/commit/9886a3bb80ce49a4a112e37f7a4440cc94ac9fd0))
+
+
+### Fixed
+
+* **analytics:** change date formatting for recent clicks to cascade style ([d03705c](https://github.com/LindemannRock/craft-smartlink-manager/commit/d03705c7f3f36a8aed51f805c90a8b4b97cffaa7))
+* **analytics:** correct date formatting for last click and created timestamps ([88ddf05](https://github.com/LindemannRock/craft-smartlink-manager/commit/88ddf05c3b79facda9125a4b276b0f9b50294497))
+* **analytics:** remove unused formatted date fields from analytics summary ([c17326b](https://github.com/LindemannRock/craft-smartlink-manager/commit/c17326b57158688b6d89d218e2c99273aff96107))
+* correct copyright year in SmartLink.php and normalize slug handling ([a3dbd87](https://github.com/LindemannRock/craft-smartlink-manager/commit/a3dbd874bef2e34ad770f78917913c3a4625165c))
+* correct delete action URL in smartlink edit template ([f3e3205](https://github.com/LindemannRock/craft-smartlink-manager/commit/f3e32056801dff2ed70ef4c0ff2e0ad87f022969))
+* correct translation keys for various labels in SmartLink templates ([ebfe892](https://github.com/LindemannRock/craft-smartlink-manager/commit/ebfe89214ec125dbbbaa8fa676730e7d37f6ecee))
+* **i18n:** correct browser terminology in Portuguese translations ([69691a2](https://github.com/LindemannRock/craft-smartlink-manager/commit/69691a222c06c27142e85b228fcce94aeec36528))
+* **i18n:** correct cache terminology in Spanish translations ([867de88](https://github.com/LindemannRock/craft-smartlink-manager/commit/867de889531a6e99f189adff5b2dd21661c09f76))
+* **i18n:** correct caching terminology in Dutch translations ([f2a7ab1](https://github.com/LindemannRock/craft-smartlink-manager/commit/f2a7ab1afd8888389c8d7ae100f78bfdf377e815))
+* **i18n:** correct phrasing for device detection caching message ([02bbe11](https://github.com/LindemannRock/craft-smartlink-manager/commit/02bbe1158ce03b6e0d4a49778b07ede875a94a98))
+* **i18n:** correct phrasing for entry deletion confirmation messages ([50d5a9d](https://github.com/LindemannRock/craft-smartlink-manager/commit/50d5a9d9bf32a0bd56236f080dae99b788eaee8e))
+* **i18n:** correct pluralization for smart link messages in multiple locales ([b89739f](https://github.com/LindemannRock/craft-smartlink-manager/commit/b89739f7258f29f7f8c74571eebb3c62e2e25e8f))
+* **i18n:** correct punctuation in Japanese translation strings ([9b7c1d0](https://github.com/LindemannRock/craft-smartlink-manager/commit/9b7c1d0cc8b01a59db86b4531df91ec8c82869c6))
+* **i18n:** correct translation keys for SmartLink statuses and labels ([5203c5b](https://github.com/LindemannRock/craft-smartlink-manager/commit/5203c5be54ab3c71c9abb86efc835ec076b3ad8d))
+* **i18n:** correct translations for cache and permissions phrases ([ecd7375](https://github.com/LindemannRock/craft-smartlink-manager/commit/ecd737503f77e477fe06f6f6fd2e8ef3c3cb9224))
+* **i18n:** normalize error messages for permissions and settings ([170e011](https://github.com/LindemannRock/craft-smartlink-manager/commit/170e011015d679f3b1e5bcea870950d5db45521d))
+* **i18n:** normalized translations ([4253c18](https://github.com/LindemannRock/craft-smartlink-manager/commit/4253c18a86ea92cb04af3fd282411b776a1e3683))
+* **i18n:** remove 'Live' string from multiple translation files ([7b8cf94](https://github.com/LindemannRock/craft-smartlink-manager/commit/7b8cf94cb7fdf1998ad0949e296e3294feb3d11f))
+* **i18n:** remove unused 'Save Settings' translation key ([07acf9a](https://github.com/LindemannRock/craft-smartlink-manager/commit/07acf9a0f2c8463c688efd185ed7cfe8545cb0d7))
+* normalize smart link status display logic and labels ([a112e6b](https://github.com/LindemannRock/craft-smartlink-manager/commit/a112e6b2754c46018e1498cf9ec20137f2c60ddd))
+* update default date range options for analytics ([c7dfd74](https://github.com/LindemannRock/craft-smartlink-manager/commit/c7dfd74dda7c1cef43a4800e449803d083fbcdee))
+
 ## [5.28.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.27.0...v5.28.0) - 2026-05-21
 
 
