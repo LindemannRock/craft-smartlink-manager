@@ -12,7 +12,7 @@
 {% block content %}
     <h2 class="first">{{ "Import Preview"|t('smartlink-manager') }}</h2>
 
-    <div class="lr-unified-cards cols-4" style="margin: 30px 0;">
+    <div class="lr-unified-cards cols-4 lr-mt-30 lr-mb-30">
         {% include 'lindemannrock-base/_components/unified-card' with { value: summary.totalRows, description: 'Total Rows'|t('smartlink-manager'), align: 'center' } only %}
         {% include 'lindemannrock-base/_components/unified-card' with { value: summary.validRows, description: 'Valid'|t('smartlink-manager'), palette: 'green', align: 'center' } only %}
         {% include 'lindemannrock-base/_components/unified-card' with { value: summary.duplicates, description: 'Duplicates'|t('smartlink-manager'), palette: 'amber', align: 'center' } only %}
@@ -22,9 +22,9 @@
     {% if validRows|length %}
         <hr>
         <h3>{{ "Valid Smart Links to Import"|t('smartlink-manager') }} ({{ validRows|length }})</h3>
-        <div style="max-height: 500px; overflow: auto; border: 1px solid #e0e0e0; border-radius: 4px;">
-            <table class="data fullwidth" style="margin: 0;">
-                <thead style="position: sticky; top: 0; background: #f7f7f7; z-index: 1;">
+        <div class="lr-preview-table lr-preview-table--tall">
+            <table class="data fullwidth">
+                <thead>
                     <tr>
                         <th>{{ 'Slug'|t('smartlink-manager') }}</th>
                         <th>{{ 'Title'|t('smartlink-manager') }}</th>
@@ -37,9 +37,9 @@
                 <tbody>
                     {% for row in validRows %}
                         <tr>
-                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.slug }}">{{ row.slug }}</code></td>
+                            <td><code class="lr-cell-clip" title="{{ row.slug }}">{{ row.slug }}</code></td>
                             <td>{{ row.title }}</td>
-                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
+                            <td><code class="lr-cell-clip" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{% if row.imageId %}{{ row.imageId }}{% else %}-{% endif %}</td>
                             <td>{{ row.enabled ? 'Yes'|t('smartlink-manager') : 'No'|t('smartlink-manager') }}</td>
                             <td>
@@ -60,9 +60,9 @@
     {% if duplicateRows|length %}
         <hr>
         <h3>{{ 'Duplicates (will be skipped)'|t('smartlink-manager') }} ({{ duplicateRows|length }})</h3>
-        <div style="max-height: 300px; overflow: auto; border: 1px solid #e0e0e0; border-radius: 4px;">
-            <table class="data fullwidth" style="margin: 0;">
-                <thead style="position: sticky; top: 0; background: #fffbf0; z-index: 1;">
+        <div class="lr-preview-table">
+            <table class="data fullwidth">
+                <thead class="is-warning">
                     <tr>
                         <th>{{ 'Slug'|t('smartlink-manager') }}</th>
                         <th>{{ 'Fallback URL'|t('smartlink-manager') }}</th>
@@ -72,8 +72,8 @@
                 <tbody>
                     {% for row in duplicateRows %}
                         <tr>
-                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.slug }}">{{ row.slug }}</code></td>
-                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
+                            <td><code class="lr-cell-clip" title="{{ row.slug }}">{{ row.slug }}</code></td>
+                            <td><code class="lr-cell-clip" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{{ row.reason }}</td>
                         </tr>
                     {% endfor %}
@@ -85,9 +85,9 @@
     {% if errorRows|length %}
         <hr>
         <h3>{{ 'Invalid Rows (will be skipped)'|t('smartlink-manager') }} ({{ errorRows|length }})</h3>
-        <div style="max-height: 300px; overflow: auto; border: 1px solid #e0e0e0; border-radius: 4px;">
-            <table class="data fullwidth" style="margin: 0;">
-                <thead style="position: sticky; top: 0; background: #fef2f2; z-index: 1;">
+        <div class="lr-preview-table">
+            <table class="data fullwidth">
+                <thead class="is-error">
                     <tr>
                         <th>{{ 'Row'|t('smartlink-manager') }}</th>
                         <th>{{ 'Slug'|t('smartlink-manager') }}</th>
@@ -99,8 +99,8 @@
                     {% for row in errorRows %}
                         <tr>
                             <td>{{ row.rowNumber }}</td>
-                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.slug }}">{{ row.slug }}</code></td>
-                            <td><code class="lr-cell-clip" style="font-size: 11px;" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
+                            <td><code class="lr-cell-clip" title="{{ row.slug }}">{{ row.slug }}</code></td>
+                            <td><code class="lr-cell-clip" title="{{ row.fallbackUrl }}">{{ row.fallbackUrl }}</code></td>
                             <td>{{ row.error }}</td>
                         </tr>
                     {% endfor %}
@@ -113,7 +113,7 @@
 
     <form method="post" action="{{ actionUrl('smartlink-manager/import-export/import') }}" id="importForm">
         {{ csrfInput() }}
-        <div style="background: #f7f7f7; padding: 20px; border-radius: 4px; margin: 20px 0;">
+        <div class="lr-import-summary">
             <h3 class="first">{{ "Ready to Import"|t('smartlink-manager') }}</h3>
             <p>
                 {% if summary.validRows > 0 %}
@@ -128,7 +128,7 @@
                     {{ "No valid smart links found to import."|t('smartlink-manager') }}
                 {% endif %}
             </p>
-            <div class="buttons" style="margin-top: 15px;">
+            <div class="buttons">
                 <a href="{{ url('smartlink-manager/import-export') }}" class="btn secondary">{{ 'Cancel'|t('smartlink-manager') }}</a>
                 {% if summary.validRows > 0 %}
                     <button type="submit" class="btn submit">{{ 'Import {count} Smart Links'|t('smartlink-manager', {count: summary.validRows}) }}</button>
@@ -143,24 +143,6 @@
 {% endblock %}
 
 {% js %}
-const noWrapStyleId = 'smartlink-import-cell-clip-style';
-if (!document.getElementById(noWrapStyleId)) {
-    const style = document.createElement('style');
-    style.id = noWrapStyleId;
-    style.textContent = `
-        .lr-cell-clip {
-            display: block;
-            max-width: 280px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            word-break: normal;
-            overflow-wrap: normal;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
 const importForm = document.getElementById('importForm');
 if (importForm) {
     importForm.addEventListener('submit', function(e) {
