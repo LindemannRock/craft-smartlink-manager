@@ -1,0 +1,14 @@
+slug,title,description,iosUrl,androidUrl,fallbackUrl,enabled,trackAnalytics
+js-fallback,JS in Fallback,javascript: scheme in fallbackUrl,,,javascript:alert(1),1,1
+js-obfuscated,JS Obfuscated,javascript:// form that fools naive checks,,,javascript://%0aalert(1),1,1
+js-leading-space,JS Leading Space,Whitespace before the scheme,,," javascript:alert(1)",1,1
+data-ios,Data URI in iOS,data:text/html payload in iosUrl,"data:text/html,<script>alert(1)</script>",,https://example.com,1,1
+vbscript-android,VBScript in Android,vbscript: scheme in androidUrl,,vbscript:msgbox(1),https://example.com,1,1
+file-fallback,File Protocol,file:// local resource in fallbackUrl,,,file:///etc/passwd,1,1
+xss-title,<script>alert('XSS')</script>,<img src=x onerror=alert(1)>,,,https://example.com,1,1
+=cmd|'/c calc',Formula In Slug,Leading = formula in the slug cell,,,https://example.com,1,1
+formula-at-title,@SUM(1+1),At-formula in title,,,https://example.com,1,1
+formula-plus-title,+1+1,Plus-formula in title,,,https://example.com,1,1
+formula-minus-title,-2+3,Minus-formula in title,,,https://example.com,1,1
+formula-pipe-title,|calc,Pipe command in title,,,https://example.com,1,1
+sql-title,'; DROP TABLE smartlinkmanager; --,SQL injection in title,,,https://example.com,1,1

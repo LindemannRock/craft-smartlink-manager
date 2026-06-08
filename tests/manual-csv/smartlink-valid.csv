@@ -1,0 +1,7 @@
+slug,title,description,iosUrl,androidUrl,fallbackUrl,enabled,trackAnalytics
+simple-https,Simple HTTPS,A normal web link,,,https://example.com,1,1
+ios-deeplink,iOS Deep Link,Custom app scheme in iosUrl,myapp://open/profile,,https://example.com/app,1,1
+fb-deeplink,Facebook Deep Link,Real-world app scheme,fb://profile/33138223345,,https://facebook.com/lindemannrock,1,1
+android-intent,Android Intent Link,intent:// scheme should pass,,intent://scan/#Intent;scheme=zxing;package=com.google.zxing;end,https://example.com,1,1
+store-links,Store Links,Both platforms point to store HTTPS,https://apps.apple.com/app/id000000000,https://play.google.com/store/apps/details?id=com.example,https://example.com,1,1
+unicode-content,رابط ذكي,وصف باللغة العربية,,,https://example.com/landing,1,1

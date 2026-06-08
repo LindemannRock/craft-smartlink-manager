@@ -1,0 +1,11 @@
+slug,title,description,iosUrl,androidUrl,fallbackUrl,enabled,trackAnalytics
+missing-fallback,Missing Fallback,fallbackUrl is required,,,,1,1
+,Empty Slug,slug is required,,,https://example.com,1,1
+bare-domain,Bare Domain,No scheme - filter_var rejects,,,example.com,1,1
+protocol-relative,Protocol Relative,//host is not a valid absolute URL,,,//evil.com,1,1
+mailto-fallback,Mailto Fallback,mailto: passes filter_var and is not dangerous - accepted,,,mailto:test@example.com,1,1
+ftp-fallback,FTP Fallback,ftp:// is a valid URL and not a dangerous scheme,,,ftp://example.com/file,1,1
+emoji-slug,😀 Emoji,Slug normalizes to empty,,,https://example.com,1,1
+long-title,Very long title repeated to probe length handling Very long title repeated to probe length handling Very long title repeated to probe length handling,Length probe,,,https://example.com,1,1
+empty-platform-urls,Empty Platform URLs,All platform URLs blank is valid,,,https://example.com,1,1
+unicode-fallback-path,Unicode Path,Non-ASCII path may fail filter_var,,,https://example.com/صفحة,1,1
