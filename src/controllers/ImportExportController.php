@@ -11,6 +11,7 @@ use craft\helpers\StringHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
 use lindemannrock\base\helpers\AssetVolumeHelper;
+use lindemannrock\base\helpers\ContentSafetyHelper;
 use lindemannrock\base\helpers\CsvImportHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\ExportHelper;
@@ -358,6 +359,18 @@ class ImportExportController extends Controller
                     ];
                     continue 2;
                 }
+            }
+
+            // Reject dangerous markup in the free-text fields before it reaches storage.
+            if (ContentSafetyHelper::containsMaliciousMarkup((string)$item['title'])
+                || ContentSafetyHelper::containsMaliciousMarkup((string)$item['description'])) {
+                $errorRows[] = [
+                    'rowNumber' => $rowNumber,
+                    'slug' => $item['slug'],
+                    'fallbackUrl' => $item['fallbackUrl'],
+                    'error' => 'Disallowed markup in title or description',
+                ];
+                continue;
             }
 
             if (!in_array((string)$item['imageSize'], ['xl', 'lg', 'md', 'sm'], true)) {
