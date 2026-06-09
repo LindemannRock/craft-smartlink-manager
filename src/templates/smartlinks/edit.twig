@@ -264,19 +264,13 @@
     </div>
 
     {% if smartLink.id %}
-        <fieldset>
-            <legend class="h6">{{ "{pluginName} URL"|t('smartlink-manager', {pluginName: smartlinkHelper.displayName}) }}</legend>
-            <div class="meta" style="padding-inline: 0;">
-                <div class="flex" style="gap: 8px;">
-                    <div class="textwrapper" style="flex-grow: 1;">
-                        <input type="text" class="text fullwidth" readonly value="{{ smartLink.getRedirectUrl() }}" id="smartlink-url" style="border: none; padding-inline: var(--m) var(--s);">
-                    </div>
-                    <button type="button" class="btn" id="copy-url-btn" style="border-start-start-radius: 0; border-end-start-radius: 0;">
-                        {{ "Copy"|t('smartlink-manager') }}
-                    </button>
-                </div>
-            </div>
-        </fieldset>
+        {% include 'lindemannrock-base/_components/copy-input' with {
+            legend: "{pluginName} URL"|t('smartlink-manager', {pluginName: smartlinkHelper.displayName}),
+            value: smartLink.getRedirectUrl(),
+            id: 'smartlink-url',
+            copyLabel: 'Copy'|t('smartlink-manager'),
+            copiedMessage: 'URL copied to clipboard'|t('smartlink-manager'),
+        } only %}
     {% endif %}
 
     <div class="meta">
@@ -879,16 +873,6 @@
         }, 50);
 
         Craft.cp.displayNotice('{{ "QR code settings reset to defaults"|t('smartlink-manager')|e('js') }}');
-    });
-
-    // Copy URL button
-    $('#copy-url-btn').on('click', function() {
-        const urlInput = document.getElementById('smartlink-url');
-        if (urlInput) {
-            navigator.clipboard.writeText(urlInput.value).then(function() {
-                Craft.cp.displayNotice('{{ "URL copied to clipboard"|t('smartlink-manager')|e('js') }}');
-            });
-        }
     });
 
     {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics %}
