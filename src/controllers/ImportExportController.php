@@ -16,7 +16,6 @@ use lindemannrock\base\helpers\CsvImportHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\ExportHelper;
 use lindemannrock\base\helpers\SlugHandleHelper;
-use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\records\ImportHistoryRecord;
@@ -699,13 +698,11 @@ class ImportExportController extends Controller
 
     private function isValidUrl(string $value): bool
     {
-        if ($value === '') {
-            return false;
-        }
-
-        // Block executable schemes (javascript:, data:, etc.) that FILTER_VALIDATE_URL
-        // accepts. Custom app deep links (myapp://, fb://) still pass.
-        if (UrlSafetyHelper::hasDangerousScheme($value)) {
+        // Store and fallback URLs must be absolute http(s) — matching the CP
+        // form's UrlValidator. The http(s) allowlist rejects mailto:, ftp:,
+        // custom app schemes, and executable schemes (javascript:, data:) in one
+        // check; filter_var then validates the rest of the URL structure.
+        if ($value === '' || !preg_match('#^https?://#i', $value)) {
             return false;
         }
 

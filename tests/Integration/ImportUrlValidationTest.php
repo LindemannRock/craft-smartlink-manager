@@ -16,8 +16,9 @@ use lindemannrock\smartlinkmanager\tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * Import URL validation must reject executable schemes while still accepting
- * the custom app deep links that smart links legitimately route to.
+ * Import URL validation must accept only absolute http(s) URLs for the store and
+ * fallback fields — matching the CP form's UrlValidator — and reject every other
+ * scheme (mailto:, ftp:, custom app schemes, and executable schemes).
  *
  * @since 5.29.3
  */
@@ -44,13 +45,24 @@ final class ImportUrlValidationTest extends TestCase
         self::assertFalse($this->isValidUrl("java\tscript:alert(1)"));
     }
 
-    public function testAcceptsHttpAndAppDeepLinks(): void
+    public function testAcceptsHttpStoreUrls(): void
     {
-        self::assertTrue($this->isValidUrl('https://example.com'));
+        self::assertTrue($this->isValidUrl('https://apps.apple.com/app/id000000000'));
+        self::assertTrue($this->isValidUrl('https://play.google.com/store/apps/details?id=com.example'));
         self::assertTrue($this->isValidUrl('http://example.com/path'));
-        // Custom app deep links are the whole point of the platform URL fields.
-        self::assertTrue($this->isValidUrl('myapp://open/profile'));
-        self::assertTrue($this->isValidUrl('fb://profile/33138223345'));
+    }
+
+    public function testRejectsNonHttpSchemes(): void
+    {
+        // The store/fallback fields are http(s) only — custom app schemes and
+        // contact/file schemes are not valid store URLs.
+        self::assertFalse($this->isValidUrl('myapp://open/profile'));
+        self::assertFalse($this->isValidUrl('fb://profile/33138223345'));
+        self::assertFalse($this->isValidUrl('mailto:test@example.com'));
+        self::assertFalse($this->isValidUrl('ftp://example.com/file'));
+        self::assertFalse($this->isValidUrl('tel:+15551234567'));
+        // Bare domain (no scheme) is also rejected.
+        self::assertFalse($this->isValidUrl('example.com'));
     }
 
     public function testRejectsEmptyValue(): void

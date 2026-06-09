@@ -1,23 +1,25 @@
 # SmartLink Manager — Manual CSV Fixtures
 
-This directory contains **manual QA CSV fixtures** for exercising the CSV import flow through the CP UI (Import/Export → upload → map columns → preview → import). They are **not** loaded by PHPUnit — automated coverage lives in `../Integration/` (see `ImportUrlValidationTest`).
+This directory contains **manual QA CSV fixtures** for exercising the CSV import flow through the CP UI (Import/Export → upload → map columns → preview → import). They are **not** loaded by PHPUnit — automated coverage lives in `../Integration/` (`ImportUrlValidationTest`, `MarkupValidationTest`).
 
-Unlike Translation Manager (which imports free text rendered as HTML), SmartLink imports **URLs that become redirect targets**. The primary attack surface is therefore the **URL scheme** of `fallbackUrl` and the platform fields (`iosUrl`, `androidUrl`, `huaweiUrl`, `amazonUrl`, `windowsUrl`, `macUrl`). Validation rules:
+SmartLink imports two kinds of sensitive data:
 
-- A URL field must pass `filter_var(FILTER_VALIDATE_URL)` — so it must be an **absolute** URL (relative `/paths` are rejected here, unlike ShortLink/Redirect).
-- Executable schemes (`javascript:`, `vbscript:`, `data:`, `file:`) are rejected up front by `UrlSafetyHelper::hasDangerousScheme()`, including whitespace/`//`-obfuscated variants.
-- **Custom app deep links keep working** (`myapp://`, `fb://`, `intent://`) — that's the whole point of the platform fields, so the guard must not block them.
+**URL fields** — `fallbackUrl` plus the platform store fields (`iosUrl`, `androidUrl`, `huaweiUrl`, `amazonUrl`, `windowsUrl`, `macUrl`). These are **store/landing URLs and must be absolute `http(s)`**, matching the CP form's `UrlValidator`:
+
+- Only `http://` / `https://` are accepted. `mailto:`, `tel:`, `ftp:`, custom app schemes (`myapp://`, `fb://`), and executable schemes (`javascript:`, `data:`, `vbscript:`, `file:`) are all **rejected** — none are valid store URLs.
+- Relative paths (`/page`) and protocol-relative `//host` are also rejected (not absolute `http(s)`).
+
+**Free-text fields** — `title` / `description`. Dangerous HTML/script markup is rejected via `ContentSafetyHelper::containsMaliciousMarkup()` (detect-and-reject; a lone `<` in `price < $5` is fine). Formula injection in CSV cells is neutralized on import (prefix stripped) and on export (formula-escaped); SQL is inert via parameterized queries.
 
 All files share the column header: `slug,title,description,iosUrl,androidUrl,fallbackUrl,enabled,trackAnalytics`.
 
 ## Test Files
 
 ### `smartlink-valid.csv` — positive control
-Rows that **should import cleanly**, including the deep-link cases that prove the scheme guard does not over-block:
+Rows that **should import cleanly** — all `https` store/landing URLs:
 - Plain `https://` fallback
-- `myapp://` and `fb://` custom app schemes in `iosUrl`
-- `intent://…` Android intent link
-- App Store / Play Store `https://` links
+- App Store `https://` URL in `iosUrl`, Play Store `https://` URL in `androidUrl`
+- A row populating both platform fields
 - Unicode title/description with an ASCII URL
 
 ### `smartlink-malicious.csv` — security
@@ -26,7 +28,7 @@ Rows that **should be blocked or sanitized**. Each row targets one field with on
 - `data:text/html` in `iosUrl`
 - `vbscript:` in `androidUrl`
 - `file:///` in `fallbackUrl`
-- `<script>` / `onerror=` XSS in `title` / `description`
+- `<script>` / `onerror=` markup in `title` / `description` (→ "Disallowed markup in title or description")
 - CSV formula injection in slug/title (`=`, `@`, `+`, `-`, `|`)
 - SQL injection string in `title`
 
@@ -34,32 +36,33 @@ Rows that **should be blocked or sanitized**. Each row targets one field with on
 Unusual-but-not-malicious inputs that probe graceful handling:
 - Missing `fallbackUrl` (required → error)
 - Empty `slug` (required → error)
-- Bare domain `example.com` (no scheme → `filter_var` rejects)
-- Protocol-relative `//evil.com` (not a valid absolute URL → rejected)
-- `mailto:` fallback (valid URL, not a dangerous scheme → **accepted**; documents current behavior)
-- `ftp://` fallback (valid URL, not a dangerous scheme → **accepted**; documents current behavior)
+- Bare domain `example.com` (no scheme → rejected)
+- Protocol-relative `//evil.com` (not absolute `http(s)` → rejected)
+- `mailto:` fallback (not `http(s)` → rejected)
+- `ftp://` fallback (not `http(s)` → rejected)
+- Custom app scheme `myapp://` in `iosUrl` (not a store URL → rejected)
 - Emoji slug (normalizes to empty → error)
 - Very long title, blank platform URLs, non-ASCII URL path
 
 ## How to run a pass
 
 1. **Baseline:** export current smart links to confirm the round-trip format.
-2. **Valid:** import `smartlink-valid.csv`. Every row should preview as importable; confirm the `myapp://` / `fb://` / `intent://` rows are **accepted** (deep-link regression guard).
+2. **Valid:** import `smartlink-valid.csv`. Every row should preview as importable (all `https` store URLs).
 3. **Malicious:** import `smartlink-malicious.csv`. Confirm:
-   - Every dangerous-scheme URL row lands in **errors** (not imported).
-   - No `javascript:`/`data:`/`vbscript:`/`file:` value reaches the database.
+   - Every non-`http(s)` / dangerous-scheme URL row lands in **errors** (not imported).
+   - The `<script>` / `onerror=` row is rejected as "Disallowed markup in title or description".
    - Formula cells are neutralized (no leading `=`/`@`/`+`/`-`/`|` survives to a re-export).
    - No script/HTML executes anywhere in the preview UI.
-4. **Edge cases:** import `smartlink-edge-cases.csv`. Confirm required-field errors are clear, format rejections are graceful, and `ftp://` behaves as documented above.
+4. **Edge cases:** import `smartlink-edge-cases.csv`. Confirm required-field errors are clear and every non-`http(s)` scheme (`mailto:`, `ftp:`, `myapp://`) is rejected.
 
 ## Expected behavior summary
 
 | Input | Expected |
 |-------|----------|
-| `javascript:` / `vbscript:` / `data:` / `file:` (any URL field) | Rejected — row in errors |
-| Obfuscated `javascript://%0a…` / leading-space scheme | Rejected |
-| `myapp://`, `fb://`, `intent://` deep links | **Accepted** |
-| Relative `/path`, bare `domain.com`, `//host` in a URL field | Rejected (not an absolute URL per `filter_var`) |
-| `mailto:…`, `ftp://…` | Accepted (valid URL, not dangerous) — documented, revisit if undesired |
-| Leading `= + - @ \|` in any cell | Formula prefix stripped on import |
+| `http://…` / `https://…` (store/landing URL) | **Accepted** |
+| `javascript:` / `vbscript:` / `data:` / `file:` (+ obfuscated) | Rejected |
+| `mailto:`, `tel:`, `ftp:`, custom app schemes (`myapp://`, `fb://`) | Rejected (not a store URL) |
+| Relative `/path`, bare `domain.com`, `//host` | Rejected (not absolute `http(s)`) |
+| `<script>` / `<iframe>` / `on*=` in `title`/`description` | Rejected (disallowed markup) |
+| Leading `= + - @ \|` in any cell | Formula prefix stripped on import / escaped on export |
 | Missing `slug` or `fallbackUrl` | Rejected with a clear error |
