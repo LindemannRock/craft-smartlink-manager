@@ -321,7 +321,7 @@
                     <div class="heading">
                         <label>{{ "Preview"|t('smartlink-manager') }}</label>
                     </div>
-                    <div class="input" style="text-align: center;">
+                    <div class="input lr-text-center">
                         <a href="{{ smartLink.getQrCodeUrl() }}" target="_blank" title="{{ 'Click to view QR code image'|t('smartlink-manager') }}">
                             <img id="qr-preview"
                                  src="{{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle, size: 150 }) }}"
