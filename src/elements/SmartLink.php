@@ -20,6 +20,7 @@ use craft\helpers\DateTimeHelper;
 use craft\helpers\Html;
 use craft\models\FieldLayout;
 use craft\validators\UniqueValidator;
+use lindemannrock\base\helpers\ContentSafetyHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\SlugHandleHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -1087,6 +1088,20 @@ class SmartLink extends Element
             ['iosUrl', 'androidUrl', 'huaweiUrl', 'amazonUrl', 'windowsUrl', 'macUrl', 'fallbackUrl'],
             UrlValidator::class,
             'defaultScheme' => 'https',
+        ];
+
+        // Reject dangerous HTML/script markup in the free-text fields, so the CP
+        // form and CSV import enforce the same rule. Detect-and-reject (not strip):
+        // a lone '<' in legitimate text like "price < $5" is not flagged.
+        $rules[] = [
+            ['title', 'description'],
+            function(string $attribute): void {
+                if (ContentSafetyHelper::containsMaliciousMarkup((string)$this->$attribute)) {
+                    $this->addError($attribute, Craft::t('smartlink-manager', '{attribute} contains markup that is not allowed.', [
+                        'attribute' => $this->getAttributeLabel($attribute),
+                    ]));
+                }
+            },
         ];
         $rules[] = [['trackAnalytics', 'qrCodeEnabled'], 'boolean'];
         $rules[] = [['qrCodeSize'], 'integer', 'min' => 100, 'max' => 1000];
