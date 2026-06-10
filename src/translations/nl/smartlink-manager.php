@@ -79,7 +79,6 @@ return [
     'The text to display on the Add button.' => 'De tekst die op de knop "Toevoegen" wordt weergegeven.',
 
     // Element
-    'Smart Link' => 'Smart Link',
     'smart link' => 'smart link',
     'smart links' => 'smart links',
     'New smart link' => 'Nieuwe smart link',
@@ -620,8 +619,6 @@ return [
     'Geographic' => 'Geografisch',
     'Total Links' => 'Totaal links',
     'Active Links' => 'Actieve links',
-    'Total Clicks' => 'Totaal klikken',
-    'total clicks' => 'totaal klikken',
     'Clicks' => 'Klikken',
     'Unique Visitors' => 'Unieke bezoekers',
     'Total Interactions' => 'Totaal interacties',

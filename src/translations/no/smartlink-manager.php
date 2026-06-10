@@ -79,7 +79,6 @@ return [
     'The text to display on the Add button.' => 'Teksten som vises på "Legg til"-knappen.',
 
     // Element
-    'Smart Link' => 'Smart Link',
     'smart link' => 'smart lenke',
     'smart links' => 'smarte lenker',
     'New smart link' => 'Ny smart lenke',
@@ -620,8 +619,6 @@ return [
     'Geographic' => 'Geografisk',
     'Total Links' => 'Lenker totalt',
     'Active Links' => 'Aktive lenker',
-    'Total Clicks' => 'Klikk totalt',
-    'total clicks' => 'klikk totalt',
     'Clicks' => 'Klikk',
     'Unique Visitors' => 'Unike besøkende',
     'Total Interactions' => 'Interaksjoner totalt',

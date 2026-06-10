@@ -79,7 +79,6 @@ return [
     'The text to display on the Add button.' => 'Le texte à afficher sur le bouton « Ajouter ».',
 
     // Element
-    'Smart Link' => 'Smart Link',
     'smart link' => 'smart link',
     'smart links' => 'smart links',
     'New smart link' => 'Nouveau smart link',
@@ -620,8 +619,6 @@ return [
     'Geographic' => 'Géographique',
     'Total Links' => 'Total des liens',
     'Active Links' => 'Liens actifs',
-    'Total Clicks' => 'Total des clics',
-    'total clicks' => 'total des clics',
     'Clicks' => 'Clics',
     'Unique Visitors' => 'Visiteurs uniques',
     'Total Interactions' => 'Total des interactions',

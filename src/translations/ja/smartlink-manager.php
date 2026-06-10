@@ -79,7 +79,6 @@ return [
     'The text to display on the Add button.' => '「追加」ボタンに表示するテキスト。',
 
     // Element
-    'Smart Link' => 'スマートリンク',
     'smart link' => 'スマートリンク',
     'smart links' => 'スマートリンク',
     'New smart link' => '新しいスマートリンク',
@@ -620,8 +619,6 @@ return [
     'Geographic' => '地理的',
     'Total Links' => '総リンク数',
     'Active Links' => '有効なリンク',
-    'Total Clicks' => '総クリック数',
-    'total clicks' => '総クリック数',
     'Clicks' => 'クリック',
     'Unique Visitors' => 'ユニーク訪問者',
     'Total Interactions' => '総インタラクション数',

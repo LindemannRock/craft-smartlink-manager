@@ -79,7 +79,6 @@ return [
     'The text to display on the Add button.' => 'النص الذي سيظهر على زر "إضافة".',
 
     // Element
-    'Smart Link' => 'Smart Link',
     'smart link' => 'smart link',
     'smart links' => 'smart links',
     'New smart link' => 'smart link جديد',
@@ -620,8 +619,6 @@ return [
     'Geographic' => 'جغرافي',
     'Total Links' => 'إجمالي الروابط',
     'Active Links' => 'الروابط النشطة',
-    'Total Clicks' => 'إجمالي النقرات',
-    'total clicks' => 'إجمالي النقرات',
     'Clicks' => 'النقرات',
     'Unique Visitors' => 'الزوار الفريدون',
     'Total Interactions' => 'إجمالي التفاعلات',
