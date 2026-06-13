@@ -325,7 +325,7 @@ return [
     'Anonymize IP Addresses' => 'Anonymisera IP-adresser',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => 'Maskera IP-adresser före lagring för maximal integritet. <strong>IPv4</strong>: maskerar sista oktetten (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: maskerar de sista 80 bitarna. <strong>Kompromiss</strong>: Minskar noggrannheten för unika besökare (användare på samma subnät räknas som en besökare). Geolokalisering fungerar fortfarande normalt.',
     'Privacy Levels' => 'Integritetsnivåer',
-    'Enabled' => 'Aktiverat',
+    'Enabled' => 'Aktiverad',
     'default' => 'standard',
     'Full IP hashed with salt (accurate unique visitors)' => 'Fullständig IP-hash med salt (noggranna unika besökare)',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'Subnätsmaskerat + hash med salt (maximal integritet, mindre noggrann)',

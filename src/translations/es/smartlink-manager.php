@@ -325,7 +325,7 @@ return [
     'Anonymize IP Addresses' => 'Anonimizar direcciones IP',
     'Mask IP addresses before storage for maximum privacy. <strong>IPv4</strong>: masks last octet (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: masks last 80 bits. <strong>Trade-off</strong>: Reduces unique visitor accuracy (users on same subnet counted as one visitor). Geo-location still works normally.' => 'Enmascare las direcciones IP antes del almacenamiento para máxima privacidad. <strong>IPv4</strong>: enmascara el último octeto (192.168.1.123 → 192.168.1.0). <strong>IPv6</strong>: enmascara los últimos 80 bits. <strong>Compensación</strong>: Reduce la precisión de visitantes únicos (usuarios en la misma subred se cuentan como un visitante). La geolocalización sigue funcionando normalmente.',
     'Privacy Levels' => 'Niveles de privacidad',
-    'Enabled' => 'Habilitado',
+    'Enabled' => 'Activado',
     'default' => 'predeterminado',
     'Full IP hashed with salt (accurate unique visitors)' => 'IP completa con hash y salt (visitantes únicos precisos)',
     'Subnet masked + hashed with salt (maximum privacy, less accurate)' => 'Subred enmascarada + hash con salt (máxima privacidad, menos preciso)',

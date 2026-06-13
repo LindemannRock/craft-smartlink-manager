@@ -718,7 +718,7 @@ return [
     'Cache Status' => 'Estado da cache',
     'Total cached entries' => 'Total de entradas em cache',
     'Navigation' => 'Navegação',
-    'Access main plugin sections' => 'Aceder às seções principais do plugin',
+    'Access main plugin sections' => 'Aceder às secções principais do plugin',
     'Manage {pluginName}' => 'Gerir {pluginName}',
     'Cache Management' => 'Gestão de cache',
     'Clear cached data to force regeneration. Useful after changing QR code settings or when troubleshooting.' => 'Limpe os dados em cache para forçar a regeneração. Útil após alterar as definições de QR Code ou durante a resolução de problemas.',
