@@ -233,7 +233,7 @@ class AnalyticsSummaryService
         }
 
         return [
-            'total' => (int) $total,
+            'totalClicks' => (int) $total,
             'devices' => $devices,
             'daily' => $daily,
             'languages' => $languages,
