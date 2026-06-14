@@ -8,9 +8,20 @@ Smart links are first-class Craft elements — they have slugs, titles, statuses
 
 You create and manage smart links in **SmartLink Manager** in the Craft control panel, the same way you work with entries.
 
+## What you'll use it for
+
+- **App marketing** — one link that lands iOS visitors in the App Store, Android visitors in Google Play, and everyone else on a fallback page.
+- **Multi-store apps** — reach Huawei AppGallery and Amazon Appstore audiences alongside the major stores, from the same link.
+- **Localized destinations** — send visitors to a region- or language-specific URL based on their browser or location.
+- **Scheduled launches** — set a publish date so a link goes live the moment a campaign starts, and an expiry date so it retires itself.
+
 ## Creating and Editing Smart Links
 
-Go to **SmartLink Manager → New Smart Link** to create a link. The edit screen has these main fields:
+Go to **SmartLink Manager → New Smart Link** to create a link.
+
+![Creating a smart link in the Craft control panel](images/smart-links-create.webp)
+
+The edit screen has these main fields:
 
 | Field | Description |
 |-------|-------------|

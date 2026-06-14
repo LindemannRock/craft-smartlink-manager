@@ -6,6 +6,12 @@ The SmartLink Field is a custom Craft field type that lets editors attach smart 
 
 When you add a SmartLink Field to an entry's field layout, editors can pick from existing smart links using the familiar Craft element selector. The field stores a relation to the selected smart link(s), so you can render the smart link's redirect URL, QR code, or analytics data directly in your templates.
 
+## What you'll use it for
+
+- **Attach links to content** — give an entry, product, or category its own smart link to render a download button or QR code.
+- **Editor-friendly picking** — let editors reuse existing smart links through the standard Craft element selector, no URL pasting.
+- **Templated output** — pull the selected link's redirect URL, QR code, or analytics straight into your templates.
+
 ## Adding the Field
 
 1. Go to **Settings → Fields → New Field**
@@ -14,6 +20,8 @@ When you add a SmartLink Field to an entry's field layout, editors can pick from
 4. Add the field to the desired field layout via **Settings → [Entry Type] → Field Layout**
 
 ## Field Settings
+
+![SmartLink Field settings](images/smartlink-field-settings.webp)
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|

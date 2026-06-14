@@ -2,6 +2,14 @@
 
 By default, SmartLink Manager generates smart link URLs using each site's base URL. You can override this with a dedicated custom domain — useful for branded short URLs like `go.myapp.com` — using a single setting: `smartlinkBaseUrl`.
 
+## What you'll use it for
+
+- **Branded links** — share `go.myapp.com/my-app` instead of a long site URL.
+- **Short, memorable URLs** — a dedicated domain keeps printed and spoken links easy to type.
+- **Multisite setups** — give each site its own custom domain with site-aware URL tokens.
+
+![Custom domain setting in SmartLink Manager](images/custom-domain-settings.webp)
+
 ## Single-Site URLs
 
 Use `smartlinkBaseUrl` to serve all smart links from your custom domain:

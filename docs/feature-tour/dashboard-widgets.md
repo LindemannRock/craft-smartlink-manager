@@ -2,9 +2,17 @@
 
 SmartLink Manager provides two Craft dashboard widgets for at-a-glance analytics without leaving the dashboard.
 
+## What you'll use it for
+
+- **Daily pulse** — keep total interactions, unique visitors, and engagement on your Craft dashboard.
+- **Spot top performers** — see which links are getting the most clicks over a chosen date range.
+- **Per-user views** — each editor adds the widgets they want; data respects their permissions and editable sites.
+
 ## Adding Widgets
 
 Add widgets via **Dashboard → New Widget** and selecting either widget from the SmartLink Manager section. Both widgets require the `smartLinkManager:viewAnalytics` permission to display data.
+
+![SmartLink Manager dashboard widgets](images/dashboard-widgets-overview.webp)
 
 ## Analytics Summary Widget
 
@@ -12,10 +20,14 @@ The Analytics Summary widget shows an overview of click activity across your sma
 
 ### What It Shows
 
-- **Total clicks** — all recorded click events in the selected date range
-- **Top device types** — breakdown of phone, tablet, desktop, and other device categories
-- **Top countries** — most common visitor countries (requires geo-detection enabled)
-- **Click trend** — daily click counts as a sparkline or mini chart
+Four summary tiles for the selected date range:
+
+- **Total Interactions** — all recorded click/redirect events
+- **Unique Visitors** — distinct visitors in the period
+- **Active Links** — number of enabled smart links
+- **Engagement Rate** — percentage of active links that received at least one interaction
+
+Below the tiles, a **Top Performer** card highlights the single most-clicked link (its title links to the edit page, its slug links to the live redirect) and a **View full analytics** link to the analytics section.
 
 ### Configuration
 
@@ -27,7 +39,7 @@ Click the widget's settings icon to configure:
 
 ### Multi-Site
 
-In a multi-site setup, the widget shows analytics for all sites unless you configure a specific site scope. Site filtering is available within the widget settings.
+In a multi-site setup, the widget automatically aggregates analytics across every site the current user can edit (`getEditableSiteIds()`). There is no per-widget site selector — scope follows the user's editable-site permissions.
 
 ## Top Links Widget
 
@@ -35,9 +47,12 @@ The Top Links widget shows which smart links received the most clicks during the
 
 ### What It Shows
 
-- **Link title** — the smart link's title, linked to its edit page
-- **Click count** — total clicks in the selected period
-- **Trend indicator** — whether clicks are increasing or decreasing compared to the previous equivalent period
+A ranked table of the most-clicked links in the selected period. Each row shows:
+
+- **Link** — the smart link's title (linked to its edit page) with its slug below (linked to the live redirect)
+- **Interactions** — total clicks in the period, shown as a badge
+
+A **View all {plural}** link sits below the table. When there are no links yet, the widget shows an empty-state prompt instead.
 
 ### Configuration
 
@@ -46,11 +61,11 @@ Click the widget's settings icon to configure:
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | **Date Range** | `string` | `'last7days'` | Time period: `'today'`, `'yesterday'`, `'last7days'`, `'last30days'`, `'last90days'`, `'all'` |
-| **Limit** | `int` | `5` | Maximum number of links to display (1–20) |
+| **Number of Links** | `int` | `5` | How many top links to display (1–20) |
 
 ### Multi-Site
 
-The Top Links widget shows results across all sites by default. Configure a site scope in widget settings to restrict the results.
+Like the Analytics Summary widget, Top Links aggregates across every site the current user can edit (`getEditableSiteIds()`). There is no per-widget site selector.
 
 ## Permissions
 

@@ -2,6 +2,13 @@
 
 Every smart link in SmartLink Manager can have a QR code. Each QR code encodes the smart link's public URL, so if you update the destination, the QR code continues working without reprinting. Scanning triggers the same redirect flow as clicking — including analytics tracking.
 
+## What you'll use it for
+
+- **Print and packaging** — put a scannable code on flyers, posters, business cards, or product boxes that always points to the current destination.
+- **On-brand codes** — match the code to your brand with custom colors, module and eye styles, and a centered logo.
+- **Event and signage** — let people open your app or landing page from a screen or banner without typing a URL.
+- **Trackable offline campaigns** — every scan is recorded with device and location, so print reach shows up in your analytics.
+
 ## How It Works
 
 QR codes are generated dynamically by the `bacon/bacon-qr-code` library and cached to avoid regenerating on every request. Each QR code encodes the smart link's public URL (e.g., `https://example.com/qr/my-app`).
@@ -29,6 +36,8 @@ On the smart link edit page, toggle **QR Code Enabled** to activate QR endpoints
 ## Customization Options
 
 QR code appearance is set globally in **Settings → QR Codes** and can be overridden per link on the smart link edit page. Per-link values left at `null` inherit from the global defaults.
+
+![Customizing QR code appearance in SmartLink Manager settings](images/qr-codes-customize.webp)
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|

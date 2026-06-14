@@ -22,6 +22,7 @@
             "feature-tour/device-detection",
             "feature-tour/smartlink-field",
             "feature-tour/dashboard-widgets",
+            "feature-tour/import-export",
             "feature-tour/integrations"
         ]
     },

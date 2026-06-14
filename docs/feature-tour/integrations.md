@@ -2,6 +2,14 @@
 
 SmartLink Manager integrates with SEOmatic, Redirect Manager, and Craft Link Field. Each integration is optional and can be enabled or disabled in **Settings → Integrations**.
 
+## What you'll use it for
+
+- **Tag-manager tracking** — push smart link interactions into the GTM/GA4 data layer through SEOmatic.
+- **No broken links on slug changes** — let Redirect Manager create an automatic 301 when a smart link's slug changes.
+- **Native field picking** — offer SmartLink as a type in Craft's Link field so editors can pick one inline.
+
+![SmartLink Manager integrations settings](images/integrations-settings.webp)
+
 ## SEOmatic Integration
 
 When SEOmatic is installed and the integration is enabled, SmartLink Manager pushes structured data layer events to the GTM/GA4 data layer whenever a smart link is interacted with.

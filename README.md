@@ -29,6 +29,7 @@ This plugin is in active development and not yet available on the Craft Plugin S
 - **Custom Domain** — Serve smart links from a branded domain like `go.myapp.com` with single-site and multisite support
 - **Multi-Site** — Per-site destination URLs with a single shared slug
 - **Dashboard Widgets** — Analytics Summary and Top Links widgets
+- **Import & Export** — Bulk CSV export and a guided CSV import wizard with history tracking
 
 ## Requirements
 

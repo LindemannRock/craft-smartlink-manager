@@ -107,7 +107,7 @@ A common pattern is rendering a download button on a product entry using a Smart
 
 ## Craft Link Field Integration
 
-If the [Craft Link Field](https://github.com/verbb/link-field) plugin by Verbb is installed, SmartLink Manager also registers a **SmartLink** option in the Link field's type selector.
+SmartLink Manager registers a **SmartLink** option in the type selector of Craft's native [Link field](https://craftcms.com/docs/5.x/reference/field-types/link.html) (available in Craft CMS 5.3+).
 
 This is separate from the SmartLinkField — it allows editors to pick a smart link in any Link field alongside URLs, entries, categories, and assets.
 

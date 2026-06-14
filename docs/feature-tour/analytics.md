@@ -2,6 +2,13 @@
 
 SmartLink Manager records a click event every time a smart link is followed, capturing device type, geography, language, referrer, and click type — all without requiring a third-party analytics service.
 
+## What you'll use it for
+
+- **Campaign reporting** — see total clicks, unique visitors, and trends over any date range, per link.
+- **Audience insight** — break clicks down by device, OS, country, city, and language to learn who's engaging.
+- **Channel attribution** — read referrers to see which sites and campaigns send traffic.
+- **Privacy-friendly tracking** — keep first-party click data in your own database, with IP anonymization and a configurable retention window.
+
 ## What Gets Tracked
 
 Each click event records:
@@ -98,7 +105,11 @@ When a retention period is set, SmartLink Manager runs a `CleanupAnalyticsJob` q
 
 ## Analytics Dashboard
 
-The analytics dashboard is available in the **SmartLink Manager** CP section under **Analytics**. It shows:
+The analytics dashboard is available in the **SmartLink Manager** CP section under **Analytics**.
+
+![SmartLink Manager analytics dashboard](images/analytics-dashboard.webp)
+
+It shows:
 
 - **Summary stats** — total clicks, unique visitors, top devices, top countries
 - **Click trend chart** — clicks over time (configurable date range)

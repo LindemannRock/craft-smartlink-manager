@@ -2,6 +2,12 @@
 
 SmartLink Manager identifies the visiting device using Matomo Device Detector and resolves the most appropriate redirect destination based on supported platform mappings.
 
+## What you'll use it for
+
+- **Right store, every time** — iOS visitors reach the App Store, Android visitors reach Google Play, and Huawei, Amazon, Windows, and Mac visitors each get their platform's URL.
+- **Graceful fallbacks** — when no platform-specific URL is set, visitors fall through to the next-best match and finally the generic fallback URL.
+- **Localized routing** — combine device detection with language detection to send visitors to a region- or language-specific destination.
+
 ## How Device Detection Works
 
 When a visitor follows a smart link URL, SmartLink Manager reads the `User-Agent` HTTP header and passes it to the Matomo Device Detector library (included via the `lindemannrock/craft-plugin-base` dependency). The detector classifies the device into a type, operating system, and OS family, then SmartLink Manager maps that to a platform bucket.

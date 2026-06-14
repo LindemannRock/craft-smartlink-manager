@@ -13,6 +13,15 @@ SmartLink Manager registers granular permissions that can be assigned to user gr
 | └─ `smartLinkManager:editLinks` | Edit smart links |
 | └─ `smartLinkManager:deleteLinks` | Delete smart links |
 
+### Import/Export
+
+| Permission | Description |
+|------------|-------------|
+| **`smartLinkManager:manageImportExport`** | Manage import/export (parent — grants Import/Export section access) |
+| └─ `smartLinkManager:importLinks` | Import links from a CSV file |
+| └─ `smartLinkManager:exportLinks` | Export links to a CSV file |
+| └─ `smartLinkManager:clearImportHistory` | Clear the import history log |
+
 ### Analytics
 
 | Permission | Description |

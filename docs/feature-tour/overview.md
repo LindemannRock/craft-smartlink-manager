@@ -11,6 +11,15 @@ When a visitor follows a smart link URL (e.g., `yoursite.com/go/my-app`), SmartL
 
 Every smart link is a native Craft element with its own slug, status, publish schedule, and analytics. You manage them in the control panel just like entries.
 
+![SmartLink Manager element index in the Craft control panel](images/overview-element-index.webp)
+
+## What you'll use it for
+
+- **One link for every platform** — share a single `go/my-app` URL on social, email, or print, and send each visitor to the right app store automatically.
+- **Branded download pages** — route desktop visitors to a landing page while mobile visitors go straight to the App Store or Google Play.
+- **Print and packaging** — drop a styled QR code on a flyer or box; update the destination later without reprinting.
+- **Campaign measurement** — see which links, devices, and countries drive the most clicks, without wiring up a third-party analytics service.
+
 ## Core Capabilities
 
 - **[Smart Links](smart-links.md)** — Custom element type with per-platform URLs (iOS, Android, Huawei, Amazon, Windows, Mac, Fallback). Each link has a unique slug, publish schedule, expiry date, and status lifecycle.
@@ -26,6 +35,8 @@ Every smart link is a native Craft element with its own slug, status, publish sc
 - **[Integrations](integrations.md)** — Built-in integrations with SEOmatic (GTM/GA4 data layer events), Redirect Manager (automatic 301 on slug change), and Craft Link Field (SmartLink as a link type).
 
 - **[Dashboard Widgets](dashboard-widgets.md)** — Two Craft dashboard widgets: Analytics Summary and Top Links. Both are configurable by date range and respect user permissions.
+
+- **[Import & Export](import-export.md)** — Export all smart links to CSV, or bulk-create links by uploading a CSV through a guided map → preview → import wizard. Past imports are logged in an import history.
 
 ## How It Works
 
@@ -50,6 +61,7 @@ QR codes follow the same pattern but are accessed via `/{qrPrefix}/{slug}` (defa
 | Redirect Manager auto-301 | Settings → Integrations |
 | Craft Link Field support | Available in field type selection |
 | SmartLinkField element picker | Available in field type selection |
+| CSV import & export | CP → SmartLink Manager → Import/Export |
 | `craft.smartLinks` Twig variable | Template access to all elements and analytics |
 | Dashboard widgets (2) | Craft Dashboard → New Widget |
 | CP Utility panel | Utilities → SmartLink Manager |
@@ -61,8 +73,8 @@ SmartLink Manager provides two Craft dashboard widgets. Add them via **Dashboard
 
 | Widget | What It Shows |
 |--------|---------------|
-| **Analytics Summary** | Total clicks, top device types, top countries, and click trends over a configurable date range |
-| **Top Links** | Most-clicked smart links over a configurable date range with click counts |
+| **Analytics Summary** | Total interactions, unique visitors, active links, engagement rate, and the top-performing link over a configurable date range |
+| **Top Links** | Most-clicked smart links over a configurable date range with interaction counts |
 
 Both widgets require the `smartLinkManager:viewAnalytics` permission.
 
