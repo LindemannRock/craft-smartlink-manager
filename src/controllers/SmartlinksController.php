@@ -263,8 +263,9 @@ class SmartlinksController extends Controller
             }
             $smartLink->hideTitle = (bool)$request->getBodyParam('hideTitle');
 
+            $settings = SmartLinkManager::$plugin->getSettings();
             $smartLink->qrCodeEnabled = (bool)$request->getBodyParam('qrCodeEnabled');
-            $smartLink->qrCodeSize = $request->getBodyParam('qrCodeSize') ?: 200;
+            $smartLink->qrCodeSize = $request->getBodyParam('qrCodeSize') ?: $settings->defaultQrSize;
 
             // Fix color values - ensure they have # prefix, or set to null if empty
             $qrCodeColor = $request->getBodyParam('qrCodeColor');

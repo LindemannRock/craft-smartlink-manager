@@ -35,7 +35,7 @@ class Install extends Migration
                 'trackAnalytics' => $this->boolean()->defaultValue(true),
                 'hits' => $this->integer()->unsigned()->notNull()->defaultValue(0),
                 'qrCodeEnabled' => $this->boolean()->defaultValue(true),
-                'qrCodeSize' => $this->integer()->defaultValue(200),
+                'qrCodeSize' => $this->integer()->defaultValue(256),
                 'qrCodeColor' => $this->string(7)->null(),
                 'qrCodeBgColor' => $this->string(7)->null(),
                 'qrCodeEyeColor' => $this->string(7)->null(),
