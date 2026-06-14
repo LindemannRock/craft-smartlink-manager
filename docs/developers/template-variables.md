@@ -138,7 +138,7 @@ Returns analytics data for a specific smart link.
 | `smartLink` | `SmartLink` | — | The smart link element |
 | `criteria` | `array` | `[]` | Filter criteria for analytics query |
 
-**Returns:** `array`
+**Returns:** `array` with `totalClicks`, `devices`, `daily`, `languages`, and `countries`.
 
 ```twig
 {% set link = craft.smartLinks.getBySlug('summer-sale') %}

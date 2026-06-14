@@ -150,8 +150,8 @@ Retrieve analytics data for a specific smart link in your Twig templates using `
 
 ```twig
 {% set stats = craft.smartLinks.getAnalytics(smartLink, {
-    startDate: now|date_modify('-30 days'),
-    endDate: now
+    from: now|date_modify('-30 days'),
+    to: now
 }) %}
 
 <p>{{ stats.totalClicks }} clicks in the last 30 days</p>

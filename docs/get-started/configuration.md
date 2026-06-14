@@ -41,11 +41,11 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `defaultQrSize` | `int` | `256` | QR code size in pixels (50–2000) |
+| `defaultQrSize` | `int` | `256` | QR code size in pixels (100–1000) |
 | `defaultQrFormat` | `string` | `'png'` | QR code format: `png` or `svg` |
 | `defaultQrColor` | `string` | `'#000000'` | QR code foreground color |
 | `defaultQrBgColor` | `string` | `'#FFFFFF'` | QR code background color |
-| `defaultQrMargin` | `int` | `4` | QR code quiet zone in modules (0–50) |
+| `defaultQrMargin` | `int` | `4` | QR code quiet zone in modules (0–10) |
 | `defaultQrErrorCorrection` | `string` | `'M'` | Error correction level: `L` (7%), `M` (15%), `Q` (25%), `H` (30%) |
 | `qrModuleStyle` | `string` | `'square'` | Module shape: `square`, `rounded`, `dots` |
 | `qrEyeStyle` | `string` | `'square'` | Eye shape: `square`, `rounded`, `leaf` |
@@ -58,7 +58,7 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `enableQrLogo` | `bool` | `false` | Enable logo overlay in center of QR codes |
 | `qrLogoVolumeUid` | `?string` | `null` | Asset volume UID for logo selection (`null` = all volumes). Supports env vars |
 | `defaultQrLogoId` | `?int` | `null` | Default logo asset ID. Required when `enableQrLogo` is `true` |
-| `qrLogoSize` | `int` | `20` | Logo size as percentage of QR code (5–50) |
+| `qrLogoSize` | `int` | `20` | Logo size as percentage of QR code (10–30) |
 
 ### Downloads
 

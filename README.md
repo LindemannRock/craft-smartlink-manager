@@ -1,3 +1,5 @@
+![SmartLink Manager](docs/images/hero.webp)
+
 # SmartLink Manager for Craft CMS
 
 [![Latest Version](https://img.shields.io/packagist/v/lindemannrock/craft-smartlink-manager.svg)](https://packagist.org/packages/lindemannrock/craft-smartlink-manager)
