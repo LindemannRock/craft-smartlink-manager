@@ -652,11 +652,12 @@ class SmartLinkManager extends Plugin
         $nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
             $nextRun,
             $settings,
+            null,
             false,
-            false,
+            pluginHandle: 'smartlink-manager',
         );
 
-        $jobId = RecurringQueueHelper::ensurePending(
+        RecurringQueueHelper::ensurePending(
             pluginToken: 'smartlinkmanager',
             jobClass: CleanupAnalyticsJob::class,
             delay: $delay,
@@ -665,13 +666,6 @@ class SmartLinkManager extends Plugin
                 'nextRunTime' => $nextRunTime,
             ]),
         );
-
-        if ($jobId !== null) {
-            $this->logInfo('Scheduled analytics cleanup job', [
-                'delay_seconds' => $delay,
-                'next_run' => $nextRunTime,
-            ]);
-        }
     }
 
     /**

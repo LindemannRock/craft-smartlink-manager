@@ -63,8 +63,9 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
                 $this->nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
                     $nextRun,
                     $settings,
+                    null,
                     false,
-                    false,
+                    pluginHandle: 'smartlink-manager',
                 );
             }
         }
@@ -178,8 +179,9 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
             $nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
                 $nextRun,
                 $settings,
+                null,
                 false,
-                false,
+                pluginHandle: 'smartlink-manager',
             );
             $job = new self([
                 'reschedule' => true,

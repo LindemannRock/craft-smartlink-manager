@@ -145,8 +145,9 @@ final class SchedulerPatternTest extends TestCase
         return DateFormatHelper::formatCompactDatetimeFromSettings(
             $nextRun,
             SmartLinkManager::$plugin->getSettings(),
+            null,
             false,
-            false,
+            pluginHandle: 'smartlink-manager',
         );
     }
 
