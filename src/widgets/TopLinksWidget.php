@@ -10,6 +10,7 @@ namespace lindemannrock\smartlinkmanager\widgets;
 
 use Craft;
 use craft\base\Widget;
+use lindemannrock\base\helpers\DateRangeHelper;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 
 /**
@@ -19,6 +20,8 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
  */
 class TopLinksWidget extends Widget
 {
+    use SiteFilterTrait;
+
     /**
      * @var string Date range for analytics
      */
@@ -35,8 +38,10 @@ class TopLinksWidget extends Widget
     public function rules(): array
     {
         $rules = parent::rules();
-        $rules[] = [['dateRange'], 'string'];
+        $rules[] = [['dateRange'], 'in', 'range' => array_keys(DateRangeHelper::getOptions('assoc'))];
+        $rules[] = [['siteId'], 'in', 'range' => array_column($this->siteOptions(), 'value')];
         $rules[] = [['dateRange'], 'default', 'value' => 'last7days'];
+        $rules[] = [['siteId'], 'default', 'value' => 'all'];
         $rules[] = [['limit'], 'integer', 'min' => 1, 'max' => 20];
         $rules[] = [['limit'], 'default', 'value' => 5];
         return $rules;
@@ -65,7 +70,7 @@ class TopLinksWidget extends Widget
      */
     public static function icon(): ?string
     {
-        return '@app/icons/trophy.svg';
+        return '@lindemannrock/smartlinkmanager/icon-mask.svg';
     }
 
     /**
@@ -90,16 +95,9 @@ class TopLinksWidget extends Widget
      */
     public function getSubtitle(): ?string
     {
-        $labels = [
-            'today' => Craft::t('smartlink-manager', 'Today'),
-            'yesterday' => Craft::t('smartlink-manager', 'Yesterday'),
-            'last7days' => Craft::t('smartlink-manager', 'Last 7 days'),
-            'last30days' => Craft::t('smartlink-manager', 'Last 30 days'),
-            'last90days' => Craft::t('smartlink-manager', 'Last 90 days'),
-            'all' => Craft::t('smartlink-manager', 'All time'),
-        ];
+        $labels = DateRangeHelper::getOptions('assoc');
 
-        return $labels[$this->dateRange] ?? Craft::t('smartlink-manager', 'Last 7 days');
+        return $labels[$this->dateRange] ?? $labels['last7days'];
     }
 
     /**
@@ -109,6 +107,7 @@ class TopLinksWidget extends Widget
     {
         return Craft::$app->getView()->renderTemplate('smartlink-manager/widgets/top-links/settings', [
             'widget' => $this,
+            'siteOptions' => $this->siteOptions(),
         ]);
     }
 
@@ -127,9 +126,7 @@ class TopLinksWidget extends Widget
             return '<p class="light">' . Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.') . '</p>';
         }
 
-        // Get analytics data scoped to user's editable sites
-        $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
-        $analyticsData = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $editableSiteIds);
+        $analyticsData = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $this->effectiveSiteId());
         $topLinks = array_slice($analyticsData['topLinks'] ?? [], 0, $this->limit);
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/widgets/top-links/body', [

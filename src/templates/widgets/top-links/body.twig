@@ -1,134 +1,33 @@
 {% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
+{% set rows = [] %}
 
-<div class="top-links-widget">
-    {% if links|length > 0 %}
-        <table class="data fullwidth">
-            <thead>
-                <tr>
-                    <th>{{ "Link"|t('smartlink-manager') }}</th>
-                    <th>{{ "Interactions"|t('smartlink-manager') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for link in links %}
-                    <tr>
-                        <td>
-                            <div class="link-cell">
-                                <a href="{{ cpUrl('smartlink-manager/smartlinks/' ~ link.id) }}" class="link-name">
-                                    {{ link.name }}
-                                </a>
-                                <div class="link-slug">
-                                    {% if link.enabled %}
-                                        {% set redirectPath = ((plugin.settings.usePrefix ?? true) ? ((plugin.settings.slugPrefix ?? 'go') ~ '/') : '') ~ link.slug %}
-                                        <a href="{{ plugin.settings.buildPublicUrl(redirectPath, link.siteId ?? null) }}" target="_blank">/{{ link.slug }}</a>
-                                    {% else %}
-                                        <span class="disabled">/{{ link.slug }}</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </td>
-                        <td class="interactions-cell">
-                            <span class="badge">{{ link.clicks|number }}</span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% for link in links %}
+    {% set meta %}
+        {% if link.enabled %}
+            {% set redirectPath = ((plugin.settings.usePrefix ?? true) ? ((plugin.settings.slugPrefix ?? 'go') ~ '/') : '') ~ link.slug %}
+            <a href="{{ plugin.settings.buildPublicUrl(redirectPath, link.siteId ?? null) }}" target="_blank" rel="noopener">/{{ link.slug }}</a>
+        {% else %}
+            <span>/{{ link.slug }}</span>
+        {% endif %}
+    {% endset %}
+    {% set rows = rows|merge([{
+        primary: link.name,
+        primaryUrl: cpUrl('smartlink-manager/smartlinks/' ~ link.id),
+        metaHtml: meta,
+        value: link.clicks|number,
+    }]) %}
+{% endfor %}
 
-        <div class="widget-footer">
-            <a href="{{ cpUrl('smartlink-manager/smartlinks') }}" class="go">{{ "View all {pluginName}"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}) }}</a>
-        </div>
-    {% else %}
-        <div class="zilch">
-            <p>{{ "No {pluginName} yet"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}) }}</p>
-            <p class="light">{{ "Create your first {singularName} to see it here."|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}) }}</p>
-        </div>
-    {% endif %}
-</div>
-
-<style>
-.top-links-widget {
-    padding: 0;
-}
-
-.top-links-widget table {
-    margin-bottom: 0;
-}
-
-.top-links-widget table td {
-    vertical-align: top;
-}
-
-.link-cell {
-    min-width: 0;
-}
-
-.link-name {
-    font-weight: 600;
-    font-size: 13px;
-    color: #0d78f2;
-    background: #eff6ff;
-    padding: 4px 8px;
-    border-radius: 3px;
-    display: inline-block;
-    margin-bottom: 4px;
-    text-decoration: none;
-}
-
-.link-name:hover {
-    text-decoration: underline;
-}
-
-.link-slug {
-    font-size: 11px;
-}
-
-.link-slug a {
-    color: #6b7280;
-    text-decoration: none;
-}
-
-.link-slug a:hover {
-    text-decoration: underline;
-    color: #0d78f2;
-}
-
-.link-slug .disabled {
-    color: #9ca3af;
-}
-
-.interactions-cell {
-    text-align: left;
-    white-space: nowrap;
-}
-
-.interactions-cell .badge {
-    background: #eff6ff;
-    color: #0d78f2;
-    padding: 10px;
-    border-radius: 3px;
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-block;
-    line-height: 0;
-}
-
-.widget-footer {
-    text-align: center;
-    padding: 12px;
-    border-top: 1px solid #e3e5e8;
-}
-
-.widget-footer .go {
-    font-size: 13px;
-}
-
-.zilch {
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.zilch p {
-    margin-bottom: 8px;
-}
-</style>
+{% include 'lindemannrock-base/_components/dashboard-widget-list' with {
+    primaryHeader: "Link"|t('smartlink-manager'),
+    valueHeader: "Interactions"|t('smartlink-manager'),
+    rows: rows,
+    empty: {
+        title: "No {pluginName} yet"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
+        message: "Create your first {singularName} to see it here."|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    },
+    footer: {
+        url: cpUrl('smartlink-manager/smartlinks'),
+        label: "View all {pluginName}"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
+    },
+} only %}

@@ -76,7 +76,7 @@ SmartLink Manager provides two Craft dashboard widgets. Add them via **Dashboard
 | **Analytics Summary** | Total interactions, unique visitors, active links, engagement rate, and the top-performing link over a configurable date range |
 | **Top Links** | Most-clicked smart links over a configurable date range with interaction counts |
 
-Both widgets require the `smartLinkManager:viewAnalytics` permission.
+Both widgets require the `smartLinkManager:viewAnalytics` permission and can be scoped to **All Sites** or one selected site.
 
 ## Next Steps
 

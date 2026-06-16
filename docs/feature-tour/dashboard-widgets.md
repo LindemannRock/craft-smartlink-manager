@@ -6,7 +6,7 @@ SmartLink Manager provides two Craft dashboard widgets for at-a-glance analytics
 
 - **Daily pulse** — keep total interactions, unique visitors, and engagement on your Craft dashboard.
 - **Spot top performers** — see which links are getting the most clicks over a chosen date range.
-- **Per-user views** — each editor adds the widgets they want; data respects their permissions and editable sites.
+- **Per-user views** — each editor adds the widgets they want; data respects their permissions and selected site scope.
 
 ## Adding Widgets
 
@@ -36,10 +36,11 @@ Click the widget's settings icon to configure:
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | **Date Range** | `string` | `'last7days'` | Time period to summarize: `'today'`, `'yesterday'`, `'last7days'`, `'last30days'`, `'last90days'`, `'all'` |
+| **Site** | `string` | `All Sites` | Site scope for the summary. `All Sites` includes the plugin-enabled sites available to the current user. |
 
 ### Multi-Site
 
-In a multi-site setup, the widget automatically aggregates analytics across every site the current user can edit (`getEditableSiteIds()`). There is no per-widget site selector — scope follows the user's editable-site permissions.
+In a multi-site setup, choose **All Sites** for a cross-site summary or select one site for a focused dashboard view. The site options follow SmartLink Manager's enabled-site configuration and the current user's site access.
 
 ## Top Links Widget
 
@@ -61,11 +62,12 @@ Click the widget's settings icon to configure:
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | **Date Range** | `string` | `'last7days'` | Time period: `'today'`, `'yesterday'`, `'last7days'`, `'last30days'`, `'last90days'`, `'all'` |
+| **Site** | `string` | `All Sites` | Site scope for the ranked list. `All Sites` includes the plugin-enabled sites available to the current user. |
 | **Number of Links** | `int` | `5` | How many top links to display (1–20) |
 
 ### Multi-Site
 
-Like the Analytics Summary widget, Top Links aggregates across every site the current user can edit (`getEditableSiteIds()`). There is no per-widget site selector.
+Like the Analytics Summary widget, Top Links can show **All Sites** or one selected site.
 
 ## Permissions
 
