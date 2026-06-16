@@ -105,6 +105,7 @@ return [
     'Top Performer' => 'トップパフォーマー',
     'interactions' => 'インタラクション',
     'View full analytics' => 'アナリティクスの全体を表示する',
+    'View all analytics' => 'すべてのアナリティクスを表示',
     'You don\'t have permission to view analytics.' => 'アナリティクスを表示する権限がありません。',
     'Analytics are disabled in plugin settings.' => 'アナリティクスはプラグインの設定で無効になっています。',
     '{pluginName} - Top Links' => '{pluginName} - トップリンク',

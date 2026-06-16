@@ -105,6 +105,7 @@ return [
     'Top Performer' => 'Bedst præsterende',
     'interactions' => 'interaktioner',
     'View full analytics' => 'Vis fulde analyser',
+    'View all analytics' => 'Vis alle analyser',
     'You don\'t have permission to view analytics.' => 'Du har ikke tilladelse til at se analyser.',
     'Analytics are disabled in plugin settings.' => 'Analyser er deaktiveret i plugin-indstillingerne.',
     '{pluginName} - Top Links' => '{pluginName} - Toplinks',

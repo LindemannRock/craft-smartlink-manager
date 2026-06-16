@@ -105,6 +105,7 @@ return [
     'Top Performer' => 'Top Performer',
     'interactions' => 'interactions',
     'View full analytics' => 'View full analytics',
+    'View all analytics' => 'View all analytics',
     'You don\'t have permission to view analytics.' => 'You don\'t have permission to view analytics.',
     'Analytics are disabled in plugin settings.' => 'Analytics are disabled in plugin settings.',
     '{pluginName} - Top Links' => '{pluginName} - Top Links',

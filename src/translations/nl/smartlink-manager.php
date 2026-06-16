@@ -105,6 +105,7 @@ return [
     'Top Performer' => 'Toppresteerder',
     'interactions' => 'interacties',
     'View full analytics' => 'Volledige analyses bekijken',
+    'View all analytics' => 'Alle analyses bekijken',
     'You don\'t have permission to view analytics.' => 'U heeft geen toestemming om analyses te bekijken.',
     'Analytics are disabled in plugin settings.' => 'Analyses zijn uitgeschakeld in de plugin-instellingen.',
     '{pluginName} - Top Links' => '{pluginName} - Top Links',

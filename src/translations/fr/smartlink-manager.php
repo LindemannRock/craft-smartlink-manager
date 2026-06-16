@@ -105,6 +105,7 @@ return [
     'Top Performer' => 'Meilleure performance',
     'interactions' => 'interactions',
     'View full analytics' => 'Afficher les analytiques complètes',
+    'View all analytics' => 'Afficher toutes les analytiques',
     'You don\'t have permission to view analytics.' => "Vous n'avez pas la permission d'afficher les analytiques.",
     'Analytics are disabled in plugin settings.' => 'Les analytiques sont désactivées dans les paramètres du plugin.',
     '{pluginName} - Top Links' => '{pluginName} - Top Liens',
