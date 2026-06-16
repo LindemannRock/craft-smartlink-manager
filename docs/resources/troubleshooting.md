@@ -97,7 +97,9 @@ SmartLink Manager schedules a recurring queue job for analytics cleanup. If the 
 3. Check that **Enable Analytics** is on.
 4. Check that analytics retention is greater than `0`.
 
-The queued job description shows when that specific queued row is due to run.
+The queued job description shows when that specific queued row is due to run. Craft stores that description when the row is queued, so date/time format changes apply to newly queued rows. Existing delayed rows keep their old label until they run or are requeued. Queue labels stay compact: numeric months render numerically, while short and long month settings both render as short month names.
+
+If a deployment or multiple web processes create duplicate pending cleanup rows, SmartLink Manager collapses the duplicate pending rows during bootstrap and keeps one row for the next scheduled run.
 
 ---
 
