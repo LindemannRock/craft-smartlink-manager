@@ -29,6 +29,12 @@ use yii\db\ActiveQueryInterface;
  * @property bool $isRobot
  * @property bool $isMobileApp
  * @property string|null $botName
+ * @property string|null $botCategory
+ * @property string|null $botUrl
+ * @property string|null $botProducerName
+ * @property string|null $botProducerUrl
+ * @property bool|null $isSystemAgent
+ * @property string $trafficType
  * @property string|null $country
  * @property string|null $city
  * @property string|null $region

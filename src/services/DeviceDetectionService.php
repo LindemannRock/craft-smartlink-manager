@@ -64,6 +64,12 @@ class DeviceDetectionService extends Component
             'browserEngine' => 'browserEngine',
             'isBot' => 'isRobot',
             'botName' => 'botName',
+            'botCategory' => 'botCategory',
+            'botUrl' => 'botUrl',
+            'botProducerName' => 'botProducerName',
+            'botProducerUrl' => 'botProducerUrl',
+            'isSystemAgent' => 'isSystemAgent',
+            'trafficType' => 'trafficType',
             'platform' => 'platform',
             'vendor' => 'vendor',
         ]);

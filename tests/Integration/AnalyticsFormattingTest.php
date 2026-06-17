@@ -104,6 +104,9 @@ final class AnalyticsFormattingTest extends TestCase
             self::assertSame('Button', $rows[0]['clickType']);
             self::assertSame('Android', $rows[0]['platform']);
             self::assertSame('https://example.com/android', $rows[0]['destinationUrl']);
+            self::assertSame('Yes', $rows[0]['isRobot']);
+            self::assertSame('Blink', $rows[0]['browserEngine']);
+            self::assertSame('en', $rows[0]['language']);
             self::assertArrayNotHasKey('country', $rows[0], 'Geo columns should be omitted when geo export is disabled.');
         });
     }
@@ -124,6 +127,9 @@ final class AnalyticsFormattingTest extends TestCase
                 'deviceType' => 'mobile',
                 'osName' => 'Android',
                 'browser' => 'Chrome',
+                'browserEngine' => 'Blink',
+                'language' => 'en',
+                'isRobot' => true,
                 'metadata' => !empty($metadata) ? Json::encode($metadata) : null,
                 'dateCreated' => $date,
                 'dateUpdated' => $date,

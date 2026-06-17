@@ -38,9 +38,19 @@ class AnalyticsExportService
      */
     public function getExportData(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
     {
+        $columns = $this->_analyticsColumns();
+        $optionalSelect = array_values(array_intersect([
+            'isSystemAgent',
+            'trafficType',
+            'isRobot',
+            'botName',
+            'botCategory',
+            'botProducerName',
+        ], $columns));
+
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
-            ->select([
+            ->select(array_merge([
                 'dateCreated',
                 'linkId',
                 'siteId',
@@ -52,12 +62,13 @@ class AnalyticsExportService
                 'osVersion',
                 'browser',
                 'browserVersion',
+                'browserEngine',
                 'country',
                 'city',
                 'language',
                 'referrer',
                 'userAgent',
-            ])
+            ], $optionalSelect))
             ->orderBy(['dateCreated' => SORT_DESC]);
 
         $this->applyDateRangeFilter($query, $dateRange);
@@ -172,7 +183,14 @@ class AnalyticsExportService
                 'osVersion' => $row['osVersion'] ?? '',
                 'browser' => $row['browser'] ?? '',
                 'browserVersion' => $row['browserVersion'] ?? '',
+                'browserEngine' => $row['browserEngine'] ?? '',
                 'language' => $row['language'] ?? '',
+                'trafficType' => $row['trafficType'] ?? 'human',
+                'isSystemAgent' => !empty($row['isSystemAgent']) ? 'Yes' : 'No',
+                'isRobot' => !empty($row['isRobot']) ? 'Yes' : 'No',
+                'botName' => $row['botName'] ?? '',
+                'botCategory' => $row['botCategory'] ?? '',
+                'botProducerName' => $row['botProducerName'] ?? '',
                 'userAgent' => $row['userAgent'] ?? '',
             ];
 
@@ -198,5 +216,13 @@ class AnalyticsExportService
         return Craft::$app->db->createCommand()
             ->delete('{{%smartlinkmanager_analytics}}', ['linkId' => $smartLink->id])
             ->execute();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function _analyticsColumns(): array
+    {
+        return Craft::$app->getDb()->getTableSchema('{{%smartlinkmanager_analytics}}', true)?->columnNames ?? [];
     }
 }

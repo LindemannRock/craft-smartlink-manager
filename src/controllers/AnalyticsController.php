@@ -106,7 +106,7 @@ class AnalyticsController extends Controller
         $dateRange = $request->getParam('dateRange', DateRangeHelper::getDefaultDateRange(SmartLinkManager::$plugin->id));
         $type = $request->getParam('type', 'summary');
 
-        $validTypes = ['summary', 'clicks', 'devices', 'device-types', 'device-brands', 'platforms', 'os-breakdown', 'browsers', 'countries', 'all-countries', 'all-cities', 'languages', 'hourly', 'insights', 'recent-clicks'];
+        $validTypes = ['summary', 'clicks', 'devices', 'device-types', 'device-brands', 'traffic-types', 'top-agents', 'platforms', 'os-breakdown', 'browsers', 'countries', 'all-countries', 'all-cities', 'languages', 'hourly', 'insights', 'recent-clicks'];
         if (!in_array($type, $validTypes, true)) {
             throw new \yii\web\BadRequestHttpException('Invalid data type.');
         }
@@ -143,6 +143,8 @@ class AnalyticsController extends Controller
                 'devices' => SmartLinkManager::$plugin->analytics->getDeviceBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
                 'device-types' => SmartLinkManager::$plugin->analytics->getDeviceTypeBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
                 'device-brands' => SmartLinkManager::$plugin->analytics->getDeviceBrandBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'traffic-types' => SmartLinkManager::$plugin->analytics->getTrafficTypeBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
+                'top-agents' => SmartLinkManager::$plugin->analytics->getTopAgents($smartLinkId, $dateRange, 10, $resolvedSiteId),
                 'platforms' => SmartLinkManager::$plugin->analytics->getPlatformBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
                 'os-breakdown' => SmartLinkManager::$plugin->analytics->getOsBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
                 'browsers' => SmartLinkManager::$plugin->analytics->getBrowserBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
@@ -284,7 +286,14 @@ class AnalyticsController extends Controller
             'osVersion' => Craft::t('smartlink-manager', 'OS Version'),
             'browser' => Craft::t('smartlink-manager', 'Browser'),
             'browserVersion' => Craft::t('smartlink-manager', 'Browser Version'),
-            'language' => Craft::t('smartlink-manager', 'Language'),
+            'browserEngine' => Craft::t('smartlink-manager', 'Browser Engine'),
+            'language' => Craft::t('smartlink-manager', 'Detected Language'),
+            'trafficType' => Craft::t('smartlink-manager', 'Traffic Type'),
+            'isSystemAgent' => Craft::t('smartlink-manager', 'System Agent'),
+            'isRobot' => Craft::t('smartlink-manager', 'Is Bot'),
+            'botName' => Craft::t('smartlink-manager', 'Bot Name'),
+            'botCategory' => Craft::t('smartlink-manager', 'Bot Category'),
+            'botProducerName' => Craft::t('smartlink-manager', 'Bot Producer'),
             'userAgent' => Craft::t('smartlink-manager', 'User Agent'),
         ];
 
@@ -417,6 +426,10 @@ class AnalyticsController extends Controller
                 'deviceType' => !empty($click['deviceType']) ? ucfirst($click['deviceType']) : '',
                 'browser' => $click['browser'] ?? '',
                 'osName' => $click['osName'] ?? '',
+                'trafficType' => $click['trafficType'] ?? 'human',
+                'botName' => $click['botName'] ?? null,
+                'botCategory' => $click['botCategory'] ?? null,
+                'botProducerName' => $click['botProducerName'] ?? null,
                 'location' => $location,
                 'geoEnabled' => $geoEnabled,
             ];

@@ -53,6 +53,7 @@ The `DeviceInfo` model is available as the `device` variable in redirect templat
 | `isTablet` | `bool` | Whether the device is a tablet |
 | `isDesktop` | `bool` | Whether the device is a desktop |
 | `isBot` | `bool` | Whether the user agent was identified as a bot/crawler |
+| `isSystemAgent` | `bool` | Whether the user agent matched a known first-party/system agent |
 | `isMobileApp` | `bool` | Whether the client is a mobile app (not a browser) |
 | `osName` | `string\|null` | Operating system name (e.g., `iOS`, `Android`, `Windows`) |
 | `osVersion` | `string\|null` | OS version string |
@@ -65,7 +66,12 @@ The `DeviceInfo` model is available as the `device` variable in redirect templat
 | `language` | `string\|null` | Detected 2-letter language code |
 | `country` | `string\|null` | Detected 2-letter country code |
 | `clientType` | `string\|null` | Client type: `browser`, `mobile app`, `feed reader`, etc. |
+| `trafficType` | `string` | Coarse traffic classification: `human`, `system`, or `bot` |
 | `botName` | `string\|null` | Bot name if `isBot` is true |
+| `botCategory` | `string\|null` | Bot or system-agent category when detected |
+| `botUrl` | `string\|null` | Bot information URL when detected |
+| `botProducerName` | `string\|null` | Bot or system-agent producer name when detected |
+| `botProducerUrl` | `string\|null` | Bot or system-agent producer URL when detected |
 | `userAgent` | `string` | Raw user agent string |
 
 Bot traffic is recorded in analytics with `isBot: true` but still follows the normal redirect logic — bots will hit the fallback URL unless a specific platform URL matches.

@@ -18,9 +18,11 @@ Each click event records:
 | **Device type** | Phone, tablet, desktop, smart TV, etc. |
 | **OS** | iOS, Android, Windows, macOS, Linux, etc. |
 | **Browser** | Chrome, Safari, Firefox, Samsung Internet, etc. |
+| **Traffic type** | Human, system, or bot traffic based on user-agent detection |
+| **Agent** | Bot/system-agent name, category, and producer when detected |
 | **Country** | Visitor's country (requires geo-detection enabled) |
 | **City** | Visitor's city (requires geo-detection enabled) |
-| **Language** | Detected language code (browser or IP-based) |
+| **Detected language** | Detected language code from the configured language detection method |
 | **Referrer** | HTTP referrer URL |
 | **Click type** | `redirect` (followed the link), `qr_scan` (scanned QR), `button_click` (SEOmatic event) |
 | **Site** | Which Craft site the smart link belongs to |
@@ -114,6 +116,8 @@ It shows:
 - **Summary stats** — total clicks, unique visitors, top devices, top countries
 - **Click trend chart** — clicks over time (configurable date range)
 - **Device breakdown** — pie or bar chart of device types
+- **Traffic type** — human, system, and bot traffic split
+- **Top agents** — known bots and first-party system agents such as cache warmers
 - **Geographic map** — country-level click distribution
 - **Top links** — most-clicked smart links in the selected period
 - **Referrer breakdown** — where traffic is coming from
@@ -142,7 +146,7 @@ Export click data from the analytics dashboard using the **Export** button. Thre
 | **Excel** | Formatted spreadsheet with column headers |
 | **JSON** | API consumers, programmatic processing |
 
-Exports respect the currently active date range and site filters. The `exportAnalytics` permission is required to export.
+Exports respect the currently active date range and site filters. The `exportAnalytics` permission is required to export. Export rows include traffic type, system-agent flag, bot name, bot category, and bot producer when those values are available.
 
 ## Clearing Analytics Data
 

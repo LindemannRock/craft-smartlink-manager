@@ -109,6 +109,12 @@ class AnalyticsTrackingService
                 'isRobot' => $deviceInfo['isBot'] ?? $deviceInfo['isRobot'] ?? false,
                 'isMobileApp' => $deviceInfo['isMobileApp'] ?? false,
                 'botName' => $deviceInfo['botName'] ?? null,
+                'botCategory' => $deviceInfo['botCategory'] ?? null,
+                'botUrl' => $deviceInfo['botUrl'] ?? null,
+                'botProducerName' => $deviceInfo['botProducerName'] ?? null,
+                'botProducerUrl' => $deviceInfo['botProducerUrl'] ?? null,
+                'isSystemAgent' => $deviceInfo['isSystemAgent'] ?? false,
+                'trafficType' => $deviceInfo['trafficType'] ?? 'human',
                 'country' => null,
                 'language' => $metadata['language'] ?? null,
                 'referrer' => $metadata['referrer'] ?? null,
@@ -134,6 +140,7 @@ class AnalyticsTrackingService
 
             unset($metadata['ip']);
             $data['metadata'] = Json::encode($metadata);
+            $data = array_intersect_key($data, array_flip($db->getTableSchema('{{%smartlinkmanager_analytics}}', true)?->columnNames ?? []));
 
             return (bool) $db->createCommand()
                 ->insert('{{%smartlinkmanager_analytics}}', $data)

@@ -79,6 +79,8 @@
 {% set smartlinkStrings = {
     noInteraction: "No interaction data available for the selected filters."|t('smartlink-manager'),
     noDevice: "No device data available for the selected filters."|t('smartlink-manager'),
+    noTrafficType: "No traffic type data available for the selected filters."|t('smartlink-manager'),
+    noAgentData: "No agent data available"|t('smartlink-manager'),
     noBrand: "No device brand data available for the selected filters."|t('smartlink-manager'),
     noOs: "No OS data available for the selected filters."|t('smartlink-manager'),
     noBrowser: "No browser data available for the selected filters."|t('smartlink-manager'),
@@ -88,6 +90,9 @@
     noCountryData: "No country data available"|t('smartlink-manager'),
     noCityData: "No city data available"|t('smartlink-manager'),
     noRecentClicks: "No interactions recorded yet"|t('smartlink-manager'),
+    human: "Human"|t('smartlink-manager'),
+    system: "System"|t('smartlink-manager'),
+    bot: "Bot"|t('smartlink-manager'),
 } %}
 
 {% set smartlinkAnalyticsConfig = {
@@ -99,7 +104,7 @@
     dataEndpoint: analyticsConfig.charts.dataEndpoint,
     strings: smartlinkStrings,
     geoEnabled: settings.enableGeoDetection ? true : false,
-    recentClicksColSpan: settings.enableGeoDetection ? 12 : 11,
+    recentClicksColSpan: settings.enableGeoDetection ? 13 : 12,
 } %}
 
 {% js %}

@@ -85,6 +85,12 @@ final class SaveAnalyticsTest extends TestCase
             'osName' => 'TestOS',
             'osVersion' => '0',
             'userAgent' => 'Mozilla/5.0 (Test) SmartLinkManagerStub/1.0',
+            'isRobot' => true,
+            'botName' => 'Cache Manager',
+            'botCategory' => 'Service Agent',
+            'botProducerName' => 'LindemannRock',
+            'isSystemAgent' => true,
+            'trafficType' => 'system',
         ];
         $metadata = [
             'ip' => '203.0.113.42',
@@ -103,6 +109,14 @@ final class SaveAnalyticsTest extends TestCase
         $this->assertSame('TestOS', $row['osName']);
         $this->assertSame('Mozilla/5.0 (Test) SmartLinkManagerStub/1.0', $row['userAgent']);
         $this->assertSame('https://example.com/some/page', $row['referrer']);
+        $this->assertSame('1', (string)$row['isRobot']);
+        $this->assertSame('Cache Manager', $row['botName']);
+        if (array_key_exists('trafficType', $row)) {
+            $this->assertSame('1', (string)$row['isSystemAgent']);
+            $this->assertSame('system', $row['trafficType']);
+            $this->assertSame('Service Agent', $row['botCategory']);
+            $this->assertSame('LindemannRock', $row['botProducerName']);
+        }
 
         $stored = Json::decode($row['metadata']);
         $this->assertSame('qr', $stored['source']);

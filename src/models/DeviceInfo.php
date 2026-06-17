@@ -98,6 +98,36 @@ class DeviceInfo extends Model
     public ?string $botName = null;
 
     /**
+     * @var string|null Bot or system-agent category if detected
+     */
+    public ?string $botCategory = null;
+
+    /**
+     * @var string|null Bot information URL if detected
+     */
+    public ?string $botUrl = null;
+
+    /**
+     * @var string|null Bot or system-agent producer name if detected
+     */
+    public ?string $botProducerName = null;
+
+    /**
+     * @var string|null Bot or system-agent producer URL if detected
+     */
+    public ?string $botProducerUrl = null;
+
+    /**
+     * @var bool Whether this request came from a known first-party/system agent
+     */
+    public bool $isSystemAgent = false;
+
+    /**
+     * @var string Base traffic classification: human, system, or bot
+     */
+    public string $trafficType = 'human';
+
+    /**
      * @var string|null Operating system name
      */
     public ?string $osName = null;
@@ -125,8 +155,8 @@ class DeviceInfo extends Model
         return [
             [['platform', 'userAgent'], 'required'],
             [['platform'], 'in', 'range' => ['ios', 'android', 'huawei', 'windows', 'macos', 'linux', 'other']],
-            [['isMobile', 'isTablet', 'isDesktop', 'isBot', 'isMobileApp'], 'boolean'],
-            [['vendor', 'osVersion', 'browser', 'browserVersion', 'language', 'country', 'model', 'brand', 'deviceType', 'botName', 'osName', 'browserEngine', 'clientType'], 'string'],
+            [['isMobile', 'isTablet', 'isDesktop', 'isBot', 'isMobileApp', 'isSystemAgent'], 'boolean'],
+            [['vendor', 'osVersion', 'browser', 'browserVersion', 'language', 'country', 'model', 'brand', 'deviceType', 'botName', 'botCategory', 'botUrl', 'botProducerName', 'botProducerUrl', 'osName', 'browserEngine', 'clientType', 'trafficType'], 'string'],
             [['language'], 'string', 'length' => 2],
             [['country'], 'string', 'length' => 2],
         ];
@@ -173,6 +203,12 @@ class DeviceInfo extends Model
             'country' => $this->country,
             'userAgent' => $this->userAgent,
             'botName' => $this->botName,
+            'botCategory' => $this->botCategory,
+            'botUrl' => $this->botUrl,
+            'botProducerName' => $this->botProducerName,
+            'botProducerUrl' => $this->botProducerUrl,
+            'isSystemAgent' => $this->isSystemAgent,
+            'trafficType' => $this->trafficType,
         ];
     }
 }

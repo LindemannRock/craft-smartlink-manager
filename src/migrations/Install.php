@@ -118,6 +118,12 @@ class Install extends Migration
                 'isRobot' => $this->boolean()->defaultValue(false),
                 'isMobileApp' => $this->boolean()->defaultValue(false),
                 'botName' => $this->string(100)->null(),
+                'botCategory' => $this->string(100)->null(),
+                'botUrl' => $this->string(255)->null(),
+                'botProducerName' => $this->string(100)->null(),
+                'botProducerUrl' => $this->string(255)->null(),
+                'isSystemAgent' => $this->boolean()->defaultValue(false),
+                'trafficType' => $this->string(20)->notNull()->defaultValue('human'),
                 'country' => $this->string(2)->null(),
                 'city' => $this->string(100)->null(),
                 'region' => $this->string(100)->null(),
@@ -145,6 +151,7 @@ class Install extends Migration
             $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['deviceBrand']);
             $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['osName']);
             $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['clientType']);
+            $this->createIndex(null, '{{%smartlinkmanager_analytics}}', ['trafficType']);
 
             // Add foreign keys
             $this->addForeignKey(null, '{{%smartlinkmanager_analytics}}', ['linkId'], '{{%smartlinkmanager}}', ['id'], 'CASCADE');

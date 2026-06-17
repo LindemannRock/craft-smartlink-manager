@@ -206,6 +206,101 @@ class AnalyticsBreakdownService
     }
 
     /**
+     * Get traffic type breakdown.
+     *
+     * @param int|null $smartLinkId
+     * @param string $dateRange
+     * @param int|int[]|null $siteId
+     * @return array
+     */
+    public function getTrafficTypeBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
+    {
+        if (!$this->_hasAnalyticsColumn('trafficType')) {
+            return [
+                'labels' => [],
+                'types' => [],
+                'values' => [],
+            ];
+        }
+
+        $query = (new Query())
+            ->from('{{%smartlinkmanager_analytics}}')
+            ->select(['trafficType', 'COUNT(*) as clicks'])
+            ->groupBy(['trafficType'])
+            ->orderBy(['clicks' => SORT_DESC]);
+
+        $this->applyDateRangeFilter($query, $dateRange);
+
+        if ($smartLinkId) {
+            $query->andWhere(['linkId' => $smartLinkId]);
+        }
+
+        if ($siteId) {
+            $query->andWhere(['siteId' => $siteId]);
+        }
+
+        $results = $query->all();
+
+        return [
+            'labels' => array_map(static fn($type) => ucfirst((string)($type ?: 'human')), array_column($results, 'trafficType')),
+            'types' => array_map(static fn($type) => (string)($type ?: 'human'), array_column($results, 'trafficType')),
+            'values' => array_map('intval', array_column($results, 'clicks')),
+        ];
+    }
+
+    /**
+     * Get top non-human agents.
+     *
+     * @param int|null $smartLinkId
+     * @param string $dateRange
+     * @param int $limit
+     * @param int|int[]|null $siteId
+     * @return array
+     */
+    public function getTopAgents(?int $smartLinkId, string $dateRange, int $limit = 10, int|array|null $siteId = null): array
+    {
+        if (!$this->_hasAnalyticsColumn('trafficType') || !$this->_hasAnalyticsColumn('botCategory') || !$this->_hasAnalyticsColumn('botProducerName')) {
+            return [];
+        }
+
+        $query = (new Query())
+            ->from('{{%smartlinkmanager_analytics}}')
+            ->select([
+                'botName',
+                'trafficType',
+                'botCategory',
+                'botProducerName',
+                'COUNT(*) as clicks',
+            ])
+            ->where([
+                'or',
+                ['trafficType' => ['system', 'bot']],
+                ['not', ['botName' => null]],
+            ])
+            ->groupBy(['botName', 'trafficType', 'botCategory', 'botProducerName'])
+            ->orderBy(['clicks' => SORT_DESC])
+            ->limit($limit);
+
+        $this->applyDateRangeFilter($query, $dateRange);
+
+        if ($smartLinkId) {
+            $query->andWhere(['linkId' => $smartLinkId]);
+        }
+
+        if ($siteId) {
+            $query->andWhere(['siteId' => $siteId]);
+        }
+
+        return $query->all();
+    }
+
+    private function _hasAnalyticsColumn(string $column): bool
+    {
+        $columns = \Craft::$app->getDb()->getTableSchema('{{%smartlinkmanager_analytics}}', true)?->columnNames ?? [];
+        return in_array($column, $columns, true);
+    }
+
+    /**
      * Get platform breakdown (iOS, Android, Windows, macOS, Linux)
      *
      * @param int|null $smartLinkId

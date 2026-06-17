@@ -104,6 +104,7 @@
                         <th>{{ "Button"|t('smartlink-manager') }}</th>
                         <th>{{ "Source"|t('smartlink-manager') }}</th>
                         <th>{{ "Destination URL"|t('smartlink-manager') }}</th>
+                        <th>{{ "Agent"|t('smartlink-manager') }}</th>
                         <th>{{ "Device"|t('smartlink-manager') }}</th>
                         <th>{{ "Browser"|t('smartlink-manager') }}</th>
                         <th>{{ "OS"|t('smartlink-manager') }}</th>
@@ -114,9 +115,9 @@
                 </thead>
                 <tbody id="recent-clicks-body">
                     <tr>
-                        <td colspan="{{ settings.enableGeoDetection ? 12 : 11 }}" class="light lr-text-center">
-                            <div class="spinner"></div>
-                        </td>
+                            <td colspan="{{ settings.enableGeoDetection ? 13 : 12 }}" class="light lr-text-center">
+                                <div class="spinner"></div>
+                            </td>
                     </tr>
                 </tbody>
             </table>

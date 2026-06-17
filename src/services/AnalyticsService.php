@@ -272,6 +272,22 @@ class AnalyticsService extends Component
     }
 
     /**
+     * Get traffic type breakdown.
+     */
+    public function getTrafficTypeBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
+    {
+        return $this->_breakdown->getTrafficTypeBreakdown($smartLinkId, $dateRange, $siteId);
+    }
+
+    /**
+     * Get top non-human agents.
+     */
+    public function getTopAgents(?int $smartLinkId, string $dateRange, int $limit = 10, int|array|null $siteId = null): array
+    {
+        return $this->_breakdown->getTopAgents($smartLinkId, $dateRange, $limit, $siteId);
+    }
+
+    /**
      * Get platform breakdown (iOS, Android, Windows, macOS, Linux)
      */
     public function getPlatformBreakdown(?int $smartLinkId, string $dateRange, int|array|null $siteId = null): array
