@@ -101,8 +101,13 @@ class ImportExportController extends Controller
         ];
 
         $smartLinks = SmartLink::find()->site('*')->status(null)->orderBy(['elements.dateCreated' => SORT_DESC])->all();
+        $sitesById = [];
+        foreach (Craft::$app->getSites()->getAllSites() as $site) {
+            $sitesById[$site->id] = $site;
+        }
+
         foreach ($smartLinks as $smartLink) {
-            $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+            $site = $sitesById[$smartLink->siteId] ?? null;
             $rows[] = [
                 'slug' => $smartLink->slug,
                 'title' => $smartLink->title,
@@ -319,7 +324,9 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => '-',
                     'fallbackUrl' => $item['fallbackUrl'] ?: '-',
-                    'error' => 'Missing required field: slug',
+                    'error' => Craft::t('smartlink-manager', 'Missing required field: {field}', [
+                        'field' => $this->importFieldLabel('slug'),
+                    ]),
                 ];
                 continue;
             }
@@ -333,7 +340,9 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => $item['slug'],
                     'fallbackUrl' => '-',
-                    'error' => 'Missing required field: fallbackUrl',
+                    'error' => Craft::t('smartlink-manager', 'Missing required field: {field}', [
+                        'field' => $this->importFieldLabel('fallbackUrl'),
+                    ]),
                 ];
                 continue;
             }
@@ -343,7 +352,7 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'error' => 'Invalid fallback URL',
+                    'error' => Craft::t('smartlink-manager', 'Invalid fallback URL'),
                 ];
                 continue;
             }
@@ -354,7 +363,9 @@ class ImportExportController extends Controller
                         'rowNumber' => $rowNumber,
                         'slug' => $item['slug'],
                         'fallbackUrl' => $item['fallbackUrl'],
-                        'error' => 'Invalid URL in field: ' . $urlField,
+                        'error' => Craft::t('smartlink-manager', 'Invalid URL in field: {field}', [
+                            'field' => $this->importFieldLabel($urlField),
+                        ]),
                     ];
                     continue 2;
                 }
@@ -367,7 +378,7 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'error' => 'Disallowed markup in title or description',
+                    'error' => Craft::t('smartlink-manager', 'Disallowed markup in title or description'),
                 ];
                 continue;
             }
@@ -381,7 +392,7 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'error' => 'QR format must be png or svg',
+                    'error' => Craft::t('smartlink-manager', 'QR format must be png or svg'),
                 ];
                 continue;
             }
@@ -393,7 +404,7 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'error' => 'Invalid site',
+                    'error' => Craft::t('smartlink-manager', 'Invalid site'),
                 ];
                 continue;
             }
@@ -403,7 +414,9 @@ class ImportExportController extends Controller
                     'rowNumber' => $rowNumber,
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'error' => 'Image asset not found for imageId',
+                    'error' => Craft::t('smartlink-manager', 'Image asset not found for {field}', [
+                        'field' => $this->importFieldLabel('imageId'),
+                    ]),
                 ];
                 continue;
             }
@@ -413,7 +426,7 @@ class ImportExportController extends Controller
                 $duplicateRows[] = [
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'reason' => 'Slug already exists',
+                    'reason' => Craft::t('smartlink-manager', 'Slug already exists'),
                 ];
                 continue;
             }
@@ -423,7 +436,10 @@ class ImportExportController extends Controller
                 $duplicateRows[] = [
                     'slug' => $item['slug'],
                     'fallbackUrl' => $item['fallbackUrl'],
-                    'reason' => 'Duplicate row for same slug and site',
+                    'reason' => Craft::t('smartlink-manager', 'Duplicate row for the same {slugField} and {siteField}', [
+                        'slugField' => $this->importFieldLabel('slug'),
+                        'siteField' => $this->importFieldLabel('site'),
+                    ]),
                 ];
                 continue;
             }
@@ -672,6 +688,24 @@ class ImportExportController extends Controller
     private function normalizeSlug(string $slug): string
     {
         return SlugHandleHelper::normalizeSlug($slug, '');
+    }
+
+    private function importFieldLabel(string $field): string
+    {
+        $labels = [
+            'slug' => Craft::t('smartlink-manager', 'Slug'),
+            'fallbackUrl' => Craft::t('smartlink-manager', 'Fallback URL'),
+            'iosUrl' => Craft::t('smartlink-manager', 'iOS URL'),
+            'androidUrl' => Craft::t('smartlink-manager', 'Android URL'),
+            'huaweiUrl' => Craft::t('smartlink-manager', 'Huawei URL'),
+            'amazonUrl' => Craft::t('smartlink-manager', 'Amazon URL'),
+            'windowsUrl' => Craft::t('smartlink-manager', 'Windows URL'),
+            'macUrl' => Craft::t('smartlink-manager', 'Mac URL'),
+            'imageId' => Craft::t('smartlink-manager', 'Image Asset ID'),
+            'site' => Craft::t('smartlink-manager', 'Site'),
+        ];
+
+        return $labels[$field] ?? $field;
     }
 
     private function parseDateOrNull(string $value): ?\DateTime
