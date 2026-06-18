@@ -35,6 +35,14 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `logLevel` | `string` | `'error'` | Log level: `error`, `warning`, `info`, `debug`. Debug requires `devMode` |
 | `itemsPerPage` | `int` | `100` | Items per page in element index (10–500) |
 
+## Field Layout
+
+Use **SmartLink Manager → Settings → Field Layout** to add custom fields to SmartLink elements. Fields added there appear as extra tabs on each smart link edit screen, which is useful for campaign metadata, app-owner details, approval notes, launch information, or other editor-managed fields that belong with the smart link itself.
+
+This is different from the **SmartLink Field** field type. The SmartLink Field lets entries and other elements select smart links; the Field Layout settings page adds fields directly to SmartLink elements.
+
+Field layouts are saved to Craft project config, so they follow Craft's normal administrative-change rules. In environments where `allowAdminChanges` is disabled, the Field Layout page is read-only. The other SmartLink Manager settings remain database-backed and editable from the CP unless you lock individual settings with `config/smartlink-manager.php`.
+
 ## QR Code Settings
 
 ### Appearance

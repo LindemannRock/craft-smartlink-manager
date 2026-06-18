@@ -24,6 +24,8 @@ Every smart link is a native Craft element with its own slug, status, publish sc
 
 - **[Smart Links](smart-links.md)** — Custom element type with per-platform URLs (iOS, Android, Huawei, Amazon, Windows, Mac, Fallback). Each link has a unique slug, publish schedule, expiry date, and status lifecycle.
 
+- **Custom fields** — Add fields to SmartLink elements from **Settings → Field Layout** when the link itself needs campaign metadata, app-owner notes, launch details, or internal approval fields. These fields render as extra tabs on the SmartLink edit screen.
+
 - **[Custom Domain](custom-domain.md)** — Serve smart links from a dedicated domain like `go.myapp.com`. Supports single-site and multisite setups with per-site URL tokens.
 
 - **[QR Codes](qr-codes.md)** — Generate styled QR codes for any smart link. Customize module style, eye style, colors, logo overlay, size, margin, and output format (PNG or SVG). Cacheable via file system or Redis.
@@ -53,6 +55,7 @@ QR codes follow the same pattern but are accessed via `/{qrPrefix}/{slug}` (defa
 | Feature | Where |
 |---------|-------|
 | Smart Link element type | CP → SmartLink Manager |
+| Custom SmartLink fields | Settings → Field Layout |
 | Platform-specific redirect routing | Automatic on install |
 | QR code generation (PNG/SVG) | Per smart link, globally configurable |
 | Click analytics with geo-detection | Built-in analytics dashboard |
