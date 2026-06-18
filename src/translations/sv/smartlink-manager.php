@@ -14,6 +14,7 @@ return [
     'Open SmartLink Manager' => 'Öppna SmartLink Manager',
     '{name} plugin loaded' => 'Plugin {name} laddades',
     '{displayName} caches' => '{displayName}-cacher',
+    'Query {name} data' => 'Fråga {name}-data',
 
     // Navigation
     'Links' => 'Länkar',
@@ -287,7 +288,7 @@ return [
     'QR Code Page' => 'QR Code-sida',
     'Reset to Defaults' => 'Återställ till standard',
     'Live Preview' => 'Liveförhandsgranskning',
-    'Preview' => 'Förhandsgranskning',
+    'Preview' => 'Förhandsvisning',
     'Click to view QR code image' => 'Klicka för att visa QR Code-bilden',
     'Click to view QR code page' => 'Klicka för att visa QR Code-sidan',
     'Toggle preview' => 'Växla förhandsgranskning',
@@ -595,7 +596,7 @@ return [
     'Failed to clear history.' => 'Det gick inte att rensa historiken.',
     'Map CSV Columns' => 'Mappa CSV-kolumner',
     'Your CSV has {count} rows. Map each CSV column to a smart link field.' => 'Din CSV har {count} rader. Mappa varje CSV-kolumn till ett smart länk-fält.',
-    'Preview of CSV Data' => 'Förhandsgranskning av CSV-data',
+    'Preview of CSV Data' => 'Förhandsvisning av CSV-data',
     'Showing first 5 rows. {total} total rows will be imported.' => 'Visar de första 5 raderna. Totalt {total} rader importeras.',
     'Column Mapping' => 'Kolumnmappning',
     'Note: only columns mapped to a field will be imported.' => 'Obs: Bara kolumner som mappats till ett fält importeras.',

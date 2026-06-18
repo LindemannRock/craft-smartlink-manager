@@ -14,6 +14,7 @@ return [
     'Open SmartLink Manager' => 'فتح SmartLink Manager',
     '{name} plugin loaded' => 'تم تحميل الإضافة {name}',
     '{displayName} caches' => 'Caches الخاصة بـ {displayName}',
+    'Query {name} data' => 'الاستعلام عن بيانات {name}',
 
     // Navigation
     'Links' => 'الروابط',

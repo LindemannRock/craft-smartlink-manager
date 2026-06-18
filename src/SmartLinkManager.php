@@ -13,8 +13,12 @@ namespace lindemannrock\smartlinkmanager;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\events\ExecuteGqlQueryEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterGqlQueriesEvent;
+use craft\events\RegisterGqlSchemaComponentsEvent;
+use craft\events\RegisterGqlTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -22,6 +26,7 @@ use craft\fields\Link as LinkField;
 use craft\services\Dashboard;
 use craft\services\Elements;
 use craft\services\Fields;
+use craft\services\Gql;
 use craft\services\UserPermissions;
 use craft\services\Utilities;
 use craft\utilities\ClearCaches;
@@ -37,6 +42,8 @@ use lindemannrock\logginglibrary\LoggingLibrary;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\fields\SmartLinkField;
+use lindemannrock\smartlinkmanager\gql\queries\SmartLinkQuery;
+use lindemannrock\smartlinkmanager\gql\types\SmartLinkType as GqlSmartLinkType;
 use lindemannrock\smartlinkmanager\integrations\SmartLinkType;
 use lindemannrock\smartlinkmanager\jobs\CleanupAnalyticsJob;
 use lindemannrock\smartlinkmanager\models\Settings;
@@ -136,6 +143,7 @@ class SmartLinkManager extends Plugin
 
         // Register project config event handlers
         $this->registerProjectConfigEventHandlers();
+        $this->registerGraphql();
 
         // Register template roots
         Event::on(
@@ -311,6 +319,87 @@ class SmartLinkManager extends Plugin
         );
 
         // DO NOT log in init() - it's called on every request
+    }
+
+    /**
+     * Register SmartLink Manager GraphQL types, queries, permissions, and cache behavior.
+     */
+    private function registerGraphql(): void
+    {
+        $graphqlCacheSetting = null;
+
+        Event::on(
+            Gql::class,
+            Gql::EVENT_REGISTER_GQL_TYPES,
+            static function(RegisterGqlTypesEvent $event) {
+                $event->types[] = GqlSmartLinkType::class;
+            }
+        );
+
+        Event::on(
+            Gql::class,
+            Gql::EVENT_REGISTER_GQL_QUERIES,
+            static function(RegisterGqlQueriesEvent $event) {
+                foreach (SmartLinkQuery::getQueries() as $key => $value) {
+                    $event->queries[$key] = $value;
+                }
+            }
+        );
+
+        Event::on(
+            Gql::class,
+            Gql::EVENT_REGISTER_GQL_SCHEMA_COMPONENTS,
+            static function(RegisterGqlSchemaComponentsEvent $event) {
+                if (self::$plugin === null) {
+                    return;
+                }
+
+                $pluginName = self::$plugin->getSettings()->getFullName();
+
+                $event->queries[$pluginName]['smartlinkManager.all:read'] = [
+                    'label' => Craft::t('smartlink-manager', 'Query {name} data', ['name' => $pluginName]),
+                ];
+            }
+        );
+
+        Event::on(
+            Gql::class,
+            Gql::EVENT_BEFORE_EXECUTE_GQL_QUERY,
+            static function(ExecuteGqlQueryEvent $event) use (&$graphqlCacheSetting) {
+                if (!self::queryResolvesSmartLink($event->query)) {
+                    return;
+                }
+
+                $generalConfig = Craft::$app->getConfig()->getGeneral();
+                $graphqlCacheSetting = $generalConfig->enableGraphqlCaching;
+                $generalConfig->enableGraphqlCaching = false;
+            }
+        );
+
+        Event::on(
+            Gql::class,
+            Gql::EVENT_AFTER_EXECUTE_GQL_QUERY,
+            static function(ExecuteGqlQueryEvent $event) use (&$graphqlCacheSetting) {
+                if ($graphqlCacheSetting === null || !self::queryResolvesSmartLink($event->query)) {
+                    return;
+                }
+
+                Craft::$app->getConfig()->getGeneral()->enableGraphqlCaching = $graphqlCacheSetting;
+                $graphqlCacheSetting = null;
+            }
+        );
+    }
+
+    /**
+     * Return whether a GraphQL operation includes the side-effecting resolver.
+     *
+     * @param string $query
+     * @return bool
+     * @since 5.30.0
+     */
+    private static function queryResolvesSmartLink(string $query): bool
+    {
+        return str_contains($query, 'smartlinkManagerResolveSmartLink');
     }
 
     /**

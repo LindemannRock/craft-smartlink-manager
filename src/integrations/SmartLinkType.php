@@ -14,7 +14,9 @@ use craft\fields\Link;
 use craft\fields\linktypes\BaseElementLinkType;
 use craft\helpers\Cp;
 use craft\helpers\Html;
+use GraphQL\Type\Definition\Type;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\gql\types\SmartLinkType as GqlSmartLinkType;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 
 /**
@@ -38,6 +40,14 @@ class SmartLinkType extends BaseElementLinkType
     public static function elementType(): string
     {
         return SmartLink::class;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function elementGqlType(): Type
+    {
+        return GqlSmartLinkType::getType();
     }
 
     /**

@@ -13,9 +13,12 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\elements\db\ElementQueryInterface;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use lindemannrock\smartlinkmanager\elements\db\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\gql\resolvers\SmartLinkResolver;
+use lindemannrock\smartlinkmanager\gql\types\SmartLinkType as GqlSmartLinkType;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 
 /**
@@ -266,7 +269,19 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
      */
     public function getContentGqlType(): Type|array
     {
-        return Type::listOf(Type::string());
+        return [
+            'name' => $this->handle,
+            'type' => $this->allowMultiple ? Type::listOf(GqlSmartLinkType::getType()) : GqlSmartLinkType::getType(),
+            'description' => $this->instructions,
+            'resolve' => function(
+                ElementInterface $source,
+                array $arguments = [],
+                mixed $context = null,
+                ?ResolveInfo $resolveInfo = null,
+            ): mixed {
+                return $this->resolveGqlValue($source);
+            },
+        ];
     }
 
     /**
@@ -297,5 +312,32 @@ class SmartLinkField extends Field implements PreviewableFieldInterface
         $html .= '</div>';
 
         return $html;
+    }
+
+    /**
+     * Resolve selected smart links for entry/element GraphQL output.
+     *
+     * @param ElementInterface $element
+     * @return array<int, array<string, mixed>>|array<string, mixed>|null
+     */
+    private function resolveGqlValue(ElementInterface $element): array|null
+    {
+        $value = $element->getFieldValue($this->handle);
+        if (!($value instanceof ElementQueryInterface)) {
+            $value = $this->normalizeValue($value, $element);
+        }
+
+        /** @var SmartLink[] $smartLinks */
+        $smartLinks = $value->all();
+        $rows = array_map(
+            static fn(SmartLink $smartLink): array => SmartLinkResolver::toArray($smartLink),
+            $smartLinks,
+        );
+
+        if ($this->allowMultiple) {
+            return $rows;
+        }
+
+        return $rows[0] ?? null;
     }
 }

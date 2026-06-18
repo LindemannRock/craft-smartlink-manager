@@ -36,6 +36,7 @@
             "developers/template-variables",
             "developers/permissions",
             "developers/console-commands",
+            "developers/graphql",
             "developers/events",
             "developers/integrations",
             "developers/twig-globals",

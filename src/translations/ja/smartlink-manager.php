@@ -14,6 +14,7 @@ return [
     'Open SmartLink Manager' => 'SmartLink Manager を開く',
     '{name} plugin loaded' => '{name} プラグインが読み込まれました',
     '{displayName} caches' => '{displayName} のキャッシュ',
+    'Query {name} data' => '{name} データを照会する',
 
     // Navigation
     'Links' => 'リンク',

@@ -14,6 +14,7 @@ return [
     'Open SmartLink Manager' => 'SmartLink Manager openen',
     '{name} plugin loaded' => 'Plugin {name} geladen',
     '{displayName} caches' => '{displayName} caches',
+    'Query {name} data' => '{name}-gegevens opvragen',
 
     // Navigation
     'Links' => 'Links',
