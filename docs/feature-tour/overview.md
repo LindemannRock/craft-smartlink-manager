@@ -24,7 +24,7 @@ Every smart link is a native Craft element with its own slug, status, publish sc
 
 - **[Smart Links](smart-links.md)** — Custom element type with per-platform URLs (iOS, Android, Huawei, Amazon, Windows, Mac, Fallback). Each link has a unique slug, publish schedule, expiry date, and status lifecycle.
 
-- **Custom fields** — Add fields to SmartLink elements from **Settings → Field Layout** when the link itself needs campaign metadata, app-owner notes, launch details, or internal approval fields. These fields render as extra tabs on the SmartLink edit screen.
+- **[Field layout](field-layout.md)** — Add fields to SmartLink elements when the link itself needs campaign metadata, app-owner notes, launch details, or internal approval fields. Populated tabs render on the SmartLink edit screen.
 
 - **[Custom Domain](custom-domain.md)** — Serve smart links from a dedicated domain like `go.myapp.com`. Supports single-site and multisite setups with per-site URL tokens.
 
