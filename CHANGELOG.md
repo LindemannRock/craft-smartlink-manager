@@ -1,5 +1,34 @@
 # Changelog
 
+## [5.30.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.29.2...v5.30.0) (2026-06-18)
+
+
+### Added
+
+* enrich smartlink analytics traffic exports ([5656471](https://github.com/LindemannRock/craft-smartlink-manager/commit/5656471dbccb772c3c9836bab06a38a38c26a494))
+* **gql:** add graphql support ([a63fb21](https://github.com/LindemannRock/craft-smartlink-manager/commit/a63fb21eb94dd6ed767ad5a6261aac033b6ec304))
+* **i18n:** add "View all analytics" translation across multiple locales ([efc9459](https://github.com/LindemannRock/craft-smartlink-manager/commit/efc9459a9a384e46ff4ceadf1a4fee37f50c5bc0))
+* **i18n:** add new translation keys for import validation ([6955323](https://github.com/LindemannRock/craft-smartlink-manager/commit/69553235758f986a50be1dd8280aae8e06b1b30f))
+* **i18n:** update translations for QR code terminology ([cb4a5e3](https://github.com/LindemannRock/craft-smartlink-manager/commit/cb4a5e30e0d25313b26235837deafa5ccbcce4f8))
+* **tests:** add manual CSV fixtures for testing import flow ([f1fde18](https://github.com/LindemannRock/craft-smartlink-manager/commit/f1fde1881e7189c21c7c70f616c13d8a48fb909e))
+
+
+### Fixed
+
+* **analytics:** rename total to totalClicks in analytics summary ([5a6312e](https://github.com/LindemannRock/craft-smartlink-manager/commit/5a6312ea5728405b575162d926707805a48012fa))
+* clamp QR code size and margin to defined limits ([e3bbd33](https://github.com/LindemannRock/craft-smartlink-manager/commit/e3bbd3332f1ecfc3091fe69293f25d58fc2b0459))
+* **i18n:** correct translations for 'Enabled' across multiple locales ([1a8e7d0](https://github.com/LindemannRock/craft-smartlink-manager/commit/1a8e7d0a0b0c0677dac1f7cd00aff8bf64c66abc))
+* **i18n:** finalize smartlink-manager translations — DA du/analytics, DE cache+CSV terms, ES Activar, IT cache casing, remove 3 orphan keys ([7ffffa6](https://github.com/LindemannRock/craft-smartlink-manager/commit/7ffffa6011f34055cf67869ee10763ef35445544))
+* **migrations:** change default qrCodeSize from 200 to 256 ([c41df37](https://github.com/LindemannRock/craft-smartlink-manager/commit/c41df37029f41cd47bec1f3904b0be7002032653))
+
+
+### Security
+
+* block dangerous URL schemes in validation ([726d0df](https://github.com/LindemannRock/craft-smartlink-manager/commit/726d0dfb802f8438066f924b56196439cf5126a8))
+* reject dangerous HTML/script markup in title and description fields ([d760409](https://github.com/LindemannRock/craft-smartlink-manager/commit/d7604090a2f16cdeb642d62e545c64df8e5f60ff))
+* reject dangerous markup in title and description fields ([e86ba7c](https://github.com/LindemannRock/craft-smartlink-manager/commit/e86ba7c3594ffa1c4c4677d437fd079cd96beb5c))
+* validate URL format to block dangerous schemes in imports ([db7905d](https://github.com/LindemannRock/craft-smartlink-manager/commit/db7905d4746478fc6b86bfcf387c3675f3e70c08))
+
 ## [5.29.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.29.1...v5.29.2) - 2026-06-07
 
 
