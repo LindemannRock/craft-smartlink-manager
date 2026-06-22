@@ -185,6 +185,25 @@ If a settings save fails, keep the submitted form open and check the inline fiel
 
 ---
 
+## Smart Link or Import Row Rejected for Its URL or Markup
+
+**Symptom:** Saving a smart link fails with a validation error on a URL field, or on the **Title** or **Description** ("… contains markup that is not allowed"). A CSV import marks rows as errors for the same fields.
+
+**Cause:** SmartLink Manager validates link data before storing it, and the Control Panel form and the CSV importer enforce the same rules:
+
+- **URLs** (platform URLs and the fallback URL) must be absolute `http://` or `https://` addresses. Other schemes — `mailto:`, `ftp:`, custom app/deep-link schemes, and executable schemes such as `javascript:` or `data:` — are rejected.
+- **Title** and **Description** reject embedded HTML or script markup (for example a `<script>` tag or an HTML element with attributes). Plain text is fine — a lone `<` in everyday text like `price < $5` is not flagged.
+
+**Fix:**
+
+1. Use a full `https://` (or `http://`) URL for every platform and fallback link. For a non-web target such as a deep link, point the link at a web URL that performs the redirect rather than storing the custom scheme directly.
+2. Remove HTML or script markup from the Title and Description and store plain text.
+3. For imports, correct the flagged rows in your CSV and re-upload — the preview step lists each rejected row with its reason.
+
+**Why it happens:** Restricting links to `http(s)` and rejecting markup in free-text fields prevents dangerous values (such as `javascript:` URLs or injected scripts) from being stored and later rendered.
+
+---
+
 ## Multisite Custom Domain Resolves to Wrong Site
 
 **Symptom:** In multisite, generated SmartLink URLs all resolve to one site unless the URL contains a site segment.

@@ -146,7 +146,7 @@ Export click data from the analytics dashboard using the **Export** button. Thre
 | **Excel** | Formatted spreadsheet with column headers |
 | **JSON** | API consumers, programmatic processing |
 
-Exports respect the currently active date range and site filters. The `exportAnalytics` permission is required to export. Export rows include traffic type, system-agent flag, bot name, bot category, and bot producer when those values are available.
+Exports respect the currently active date range and site filters. The `exportAnalytics` permission is required to export. Export rows include traffic type, robot and system-agent flags, bot name, bot category, and bot producer when those values are available.
 
 ## Clearing Analytics Data
 
