@@ -464,7 +464,9 @@ class QrCodeService extends Component
             return null;
         }
 
-        return file_get_contents($cacheFile);
+        $data = file_get_contents($cacheFile);
+
+        return $data !== false ? $data : null;
     }
 
     /**
