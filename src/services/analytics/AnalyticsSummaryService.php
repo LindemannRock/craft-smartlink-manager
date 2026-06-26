@@ -593,10 +593,19 @@ class AnalyticsSummaryService
      */
     public function getButtonClicks(int $smartLinkId, string $dateRange = 'last7days', int|array|null $siteId = null): array
     {
+        $platformExpression = DbHelper::jsonExtract('metadata', 'platform');
+
         $query = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
+            ->select([
+                'platform' => $platformExpression,
+                'clicks' => 'COUNT(*)',
+            ])
             ->where(['linkId' => $smartLinkId])
-            ->andWhere([DbHelper::jsonExtract('metadata', 'clickType') => 'button']);
+            ->andWhere([DbHelper::jsonExtract('metadata', 'clickType') => 'button'])
+            ->andWhere(['not', [$platformExpression => null]])
+            ->groupBy($platformExpression)
+            ->orderBy(['clicks' => SORT_DESC]);
 
         if ($siteId) {
             $query->andWhere(['siteId' => $siteId]);
@@ -604,27 +613,13 @@ class AnalyticsSummaryService
 
         $this->applyDateRangeFilter($query, $dateRange);
 
-        $records = $query->all();
-
         $platformCounts = [];
-        $totalButtonClicks = 0;
-
-        foreach ($records as $record) {
-            $metadata = Json::decodeIfJson($record['metadata']);
-            if (isset($metadata['platform'])) {
-                $platform = $metadata['platform'];
-                if (!isset($platformCounts[$platform])) {
-                    $platformCounts[$platform] = 0;
-                }
-                $platformCounts[$platform]++;
-                $totalButtonClicks++;
-            }
+        foreach ($query->all() as $row) {
+            $platformCounts[(string) $row['platform']] = (int) $row['clicks'];
         }
 
-        arsort($platformCounts);
-
         return [
-            'total' => $totalButtonClicks,
+            'total' => array_sum($platformCounts),
             'byPlatform' => $platformCounts,
         ];
     }
