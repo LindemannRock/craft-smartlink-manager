@@ -23,6 +23,9 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
+/**
+ * @since 5.24.0
+ */
 class ImportExportController extends Controller
 {
     use LoggingTrait;
