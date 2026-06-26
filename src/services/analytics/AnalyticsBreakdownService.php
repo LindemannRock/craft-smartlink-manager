@@ -24,6 +24,11 @@ class AnalyticsBreakdownService
     use AnalyticsQueryTrait;
 
     /**
+     * @var string[]|null
+     */
+    private ?array $_analyticsColumns = null;
+
+    /**
      * Get device breakdown (mobile, tablet, desktop)
      *
      * @param int|null $smartLinkId
@@ -296,8 +301,19 @@ class AnalyticsBreakdownService
 
     private function _hasAnalyticsColumn(string $column): bool
     {
-        $columns = \Craft::$app->getDb()->getTableSchema('{{%smartlinkmanager_analytics}}', true)?->columnNames ?? [];
-        return in_array($column, $columns, true);
+        return in_array($column, $this->_analyticsColumns(), true);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function _analyticsColumns(): array
+    {
+        if ($this->_analyticsColumns !== null) {
+            return $this->_analyticsColumns;
+        }
+
+        return $this->_analyticsColumns = \Craft::$app->getDb()->getTableSchema('{{%smartlinkmanager_analytics}}')?->columnNames ?? [];
     }
 
     /**

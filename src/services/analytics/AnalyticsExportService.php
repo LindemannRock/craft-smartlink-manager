@@ -223,6 +223,6 @@ class AnalyticsExportService
      */
     private function _analyticsColumns(): array
     {
-        return Craft::$app->getDb()->getTableSchema('{{%smartlinkmanager_analytics}}', true)?->columnNames ?? [];
+        return Craft::$app->getDb()->getTableSchema('{{%smartlinkmanager_analytics}}')?->columnNames ?? [];
     }
 }

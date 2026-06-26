@@ -140,7 +140,7 @@ class AnalyticsTrackingService
 
             unset($metadata['ip']);
             $data['metadata'] = Json::encode($metadata);
-            $data = array_intersect_key($data, array_flip($db->getTableSchema('{{%smartlinkmanager_analytics}}', true)?->columnNames ?? []));
+            $data = array_intersect_key($data, array_flip($db->getTableSchema('{{%smartlinkmanager_analytics}}')?->columnNames ?? []));
 
             return (bool) $db->createCommand()
                 ->insert('{{%smartlinkmanager_analytics}}', $data)
