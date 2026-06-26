@@ -84,13 +84,15 @@ return [
 ];
 ```
 
-Default country and city when geo-detection is unavailable or disabled can be set via environment variables:
+Private/local IP addresses cannot be geolocated automatically. Set both defaults to record a local test location:
 
 ```bash
 # .env
 SMARTLINK_MANAGER_DEFAULT_COUNTRY=US
 SMARTLINK_MANAGER_DEFAULT_CITY=New York
 ```
+
+If either value is missing or unsupported, SmartLink Manager leaves local/private IP geo fields empty instead of inventing a fallback location.
 
 ## Data Retention
 

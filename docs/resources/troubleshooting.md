@@ -128,12 +128,14 @@ If a date-format setting does not appear to change the index:
 
 3. **Is the API reachable?** The Craft server must be able to make outbound HTTP requests to the provider's API. Check firewall rules or proxy settings on your server.
 
-4. **Is the IP address a private/localhost address?** Local development requests (127.0.0.1, ::1, 192.168.x.x) cannot be geo-located. Geo-detection will return the default country and city from your `.env`:
+4. **Is the IP address a private/localhost address?** Local development requests (127.0.0.1, ::1, 192.168.x.x) cannot be geo-located automatically. SmartLink Manager leaves geo fields empty unless you set both defaults:
 
     ```bash
     SMARTLINK_MANAGER_DEFAULT_COUNTRY=US
     SMARTLINK_MANAGER_DEFAULT_CITY=New York
     ```
+
+    If either value is missing or does not match a supported location, SmartLink Manager leaves the geo fields empty instead of inventing a fallback location.
 
 5. **Have you hit the API rate limit?** Free tiers on geo APIs have request limits. Check the provider's dashboard for rate limit errors.
 

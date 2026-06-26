@@ -95,8 +95,8 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `enableGeoDetection` | `bool` | `false` | Enable geographic detection for analytics |
 | `geoProvider` | `string` | `'ip-api.com'` | Geo IP provider: `ip-api.com` (HTTP free, HTTPS paid), `ipapi.co` (1K/day free), `ipinfo.io` (50K/month free) |
 | `geoApiKey` | `?string` | `null` | API key for paid provider tiers. Required for ip-api.com HTTPS |
-| `defaultCountry` | `?string` | `null` | Default 2-letter country code for local dev. Falls back to `SMARTLINK_MANAGER_DEFAULT_COUNTRY` env var. **Config/env only — not stored in DB** |
-| `defaultCity` | `?string` | `null` | Default city for local dev. Falls back to `SMARTLINK_MANAGER_DEFAULT_CITY` env var. **Config/env only — not stored in DB** |
+| `defaultCountry` | `?string` | `null` | Default 2-letter country code for local dev. Falls back to `SMARTLINK_MANAGER_DEFAULT_COUNTRY` env var. Requires `defaultCity`; otherwise private/local IP geo fields stay empty. **Config/env only — not stored in DB** |
+| `defaultCity` | `?string` | `null` | Default city for local dev. Falls back to `SMARTLINK_MANAGER_DEFAULT_CITY` env var. Requires `defaultCountry`; otherwise private/local IP geo fields stay empty. **Config/env only — not stored in DB** |
 
 ### Device & Language Detection
 

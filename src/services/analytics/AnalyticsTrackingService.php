@@ -215,13 +215,17 @@ class AnalyticsTrackingService
     /**
      * Get default location for private/local IPs
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed>|null
      */
-    private function getDefaultLocation(): array
+    private function getDefaultLocation(): ?array
     {
         $settings = SmartLinkManager::$plugin->getSettings();
-        $defaultCountry = $settings->defaultCountry ?: (App::env('SMARTLINK_MANAGER_DEFAULT_COUNTRY') ?: 'AE');
-        $defaultCity = $settings->defaultCity ?: (App::env('SMARTLINK_MANAGER_DEFAULT_CITY') ?: 'Dubai');
+        $defaultCountry = $settings->defaultCountry ?: App::env('SMARTLINK_MANAGER_DEFAULT_COUNTRY');
+        $defaultCity = $settings->defaultCity ?: App::env('SMARTLINK_MANAGER_DEFAULT_CITY');
+
+        if (!$defaultCountry || !$defaultCity) {
+            return null;
+        }
 
         $locations = [
             'US' => [
@@ -273,7 +277,12 @@ class AnalyticsTrackingService
             return $locations[$defaultCountry][$defaultCity];
         }
 
-        return $locations['AE']['Dubai'];
+        Craft::warning('Configured default analytics location was not found; leaving local/private IP geo fields empty. | ' . json_encode([
+            'configuredCountry' => $defaultCountry,
+            'configuredCity' => $defaultCity,
+        ]), SmartLinkManager::$plugin->id);
+
+        return null;
     }
 
     /**
