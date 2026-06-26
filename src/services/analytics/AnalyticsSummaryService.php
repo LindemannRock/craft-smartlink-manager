@@ -604,7 +604,7 @@ class AnalyticsSummaryService
             ->where(['linkId' => $smartLinkId])
             ->andWhere([DbHelper::jsonExtract('metadata', 'clickType') => 'button'])
             ->andWhere(['not', [$platformExpression => null]])
-            ->groupBy($platformExpression)
+            ->groupBy(DbHelper::jsonExtractExpression('metadata', 'platform'))
             ->orderBy(['clicks' => SORT_DESC]);
 
         if ($siteId) {

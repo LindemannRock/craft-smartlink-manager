@@ -111,6 +111,34 @@ final class AnalyticsFormattingTest extends TestCase
         });
     }
 
+    public function testSmartLinkAnalyticsAggregatesButtonClicksByPlatform(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+        $link = $this->seedSmartLink(['siteId' => $site->id]);
+        $now = new \DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone()));
+
+        $this->insertAnalyticsRow($link->id, $site->id, $now, [
+            'clickType' => 'button',
+            'platform' => 'ios',
+        ]);
+        $this->insertAnalyticsRow($link->id, $site->id, $now, [
+            'clickType' => 'button',
+            'platform' => 'android',
+        ]);
+        $this->insertAnalyticsRow($link->id, $site->id, $now, [
+            'clickType' => 'button',
+            'platform' => 'android',
+        ]);
+
+        $analytics = $this->analytics->getSmartLinkAnalytics($link->id, 'today', $site->id);
+
+        self::assertSame(3, $analytics['buttonClicks']['total']);
+        self::assertSame([
+            'android' => 2,
+            'ios' => 1,
+        ], $analytics['buttonClicks']['byPlatform']);
+    }
+
     /**
      * @param array<string, mixed> $metadata
      */
