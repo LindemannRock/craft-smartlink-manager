@@ -297,6 +297,12 @@ class QrCodeService extends Component
      */
     private function _addLogoToQrCode(string $qrCodeData, string $logoId, int $qrSize, int $logoSizePercent): string
     {
+        $logoPath = null;
+        $qrImage = null;
+        $logoImage = null;
+        $resizedLogo = null;
+        $bufferLevel = ob_get_level();
+
         try {
             // Get logo asset
             $logoAsset = Asset::find()->id($logoId)->one();
@@ -338,7 +344,6 @@ class QrCodeService extends Component
             }
 
             if (!$logoImage) {
-                imagedestroy($qrImage);
                 return $qrCodeData; // Return original if can't create logo image
             }
 
@@ -363,7 +368,10 @@ class QrCodeService extends Component
 
             // Create resized logo
             $resizedLogo = imagecreatetruecolor($logoWidth, $logoHeight);
-            
+            if (!$resizedLogo) {
+                return $qrCodeData;
+            }
+
             // Preserve transparency for PNG
             imagealphablending($resizedLogo, false);
             imagesavealpha($resizedLogo, true);
@@ -389,7 +397,7 @@ class QrCodeService extends Component
             $circleRadius = (int)(max($logoWidth, $logoHeight) / 2) + 2;
             $centerX = $logoX + (int)($logoWidth / 2);
             $centerY = $logoY + (int)($logoHeight / 2);
-            
+
             imagefilledellipse($qrImage, $centerX, $centerY, $circleRadius * 2, $circleRadius * 2, $backgroundColor);
 
             // Overlay logo on QR code
@@ -398,21 +406,30 @@ class QrCodeService extends Component
             // Convert back to binary data
             ob_start();
             imagepng($qrImage);
-            $result = ob_get_contents();
-            ob_end_clean();
+            $result = ob_get_clean();
 
-            // Clean up
-            imagedestroy($qrImage);
-            imagedestroy($logoImage);
-            imagedestroy($resizedLogo);
-
-            // Clean up temporary file
-            unlink($logoPath);
-
-            return $result;
-        } catch (\Exception $e) {
+            return $result !== false ? $result : $qrCodeData;
+        } catch (\Throwable $e) {
             $this->logError('Failed to add logo to QR code', ['error' => $e->getMessage()]);
             return $qrCodeData; // Return original on any error
+        } finally {
+            while (ob_get_level() > $bufferLevel) {
+                ob_end_clean();
+            }
+
+            if ($qrImage instanceof \GdImage) {
+                imagedestroy($qrImage);
+            }
+            if ($logoImage instanceof \GdImage) {
+                imagedestroy($logoImage);
+            }
+            if ($resizedLogo instanceof \GdImage) {
+                imagedestroy($resizedLogo);
+            }
+
+            if (is_string($logoPath) && is_file($logoPath)) {
+                @unlink($logoPath);
+            }
         }
     }
 
