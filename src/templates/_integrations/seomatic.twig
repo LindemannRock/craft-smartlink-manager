@@ -1,14 +1,26 @@
-{% macro tracking(smartLink, eventType = 'qr_scan') %}
-    {% set seomaticEnabled = craft.app.plugins.isPluginEnabled('seomatic') and 'seomatic' in (craft.app.plugins.getPlugin('smartlink-manager').settings.enabledIntegrations ?? []) %}
+{#
+  SEOmatic integration tracking template
+  Pushes smart link events to Google Tag Manager dataLayer
+#}
+{% set smartlinkPlugin = craft.app.plugins.getPlugin('smartlink-manager') %}
+{% set settings = smartlinkPlugin ? smartlinkPlugin.settings : null %}
+{% set enabledIntegrations = settings.enabledIntegrations ?? [] %}
+{% set trackingEvents = settings.seomaticTrackingEvents ?? ['redirect', 'button_click', 'qr_scan'] %}
+{% set seomaticEnabled = settings
+    and craft.app.plugins.isPluginEnabled('seomatic')
+    and 'seomatic' in enabledIntegrations
+    and eventType in trackingEvents
+%}
 
-    {% if seomaticEnabled %}
+{% if seomaticEnabled %}
+    {% set eventPrefix = settings.seomaticEventPrefix ?? 'smart_links' %}
     <script>
         window.dataLayer = window.dataLayer || [];
 
         {% if eventType == 'qr_scan' %}
         (function() {
             var eventData = {
-                event: '{{ (craft.app.plugins.getPlugin('smartlink-manager').settings.seomaticEventPrefix ?? 'smart_links')|e('js') }}_qr_scan',
+                event: '{{ eventPrefix|e('js') }}_qr_scan',
                 smart_link: {
                     slug: '{{ smartLink.slug|e('js') }}',
                     title: '{{ smartLink.title|e('js') }}',
@@ -24,7 +36,7 @@
         {% else %}
         function pushSmartLinkEvent(eventType, platform, source) {
             var eventData = {
-                event: '{{ (craft.app.plugins.getPlugin('smartlink-manager').settings.seomaticEventPrefix ?? 'smart_links')|e('js') }}_' + eventType,
+                event: '{{ eventPrefix|e('js') }}_' + eventType,
                 smart_link: {
                     slug: '{{ smartLink.slug|e('js') }}',
                     title: '{{ smartLink.title|e('js') }}',
@@ -86,5 +98,4 @@
         });
         {% endif %}
     </script>
-    {% endif %}
-{% endmacro %}
+{% endif %}
