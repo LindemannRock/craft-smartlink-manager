@@ -65,8 +65,8 @@ class AnalyticsBreakdownService
 
         if (empty($labels)) {
             return [
-                'labels' => ['No data yet'],
-                'values' => [1],
+                'labels' => [],
+                'values' => [],
             ];
         }
 
@@ -364,8 +364,8 @@ class AnalyticsBreakdownService
 
         if (empty($labels)) {
             return [
-                'labels' => ['No data yet'],
-                'values' => [1],
+                'labels' => [],
+                'values' => [],
             ];
         }
 
