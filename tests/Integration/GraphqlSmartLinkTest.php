@@ -70,7 +70,7 @@ final class GraphqlSmartLinkTest extends TestCase
         self::assertArrayHasKey('site', $queries['smartlinkManagerResolveSmartLink']['args']);
         self::assertArrayHasKey('siteId', $queries['smartlinkManagerResolveSmartLink']['args']);
         self::assertArrayHasKey('platform', $queries['smartlinkManagerResolveSmartLink']['args']);
-        self::assertArrayHasKey('source', $queries['smartlinkManagerResolveSmartLink']['args']);
+        self::assertArrayNotHasKey('source', $queries['smartlinkManagerResolveSmartLink']['args']);
     }
 
     public function testQueryDefinitionsAreSchemaPermissionGated(): void
@@ -132,7 +132,6 @@ final class GraphqlSmartLinkTest extends TestCase
                 'slug' => $link->slug,
                 'siteId' => $site->id,
                 'platform' => 'android',
-                'source' => 'spa',
             ],
             null,
             $this->createMock(ResolveInfo::class),
@@ -146,7 +145,7 @@ final class GraphqlSmartLinkTest extends TestCase
         $analytics = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
         self::assertNotNull($analytics);
         $metadata = Json::decode($analytics['metadata']);
-        self::assertSame('spa', $metadata['source']);
+        self::assertSame('graphql', $metadata['source']);
         self::assertSame('button', $metadata['clickType']);
         self::assertSame('android', $metadata['platform']);
     }

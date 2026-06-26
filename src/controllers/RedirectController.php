@@ -253,8 +253,9 @@ class RedirectController extends Controller
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
         $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
-        // Get source parameter for QR tracking
-        $source = Craft::$app->getRequest()->getParam('src', 'direct');
+        // Get source parameter for QR tracking.
+        $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
+        $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
 
         // Determine destination URL
         $destinationUrl = null;

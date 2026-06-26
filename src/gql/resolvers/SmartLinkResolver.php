@@ -58,7 +58,7 @@ class SmartLinkResolver extends Resolver
         $destinationUrl = UrlSafetyHelper::sanitizeRedirectUrl($destinationUrl);
 
         if ($smartLink->trackAnalytics && SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
-            self::trackResolution($smartLink, $destinationUrl, $platform, $clickType, $siteId, (string)($arguments['source'] ?? 'graphql'));
+            self::trackResolution($smartLink, $destinationUrl, $platform, $clickType, $siteId, 'graphql');
         }
 
         return self::toArray($smartLink, $destinationUrl, $platform, $clickType);

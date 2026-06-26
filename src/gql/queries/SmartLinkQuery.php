@@ -54,11 +54,6 @@ class SmartLinkQuery extends Query
                         'type' => Type::string(),
                         'description' => 'The platform to resolve for. Defaults to auto detection.',
                     ],
-                    'source' => [
-                        'name' => 'source',
-                        'type' => Type::string(),
-                        'description' => 'Optional analytics source label. Defaults to graphql.',
-                    ],
                 ],
                 'resolve' => SmartLinkResolver::class . '::resolve',
                 'description' => 'Resolves a smart link and records hits/analytics like a real smart link request.',

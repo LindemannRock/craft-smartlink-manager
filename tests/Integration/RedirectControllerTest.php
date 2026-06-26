@@ -87,6 +87,31 @@ final class RedirectControllerTest extends TestCase
         });
     }
 
+    public function testUnknownSourceFallsBackToDirectAttribution(): void
+    {
+        $this->installWebHarness(['src' => 'spa']);
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new StubDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-unknown-source',
+            'iosUrl' => 'https://example.com/ios',
+            'fallbackUrl' => 'https://example.com/fallback',
+        ]);
+
+        $this->withSettings([
+            'enableAnalytics' => true,
+            'enableGeoDetection' => false,
+            'ipHashSalt' => '0123456789abcdef0123456789abcdef',
+        ], function() use ($link): void {
+            $response = $this->controller()->actionGo($link->slug, 'auto');
+
+            self::assertSame(302, $response->getStatusCode());
+
+            $row = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
+            self::assertNotNull($row);
+            self::assertStringContainsString('"source":"direct"', (string) $row['metadata']);
+        });
+    }
+
     public function testExplicitPlatformRedirectsToMatchingUrl(): void
     {
         $this->installWebHarness();
