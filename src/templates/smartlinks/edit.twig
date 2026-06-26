@@ -569,11 +569,11 @@
 
                     // Get the format - use selected value or default
                     const formatValue = formatSelect ? formatSelect.value : '';
-                    const format = formatValue || '{{ craft.smartLinks.settings.defaultQrFormat ?? 'png' }}';
+                    const format = formatValue || {{ (craft.smartLinks.settings.defaultQrFormat ?? 'png')|json_encode|raw }};
 
                     // Build parameters
-                    let params = `size=150&color=${color}&bg=${bgColor}&format=${format}&margin={{ craft.smartLinks.settings.defaultQrMargin }}`;
-                    let fullSizeParams = `size=${size}&color=${color}&bg=${bgColor}&format=${format}&margin={{ craft.smartLinks.settings.defaultQrMargin }}`;
+                    let params = `size=150&color=${color}&bg=${bgColor}&format=${format}&margin={{ craft.smartLinks.settings.defaultQrMargin|json_encode|raw }}`;
+                    let fullSizeParams = `size=${size}&color=${color}&bg=${bgColor}&format=${format}&margin={{ craft.smartLinks.settings.defaultQrMargin|json_encode|raw }}`;
 
                     // Add eye color if set
                     if (eyeColor) {
@@ -594,8 +594,8 @@
                     }
 
                     // If no specific logo selected, use default logo from settings
-                    if (!logoId && {{ craft.smartLinks.settings.defaultQrLogoId ?? 'null' }}) {
-                        logoId = {{ craft.smartLinks.settings.defaultQrLogoId ?? 'null' }};
+                    if (!logoId && {{ (craft.smartLinks.settings.defaultQrLogoId ?? null)|json_encode|raw }}) {
+                        logoId = {{ (craft.smartLinks.settings.defaultQrLogoId ?? null)|json_encode|raw }};
                     }
 
                     if (logoId) {
@@ -801,7 +801,7 @@
         const color = ($('#qrCodeColor').val() || '000000').replace(/^#/, '');
         const bgColor = ($('#qrCodeBgColor').val() || 'FFFFFF').replace(/^#/, '');
         const eyeColor = $('#qrCodeEyeColor').val() ? $('#qrCodeEyeColor').val().replace(/^#/, '') : '';
-        const format = $('#qrCodeFormat').val() || '{{ craft.smartLinks.settings.defaultQrFormat ?? 'png' }}';
+        const format = $('#qrCodeFormat').val() || {{ (craft.smartLinks.settings.defaultQrFormat ?? 'png')|json_encode|raw }};
 
         // Build download URL
         let downloadUrl = {{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId)|json_encode|raw }} +
@@ -838,10 +838,10 @@
 
         // Get plugin default values
         const defaults = {
-            size: {{ craft.smartLinks.settings.defaultQrSize }},
-            color: '{{ craft.smartLinks.settings.defaultQrColor }}',
-            bgColor: '{{ craft.smartLinks.settings.defaultQrBgColor }}',
-            eyeColor: '{{ craft.smartLinks.settings.qrEyeColor ?? '' }}'
+            size: {{ craft.smartLinks.settings.defaultQrSize|json_encode|raw }},
+            color: {{ craft.smartLinks.settings.defaultQrColor|json_encode|raw }},
+            bgColor: {{ craft.smartLinks.settings.defaultQrBgColor|json_encode|raw }},
+            eyeColor: {{ (craft.smartLinks.settings.qrEyeColor ?? '')|json_encode|raw }}
         };
 
         // Reset form fields
