@@ -27,6 +27,8 @@ class AnalyticsChartService
     use AnalyticsQueryTrait;
 
     private const DATE_FORMAT_PLUGIN_HANDLE = 'smartlink-manager';
+    private const INSIGHT_COUNTRY_LIMIT = 10;
+    private const INSIGHT_BRANDS_PER_COUNTRY_LIMIT = 3;
 
     /**
      * Get clicks data for charts
@@ -243,6 +245,10 @@ class AnalyticsChartService
 
         $this->applyDateRangeFilter($browserByCountry, $dateRange);
 
+        if ($siteId) {
+            $browserByCountry->andWhere(['siteId' => $siteId]);
+        }
+
         $browserData = [];
         foreach ($browserByCountry->all() as $row) {
             $countryName = GeoHelper::getCountryName($row['country']);
@@ -256,27 +262,50 @@ class AnalyticsChartService
         }
 
         // Device brands by country
-        $brandsByCountry = (new Query())
+        $topCountriesQuery = (new Query())
             ->from('{{%smartlinkmanager_analytics}}')
             ->select([
                 'country',
-                'deviceBrand',
                 'COUNT(*) as clicks',
             ])
             ->where(['not', ['country' => null]])
             ->andWhere(['not', ['deviceBrand' => null]])
-            ->groupBy(['country', 'deviceBrand'])
-            ->orderBy(['clicks' => SORT_DESC]);
+            ->groupBy(['country'])
+            ->orderBy(['clicks' => SORT_DESC])
+            ->limit(self::INSIGHT_COUNTRY_LIMIT);
 
-        $this->applyDateRangeFilter($brandsByCountry, $dateRange);
+        $this->applyDateRangeFilter($topCountriesQuery, $dateRange);
+
+        if ($siteId) {
+            $topCountriesQuery->andWhere(['siteId' => $siteId]);
+        }
+
+        $topCountries = array_column($topCountriesQuery->all(), 'country');
 
         $brandsData = [];
-        foreach ($brandsByCountry->all() as $row) {
-            $countryName = GeoHelper::getCountryName($row['country']);
-            if (!isset($brandsData[$countryName])) {
-                $brandsData[$countryName] = [];
+        foreach ($topCountries as $country) {
+            $brandsByCountry = (new Query())
+                ->from('{{%smartlinkmanager_analytics}}')
+                ->select([
+                    'deviceBrand',
+                    'COUNT(*) as clicks',
+                ])
+                ->where([
+                    'country' => $country,
+                ])
+                ->andWhere(['not', ['deviceBrand' => null]])
+                ->groupBy(['deviceBrand'])
+                ->orderBy(['clicks' => SORT_DESC])
+                ->limit(self::INSIGHT_BRANDS_PER_COUNTRY_LIMIT);
+
+            $this->applyDateRangeFilter($brandsByCountry, $dateRange);
+
+            if ($siteId) {
+                $brandsByCountry->andWhere(['siteId' => $siteId]);
             }
-            if (count($brandsData[$countryName]) < 3) {
+
+            $countryName = GeoHelper::getCountryName($country);
+            foreach ($brandsByCountry->all() as $row) {
                 $brandsData[$countryName][] = [
                     'brand' => $row['deviceBrand'],
                     'clicks' => (int) $row['clicks'],
