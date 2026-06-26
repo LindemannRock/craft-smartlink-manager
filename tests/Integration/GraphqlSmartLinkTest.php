@@ -19,9 +19,7 @@ use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\gql\queries\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\gql\resolvers\SmartLinkResolver;
 use lindemannrock\smartlinkmanager\models\DeviceInfo;
-use lindemannrock\smartlinkmanager\models\Settings;
 use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
-use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\Stubs\StubDeviceDetectionService;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use yii\base\Request as YiiRequest;
@@ -37,12 +35,6 @@ final class GraphqlSmartLinkTest extends TestCase
 
     private ?YiiRequest $savedRequest = null;
 
-    private ?string $savedSalt = null;
-
-    private bool $savedEnableAnalytics = true;
-
-    private bool $savedEnableGeo = false;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,15 +44,11 @@ final class GraphqlSmartLinkTest extends TestCase
 
         $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new StubDeviceDetectionService());
 
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $this->savedSalt = $settings->ipHashSalt;
-        $this->savedEnableAnalytics = $settings->enableAnalytics;
-        $this->savedEnableGeo = $settings->enableGeoDetection;
-
-        $settings->ipHashSalt = self::TEST_SALT;
-        $settings->enableAnalytics = true;
-        $settings->enableGeoDetection = false;
+        $this->applySettingsForTest([
+            'ipHashSalt' => self::TEST_SALT,
+            'enableAnalytics' => true,
+            'enableGeoDetection' => false,
+        ]);
     }
 
     protected function tearDown(): void
@@ -68,12 +56,6 @@ final class GraphqlSmartLinkTest extends TestCase
         if ($this->savedRequest !== null) {
             Craft::$app->set('request', $this->savedRequest);
         }
-
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $settings->ipHashSalt = $this->savedSalt;
-        $settings->enableAnalytics = $this->savedEnableAnalytics;
-        $settings->enableGeoDetection = $this->savedEnableGeo;
 
         parent::tearDown();
     }

@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use craft\helpers\Json;
-use lindemannrock\smartlinkmanager\models\Settings;
-use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 
 /**
@@ -44,35 +42,15 @@ final class SaveAnalyticsTest extends TestCase
 {
     private const TEST_SALT = '0123456789abcdef0123456789abcdef';
 
-    /** Track + restore settings mutations across tests. */
-    private ?string $savedSalt = null;
-    private bool $savedAnonymize = false;
-    private bool $savedEnableGeo = false;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $this->savedSalt = $settings->ipHashSalt;
-        $this->savedAnonymize = $settings->anonymizeIpAddress;
-        $this->savedEnableGeo = $settings->enableGeoDetection;
-
-        $settings->ipHashSalt = self::TEST_SALT;
-        $settings->anonymizeIpAddress = false;
-        $settings->enableGeoDetection = false;
-    }
-
-    protected function tearDown(): void
-    {
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $settings->ipHashSalt = $this->savedSalt;
-        $settings->anonymizeIpAddress = $this->savedAnonymize;
-        $settings->enableGeoDetection = $this->savedEnableGeo;
-
-        parent::tearDown();
+        $this->applySettingsForTest([
+            'ipHashSalt' => self::TEST_SALT,
+            'anonymizeIpAddress' => false,
+            'enableGeoDetection' => false,
+        ]);
     }
 
     public function testSaveAnalyticsWritesRowWithDeviceAndMetadataFields(): void
@@ -159,46 +137,38 @@ final class SaveAnalyticsTest extends TestCase
 
     public function testSaveAnalyticsAnonymizesIpv4BeforeHashing(): void
     {
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $settings->anonymizeIpAddress = true;
+        $this->withSettings(['anonymizeIpAddress' => true], function(): void {
+            $link = $this->seedSmartLink();
+            // Two IPs in the same /24 must collapse to the same anonymised form
+            // (192.168.1.0), then hash to the same value.
+            $this->analytics->saveAnalytics($link->id, [], ['ip' => '192.168.1.42']);
+            $this->analytics->saveAnalytics($link->id, [], ['ip' => '192.168.1.99']);
 
-        $link = $this->seedSmartLink();
-        // Two IPs in the same /24 must collapse to the same anonymised form
-        // (192.168.1.0), then hash to the same value.
-        $this->analytics->saveAnalytics($link->id, [], ['ip' => '192.168.1.42']);
-        $this->analytics->saveAnalytics($link->id, [], ['ip' => '192.168.1.99']);
+            $hashes = (new \craft\db\Query())
+                ->from('{{%smartlinkmanager_analytics}}')
+                ->where(['linkId' => $link->id])
+                ->select(['ip'])
+                ->column();
 
-        $hashes = (new \craft\db\Query())
-            ->from('{{%smartlinkmanager_analytics}}')
-            ->where(['linkId' => $link->id])
-            ->select(['ip'])
-            ->column();
-
-        $this->assertCount(2, $hashes);
-        $expected = hash('sha256', '192.168.1.0' . self::TEST_SALT);
-        $this->assertSame($expected, $hashes[0]);
-        $this->assertSame($expected, $hashes[1], 'IP anonymisation must run BEFORE hashing, so /24 neighbours share a hash.');
+            $this->assertCount(2, $hashes);
+            $expected = hash('sha256', '192.168.1.0' . self::TEST_SALT);
+            $this->assertSame($expected, $hashes[0]);
+            $this->assertSame($expected, $hashes[1], 'IP anonymisation must run BEFORE hashing, so /24 neighbours share a hash.');
+        });
     }
 
     public function testSaveAnalyticsWithUnconfiguredSaltStillWritesRowButNullsTheIp(): void
     {
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        // Mirror the production "not configured" sentinel value defined in
-        // AnalyticsTrackingService::_hashIpWithSalt() — this string is treated
-        // as "no salt set" and trips the hash-error branch in
-        // AnalyticsIpHelper::prepare(), which must NOT propagate the exception.
-        $settings->ipHashSalt = '$SMARTLINK_MANAGER_IP_SALT';
+        $this->withSettings(['ipHashSalt' => '$SMARTLINK_MANAGER_IP_SALT'], function(): void {
+            $link = $this->seedSmartLink();
+            $this->assertTrue(
+                $this->analytics->saveAnalytics($link->id, [], ['ip' => '203.0.113.42']),
+                'A missing salt must not crash saveAnalytics — the row should still land.',
+            );
 
-        $link = $this->seedSmartLink();
-        $this->assertTrue(
-            $this->analytics->saveAnalytics($link->id, [], ['ip' => '203.0.113.42']),
-            'A missing salt must not crash saveAnalytics — the row should still land.',
-        );
-
-        $row = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
-        $this->assertNotNull($row);
-        $this->assertNull($row['ip'], 'Without a salt, the IP must be persisted as null rather than an unsalted hash.');
+            $row = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
+            $this->assertNotNull($row);
+            $this->assertNull($row['ip'], 'Without a salt, the IP must be persisted as null rather than an unsalted hash.');
+        });
     }
 }

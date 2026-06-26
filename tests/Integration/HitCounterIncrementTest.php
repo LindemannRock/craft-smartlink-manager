@@ -12,8 +12,6 @@ namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use Craft;
 use lindemannrock\smartlinkmanager\models\DeviceInfo;
-use lindemannrock\smartlinkmanager\models\Settings;
-use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\base\testing\StubConsoleRequest;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use yii\base\Request as YiiRequest;
@@ -42,8 +40,6 @@ final class HitCounterIncrementTest extends TestCase
     private const TEST_SALT = '0123456789abcdef0123456789abcdef';
 
     private ?YiiRequest $savedRequest = null;
-    private ?string $savedSalt = null;
-    private bool $savedEnableGeo = false;
 
     protected function setUp(): void
     {
@@ -54,12 +50,10 @@ final class HitCounterIncrementTest extends TestCase
         $this->savedRequest = Craft::$app->getRequest();
         Craft::$app->set('request', new StubConsoleRequest());
 
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $this->savedSalt = $settings->ipHashSalt;
-        $this->savedEnableGeo = $settings->enableGeoDetection;
-        $settings->ipHashSalt = self::TEST_SALT;
-        $settings->enableGeoDetection = false;
+        $this->applySettingsForTest([
+            'ipHashSalt' => self::TEST_SALT,
+            'enableGeoDetection' => false,
+        ]);
     }
 
     protected function tearDown(): void
@@ -67,11 +61,6 @@ final class HitCounterIncrementTest extends TestCase
         if ($this->savedRequest !== null) {
             Craft::$app->set('request', $this->savedRequest);
         }
-
-        /** @var Settings $settings */
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $settings->ipHashSalt = $this->savedSalt;
-        $settings->enableGeoDetection = $this->savedEnableGeo;
 
         parent::tearDown();
     }

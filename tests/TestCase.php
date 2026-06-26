@@ -47,6 +47,11 @@ abstract class TestCase extends IntegrationTestCase
     protected SmartLinksService $smartLinks;
     protected AnalyticsService $analytics;
 
+    /**
+     * @var list<callable(): void>
+     */
+    private array $settingsOverrideRestorers = [];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -57,7 +62,11 @@ abstract class TestCase extends IntegrationTestCase
 
     protected function tearDown(): void
     {
-        parent::tearDown();
+        try {
+            $this->restoreSettingsOverrides();
+        } finally {
+            parent::tearDown();
+        }
     }
 
     /**
@@ -119,6 +128,52 @@ abstract class TestCase extends IntegrationTestCase
      */
     protected function withSettings(array $overrides, callable $callback): mixed
     {
+        $restore = $this->createSettingsOverride($overrides);
+
+        try {
+            return $callback();
+        } finally {
+            $restore();
+        }
+    }
+
+    /**
+     * Apply a settings override for the rest of the current test.
+     *
+     * @param array<string, mixed> $overrides
+     */
+    protected function applySettingsForTest(array $overrides): void
+    {
+        $this->settingsOverrideRestorers[] = $this->createSettingsOverride($overrides);
+    }
+
+    /**
+     * Create a scoped override that beats both DB-backed settings and the
+     * workspace's config/smartlink-manager.php file.
+     *
+     * @param array<string, mixed> $overrides
+     * @return callable(): void
+     */
+    private function createSettingsOverride(array $overrides): callable
+    {
+        $config = Craft::$app->getConfig();
+        $previousConfigDir = $config->configDir;
+        $originalConfig = $config->getConfigFromFile('smartlink-manager');
+        $testConfig = array_merge(is_array($originalConfig) ? $originalConfig : [], $overrides);
+
+        $tempDir = Craft::$app->getPath()->getTempPath()
+            . DIRECTORY_SEPARATOR
+            . 'smartlink-manager-test-config-' . bin2hex(random_bytes(4));
+
+        if (!is_dir($tempDir) && !mkdir($tempDir, 0777, true) && !is_dir($tempDir)) {
+            throw new \RuntimeException("Unable to create temporary config directory: {$tempDir}");
+        }
+
+        file_put_contents(
+            $tempDir . DIRECTORY_SEPARATOR . 'smartlink-manager.php',
+            "<?php\nreturn " . var_export($testConfig, true) . ";\n",
+        );
+
         $settings = SmartLinkManager::$plugin->getSettings();
         $previous = [];
 
@@ -127,16 +182,39 @@ abstract class TestCase extends IntegrationTestCase
             $settings->{$attribute} = $value;
         }
 
+        $config->configDir = $tempDir;
         DateFormatHelper::clearConfigCache('smartlink-manager');
 
-        try {
-            return $callback();
-        } finally {
+        $restored = false;
+
+        return static function() use (
+            $config,
+            $previousConfigDir,
+            $settings,
+            $previous,
+            $tempDir,
+            &$restored,
+        ): void {
+            if ($restored) {
+                return;
+            }
+
+            $config->configDir = $previousConfigDir;
+
             foreach ($previous as $attribute => $value) {
                 $settings->{$attribute} = $value;
             }
 
             DateFormatHelper::clearConfigCache('smartlink-manager');
+            \craft\helpers\FileHelper::removeDirectory($tempDir);
+            $restored = true;
+        };
+    }
+
+    private function restoreSettingsOverrides(): void
+    {
+        while ($restore = array_pop($this->settingsOverrideRestorers)) {
+            $restore();
         }
     }
 
