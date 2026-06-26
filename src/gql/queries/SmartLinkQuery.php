@@ -74,7 +74,7 @@ class SmartLinkQuery extends Query
                     'limit' => [
                         'name' => 'limit',
                         'type' => Type::int(),
-                        'description' => 'The maximum number of smart links to return.',
+                        'description' => 'The maximum number of smart links to return. Defaults to 100 and is capped at 500.',
                     ],
                 ],
                 'resolve' => SmartLinkResolver::class . '::resolveAll',

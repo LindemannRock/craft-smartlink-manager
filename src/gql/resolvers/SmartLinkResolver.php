@@ -76,15 +76,15 @@ class SmartLinkResolver extends Resolver
             return [];
         }
 
+        $limit = $arguments['limit'] ?? null;
+        $limit = is_numeric($limit) && (int)$limit > 0 ? (int)$limit : 100;
+
         $query = SmartLink::find()
             ->siteId($siteId)
             ->status(null)
             ->orderBy(['elements.dateCreated' => SORT_DESC]);
 
-        $limit = $arguments['limit'] ?? null;
-        if (is_numeric($limit) && (int)$limit > 0) {
-            $query->limit(min((int)$limit, 500));
-        }
+        $query->limit(min($limit, 500));
 
         return array_map(
             static fn(SmartLink $smartLink): array => self::toArray($smartLink),

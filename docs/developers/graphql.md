@@ -70,7 +70,6 @@ query ResolveSmartLink($slug: String!, $site: String, $platform: String) {
     slug: $slug
     site: $site
     platform: $platform
-    source: "spa"
   ) {
     id
     title
@@ -125,7 +124,7 @@ When a smart link matches, the requested fields are returned:
 This query behaves like a real smart link hit:
 
 - matched, enabled smart links increment `hits` when analytics tracking is enabled for the link and plugin
-- matched, enabled smart links record analytics with `source = graphql` unless you pass a custom `source`
+- matched, enabled smart links record analytics with `source = graphql`
 - `platform: "auto"` uses device and language detection
 - auto resolution falls back to `fallbackUrl` when the detected platform has no configured destination URL
 - `platform: "ios"`, `android`, `huawei`, `amazon`, `windows`, `mac`, or `fallback` resolves the matching destination URL
@@ -141,7 +140,6 @@ smartlinkManagerResolveSmartLink(
   siteId: 1
   site: "en"
   platform: "auto"
-  source: "spa"
 )
 ```
 
@@ -151,7 +149,6 @@ smartlinkManagerResolveSmartLink(
 | `siteId` | `Int` | No | Site ID to resolve against |
 | `site` | `String` | No | Site handle to resolve against |
 | `platform` | `String` | No | Platform to resolve for. Defaults to `auto` |
-| `source` | `String` | No | Analytics source label. Defaults to `graphql` |
 
 ## List smart links
 
@@ -180,6 +177,7 @@ The list query:
 
 - returns enabled smart links for the requested site
 - accepts `site` or `siteId`
+- defaults to 100 results when `limit` is omitted
 - caps `limit` at 500
 - does not increment `hits`
 - does not write analytics
@@ -194,7 +192,7 @@ smartlinkManagerSmartLinks(siteId: 1, site: "en", limit: 20)
 |---|---|---|---|
 | `siteId` | `Int` | No | Site ID to list smart links for |
 | `site` | `String` | No | Site handle to list smart links for |
-| `limit` | `Int` | No | Maximum number of smart links to return, capped at 500 |
+| `limit` | `Int` | No | Maximum number of smart links to return. Defaults to 100 and is capped at 500 |
 
 ## Query a SmartLink field
 

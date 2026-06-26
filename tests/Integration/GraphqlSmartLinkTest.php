@@ -198,6 +198,24 @@ final class GraphqlSmartLinkTest extends TestCase
         self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]));
     }
 
+    public function testListQueryAppliesDefaultLimitWhenLimitIsOmitted(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+
+        for ($i = 0; $i < 101; $i++) {
+            $this->seedSmartLink(['siteId' => $site->id]);
+        }
+
+        $results = SmartLinkResolver::resolveAll(
+            null,
+            ['siteId' => $site->id],
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+
+        self::assertCount(100, $results);
+    }
+
     public function testInvalidExplicitSiteDoesNotFallBack(): void
     {
         $this->seedSmartLink();
