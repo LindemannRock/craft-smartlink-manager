@@ -537,8 +537,8 @@
             const eyeColorInput = document.getElementById('qrCodeEyeColor');
             const sizeInput = document.getElementById('qrCodeSize');
             const formatSelect = document.getElementById('qrCodeFormat');
-            const previewBaseUrl = '{{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle }) }}';
-            const publicBaseUrl = '{{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId) }}';
+            const previewBaseUrl = {{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle })|json_encode|raw }};
+            const publicBaseUrl = {{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId)|json_encode|raw }};
             let updateTimeout;
 
             function updateQrCode() {
@@ -804,7 +804,7 @@
         const format = $('#qrCodeFormat').val() || '{{ craft.smartLinks.settings.defaultQrFormat ?? 'png' }}';
 
         // Build download URL
-        let downloadUrl = '{{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId) }}' +
+        let downloadUrl = {{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId)|json_encode|raw }} +
             '?size=' + size +
             '&color=' + color +
             '&bg=' + bgColor +
