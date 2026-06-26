@@ -234,10 +234,11 @@ class AnalyticsController extends Controller
         // Check for empty data
         if (empty($exportData)) {
             Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'No analytics data to export.'));
+            $encodedDateRange = urlencode((string)$dateRange);
             if ($smartLinkId) {
-                return $this->redirect('smartlink-manager/smartlinks/' . $smartLinkId . '?range=' . $dateRange);
+                return $this->redirect('smartlink-manager/smartlinks/' . $smartLinkId . '?range=' . $encodedDateRange);
             }
-            return $this->redirect('smartlink-manager/analytics?dateRange=' . $dateRange);
+            return $this->redirect('smartlink-manager/analytics?dateRange=' . $encodedDateRange);
         }
 
         $settings = SmartLinkManager::$plugin->getSettings();
