@@ -47,6 +47,9 @@ class SeomaticTrackingTemplateTest extends TestCase
             $this->assertStringContainsString('{% if autoRedirect %}', $template);
             $this->assertStringContainsString('var goUrl = {{ goUrl|json_encode|raw }};', $template);
             $this->assertStringContainsString('window.location.replace(goUrl);', $template);
+            $this->assertStringContainsString('{{ goUrls.ios }}', $template);
+            $this->assertStringContainsString('{{ goUrls.fallback }}', $template);
+            $this->assertStringNotContainsString("actionUrl('smartlink-manager/redirect/go'", $template);
             $this->assertStringContainsString("smartLink.renderSeomaticTracking(eventType ?? 'redirect')", $template);
         }
     }

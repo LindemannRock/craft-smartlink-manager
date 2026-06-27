@@ -9,7 +9,6 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
-use craft\helpers\UrlHelper;
 use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
@@ -144,19 +143,14 @@ class RedirectController extends Controller
         $template = $settings->redirectTemplate ?: 'smartlink-manager/redirect';
         $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
         $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
-        $goSite = Craft::$app->getSites()->getSiteById($smartLink->siteId);
-        $goUrl = UrlHelper::actionUrl('smartlink-manager/redirect/go', [
-            'slug' => $smartLink->slug,
-            'platform' => 'auto',
-            'site' => $goSite?->handle,
-            'src' => $source,
-        ]);
+        $goUrls = $this->buildTrackedGoUrls($smartLink, $source);
 
         return $this->renderTemplate($template, [
             'smartLink' => $smartLink,
             'device' => $deviceInfo,
             'language' => $language,
-            'goUrl' => $goUrl,
+            'goUrl' => $goUrls['auto'],
+            'goUrls' => $goUrls,
             'source' => $source,
             'eventType' => 'redirect',
             'autoRedirect' => $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
@@ -392,6 +386,31 @@ class RedirectController extends Controller
         }
 
         return SmartLinkManager::$plugin->deviceDetection->getRedirectUrl($smartLink, $deviceInfo, $language) !== '';
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function buildTrackedGoUrls(SmartLink $smartLink, string $source): array
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+        $params = [
+            'site' => $site?->handle,
+            'src' => $source,
+        ];
+        $params = array_filter($params, static fn($value): bool => $value !== null && $value !== '');
+
+        $urls = [];
+        foreach (['auto', 'ios', 'android', 'huawei', 'amazon', 'windows', 'mac', 'fallback'] as $platform) {
+            $urls[$platform] = $settings->buildPublicUrl(
+                "smartlink-manager/redirect/go/{$smartLink->slug}/{$platform}",
+                $smartLink->siteId,
+                $params
+            );
+        }
+
+        return $urls;
     }
 
     /**

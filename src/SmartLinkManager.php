@@ -630,6 +630,8 @@ class SmartLinkManager extends Plugin
         $siteHandlePattern = !empty($siteHandles) ? implode('|', $siteHandles) : '[a-zA-Z0-9_-]+';
 
         $rules = [
+            'smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
+            '<siteHandle:' . $siteHandlePattern . '>/smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
             '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',

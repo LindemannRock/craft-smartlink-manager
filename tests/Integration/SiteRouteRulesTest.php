@@ -29,6 +29,8 @@ final class SiteRouteRulesTest extends TestCase
         ], function(): void {
             $rules = $this->siteUrlRules();
 
+            self::assertArrayHasKey('smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\\-\\_]+>/<platform:[a-zA-Z0-9\\-\\_]+>', $rules);
+            self::assertArrayHasKey('<siteHandle:[^>]+>/smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\\-\\_]+>/<platform:[a-zA-Z0-9\\-\\_]+>', $this->normalizedSiteHandleRules($rules));
             self::assertArrayHasKey('go/<slug:[a-zA-Z0-9\\-\\_]+>', $rules);
             self::assertArrayNotHasKey('<slug:[a-zA-Z0-9\\-\\_]+>', $rules);
             self::assertArrayHasKey('go/qr/<slug:[a-zA-Z0-9\\-\\_]+>', $rules);
@@ -45,6 +47,8 @@ final class SiteRouteRulesTest extends TestCase
         ], function(): void {
             $rules = $this->siteUrlRules();
 
+            self::assertArrayHasKey('smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\\-\\_]+>/<platform:[a-zA-Z0-9\\-\\_]+>', $rules);
+            self::assertArrayHasKey('<siteHandle:[^>]+>/smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\\-\\_]+>/<platform:[a-zA-Z0-9\\-\\_]+>', $this->normalizedSiteHandleRules($rules));
             self::assertArrayHasKey('<slug:[a-zA-Z0-9\\-\\_]+>', $rules);
             self::assertArrayNotHasKey('go/<slug:[a-zA-Z0-9\\-\\_]+>', $rules);
             self::assertArrayHasKey('qr/<slug:[a-zA-Z0-9\\-\\_]+>', $rules);
@@ -84,5 +88,19 @@ final class SiteRouteRulesTest extends TestCase
 
         /** @var array<string, string> */
         return $method->invoke(SmartLinkManager::$plugin);
+    }
+
+    /**
+     * @param array<string, string> $rules
+     * @return array<string, string>
+     */
+    private function normalizedSiteHandleRules(array $rules): array
+    {
+        $normalized = [];
+        foreach ($rules as $pattern => $route) {
+            $normalized[(string) preg_replace('/<siteHandle:[^>]+>/', '<siteHandle:[^>]+>', $pattern)] = $route;
+        }
+
+        return $normalized;
     }
 }

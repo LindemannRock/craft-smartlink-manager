@@ -56,6 +56,7 @@ final class RedirectControllerTest extends TestCase
 
         $this->withSettings([
             'redirectTemplate' => 'smartlink-manager/redirect',
+            'smartlinkBaseUrl' => 'https://smart.example/{siteHandle}',
         ], function() use ($link): void {
             $controller = $this->controller();
             $response = $controller->actionIndex($link->slug);
@@ -66,9 +67,19 @@ final class RedirectControllerTest extends TestCase
             self::assertSame('redirect', $controller->lastVariables['eventType'] ?? null);
             self::assertSame('direct', $controller->lastVariables['source'] ?? null);
             self::assertArrayHasKey('goUrl', $controller->lastVariables);
-            self::assertStringContainsString('smartlink-manager/redirect/go', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('platform=auto', (string) $controller->lastVariables['goUrl']);
+            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString(
+                "/smartlink-manager/redirect/go/{$link->slug}/auto?",
+                (string) $controller->lastVariables['goUrl']
+            );
+            self::assertStringNotContainsString('craftcms.ddev.site', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('site=', (string) $controller->lastVariables['goUrl']);
+            self::assertSame($controller->lastVariables['goUrl'], $controller->lastVariables['goUrls']['auto'] ?? null);
+            self::assertStringContainsString(
+                "smartlink-manager/redirect/go/{$link->slug}/ios?",
+                (string) ($controller->lastVariables['goUrls']['ios'] ?? '')
+            );
             self::assertTrue($controller->lastVariables['autoRedirect'] ?? null);
         });
     }
