@@ -54,28 +54,9 @@
         }
 
         (function() {
-            fetch('{{ actionUrl('smartlink-manager/redirect/refresh-csrf')|raw }}', {
-                credentials: 'same-origin',
-                cache: 'no-store'
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.isMobile) {
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var source = urlParams.get('src') || 'direct';
-                    pushSmartLinkEvent('redirect', data.platform || 'mobile', source);
-                    setTimeout(function() {
-                        var redirectUrl = '{{ actionUrl('smartlink-manager/redirect/go', {slug: smartLink.slug, platform: 'auto', site: smartLink.site.handle})|raw }}';
-                        if (source !== 'direct') {
-                            redirectUrl += '&src=' + encodeURIComponent(source);
-                        }
-                        window.location.replace(redirectUrl);
-                    }, 100);
-                }
-            })
-            .catch(err => {
-                console.error('Device detection failed:', err);
-            });
+            var urlParams = new URLSearchParams(window.location.search);
+            var source = urlParams.get('src') || 'direct';
+            pushSmartLinkEvent('redirect', 'auto', source);
         })();
 
         document.addEventListener('DOMContentLoaded', function() {

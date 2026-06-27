@@ -30,6 +30,24 @@ class SeomaticTrackingTemplateTest extends TestCase
         $this->assertStringContainsString("slug: '{{ smartLink.slug|e('js') }}'", $template);
         $this->assertStringContainsString("title: '{{ smartLink.title|e('js') }}'", $template);
         $this->assertStringContainsString('window.dataLayer.push(eventData);', $template);
-        $this->assertStringContainsString("actionUrl('smartlink-manager/redirect/go'", $template);
+        $this->assertStringContainsString("pushSmartLinkEvent('redirect', 'auto', source);", $template);
+        $this->assertStringNotContainsString('refresh-csrf', $template);
+        $this->assertStringNotContainsString('Device detection failed', $template);
+        $this->assertStringNotContainsString('data.isMobile', $template);
+        $this->assertStringNotContainsString("actionUrl('smartlink-manager/redirect/go'", $template);
+        $this->assertStringNotContainsString('window.location.replace', $template);
+    }
+
+    public function testRedirectTemplatesOwnTrackedAutoNavigation(): void
+    {
+        $pluginTemplate = (string)file_get_contents(dirname(__DIR__, 2) . '/src/templates/redirect.twig');
+        $projectTemplate = (string)file_get_contents(dirname(__DIR__, 4) . '/templates/smartlink-manager/redirect.twig');
+
+        foreach ([$pluginTemplate, $projectTemplate] as $template) {
+            $this->assertStringContainsString('{% if autoRedirect %}', $template);
+            $this->assertStringContainsString('var goUrl = {{ goUrl|json_encode|raw }};', $template);
+            $this->assertStringContainsString('window.location.replace(goUrl);', $template);
+            $this->assertStringContainsString("smartLink.renderSeomaticTracking(eventType ?? 'redirect')", $template);
+        }
     }
 }

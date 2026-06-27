@@ -9,12 +9,14 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
+use craft\helpers\UrlHelper;
 use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\models\DeviceInfo;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use yii\web\Response;
 
@@ -140,11 +142,24 @@ class RedirectController extends Controller
         // Render the template - all links will point to action URLs for tracking
         $settings = SmartLinkManager::$plugin->getSettings();
         $template = $settings->redirectTemplate ?: 'smartlink-manager/redirect';
+        $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
+        $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
+        $goSite = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+        $goUrl = UrlHelper::actionUrl('smartlink-manager/redirect/go', [
+            'slug' => $smartLink->slug,
+            'platform' => 'auto',
+            'site' => $goSite?->handle,
+            'src' => $source,
+        ]);
 
         return $this->renderTemplate($template, [
             'smartLink' => $smartLink,
             'device' => $deviceInfo,
             'language' => $language,
+            'goUrl' => $goUrl,
+            'source' => $source,
+            'eventType' => 'redirect',
+            'autoRedirect' => $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
         ]);
     }
 
@@ -365,6 +380,18 @@ class RedirectController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
 
         return $this->redirect($this->_sanitizeUrl($settings->getResolvedNotFoundRedirectUrl()));
+    }
+
+    /**
+     * Auto-hop only when a mobile device resolves to a configured platform URL.
+     */
+    private function shouldAutoRedirect(SmartLink $smartLink, DeviceInfo $deviceInfo, ?string $language): bool
+    {
+        if (!$deviceInfo->isMobile && !$deviceInfo->isTablet && !$deviceInfo->isMobileApp) {
+            return false;
+        }
+
+        return SmartLinkManager::$plugin->deviceDetection->getRedirectUrl($smartLink, $deviceInfo, $language) !== '';
     }
 
     /**

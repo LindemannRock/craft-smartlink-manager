@@ -41,7 +41,7 @@
 	{# Include SEOmatic tracking - this pushes events to GTM dataLayer #}
 	{% set seomaticTracking = null %}
 	{% if smartLink.renderSeomaticTracking is defined %}
-		{% set seomaticTracking = smartLink.renderSeomaticTracking('redirect') %}
+		{% set seomaticTracking = smartLink.renderSeomaticTracking(eventType ?? 'redirect') %}
 		{{ seomaticTracking }}
 	{% endif %}
 </head>
@@ -193,6 +193,25 @@
 			}
 		})();
 	</script>
+	{% endif %}
+
+	{% if autoRedirect %}
+		<script>
+			(function() {
+				var goUrl = {{ goUrl|json_encode|raw }};
+
+				{% if craft.app.config.general.devMode %}
+				var urlParams = new URLSearchParams(window.location.search);
+				if (urlParams.get('debug') === '1') {
+					return;
+				}
+				{% endif %}
+
+				setTimeout(function() {
+					window.location.replace(goUrl);
+				}, 100);
+			})();
+		</script>
 	{% endif %}
 
 </body>

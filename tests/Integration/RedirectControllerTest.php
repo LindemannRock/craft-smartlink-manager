@@ -13,6 +13,9 @@ namespace lindemannrock\smartlinkmanager\tests\Integration;
 use Craft;
 use craft\console\Request as ConsoleRequest;
 use lindemannrock\smartlinkmanager\controllers\RedirectController;
+use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\models\DeviceInfo;
+use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\Stubs\StubDeviceDetectionService;
 use lindemannrock\smartlinkmanager\tests\TestCase;
@@ -45,18 +48,80 @@ final class RedirectControllerTest extends TestCase
     public function testLandingPageRendersConfiguredTemplate(): void
     {
         $this->installWebHarness();
-        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new StubDeviceDetectionService());
-        $link = $this->seedSmartLink(['slug' => 'smartlink-test-render']);
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new MobileIosDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-render',
+            'iosUrl' => 'https://example.com/ios',
+        ]);
 
         $this->withSettings([
             'redirectTemplate' => 'smartlink-manager/redirect',
         ], function() use ($link): void {
-            $response = $this->controller()->actionIndex($link->slug);
+            $controller = $this->controller();
+            $response = $controller->actionIndex($link->slug);
 
             self::assertSame(200, $response->getStatusCode());
             self::assertSame('rendered:smartlink-manager/redirect', $response->content);
             self::assertSame('no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
+            self::assertSame('redirect', $controller->lastVariables['eventType'] ?? null);
+            self::assertSame('direct', $controller->lastVariables['source'] ?? null);
+            self::assertArrayHasKey('goUrl', $controller->lastVariables);
+            self::assertStringContainsString('smartlink-manager/redirect/go', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('platform=auto', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
+            self::assertTrue($controller->lastVariables['autoRedirect'] ?? null);
         });
+    }
+
+    public function testLandingPageDoesNotAutoRedirectMobileWithoutPlatformUrl(): void
+    {
+        $this->installWebHarness();
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new MobileIosDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-render-no-ios',
+            'iosUrl' => null,
+            'fallbackUrl' => 'https://example.com/fallback',
+        ]);
+
+        $controller = $this->controller();
+        $response = $controller->actionIndex($link->slug);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertFalse($controller->lastVariables['autoRedirect'] ?? true);
+    }
+
+    public function testLandingPageDoesNotAutoRedirectDesktop(): void
+    {
+        $this->installWebHarness();
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new DesktopDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-render-desktop',
+            'iosUrl' => 'https://example.com/ios',
+            'fallbackUrl' => 'https://example.com/fallback',
+        ]);
+
+        $controller = $this->controller();
+        $response = $controller->actionIndex($link->slug);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertFalse($controller->lastVariables['autoRedirect'] ?? true);
+    }
+
+    public function testLandingPagePreservesQrSourceOnTrackedAutoHop(): void
+    {
+        $this->installWebHarness(['src' => 'qr']);
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new MobileIosDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-render-qr',
+            'iosUrl' => 'https://example.com/ios',
+        ]);
+
+        $controller = $this->controller();
+        $response = $controller->actionIndex($link->slug);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('qr', $controller->lastVariables['source'] ?? null);
+        self::assertStringContainsString('src=qr', (string) $controller->lastVariables['goUrl']);
     }
 
     public function testAutoRedirectUsesDeviceDetectedDestinationAndTracksQrSource(): void
@@ -185,11 +250,16 @@ final class RedirectControllerTest extends TestCase
 
 final class TestRedirectController extends RedirectController
 {
+    /** @var array<string, mixed> */
+    public array $lastVariables = [];
+
     /**
      * @param array<string, mixed> $variables
      */
     public function renderTemplate(string $template, array $variables = [], ?string $templateMode = null): Response
     {
+        $this->lastVariables = $variables;
+
         $response = Craft::$app->getResponse();
         $response->setStatusCode(200);
         $response->content = "rendered:{$template}";
@@ -235,5 +305,54 @@ final class TestConsoleRequest extends ConsoleRequest
     public function getReferrer(): ?string
     {
         return 'https://example.com/referrer';
+    }
+}
+
+final class DesktopDeviceDetectionService extends DeviceDetectionService
+{
+    public function detectDevice(?string $userAgent = null): DeviceInfo
+    {
+        $info = new DeviceInfo();
+        $info->platform = 'macos';
+        $info->deviceType = 'desktop';
+        $info->isDesktop = true;
+        $info->userAgent = 'Mozilla/5.0 (Test) SmartLinkManagerDesktopStub/1.0';
+        $info->browser = 'TestBrowser';
+        $info->osName = 'TestOS';
+        $info->language = 'en';
+
+        return $info;
+    }
+
+    public function detectLanguage(): string
+    {
+        return 'en';
+    }
+
+    public function getRedirectUrl(SmartLink $smartLink, DeviceInfo $deviceInfo, ?string $language = null): string
+    {
+        return $smartLink->macUrl ?: $smartLink->fallbackUrl;
+    }
+}
+
+final class MobileIosDeviceDetectionService extends DeviceDetectionService
+{
+    public function detectDevice(?string $userAgent = null): DeviceInfo
+    {
+        $info = new DeviceInfo();
+        $info->platform = 'ios';
+        $info->deviceType = 'smartphone';
+        $info->isMobile = true;
+        $info->userAgent = 'Mozilla/5.0 (Test) SmartLinkManagerMobileIosStub/1.0';
+        $info->browser = 'TestBrowser';
+        $info->osName = 'TestOS';
+        $info->language = 'en';
+
+        return $info;
+    }
+
+    public function detectLanguage(): string
+    {
+        return 'en';
     }
 }
