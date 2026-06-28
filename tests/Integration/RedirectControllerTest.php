@@ -74,13 +74,38 @@ final class RedirectControllerTest extends TestCase
             );
             self::assertStringNotContainsString('craftcms.ddev.site', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('site=', (string) $controller->lastVariables['goUrl']);
+            self::assertStringNotContainsString('site=', (string) $controller->lastVariables['goUrl']);
             self::assertSame($controller->lastVariables['goUrl'], $controller->lastVariables['goUrls']['auto'] ?? null);
             self::assertStringContainsString(
                 "smartlink-manager/redirect/go/{$link->slug}/ios?",
                 (string) ($controller->lastVariables['goUrls']['ios'] ?? '')
             );
             self::assertTrue($controller->lastVariables['autoRedirect'] ?? null);
+        });
+    }
+
+    public function testLandingPageAddsSiteParamWhenConfiguredBaseUrlHasNoSiteToken(): void
+    {
+        $this->installWebHarness();
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new MobileIosDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-render-shared-base',
+            'iosUrl' => 'https://example.com/ios',
+        ]);
+        $site = Craft::$app->getSites()->getSiteById($link->siteId);
+        self::assertNotNull($site);
+
+        $this->withSettings([
+            'redirectTemplate' => 'smartlink-manager/redirect',
+            'smartlinkBaseUrl' => 'https://smart.example',
+        ], function() use ($link, $site): void {
+            $controller = $this->controller();
+            $response = $controller->actionIndex($link->slug);
+
+            self::assertSame(200, $response->getStatusCode());
+            self::assertStringStartsWith('https://smart.example/smartlink-manager/redirect/go/' . $link->slug . '/auto', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('site=' . $site->handle, (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
         });
     }
 

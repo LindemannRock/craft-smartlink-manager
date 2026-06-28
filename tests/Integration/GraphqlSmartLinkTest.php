@@ -48,6 +48,7 @@ final class GraphqlSmartLinkTest extends TestCase
             'ipHashSalt' => self::TEST_SALT,
             'enableAnalytics' => true,
             'enableGeoDetection' => false,
+            'smartlinkBaseUrl' => 'https://smart.example/{siteHandle}',
         ]);
     }
 

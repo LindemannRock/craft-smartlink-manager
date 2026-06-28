@@ -9,6 +9,7 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
+use craft\helpers\App;
 use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
@@ -396,9 +397,11 @@ class RedirectController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
         $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
         $params = [
-            'site' => $site?->handle,
             'src' => $source,
         ];
+        if ($this->shouldIncludeSiteParamForTrackedUrl($settings->smartlinkBaseUrl ?? null) && $site !== null) {
+            $params['site'] = $site->handle;
+        }
         $params = array_filter($params, static fn($value): bool => $value !== null && $value !== '');
 
         $urls = [];
@@ -411,6 +414,14 @@ class RedirectController extends Controller
         }
 
         return $urls;
+    }
+
+    private function shouldIncludeSiteParamForTrackedUrl(?string $baseUrl): bool
+    {
+        $baseUrl = trim((string) App::parseEnv($baseUrl ?? ''));
+
+        return $baseUrl !== ''
+            && !preg_match('/\{siteHandle\}|\{siteId\}|\{siteUid\}/', $baseUrl);
     }
 
     /**
