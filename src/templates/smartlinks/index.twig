@@ -44,7 +44,7 @@
 {% block actionButton %}
     {% if currentUser.can('smartLinkManager:createLinks') %}
         <div class="btngroup">
-            <a href="{{ url('smartlink-manager/new') }}" class="btn submit add icon">{{ 'New {name}'|t('smartlink-manager', {name: smartlinkHelper.lowerDisplayName}) }}</a>
+            <a href="{{ url('smartlink-manager/new') }}" class="btn submit add icon">{{ 'New {name}'|t('smartlink-manager', {name: smartlinkHelper.displayName}) }}</a>
         </div>
     {% endif %}
 {% endblock %}
