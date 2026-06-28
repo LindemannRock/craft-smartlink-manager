@@ -23,6 +23,9 @@ All integrations implement `IntegrationInterface`:
 | `getStatus()` | `array` | Configuration and status details |
 | `validateEventData(eventType, data)` | `bool` | Validate event data before pushing |
 
+> [!NOTE]
+> The `pushEvent()`/`formatEventData()` path is the integration API path. Visitor-facing redirect and QR pages use the client-side tracking template documented in [Integrations](../feature-tour/integrations.md), so their data layer payload is intentionally smaller.
+
 ## Event Types
 
 Three event types are supported:

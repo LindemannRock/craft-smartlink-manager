@@ -121,6 +121,8 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `seomaticEventPrefix` | `string` | `'smart_links'` | Event prefix for GTM/GA events (lowercase, numbers, underscores only) |
 | `redirectManagerEvents` | `array` | `['slug-change', 'delete']` | Event types that create redirects in Redirect Manager |
 
+Add `'seomatic'` to `enabledIntegrations` to activate both SEOmatic tracking and the SEOmatic Content SEO source for SmartLinks. When it is not enabled, SmartLink Manager does not register SmartLinks in SEOmatic.
+
 ## Example Configuration
 
 ```php

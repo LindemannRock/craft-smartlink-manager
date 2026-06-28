@@ -12,7 +12,7 @@ SmartLink Manager integrates with SEOmatic, Redirect Manager, and Craft Link Fie
 
 ## SEOmatic Integration
 
-When SEOmatic is installed and the integration is enabled, SmartLink Manager pushes structured data layer events to the GTM/GA4 data layer whenever a smart link is interacted with.
+When SEOmatic is installed and the integration is enabled, SmartLink Manager registers SmartLinks as a SEOmatic content source and pushes structured data layer events to the GTM/GA4 data layer whenever a smart link is interacted with.
 
 ### Event Types
 
@@ -26,7 +26,7 @@ Three event types are dispatched to the data layer:
 
 ### Data Layer Structure
 
-Each event pushes the following payload:
+Tracking is pushed **client-side** from the rendered redirect or QR page. A redirect event pushes this payload:
 
 ```json
 {
@@ -34,24 +34,40 @@ Each event pushes the following payload:
     "smart_link": {
         "slug": "my-app",
         "title": "My App",
-        "destination_url": "https://apps.apple.com/app/my-app",
-        "platform": "ios",
-        "source": "redirect",
-        "device_type": "smartphone",
-        "os": "iOS",
-        "os_version": "17.0",
-        "browser": "Safari",
-        "browser_version": "17.0",
-        "is_mobile": true,
-        "country": "US",
-        "city": "New York"
+        "platform": "auto",
+        "source": "direct",
+        "click_type": "redirect"
     }
 }
 ```
 
+QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Button-click events use `click_type: "button_click"` and include the clicked platform value when it is available from the tracked go URL.
+
 ### Configuration
 
 Enable the integration in **Settings → Integrations → SEOmatic**. The integration is automatically detected — if SEOmatic is not installed, the option is not shown.
+
+### Content SEO and sitemaps
+
+When the integration is enabled, SEOmatic adds a **SmartLinks** source in **SEOmatic → Content SEO**. That source lets you manage the SEOmatic metadata bundle for rendered smart link and QR pages, including title, robots, canonical URL, and sitemap settings.
+
+SmartLink Manager sets these defaults:
+
+| Setting | Default |
+|---------|---------|
+| SEO Title | From the SmartLink title |
+| Canonical URL | The smart link's public URL |
+| Robots | `all` |
+| Sitemap URLs | Off |
+
+If you enable sitemap URLs in SEOmatic, the generated sitemap URLs use the same public URL builder as smart links and QR codes. That means `smartlinkBaseUrl`, custom domains, and multisite tokens such as `{siteHandle}`, `{siteId}`, and `{siteUid}` are respected.
+
+SEOmatic only lists actual Craft field-layout fields as **Source Field** options. Native SmartLink properties such as the built-in description and image are not listed there. To manage SEO descriptions or images for smart links, use one of these approaches:
+
+- Add a SEOmatic SEO field to the SmartLink field layout and edit metadata per smart link.
+- Add your own text/asset fields to the SmartLink field layout, then map those fields in SEOmatic Content SEO.
+
+Existing SEOmatic content bundles keep their saved settings. If you enabled the integration before changing defaults, resave or reset the SmartLinks source in SEOmatic to apply the current defaults.
 
 ### Using `renderSeomaticTracking()` in Templates
 
@@ -63,7 +79,7 @@ To fire a `smart_links_button_click` event when a user interacts with a specific
 </a>
 ```
 
-This renders the necessary `data-gtm-*` attributes or inline tracking markup that SEOmatic uses to push the event to the data layer.
+This outputs inline tracking markup that pushes the event object to `window.dataLayer`.
 
 ## Redirect Manager Integration
 

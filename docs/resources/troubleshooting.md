@@ -157,6 +157,32 @@ If a date-format setting does not appear to change the index:
 
 5. **Is `renderSeomaticTracking()` included for button clicks?** The `smart_links_button_click` event only fires if you call `{{ smartLink.renderSeomaticTracking('button_click')|raw }}` in your template. Check that it's present and that the `|raw` filter is applied.
 
+## SmartLinks do not appear in SEOmatic Content SEO
+
+**Symptom:** SEOmatic is installed, but SmartLinks are missing from **SEOmatic → Content SEO**, or only the title is available as a source field.
+
+**Quick checks:**
+
+1. **Is the SEOmatic integration enabled?** In **Settings → Integrations**, confirm the SEOmatic toggle is on. The content source is only registered when the integration is enabled.
+
+2. **Did you recently enable it?** Clear SEOmatic metadata and sitemap caches, then reload the SEOmatic Content SEO screen.
+
+3. **Are you looking for description or image source fields?** SEOmatic only lists actual Craft custom fields from the SmartLink field layout, plus SEOmatic's built-in title source. Native SmartLink properties such as the built-in description and image are not listed. Add a SEOmatic SEO field for per-link metadata, or add your own text/asset fields and map those fields in SEOmatic Content SEO.
+
+---
+
+## Custom redirect template uses the wrong host
+
+**Symptom:** The smart link landing page loads, but its app-store or fallback buttons point at Craft's default host instead of your configured smart link base URL.
+
+**Quick checks:**
+
+1. **Use the generated URLs from the controller.** Custom redirect templates should use `goUrl` for auto-redirects and `goUrls.ios`, `goUrls.android`, `goUrls.fallback`, etc. for buttons. Do not rebuild action URLs manually in Twig.
+
+2. **Check debug mode in development.** When `devMode` is enabled, add `?debug=1` to a rendered smart link URL. The shipped redirect template logs the generated `goUrl` in the browser console, so you can confirm custom domains and multisite site parameters before the final redirect runs.
+
+3. **Check your base URL setting.** If `smartlinkBaseUrl` has no `{siteHandle}`, `{siteId}`, or `{siteUid}` token, SmartLink Manager adds the current link's site as a query parameter on generated tracking URLs.
+
 ---
 
 ## Cache Not Clearing
