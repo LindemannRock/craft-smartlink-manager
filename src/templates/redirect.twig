@@ -4,37 +4,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	{# SEOmatic meta tags #}
-	{% if seomatic is defined %}
-		{% if smartLink.seo is defined and smartLink.seo %}
-			{# Use SEOmatic field data if available, with Smart Link fallbacks #}
-			{% set seoData = smartLink.seo.metaGlobalVars %}
-			{% do seomatic.meta.seoTitle(seoData.seoTitle ?: smartLink.title) %}
-			{% do seomatic.meta.seoDescription(seoData.seoDescription ?: smartLink.description) %}
-			{% if seoData.seoKeywords %}{% do seomatic.meta.seoKeywords(seoData.seoKeywords) %}{% endif %}
-			{% do seomatic.meta.canonicalUrl(seoData.canonicalUrl ?: smartLink.getRedirectUrl()) %}
-			{% if seoData.robots %}{% do seomatic.meta.robots(seoData.robots) %}{% endif %}
-			{% if seoData.seoImage %}{% do seomatic.meta.seoImage(seoData.seoImage) %}{% endif %}
-			{% if seoData.ogType %}{% do seomatic.meta.ogType(seoData.ogType) %}{% endif %}
-			{% do seomatic.meta.ogTitle(seoData.ogTitle ?: smartLink.title) %}
-			{% do seomatic.meta.ogDescription(seoData.ogDescription ?: smartLink.description) %}
-			{% if seoData.ogImage %}{% do seomatic.meta.ogImage(seoData.ogImage) %}{% endif %}
-			{% if seoData.twitterCard %}{% do seomatic.meta.twitterCard(seoData.twitterCard) %}{% endif %}
-			{% do seomatic.meta.twitterTitle(seoData.twitterTitle ?: smartLink.title) %}
-			{% do seomatic.meta.twitterDescription(seoData.twitterDescription ?: smartLink.description) %}
-			{% if seoData.twitterImage %}{% do seomatic.meta.twitterImage(seoData.twitterImage) %}{% endif %}
-		{% else %}
-			{# Fallback to Smart Link data #}
-			{% do seomatic.meta.seoTitle(smartLink.title) %}
-			{% do seomatic.meta.seoDescription(smartLink.description) %}
-			{% do seomatic.meta.canonicalUrl(smartLink.getRedirectUrl()) %}
-		{% endif %}
-	{% else %}
-		{# Fallback meta tags if SEOmatic is not installed #}
-		<title>{{ smartLink.title }} - {{ siteName }}</title>
-		{% if smartLink.description %}<meta name="description" content="{{ smartLink.description }}">{% endif %}
-		<link rel="canonical" href="{{ smartLink.getRedirectUrl() }}">
-	{% endif %}
+	<title>{{ smartLink.title }} - {{ siteName }}</title>
+	{% if smartLink.description %}<meta name="description" content="{{ smartLink.description }}">{% endif %}
+	<link rel="canonical" href="{{ smartLink.getRedirectUrl() }}">
 
 	<script src="https://cdn.tailwindcss.com"></script>
 
@@ -169,6 +141,9 @@
 				console.log('🐛 DEBUG MODE ENABLED');
 				console.log('🔗 Smart Link Slug:', {{ smartLink.slug|json_encode|raw }});
 				console.log('📊 Event Type:', 'redirect');
+				console.log('📱 Detected Device:', {{ (device ? device.toArray() : null)|json_encode|raw }});
+				console.log('🚦 Auto Redirect:', {{ autoRedirect|json_encode|raw }});
+				console.log('➡️ Go URL:', {{ goUrl|json_encode|raw }});
 
 				console.log('\n📡 SEOmatic Integration:');
 				{% if seomaticTracking %}
@@ -188,7 +163,7 @@
 
 				var debugBanner = document.createElement('div');
 				debugBanner.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: #ff6b6b; color: white; padding: 10px; text-align: center; font-weight: bold; z-index: 9999;';
-				debugBanner.textContent = '🐛 DEBUG MODE - Check browser console for details';
+				debugBanner.textContent = '🐛 DEBUG MODE - Check browser console for generated Go URL';
 				document.body.insertBefore(debugBanner, document.body.firstChild);
 			}
 		})();
