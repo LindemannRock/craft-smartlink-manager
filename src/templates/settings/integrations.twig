@@ -223,19 +223,13 @@
                     </summary>
                     <div class="lr-code-block">
 <pre>{
-  event: "smart_links_redirect",
+  event: "{{ (settings.seomaticEventPrefix ?? 'smart_links')|e('html') }}_redirect",
   smart_link: {
     slug: "promo-2024",
     title: "Summer Promo",
-    destination_url: "https://app.example.com",
-    platform: "ios",
-    source: "qr",
-    device_type: "mobile",
-    os: "iOS 17",
-    browser: "Safari",
-    country: "United States",
-    city: "New York",
-    click_type: "button"
+    platform: "auto",
+    source: "direct",
+    click_type: "redirect"
   }
 }</pre>
                     </div>
