@@ -31,6 +31,11 @@ class SeomaticTrackingTemplateTest extends TestCase
         $this->assertStringContainsString("title: '{{ smartLink.title|e('js') }}'", $template);
         $this->assertStringContainsString('window.dataLayer.push(eventData);', $template);
         $this->assertStringContainsString("pushSmartLinkEvent('redirect', 'auto', source);", $template);
+        $this->assertStringContainsString('function platformFromTrackedUrl(url)', $template);
+        $this->assertStringContainsString("var queryPlatform = url.searchParams.get('platform');", $template);
+        $this->assertStringContainsString("return pathParts[goIndex + 2];", $template);
+        $this->assertStringContainsString('var platform = platformFromTrackedUrl(url);', $template);
+        $this->assertStringNotContainsString("var platform = url.searchParams.get('platform') || 'unknown';", $template);
         $this->assertStringNotContainsString('refresh-csrf', $template);
         $this->assertStringNotContainsString('Device detection failed', $template);
         $this->assertStringNotContainsString('data.isMobile', $template);

@@ -53,6 +53,26 @@
             {% endif %}
         }
 
+        function platformFromTrackedUrl(url) {
+            var queryPlatform = url.searchParams.get('platform');
+            if (queryPlatform) {
+                return queryPlatform;
+            }
+
+            var pathParts = url.pathname.split('/').filter(Boolean);
+            var goIndex = pathParts.indexOf('go');
+            if (
+                goIndex !== -1 &&
+                pathParts[goIndex - 1] === 'redirect' &&
+                pathParts[goIndex - 2] === 'smartlink-manager' &&
+                pathParts[goIndex + 2]
+            ) {
+                return pathParts[goIndex + 2];
+            }
+
+            return 'unknown';
+        }
+
         (function() {
             var urlParams = new URLSearchParams(window.location.search);
             var source = urlParams.get('src') || 'direct';
@@ -66,7 +86,7 @@
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     var url = new URL(link.href);
-                    var platform = url.searchParams.get('platform') || 'unknown';
+                    var platform = platformFromTrackedUrl(url);
                     var urlParams = new URLSearchParams(window.location.search);
                     var source = urlParams.get('src') || 'direct';
                     pushSmartLinkEvent('button_click', platform, source);
