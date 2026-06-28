@@ -146,6 +146,8 @@ class RedirectController extends Controller
         $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
         $goUrls = $this->buildTrackedGoUrls($smartLink, $source);
 
+        SmartLinkManager::$plugin->integration->prepareSeomaticMetadata($smartLink);
+
         return $this->renderTemplate($template, [
             'smartLink' => $smartLink,
             'device' => $deviceInfo,

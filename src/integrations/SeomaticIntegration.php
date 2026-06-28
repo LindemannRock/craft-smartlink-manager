@@ -10,8 +10,11 @@ namespace lindemannrock\smartlinkmanager\integrations;
 
 use Craft;
 use craft\helpers\App;
+use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\integrations\seomatic\SeoSmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use nystudio107\seomatic\Seomatic;
+use nystudio107\seomatic\variables\SeomaticVariable;
 use yii\base\Event;
 
 /**
@@ -111,6 +114,46 @@ class SeomaticIntegration extends BaseIntegration
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
+            return false;
+        }
+    }
+
+    /**
+     * Prime SEOmatic's content metadata for a rendered SmartLink page.
+     */
+    public function prepareMetadataForSmartLink(SmartLink $smartLink): bool
+    {
+        if (!$this->isAvailable() || !$this->isEnabled()) {
+            return false;
+        }
+
+        if (!class_exists(Seomatic::class) || !isset(Seomatic::$plugin)) {
+            return false;
+        }
+
+        try {
+            if (Seomatic::$seomaticVariable === null) {
+                Seomatic::$seomaticVariable = new SeomaticVariable();
+            }
+
+            Seomatic::$plugin->seoElements->getAllSeoElementTypes();
+
+            Seomatic::setMatchedElement($smartLink);
+            Seomatic::$plugin->metaBundles->getMetaBundleBySourceId(
+                SeoSmartLink::getMetaBundleType(),
+                SeoSmartLink::SOURCE_ID,
+                $smartLink->siteId
+            );
+            Seomatic::$plugin->metaContainers->loadMetaContainers('', $smartLink->siteId, $smartLink);
+
+            return true;
+        } catch (\Throwable $e) {
+            $this->logError('Failed to prepare SEOmatic metadata for SmartLink', [
+                'error' => $e->getMessage(),
+                'slug' => $smartLink->slug,
+                'siteId' => $smartLink->siteId,
+            ]);
+
             return false;
         }
     }

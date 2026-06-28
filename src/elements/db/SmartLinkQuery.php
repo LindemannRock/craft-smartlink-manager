@@ -53,6 +53,12 @@ class SmartLinkQuery extends ElementQuery
     public ?int $ownerId = null;
 
     /**
+     * @var bool Whether populated elements should expose synthetic public URLs through `uri`.
+     * @since 5.31.0
+     */
+    public bool $withSyntheticUris = false;
+
+    /**
      * Narrows the query results based on the smart links' slugs.
      *
      * NOTE: We store slug in a private property to prevent Craft from
@@ -83,6 +89,37 @@ class SmartLinkQuery extends ElementQuery
     {
         $this->qrCodeEnabled = $value;
         return $this;
+    }
+
+    /**
+     * Sets whether populated elements should expose synthetic public URLs through `uri`.
+     *
+     * @since 5.31.0
+     */
+    public function withSyntheticUris(bool $value = true): static
+    {
+        $this->withSyntheticUris = $value;
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterPopulate(array $elements): array
+    {
+        $elements = parent::afterPopulate($elements);
+
+        if (!$this->withSyntheticUris) {
+            return $elements;
+        }
+
+        foreach ($elements as $element) {
+            if ($element instanceof SmartLink) {
+                $element->uri = $element->getUrl();
+            }
+        }
+
+        return $elements;
     }
 
     /**

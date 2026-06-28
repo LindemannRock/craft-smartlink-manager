@@ -5,6 +5,7 @@ namespace lindemannrock\smartlinkmanager\services;
 use Craft;
 use craft\base\Component;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
+use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\integrations\IntegrationInterface;
 use lindemannrock\smartlinkmanager\integrations\RedirectManagerIntegration;
 use lindemannrock\smartlinkmanager\integrations\SeomaticIntegration;
@@ -230,6 +231,20 @@ class IntegrationService extends Component
     public function hasEnabledIntegrations(): bool
     {
         return !empty($this->getEnabledIntegrations());
+    }
+
+    /**
+     * Prepare SEOmatic content metadata for a rendered SmartLink page.
+     */
+    public function prepareSeomaticMetadata(SmartLink $smartLink): bool
+    {
+        $seomatic = $this->getIntegration('seomatic');
+
+        if (!$seomatic instanceof SeomaticIntegration) {
+            return false;
+        }
+
+        return $seomatic->prepareMetadataForSmartLink($smartLink);
     }
 
     /**

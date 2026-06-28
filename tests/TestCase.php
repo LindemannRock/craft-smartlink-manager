@@ -91,6 +91,8 @@ abstract class TestCase extends IntegrationTestCase
         $element->iosUrl = $overrides['iosUrl'] ?? null;
         $element->androidUrl = $overrides['androidUrl'] ?? null;
         $element->trackAnalytics = $overrides['trackAnalytics'] ?? true;
+        $element->postDate = $overrides['postDate'] ?? null;
+        $element->dateExpired = $overrides['dateExpired'] ?? null;
         $element->siteId = $overrides['siteId'] ?? Craft::$app->getSites()->getPrimarySite()->id;
         $element->setEnabledForSite($overrides['enabled'] ?? true);
 

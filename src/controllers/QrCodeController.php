@@ -157,6 +157,8 @@ class QrCodeController extends Controller
             $settings = SmartLinkManager::$plugin->getSettings();
             $template = $settings->qrTemplate ?: 'smartlink-manager/qr';
 
+            SmartLinkManager::$plugin->integration->prepareSeomaticMetadata($smartLink);
+
             return $this->renderTemplate($template, $templateVars);
         } catch (\Exception $e) {
             $this->logError('Failed to generate QR code', ['error' => $e->getMessage()]);

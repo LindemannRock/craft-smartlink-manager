@@ -44,6 +44,7 @@ use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\fields\SmartLinkField;
 use lindemannrock\smartlinkmanager\gql\queries\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\gql\types\SmartLinkType as GqlSmartLinkType;
+use lindemannrock\smartlinkmanager\integrations\seomatic\SeoSmartLink;
 use lindemannrock\smartlinkmanager\integrations\SmartLinkType;
 use lindemannrock\smartlinkmanager\jobs\CleanupAnalyticsJob;
 use lindemannrock\smartlinkmanager\models\Settings;
@@ -144,6 +145,7 @@ class SmartLinkManager extends Plugin
         // Register project config event handlers
         $this->registerProjectConfigEventHandlers();
         $this->registerGraphql();
+        $this->registerSeomaticSeoElement();
 
         // Register template roots
         Event::on(
@@ -319,6 +321,29 @@ class SmartLinkManager extends Plugin
         );
 
         // DO NOT log in init() - it's called on every request
+    }
+
+    private function registerSeomaticSeoElement(): void
+    {
+        $seoElementsClass = 'nystudio107\seomatic\services\SeoElements';
+
+        if (!class_exists($seoElementsClass)) {
+            return;
+        }
+
+        $seomatic = $this->integration->getIntegration('seomatic');
+
+        if ($seomatic === null || !$seomatic->isAvailable() || !$seomatic->isEnabled()) {
+            return;
+        }
+
+        Event::on(
+            $seoElementsClass,
+            'registerSeoElementTypes',
+            static function(RegisterComponentTypesEvent $event): void {
+                $event->types[] = SeoSmartLink::class;
+            }
+        );
     }
 
     /**

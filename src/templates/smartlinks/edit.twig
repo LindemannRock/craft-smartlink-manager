@@ -457,6 +457,8 @@
     </fieldset>
 
     {% if smartLink.id %}
+        {{ smartLink.getSidebarHtml(true)|raw }}
+
         <dl class="meta read-only">
             <div class="data">
                 <dt class="heading">{{ "ID"|t('smartlink-manager') }}</dt>
