@@ -65,6 +65,7 @@ return [
     'Copy' => 'نسخ',
     'Author' => 'المؤلف',
     'Content' => 'المحتوى',
+    'Details' => 'التفاصيل',
     'Limit' => 'الحد',
     'Select site' => 'اختيار الموقع',
     'ID' => 'ID',

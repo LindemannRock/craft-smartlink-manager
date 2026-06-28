@@ -65,6 +65,7 @@ return [
     'Copy' => 'Kopieren',
     'Author' => 'Autor',
     'Content' => 'Inhalt',
+    'Details' => 'Details',
     'Limit' => 'Limit',
     'Select site' => 'Website auswählen',
     'ID' => 'ID',

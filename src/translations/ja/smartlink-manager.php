@@ -65,6 +65,7 @@ return [
     'Copy' => 'コピーする',
     'Author' => '作成者',
     'Content' => 'コンテンツ',
+    'Details' => '詳細',
     'Limit' => '上限',
     'Select site' => 'サイトを選択する',
     'ID' => 'ID',

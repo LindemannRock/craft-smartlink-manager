@@ -65,6 +65,7 @@ return [
     'Copy' => 'Kopiera',
     'Author' => 'Författare',
     'Content' => 'Innehåll',
+    'Details' => 'Detaljer',
     'Limit' => 'Gräns',
     'Select site' => 'Välj webbplats',
     'ID' => 'ID',

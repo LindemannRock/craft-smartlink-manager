@@ -65,6 +65,7 @@ return [
     'Copy' => 'Kopier',
     'Author' => 'Forfatter',
     'Content' => 'Innhold',
+    'Details' => 'Detaljer',
     'Limit' => 'Grense',
     'Select site' => 'Velg nettsted',
     'ID' => 'ID',
