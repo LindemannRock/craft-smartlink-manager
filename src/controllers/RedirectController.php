@@ -350,7 +350,8 @@ class RedirectController extends Controller
         }
 
         // No destination URL available, redirect to fallback
-        $response = $this->redirect($this->_sanitizeUrl($smartLink->fallbackUrl), 302);
+        $fallbackUrl = $smartLink->fallbackUrl ?? $settings->getResolvedNotFoundRedirectUrl();
+        $response = $this->redirect($this->_sanitizeUrl($fallbackUrl), 302);
         if ($shouldTrack) {
             $this->applyNoStoreHeaders($response);
         }
@@ -424,28 +425,6 @@ class RedirectController extends Controller
 
         return $baseUrl !== ''
             && !preg_match('/\{siteHandle\}|\{siteId\}|\{siteUid\}/', $baseUrl);
-    }
-
-    /**
-     * Get fresh device detection (for cached pages)
-     * This endpoint is never cached and provides real-time device info
-     *
-     * @return Response
-     * @since 1.7.0
-     */
-    public function actionRefreshCsrf(): Response
-    {
-        // Prevent caching of this response
-        $this->response->setNoCacheHeaders();
-
-        // Detect device using the plugin's device detection service
-        $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
-
-        return $this->asJson([
-            'csrfToken' => Craft::$app->request->getCsrfToken(),
-            'isMobile' => $deviceInfo->isMobile ?? false,
-            'platform' => $deviceInfo->platform ?? 'unknown',
-        ]);
     }
 
     /**
