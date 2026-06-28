@@ -235,6 +235,8 @@ class IntegrationService extends Component
 
     /**
      * Prepare SEOmatic content metadata for a rendered SmartLink page.
+     *
+     * @since 5.31.0
      */
     public function prepareSeomaticMetadata(SmartLink $smartLink): bool
     {
