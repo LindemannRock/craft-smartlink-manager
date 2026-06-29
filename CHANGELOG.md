@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.32.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.32.0...v5.32.1) (2026-06-29)
+
+
+### Fixed
+
+* **redirects:** use action URLs for smart link tracking hops ([9a61617](https://github.com/LindemannRock/craft-smartlink-manager/commit/9a616171a3db95d0e9471b2d2e1ce8d7813ca7ba))
+
 ## [5.32.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.31.1...v5.32.0) - 2026-06-29
 
 
