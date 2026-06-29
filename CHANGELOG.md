@@ -1,5 +1,42 @@
 # Changelog
 
+## [5.31.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.30.0...v5.31.0) (2026-06-29)
+
+
+### Added
+
+* **analytics:** enhance insights query with site filtering and limits ([5369e13](https://github.com/LindemannRock/craft-smartlink-manager/commit/5369e13ff56158fa57e266e6d3e18a4bc9eb7756))
+* **cli:** add smoke test and compatibility check scripts ([bcd6b92](https://github.com/LindemannRock/craft-smartlink-manager/commit/bcd6b923cc6955086b31cbab1d0bd5f37a93e2ca))
+* **integrations:** update seomatic event prefix and smart link properties ([df97cb1](https://github.com/LindemannRock/craft-smartlink-manager/commit/df97cb1da9506aca9b5e627640107010976d4730))
+* **redirects:** add source parameter handling and auto-redirect logic ([649ca63](https://github.com/LindemannRock/craft-smartlink-manager/commit/649ca63ee891765ecee428c79dc7abf618aa8e2a))
+* **redirects:** include site parameter in tracked URLs conditionally ([5b862c2](https://github.com/LindemannRock/craft-smartlink-manager/commit/5b862c2f340b1b3902455bd6a5f27a162c2631b2))
+* **redirects:** replace action URLs with goUrls for app store links ([1501ff9](https://github.com/LindemannRock/craft-smartlink-manager/commit/1501ff95d805f5000011bace5e9db6f607f5d8e6))
+* **seomatic:** add platform detection from tracked URLs ([4b157ca](https://github.com/LindemannRock/craft-smartlink-manager/commit/4b157cac66132ffe198403b635114ba1e683fb30))
+* **seomatic:** prepare SEOmatic metadata for SmartLink elements ([28d6d81](https://github.com/LindemannRock/craft-smartlink-manager/commit/28d6d818e0beb885ae5824fbc7bcb710faaa7fbd))
+* **tests:** add SeomaticTrackingTemplateTest for template validation ([3ac8f2f](https://github.com/LindemannRock/craft-smartlink-manager/commit/3ac8f2fb40a6dc5b8b361e65176dc0a590a12112))
+
+
+### Fixed
+
+* **analytics:** encode CSRF token for AJAX request in analytics settings ([2ec5338](https://github.com/LindemannRock/craft-smartlink-manager/commit/2ec5338e353d5738b0de6207f633a6d7453e3abb))
+* **analytics:** encode date range for export redirects ([4621a9f](https://github.com/LindemannRock/craft-smartlink-manager/commit/4621a9f89c502144ae8da02da153cb64d660d04a))
+* **analytics:** group button clicks by platform in analytics summary ([f42f45b](https://github.com/LindemannRock/craft-smartlink-manager/commit/f42f45b47fec1d1b4e29b614c14da5fc9598d090))
+* **analytics:** return empty labels and values for no data scenarios ([74233a9](https://github.com/LindemannRock/craft-smartlink-manager/commit/74233a985bc911143afb25893d01c274de457769))
+* clean up QR logo overlay resources ([c789d65](https://github.com/LindemannRock/craft-smartlink-manager/commit/c789d6501a1572ece30d553df67c6a8d8132cf10))
+* correct tab label from 'Content' to 'Details' in edit template ([ae7b140](https://github.com/LindemannRock/craft-smartlink-manager/commit/ae7b140bfd39cf4c73e652fb7c85fdec0a23a3ed))
+* encode QR format and margin settings for JSON safety ([70c9f59](https://github.com/LindemannRock/craft-smartlink-manager/commit/70c9f59e16e64bb8291b74cfc0d7c3112356a3b9))
+* **gql:** clarify default limit behavior for smart links query ([b543065](https://github.com/LindemannRock/craft-smartlink-manager/commit/b54306585bcae7e2f1af36f3d3431e6736d84737))
+* **qr-code:** escape URLs for QR code generation and download links ([b21a905](https://github.com/LindemannRock/craft-smartlink-manager/commit/b21a905a574d3fffc9b7253bef3d7f1ac0e54217))
+* **qr:** handle null return from file_get_contents in cache retrieval ([89ee6fb](https://github.com/LindemannRock/craft-smartlink-manager/commit/89ee6fbef9609b8922132b91ef01e1d30fb1ba74))
+* **redirects:** fallback to 'direct' for unknown QR source parameters ([4631131](https://github.com/LindemannRock/craft-smartlink-manager/commit/4631131be40f34ac82ee607b92fa4df5f67e486d))
+* **redirects:** handle fallback URL for smart link redirects ([4a8e51f](https://github.com/LindemannRock/craft-smartlink-manager/commit/4a8e51f5ce6f27b2c20b664b0f16b52d2afc488b))
+* replace ModuleEye with PointyEye for leaf-like QR code appearance ([51c635d](https://github.com/LindemannRock/craft-smartlink-manager/commit/51c635db52bf9717b9963d48d7f82916dff2aa88))
+* require explicit local geo defaults ([79fb31d](https://github.com/LindemannRock/craft-smartlink-manager/commit/79fb31d7824a447952b67ba017bb92ee571bb2e3))
+* **seomatic:** ensure site-specific SEOmatic meta containers load correctly ([0035459](https://github.com/LindemannRock/craft-smartlink-manager/commit/0035459995147bd3d782ddc5af4b60424323fdad))
+* **settings:** rename QR code eye style from 'leaf' to 'pointed' ([3ec8a62](https://github.com/LindemannRock/craft-smartlink-manager/commit/3ec8a6205ebb6967418a755505fdd28679da2f12))
+* **settings:** rename QR code settings input IDs for consistency ([ee26c74](https://github.com/LindemannRock/craft-smartlink-manager/commit/ee26c74e5b640634a2dae7d02953b6d57f905450))
+* switch to displayName for new smart link creation ([5cb6eae](https://github.com/LindemannRock/craft-smartlink-manager/commit/5cb6eae7a881460841944431f85d433a59f16cba))
+
 ## [5.30.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.29.2...v5.30.0) - 2026-06-18
 
 
