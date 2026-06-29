@@ -9,7 +9,6 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
-use craft\helpers\App;
 use craft\models\Site;
 use craft\web\Controller;
 use lindemannrock\base\helpers\PluginHelper;
@@ -462,19 +461,20 @@ class RedirectController extends Controller
         $settings = SmartLinkManager::$plugin->getSettings();
         $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
         $params = [
+            'slug' => $smartLink->slug,
             'src' => $source,
         ];
-        if ($this->shouldIncludeSiteParamForTrackedUrl($settings->smartlinkBaseUrl ?? null) && $site !== null) {
+        if ($site !== null) {
             $params['site'] = $site->handle;
         }
         $params = array_filter($params, static fn($value): bool => $value !== null && $value !== '');
 
         $urls = [];
         foreach (['auto', 'ios', 'android', 'huawei', 'amazon', 'windows', 'mac', 'fallback'] as $platform) {
-            $urls[$platform] = $settings->buildPublicUrl(
-                "smartlink-manager/redirect/go/{$smartLink->slug}/{$platform}",
+            $urls[$platform] = $settings->buildPublicActionUrl(
+                'smartlink-manager/redirect/go',
                 $smartLink->siteId,
-                $params
+                $params + ['platform' => $platform]
             );
         }
 
@@ -505,14 +505,6 @@ class RedirectController extends Controller
         $this->applyNoStoreHeaders($response);
 
         return $response;
-    }
-
-    private function shouldIncludeSiteParamForTrackedUrl(?string $baseUrl): bool
-    {
-        $baseUrl = trim((string) App::parseEnv($baseUrl ?? ''));
-
-        return $baseUrl !== ''
-            && !preg_match('/\{siteHandle\}|\{siteId\}|\{siteUid\}/', $baseUrl);
     }
 
     /**

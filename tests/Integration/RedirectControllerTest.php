@@ -69,12 +69,14 @@ final class RedirectControllerTest extends TestCase
             self::assertArrayHasKey('goUrl', $controller->lastVariables);
             self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString(
-                "/smartlink-manager/redirect/go/{$link->slug}/auto?",
+                'actions/smartlink-manager/redirect/go',
                 (string) $controller->lastVariables['goUrl']
             );
+            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('platform=auto', (string) $controller->lastVariables['goUrl']);
             self::assertStringNotContainsString('craftcms.ddev.site', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
-            self::assertStringNotContainsString('site=', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('site=en', (string) $controller->lastVariables['goUrl']);
             self::assertArrayHasKey('autoRedirectUrl', $controller->lastVariables);
             self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['autoRedirectUrl']);
             self::assertStringContainsString(
@@ -88,9 +90,10 @@ final class RedirectControllerTest extends TestCase
             self::assertStringNotContainsString('src=', (string) $controller->lastVariables['autoRedirectUrl']);
             self::assertSame($controller->lastVariables['goUrl'], $controller->lastVariables['goUrls']['auto'] ?? null);
             self::assertStringContainsString(
-                "smartlink-manager/redirect/go/{$link->slug}/ios?",
+                'actions/smartlink-manager/redirect/go',
                 (string) ($controller->lastVariables['goUrls']['ios'] ?? '')
             );
+            self::assertStringContainsString('platform=ios', (string) ($controller->lastVariables['goUrls']['ios'] ?? ''));
             self::assertTrue($controller->lastVariables['autoRedirect'] ?? null);
         });
     }
@@ -114,7 +117,10 @@ final class RedirectControllerTest extends TestCase
             $response = $controller->actionIndex($link->slug);
 
             self::assertSame(200, $response->getStatusCode());
-            self::assertStringStartsWith('https://smart.example/smartlink-manager/redirect/go/' . $link->slug . '/auto', (string) $controller->lastVariables['goUrl']);
+            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('actions/smartlink-manager/redirect/go', (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['goUrl']);
+            self::assertStringContainsString('platform=auto', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('site=' . $site->handle, (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
             self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['autoRedirectUrl']);
@@ -193,9 +199,11 @@ final class RedirectControllerTest extends TestCase
         self::assertIsArray($data);
         self::assertTrue($data['autoRedirect'] ?? false);
         self::assertStringContainsString(
-            "smartlink-manager/redirect/go/{$link->slug}/auto",
+            'actions/smartlink-manager/redirect/go',
             (string) ($data['goUrl'] ?? '')
         );
+        self::assertStringContainsString('slug=' . $link->slug, (string) ($data['goUrl'] ?? ''));
+        self::assertStringContainsString('platform=auto', (string) ($data['goUrl'] ?? ''));
         self::assertStringContainsString('src=qr', (string) ($data['goUrl'] ?? ''));
     }
 
