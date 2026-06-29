@@ -485,17 +485,15 @@ class RedirectController extends Controller
     {
         $settings = SmartLinkManager::$plugin->getSettings();
         $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
-        $params = [];
-        if ($this->shouldIncludeSiteParamForTrackedUrl($settings->smartlinkBaseUrl ?? null) && $site !== null) {
+        $params = [
+            'slug' => $smartLink->slug,
+        ];
+        if ($site !== null) {
             $params['site'] = $site->handle;
         }
         $params = array_filter($params, static fn($value): bool => $value !== null && $value !== '');
 
-        return $settings->buildPublicUrl(
-            "smartlink-manager/redirect/auto/{$smartLink->slug}",
-            $smartLink->siteId,
-            $params
-        );
+        return $settings->buildPublicActionUrl('smartlink-manager/redirect/auto-redirect', $smartLink->siteId, $params);
     }
 
     private function autoRedirectResponse(bool $autoRedirect, ?string $goUrl = null): Response

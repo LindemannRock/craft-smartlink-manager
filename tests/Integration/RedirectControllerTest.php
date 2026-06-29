@@ -76,10 +76,15 @@ final class RedirectControllerTest extends TestCase
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
             self::assertStringNotContainsString('site=', (string) $controller->lastVariables['goUrl']);
             self::assertArrayHasKey('autoRedirectUrl', $controller->lastVariables);
+            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['autoRedirectUrl']);
             self::assertStringContainsString(
-                "/smartlink-manager/redirect/auto/{$link->slug}",
+                'actions/smartlink-manager/redirect/auto-redirect',
                 (string) $controller->lastVariables['autoRedirectUrl']
             );
+            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertStringContainsString('site=en', (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertStringNotContainsString('/en/index.php', (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertStringNotContainsString("/smartlink-manager/redirect/auto/{$link->slug}", (string) $controller->lastVariables['autoRedirectUrl']);
             self::assertStringNotContainsString('src=', (string) $controller->lastVariables['autoRedirectUrl']);
             self::assertSame($controller->lastVariables['goUrl'], $controller->lastVariables['goUrls']['auto'] ?? null);
             self::assertStringContainsString(
@@ -112,6 +117,10 @@ final class RedirectControllerTest extends TestCase
             self::assertStringStartsWith('https://smart.example/smartlink-manager/redirect/go/' . $link->slug . '/auto', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('site=' . $site->handle, (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
+            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertStringContainsString('actions/smartlink-manager/redirect/auto-redirect', (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertStringContainsString('site=' . $site->handle, (string) $controller->lastVariables['autoRedirectUrl']);
         });
     }
 
