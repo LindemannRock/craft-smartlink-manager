@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.31.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.31.0...v5.31.1) - 2026-06-29
+
+
+### Fixed
+
+* **redirects:** make smart link auto redirect cache-safe ([97e8e7c](https://github.com/LindemannRock/craft-smartlink-manager/commit/97e8e7c894402d6ce32b92a8e5bb3fcfbf83ddff))
+
 ## [5.31.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.30.0...v5.31.0) - 2026-06-29
 
 
