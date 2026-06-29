@@ -9,7 +9,7 @@
 namespace lindemannrock\smartlinkmanager\services;
 
 use BaconQrCode\Renderer\Color\Rgb;
-use BaconQrCode\Renderer\Eye\ModuleEye;
+use BaconQrCode\Renderer\Eye\PointyEye;
 use BaconQrCode\Renderer\Eye\SimpleCircleEye;
 use BaconQrCode\Renderer\Eye\SquareEye;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
@@ -260,8 +260,7 @@ class QrCodeService extends Component
             case 'circle':
                 return SimpleCircleEye::instance();
             case 'leaf':
-                // Use ModuleEye with rounded modules for a leaf-like appearance
-                return new ModuleEye(new RoundnessModule(RoundnessModule::MEDIUM));
+                return PointyEye::instance();
             case 'square':
             default:
                 return SquareEye::instance();
