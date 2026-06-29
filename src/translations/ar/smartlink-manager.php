@@ -300,7 +300,7 @@ return [
     'Square' => 'مربع',
     'Rounded' => 'مستدير',
     'Dots' => 'نقاط',
-    'Leaf' => 'ورقة',
+    'Pointed Corner' => 'زاوية مدببة',
     'Low (~7% correction)' => 'منخفض (~7% تصحيح)',
     'Medium (~15% correction)' => 'متوسط (~15% تصحيح)',
     'Quartile (~25% correction)' => 'ربعي (~25% تصحيح)',

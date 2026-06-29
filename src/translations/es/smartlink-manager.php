@@ -300,7 +300,7 @@ return [
     'Square' => 'Cuadrado',
     'Rounded' => 'Redondeado',
     'Dots' => 'Puntos',
-    'Leaf' => 'Hoja',
+    'Pointed Corner' => 'Esquina puntiaguda',
     'Low (~7% correction)' => 'Bajo (~7% de corrección)',
     'Medium (~15% correction)' => 'Medio (~15% de corrección)',
     'Quartile (~25% correction)' => 'Cuartil (~25% de corrección)',

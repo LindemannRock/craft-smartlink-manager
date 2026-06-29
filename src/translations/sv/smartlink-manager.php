@@ -300,7 +300,7 @@ return [
     'Square' => 'Kvadrat',
     'Rounded' => 'Rundad',
     'Dots' => 'Punkter',
-    'Leaf' => 'Löv',
+    'Pointed Corner' => 'Spetsigt hörn',
     'Low (~7% correction)' => 'Låg (~7% korrigering)',
     'Medium (~15% correction)' => 'Medel (~15% korrigering)',
     'Quartile (~25% correction)' => 'Kvartil (~25% korrigering)',

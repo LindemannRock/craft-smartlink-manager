@@ -300,7 +300,7 @@ return [
     'Square' => '正方形',
     'Rounded' => '角丸',
     'Dots' => 'ドット',
-    'Leaf' => 'リーフ',
+    'Pointed Corner' => '尖った角',
     'Low (~7% correction)' => '低 (約 7% 訂正)',
     'Medium (~15% correction)' => '中 (約 15% 訂正)',
     'Quartile (~25% correction)' => 'クォータイル (約 25% 訂正)',

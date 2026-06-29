@@ -300,7 +300,7 @@ return [
     'Square' => 'Square',
     'Rounded' => 'Rounded',
     'Dots' => 'Dots',
-    'Leaf' => 'Leaf',
+    'Pointed Corner' => 'Pointed Corner',
     'Low (~7% correction)' => 'Low (~7% correction)',
     'Medium (~15% correction)' => 'Medium (~15% correction)',
     'Quartile (~25% correction)' => 'Quartile (~25% correction)',

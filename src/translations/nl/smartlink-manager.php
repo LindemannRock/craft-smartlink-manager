@@ -300,7 +300,7 @@ return [
     'Square' => 'Vierkant',
     'Rounded' => 'Afgerond',
     'Dots' => 'Punten',
-    'Leaf' => 'Blad',
+    'Pointed Corner' => 'Spitse hoek',
     'Low (~7% correction)' => 'Laag (~7% correctie)',
     'Medium (~15% correction)' => 'Gemiddeld (~15% correctie)',
     'Quartile (~25% correction)' => 'Kwartiel (~25% correctie)',
