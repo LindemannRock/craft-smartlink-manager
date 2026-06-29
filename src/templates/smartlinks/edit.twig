@@ -1,6 +1,7 @@
 {% extends "smartlink-manager/_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 {% do view.registerAssetBundle('lindemannrock\\base\\web\\assets\\components\\ComponentsAsset') %}
+{% do view.registerAssetBundle('lindemannrock\\smartlinkmanager\\web\\assets\\edit\\EditAsset') %}
 {% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
 
 {% set title = smartLink.id ? smartLink.title : "New {singularName}"|t('smartlink-manager', {singularName: smartlinkHelper.displayName}) %}
@@ -18,6 +19,70 @@
 } %}
 {% set smartLinkSite = craft.app.sites.getSiteById(smartLink.siteId) %}
 {% set smartLinkSiteHandle = smartLinkSite ? smartLinkSite.handle : null %}
+
+{% set editConfig = {
+    generateSlug: not smartLink.id,
+    confirmAnalyticsDisable: canViewAnalytics and craft.smartLinks.settings.enableAnalytics,
+    defaults: {
+        qrSize: craft.smartLinks.settings.defaultQrSize,
+        qrColor: craft.smartLinks.settings.defaultQrColor,
+        qrBgColor: craft.smartLinks.settings.defaultQrBgColor,
+        qrEyeColor: craft.smartLinks.settings.qrEyeColor ?? '',
+        qrFormat: craft.smartLinks.settings.defaultQrFormat ?? 'png',
+    },
+    urls: {
+        qrPublicBaseUrl: smartLink.id ? craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId) : null,
+    },
+    messages: {
+        enterCustomSize: 'Enter custom size (100-4096 pixels):'|t('smartlink-manager'),
+        invalidCustomSize: 'Please enter a valid size between 100 and 4096 pixels'|t('smartlink-manager'),
+        resetQrDefaultsConfirm: 'Reset QR code settings to plugin defaults?'|t('smartlink-manager'),
+        qrDefaultsReset: 'QR code settings reset to defaults'|t('smartlink-manager'),
+        disableAnalyticsConfirm: 'Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions.'|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    },
+} %}
+
+{% if smartLink.id %}
+    {% do view.registerAssetBundle('lindemannrock\\smartlinkmanager\\web\\assets\\qrpreview\\QrPreviewAsset') %}
+    {% set qrPreviewConfig = {
+        generateUrl: actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle }),
+        fields: {
+            size: 'qrCodeSize',
+            format: 'qrCodeFormat',
+            color: 'qrCodeColor',
+            bg: 'qrCodeBgColor',
+            eyeColor: 'qrCodeEyeColor',
+        },
+        defaults: {
+            size: smartLink.qrCodeSize ?? craft.smartLinks.settings.defaultQrSize,
+            format: smartLink.qrCodeFormat ?: (craft.smartLinks.settings.defaultQrFormat ?? 'png'),
+            color: smartLink.qrCodeColor ?: craft.smartLinks.settings.defaultQrColor,
+            bg: smartLink.qrCodeBgColor ?: craft.smartLinks.settings.defaultQrBgColor,
+            margin: craft.smartLinks.settings.defaultQrMargin,
+            errorCorrection: craft.smartLinks.settings.defaultQrErrorCorrection ?? 'M',
+            moduleStyle: craft.smartLinks.settings.qrModuleStyle ?? 'square',
+            eyeStyle: craft.smartLinks.settings.qrEyeStyle ?? 'square',
+            logoSize: craft.smartLinks.settings.qrLogoSize ?? 20,
+        },
+        logo: {
+            enabled: craft.smartLinks.settings.enableQrLogo,
+            defaultLogoId: craft.smartLinks.settings.defaultQrLogoId ?? null,
+            fieldId: 'qrLogoId-field',
+            fieldSelector: '#qrLogoId-field .elements .element',
+        },
+        preview: {
+            size: 150,
+            imageSelector: '#qr-preview',
+        },
+        link: {
+            selector: '#qr-preview-link',
+            baseUrl: craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId),
+        },
+        messages: {
+            failed: 'Failed to generate preview'|t('smartlink-manager'),
+        },
+    } %}
+{% endif %}
 
 {# Add tabs from field layout #}
 {% set fieldLayoutTabs = [] %}
@@ -167,6 +232,8 @@
 {% endif %}
 
 {% block content %}
+    <script type="application/json" data-smartlink-edit-config>{{ editConfig|json_encode|raw }}</script>
+
     <input type="hidden" name="action" value="smartlink-manager/smartlinks/save">
     {{ redirectInput('smartlink-manager') }}
     {% if smartLink.id %}
@@ -312,12 +379,14 @@
 
         <div class="meta">
             {% if smartLink.id %}
+                <script type="application/json" data-smartlink-qr-preview-config>{{ qrPreviewConfig|json_encode|raw }}</script>
+
                 <div class="field">
                     <div class="heading">
                         <label>{{ "Preview"|t('smartlink-manager') }}</label>
                     </div>
                     <div class="input lr-text-center">
-                        <a href="{{ smartLink.getQrCodeUrl() }}" target="_blank" title="{{ 'Click to view QR code image'|t('smartlink-manager') }}">
+                        <a id="qr-preview-link" href="{{ smartLink.getQrCodeUrl() }}" target="_blank" title="{{ 'Click to view QR code image'|t('smartlink-manager') }}">
                             <img id="qr-preview"
                                  src="{{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle, size: 150 }) }}"
                                  alt="QR Code Preview"
@@ -499,409 +568,3 @@
         </dl>
     {% endif %}
 {% endblock %}
-
-{% js %}
-    // Auto-generate slug from title
-    {% if not smartLink.id %}
-        $(document).ready(function() {
-            new Craft.SlugGenerator('#title', '#slug');
-        });
-    {% endif %}
-
-    // Auto-format slug on blur
-    $(document).ready(function() {
-        const $slugInput = $('#slug');
-        $slugInput.on('blur', function() {
-            let slug = $(this).val();
-            if (slug) {
-                $(this).val(window.lrIdentifiers?.normalizeSlug(slug, '') ?? slug);
-            }
-        });
-    });
-
-    // Remove custom unsaved changes detection - Craft handles this natively
-    // The fullPageForm = true setting in the template enables Craft's built-in form change tracking
-
-    // Date/time fields and lightswitches are initialized automatically by Craft's form macros
-
-
-    {% if smartLink.id %}
-        // Live QR code preview
-        (function() {
-            const qrPreview = document.getElementById('qr-preview');
-            if (!qrPreview) {
-                return;
-            }
-
-            const qrLink = qrPreview.closest('a');
-            const colorInput = document.getElementById('qrCodeColor');
-            const bgColorInput = document.getElementById('qrCodeBgColor');
-            const eyeColorInput = document.getElementById('qrCodeEyeColor');
-            const sizeInput = document.getElementById('qrCodeSize');
-            const formatSelect = document.getElementById('qrCodeFormat');
-            const previewBaseUrl = {{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle })|json_encode|raw }};
-            const publicBaseUrl = {{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId)|json_encode|raw }};
-            let updateTimeout;
-
-            function updateQrCode() {
-                // Clear previous timeout
-                clearTimeout(updateTimeout);
-
-                // Debounce updates
-                updateTimeout = setTimeout(function() {
-                    // Get color values - Craft's color input doesn't include #
-                    const color = (colorInput.value || '000000').replace(/^#/, '');
-                    const bgColor = (bgColorInput.value || 'FFFFFF').replace(/^#/, '');
-                    const eyeColor = eyeColorInput.value ? eyeColorInput.value.replace(/^#/, '') : '';
-                    const size = sizeInput.value || 256;
-
-                    // Add loading state
-                    qrPreview.style.opacity = '0.5';
-
-                    // Create new image to preload
-                    const newImg = new Image();
-                    newImg.onload = function() {
-                        qrPreview.src = this.src;
-                        qrPreview.style.opacity = '1';
-                    };
-
-                    newImg.onerror = function() {
-                        qrPreview.style.opacity = '1';
-                    };
-
-                    // Get the format - use selected value or default
-                    const formatValue = formatSelect ? formatSelect.value : '';
-                    const format = formatValue || {{ (craft.smartLinks.settings.defaultQrFormat ?? 'png')|json_encode|raw }};
-
-                    // Build parameters
-                    let params = `size=150&color=${color}&bg=${bgColor}&format=${format}&margin={{ craft.smartLinks.settings.defaultQrMargin|json_encode|raw }}`;
-                    let fullSizeParams = `size=${size}&color=${color}&bg=${bgColor}&format=${format}&margin={{ craft.smartLinks.settings.defaultQrMargin|json_encode|raw }}`;
-
-                    // Add eye color if set
-                    if (eyeColor) {
-                        params += `&eyeColor=${eyeColor}`;
-                        fullSizeParams += `&eyeColor=${eyeColor}`;
-                    }
-
-                    {% if craft.smartLinks.settings.enableQrLogo %}
-                    // Add logo parameter if one is selected OR use default logo
-                    const logoField = document.querySelector('#qrLogoId-field .elements');
-                    let logoId = null;
-
-                    if (logoField) {
-                        const selectedLogo = logoField.querySelector('.element');
-                        if (selectedLogo) {
-                            logoId = selectedLogo.dataset.id;
-                        }
-                    }
-
-                    // If no specific logo selected, use default logo from settings
-                    if (!logoId && {{ (craft.smartLinks.settings.defaultQrLogoId ?? null)|json_encode|raw }}) {
-                        logoId = {{ (craft.smartLinks.settings.defaultQrLogoId ?? null)|json_encode|raw }};
-                    }
-
-                    if (logoId) {
-                        params += `&logo=${logoId}`;
-                        fullSizeParams += `&logo=${logoId}`;
-                    }
-                    {% endif %}
-
-                    // Update QR code image
-                    const newSrc = `${previewBaseUrl}?${params}&t=${Date.now()}`;
-                    newImg.src = newSrc;
-
-                    // Update preview background immediately
-                    qrPreview.style.background = '#' + bgColor;
-
-                    // Update link to full size
-                    if (qrLink) {
-                        qrLink.href = `${publicBaseUrl}?${fullSizeParams}`;
-                    }
-                }, 150); // Debounce delay
-            }
-
-            // Function to watch for color changes with proper Craft integration
-            function setupColorListeners(input, name) {
-                if (!input) {
-                    return;
-                }
-
-                // Standard input events
-                ['input', 'change', 'keyup', 'blur', 'paste'].forEach(event => {
-                    input.addEventListener(event, updateQrCode);
-                });
-
-                // Watch for value changes via MutationObserver
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
-                            updateQrCode();
-                        }
-                    });
-                });
-
-                observer.observe(input, {
-                    attributes: true,
-                    attributeFilter: ['value']
-                });
-
-                // Find the actual color picker button (Craft uses a button that opens a color picker)
-                const field = input.closest('.field');
-                if (field) {
-                    // Look for Craft's color picker button
-                    const colorButton = field.querySelector('.color-input-button, .color-container button, button[type="button"]');
-                    if (colorButton) {
-                        // When the button is clicked, watch for value changes
-                        colorButton.addEventListener('click', () => {
-                            // Poll for changes as the color picker updates
-                            let lastValue = input.value;
-                            const checkInterval = setInterval(() => {
-                                if (input.value !== lastValue) {
-                                    lastValue = input.value;
-                                    updateQrCode();
-                                }
-                            }, 100);
-
-                            // Stop polling after 30 seconds
-                            setTimeout(() => clearInterval(checkInterval), 30000);
-                        });
-                    }
-                }
-            }
-
-            // Set up color listeners
-            setupColorListeners(colorInput, 'Color');
-            setupColorListeners(bgColorInput, 'Background Color');
-            setupColorListeners(eyeColorInput, 'Eye Color');
-
-            // Size input
-            if (sizeInput) {
-                sizeInput.addEventListener('input', updateQrCode);
-                sizeInput.addEventListener('change', updateQrCode);
-            }
-
-            // Format select
-            if (formatSelect) {
-                formatSelect.addEventListener('change', updateQrCode);
-            }
-
-            // Also update when the QR code is toggled on
-            const qrToggle = document.getElementById('qrCodeEnabled');
-            if (qrToggle) {
-                qrToggle.addEventListener('change', function() {
-                    if (this.classList.contains('on')) {
-                        setTimeout(updateQrCode, 100); // Small delay to ensure DOM is ready
-                    }
-                });
-            }
-
-            // Global event delegation for any change events on our inputs
-            document.addEventListener('input', function(e) {
-                if (e.target === colorInput || e.target === bgColorInput || e.target === eyeColorInput) {
-                    updateQrCode();
-                }
-            }, true);
-
-            // Watch for Craft's custom events
-            if (typeof Craft !== 'undefined' && Craft.cp) {
-                // Hook into Craft's CP JavaScript if available
-                const checkForChanges = () => {
-                    if (colorInput && colorInput.value !== colorInput.dataset.lastValue) {
-                        colorInput.dataset.lastValue = colorInput.value;
-                        updateQrCode();
-                    }
-                    if (bgColorInput && bgColorInput.value !== bgColorInput.dataset.lastValue) {
-                        bgColorInput.dataset.lastValue = bgColorInput.value;
-                        updateQrCode();
-                    }
-                    if (eyeColorInput && eyeColorInput.value !== eyeColorInput.dataset.lastValue) {
-                        eyeColorInput.dataset.lastValue = eyeColorInput.value;
-                        updateQrCode();
-                    }
-                };
-
-                // Store initial values
-                if (colorInput) colorInput.dataset.lastValue = colorInput.value;
-                if (bgColorInput) bgColorInput.dataset.lastValue = bgColorInput.value;
-                if (eyeColorInput) eyeColorInput.dataset.lastValue = eyeColorInput.value;
-
-                // Check periodically
-                setInterval(checkForChanges, 500);
-
-                // Also listen for Craft's field changed event
-                if (typeof Craft.BaseElementEditor !== 'undefined') {
-                    Garnish.on(Craft.BaseElementEditor, 'onFieldChange', (e) => {
-                        updateQrCode();
-                    });
-                }
-
-                // Try to hook into Craft's color field specifically
-                $(document).on('change', '.color-field input[type="text"]', function() {
-                    updateQrCode();
-                });
-
-                // Also try Garnish events
-                if (typeof Garnish !== 'undefined') {
-                    $(colorInput).on('change textchange input', updateQrCode);
-                    $(bgColorInput).on('change textchange input', updateQrCode);
-                    $(eyeColorInput).on('change textchange input', updateQrCode);
-                }
-            }
-
-            // Final fallback - watch the color display elements themselves
-            const watchColorDisplay = () => {
-                const colorDisplays = document.querySelectorAll('.color-field .color-preview, .color-field .color-container');
-                colorDisplays.forEach(display => {
-                    const observer = new MutationObserver(() => {
-                        updateQrCode();
-                    });
-                    observer.observe(display, { attributes: true, attributeFilter: ['style'] });
-                });
-            };
-
-            // Wait a bit for Craft to initialize color fields
-            setTimeout(watchColorDisplay, 1000);
-
-            {% if craft.smartLinks.settings.enableQrLogo %}
-            // Watch for logo field changes
-            const logoFieldContainer = document.getElementById('qrLogoId-field');
-            if (logoFieldContainer) {
-                // Watch for changes to the element field
-                const observer = new MutationObserver(() => {
-                    updateQrCode();
-                });
-
-                observer.observe(logoFieldContainer, {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    characterData: true
-                });
-            }
-            {% endif %}
-        })();
-    {% endif %}
-
-    // Download QR code dropdown
-    $('.download-qr').on('click', function(e) {
-        e.preventDefault();
-
-        let size = $(this).data('size');
-
-        // Handle custom size
-        if (size === 'custom') {
-            const customSize = prompt('{{ "Enter custom size (100-4096 pixels):"|t('smartlink-manager')|e('js') }}', '1024');
-            if (!customSize) return;
-
-            size = parseInt(customSize);
-            if (isNaN(size) || size < 100 || size > 4096) {
-                alert('{{ "Please enter a valid size between 100 and 4096 pixels"|t('smartlink-manager')|e('js') }}');
-                return;
-            }
-        }
-
-        const color = ($('#qrCodeColor').val() || '000000').replace(/^#/, '');
-        const bgColor = ($('#qrCodeBgColor').val() || 'FFFFFF').replace(/^#/, '');
-        const eyeColor = $('#qrCodeEyeColor').val() ? $('#qrCodeEyeColor').val().replace(/^#/, '') : '';
-        const format = $('#qrCodeFormat').val() || {{ (craft.smartLinks.settings.defaultQrFormat ?? 'png')|json_encode|raw }};
-
-        // Build download URL
-        let downloadUrl = {{ craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId)|json_encode|raw }} +
-            '?size=' + size +
-            '&color=' + color +
-            '&bg=' + bgColor +
-            '&format=' + format +
-            '&download=1';
-
-        // Add eye color if set
-        if (eyeColor) {
-            downloadUrl += '&eyeColor=' + eyeColor;
-        }
-
-        // Trigger the download in a hidden iframe so Craft's unsaved-changes
-        // guard doesn't treat it as leaving the editor page.
-        let downloadFrame = document.getElementById('smartlink-qr-download-frame');
-        if (!downloadFrame) {
-            downloadFrame = document.createElement('iframe');
-            downloadFrame.id = 'smartlink-qr-download-frame';
-            downloadFrame.style.display = 'none';
-            document.body.appendChild(downloadFrame);
-        }
-
-        downloadFrame.src = downloadUrl;
-    });
-
-    // Reset QR code settings to plugin defaults
-    $('#reset-qr-defaults').on('click', function(e) {
-        e.preventDefault();
-        if (!confirm('{{ "Reset QR code settings to plugin defaults?"|t('smartlink-manager')|e('js') }}')) {
-            return;
-        }
-
-        // Get plugin default values
-        const defaults = {
-            size: {{ craft.smartLinks.settings.defaultQrSize|json_encode|raw }},
-            color: {{ craft.smartLinks.settings.defaultQrColor|json_encode|raw }},
-            bgColor: {{ craft.smartLinks.settings.defaultQrBgColor|json_encode|raw }},
-            eyeColor: {{ (craft.smartLinks.settings.qrEyeColor ?? '')|json_encode|raw }}
-        };
-
-        // Reset form fields
-        $('#qrCodeSize').val(defaults.size);
-        $('#qrCodeColor').val(defaults.color.replace('#', ''));
-        $('#qrCodeBgColor').val(defaults.bgColor.replace('#', ''));
-        $('#qrCodeEyeColor').val(defaults.eyeColor.replace('#', ''));
-
-        // Trigger change events to update preview and color displays
-        $('#qrCodeSize').trigger('change');
-        $('#qrCodeColor').trigger('change').trigger('input');
-        $('#qrCodeBgColor').trigger('change').trigger('input');
-        $('#qrCodeEyeColor').trigger('change').trigger('input');
-
-        // Update color field displays manually for Craft
-        setTimeout(function() {
-            const colorPreview = $('#qrCodeColor').closest('.field').find('.color-preview');
-            const bgColorPreview = $('#qrCodeBgColor').closest('.field').find('.color-preview');
-            const eyeColorPreview = $('#qrCodeEyeColor').closest('.field').find('.color-preview');
-
-            if (colorPreview.length) {
-                colorPreview.css('background-color', defaults.color);
-            }
-            if (bgColorPreview.length) {
-                bgColorPreview.css('background-color', defaults.bgColor);
-            }
-            if (eyeColorPreview.length && defaults.eyeColor) {
-                eyeColorPreview.css('background-color', defaults.eyeColor);
-            }
-        }, 50);
-
-        Craft.cp.displayNotice('{{ "QR code settings reset to defaults"|t('smartlink-manager')|e('js') }}');
-    });
-
-    {% if canViewAnalytics and craft.smartLinks.settings.enableAnalytics %}
-        // Confirm when disabling analytics tracking
-        $('#trackAnalytics').on('change', function() {
-            const $toggle = $(this);
-            const isEnabled = $toggle.hasClass('on');
-
-            // If turning OFF analytics tracking, show confirmation
-            if (!isEnabled) {
-                if (!confirm('{{ "Are you sure you want to disable analytics tracking for this {singularName}? This {singularName} will no longer collect visitor data and interactions."|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName})|e('js') }}')) {
-                    // User cancelled, turn the toggle back on
-                    $toggle.addClass('on');
-                    $toggle.find('input[type="hidden"]').val('1');
-                    $toggle.attr('aria-checked', 'true');
-                    return false;
-                }
-            }
-        });
-    {% endif %}
-
-    // Set platform-specific keyboard shortcut
-    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-    const saveShortcut = document.getElementById('save-shortcut');
-    if (saveShortcut) {
-        saveShortcut.textContent = isMac ? '⌘S' : 'Ctrl+S';
-    }
-
-{% endjs %}
