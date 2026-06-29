@@ -170,24 +170,7 @@
 	</script>
 	{% endif %}
 
-	{% if autoRedirect %}
-		<script>
-			(function() {
-				var goUrl = {{ goUrl|json_encode|raw }};
+	{{ smartLink.renderAutoRedirectScript(autoRedirectUrl) }}
 
-				{% if craft.app.config.general.devMode %}
-				var urlParams = new URLSearchParams(window.location.search);
-				if (urlParams.get('debug') === '1') {
-					return;
-				}
-				{% endif %}
-
-				setTimeout(function() {
-					window.location.replace(goUrl);
-				}, 100);
-			})();
-		</script>
-	{% endif %}
-
-</body>
-</html>
+	</body>
+	</html>

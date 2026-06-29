@@ -75,6 +75,12 @@ final class RedirectControllerTest extends TestCase
             self::assertStringNotContainsString('craftcms.ddev.site', (string) $controller->lastVariables['goUrl']);
             self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
             self::assertStringNotContainsString('site=', (string) $controller->lastVariables['goUrl']);
+            self::assertArrayHasKey('autoRedirectUrl', $controller->lastVariables);
+            self::assertStringContainsString(
+                "/smartlink-manager/redirect/auto/{$link->slug}",
+                (string) $controller->lastVariables['autoRedirectUrl']
+            );
+            self::assertStringNotContainsString('src=', (string) $controller->lastVariables['autoRedirectUrl']);
             self::assertSame($controller->lastVariables['goUrl'], $controller->lastVariables['goUrls']['auto'] ?? null);
             self::assertStringContainsString(
                 "smartlink-manager/redirect/go/{$link->slug}/ios?",
@@ -158,6 +164,48 @@ final class RedirectControllerTest extends TestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('qr', $controller->lastVariables['source'] ?? null);
         self::assertStringContainsString('src=qr', (string) $controller->lastVariables['goUrl']);
+        self::assertStringNotContainsString('src=qr', (string) $controller->lastVariables['autoRedirectUrl']);
+    }
+
+    public function testAutoRedirectResolverReturnsTrackedGoUrlForMobile(): void
+    {
+        $this->installWebHarness(['src' => 'qr']);
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new MobileIosDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-auto-resolver',
+            'iosUrl' => 'https://example.com/ios',
+        ]);
+
+        $response = $this->controller()->actionAutoRedirect($link->slug);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
+        $data = $response->data;
+        self::assertIsArray($data);
+        self::assertTrue($data['autoRedirect'] ?? false);
+        self::assertStringContainsString(
+            "smartlink-manager/redirect/go/{$link->slug}/auto",
+            (string) ($data['goUrl'] ?? '')
+        );
+        self::assertStringContainsString('src=qr', (string) ($data['goUrl'] ?? ''));
+    }
+
+    public function testAutoRedirectResolverReturnsFalseForDesktop(): void
+    {
+        $this->installWebHarness();
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new DesktopDeviceDetectionService());
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-auto-resolver-desktop',
+            'iosUrl' => 'https://example.com/ios',
+        ]);
+
+        $response = $this->controller()->actionAutoRedirect($link->slug);
+
+        self::assertSame(200, $response->getStatusCode());
+        $data = $response->data;
+        self::assertIsArray($data);
+        self::assertFalse($data['autoRedirect'] ?? true);
+        self::assertNull($data['goUrl'] ?? null);
     }
 
     public function testAutoRedirectUsesDeviceDetectedDestinationAndTracksQrSource(): void

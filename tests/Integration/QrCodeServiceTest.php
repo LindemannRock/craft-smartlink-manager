@@ -159,10 +159,43 @@ class QrCodeServiceTest extends TestCase
 
     private function findImageAssetId(): ?int
     {
-        $asset = Asset::find()
+        $assets = Asset::find()
             ->kind('image')
-            ->one();
+            ->all();
 
-        return $asset ? (int) $asset->id : null;
+        foreach ($assets as $asset) {
+            if (!$asset instanceof Asset) {
+                continue;
+            }
+
+            $extension = strtolower((string)pathinfo($asset->filename, PATHINFO_EXTENSION));
+            if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'], true)) {
+                continue;
+            }
+
+            $path = null;
+            try {
+                $path = $asset->getCopyOfFile();
+                if (!is_string($path) || !is_file($path)) {
+                    continue;
+                }
+
+                $imageInfo = getimagesize($path);
+                if (
+                    is_array($imageInfo) &&
+                    in_array($imageInfo[2] ?? null, [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF], true)
+                ) {
+                    return (int)$asset->id;
+                }
+            } catch (\Throwable) {
+                continue;
+            } finally {
+                if (is_string($path) && is_file($path)) {
+                    @unlink($path);
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -47,15 +47,24 @@ class SeomaticTrackingTemplateTest extends TestCase
     {
         $pluginTemplate = (string)file_get_contents(dirname(__DIR__, 2) . '/src/templates/redirect.twig');
         $projectTemplate = (string)file_get_contents(dirname(__DIR__, 4) . '/templates/smartlink-manager/redirect.twig');
+        $autoRedirectTemplate = (string)file_get_contents(dirname(__DIR__, 2) . '/src/templates/_frontend/auto-redirect.twig');
 
         foreach ([$pluginTemplate, $projectTemplate] as $template) {
-            $this->assertStringContainsString('{% if autoRedirect %}', $template);
-            $this->assertStringContainsString('var goUrl = {{ goUrl|json_encode|raw }};', $template);
-            $this->assertStringContainsString('window.location.replace(goUrl);', $template);
+            $this->assertStringContainsString('smartLink.renderAutoRedirectScript(autoRedirectUrl)', $template);
             $this->assertStringContainsString('{{ goUrls.ios }}', $template);
             $this->assertStringContainsString('{{ goUrls.fallback }}', $template);
+            $this->assertStringNotContainsString('{% if autoRedirect %}', $template);
+            $this->assertStringNotContainsString('var goUrl = {{ goUrl|json_encode|raw }};', $template);
+            $this->assertStringNotContainsString('window.location.replace(goUrl);', $template);
+            $this->assertStringNotContainsString('fetch(resolverUrl.toString(), {', $template);
             $this->assertStringNotContainsString("actionUrl('smartlink-manager/redirect/go'", $template);
             $this->assertStringContainsString("smartLink.renderSeomaticTracking(eventType ?? 'redirect')", $template);
         }
+
+        $this->assertStringContainsString('var resolverUrl = new URL({{ autoRedirectUrl|json_encode|raw }}, window.location.href);', $autoRedirectTemplate);
+        $this->assertStringContainsString('fetch(resolverUrl.toString(), {', $autoRedirectTemplate);
+        $this->assertStringContainsString('cache: \'no-store\'', $autoRedirectTemplate);
+        $this->assertStringContainsString('window.location.replace(data.goUrl);', $autoRedirectTemplate);
+        $this->assertStringContainsString('{% if skipDebugRedirect %}', $autoRedirectTemplate);
     }
 }

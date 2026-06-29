@@ -136,28 +136,83 @@ class RedirectController extends Controller
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
         $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
-        $response = Craft::$app->getResponse();
-        $this->applyNoStoreHeaders($response);
-
         // Render the template - all links will point to action URLs for tracking
         $settings = SmartLinkManager::$plugin->getSettings();
         $template = $settings->redirectTemplate ?: 'smartlink-manager/redirect';
         $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
         $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
         $goUrls = $this->buildTrackedGoUrls($smartLink, $source);
+        $autoRedirectUrl = $this->buildAutoRedirectUrl($smartLink);
 
         SmartLinkManager::$plugin->integration->prepareSeomaticMetadata($smartLink);
 
-        return $this->renderTemplate($template, [
+        $response = $this->renderTemplate($template, [
             'smartLink' => $smartLink,
             'device' => $deviceInfo,
             'language' => $language,
             'goUrl' => $goUrls['auto'],
             'goUrls' => $goUrls,
+            'autoRedirectUrl' => $autoRedirectUrl,
             'source' => $source,
             'eventType' => 'redirect',
             'autoRedirect' => $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
         ]);
+        $this->applyNoStoreHeaders($response);
+
+        return $response;
+    }
+
+    /**
+     * Resolve whether this visitor should auto-hop from a cache-safe landing page.
+     */
+    public function actionAutoRedirect(string $slug, ?string $siteHandle = null): Response
+    {
+        $site = $this->resolveSite($siteHandle);
+        if (!$site) {
+            return $this->autoRedirectResponse(false);
+        }
+
+        $settings = SmartLinkManager::$plugin->getSettings();
+        if (!$settings->isSiteEnabled($site->id)) {
+            return $this->autoRedirectResponse(false);
+        }
+
+        $smartLink = SmartLink::find()
+            ->slug($slug)
+            ->siteId($site->id)
+            ->status(null)
+            ->one();
+
+        if (!$smartLink) {
+            $smartLink = SmartLink::find()
+                ->slug($slug)
+                ->site('*')
+                ->status(null)
+                ->one();
+        }
+
+        if (!$smartLink || !$settings->isSiteEnabled($smartLink->siteId)) {
+            return $this->autoRedirectResponse(false);
+        }
+
+        if (in_array($smartLink->getStatus(), [
+            SmartLink::STATUS_DISABLED,
+            SmartLink::STATUS_EXPIRED,
+            SmartLink::STATUS_PENDING,
+        ], true)) {
+            return $this->autoRedirectResponse(false);
+        }
+
+        $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
+        $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
+        $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
+        $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
+        $goUrls = $this->buildTrackedGoUrls($smartLink, $source);
+
+        return $this->autoRedirectResponse(
+            $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
+            $goUrls['auto']
+        );
     }
 
     /**
@@ -367,6 +422,11 @@ class RedirectController extends Controller
             return Craft::$app->getSites()->getSiteByHandle($siteHandle);
         }
 
+        $siteParam = Craft::$app->getRequest()->getParam('site');
+        if ($siteParam) {
+            return Craft::$app->getSites()->getSiteByHandle((string) $siteParam);
+        }
+
         return Craft::$app->getSites()->getCurrentSite();
     }
 
@@ -417,6 +477,34 @@ class RedirectController extends Controller
         }
 
         return $urls;
+    }
+
+    private function buildAutoRedirectUrl(SmartLink $smartLink): string
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
+        $params = [];
+        if ($this->shouldIncludeSiteParamForTrackedUrl($settings->smartlinkBaseUrl ?? null) && $site !== null) {
+            $params['site'] = $site->handle;
+        }
+        $params = array_filter($params, static fn($value): bool => $value !== null && $value !== '');
+
+        return $settings->buildPublicUrl(
+            "smartlink-manager/redirect/auto/{$smartLink->slug}",
+            $smartLink->siteId,
+            $params
+        );
+    }
+
+    private function autoRedirectResponse(bool $autoRedirect, ?string $goUrl = null): Response
+    {
+        $response = $this->asJson([
+            'autoRedirect' => $autoRedirect,
+            'goUrl' => $autoRedirect ? $goUrl : null,
+        ]);
+        $this->applyNoStoreHeaders($response);
+
+        return $response;
     }
 
     private function shouldIncludeSiteParamForTrackedUrl(?string $baseUrl): bool

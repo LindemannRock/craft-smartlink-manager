@@ -1019,6 +1019,18 @@ class SmartLink extends Element
     }
 
     /**
+     * Render the cache-safe auto-redirect resolver script for this smart link
+     *
+     * @param string $autoRedirectUrl Server-side resolver URL
+     * @return \Twig\Markup|null HTML script tag or null if rendering fails
+     * @since 5.32.0
+     */
+    public function renderAutoRedirectScript(string $autoRedirectUrl): ?\Twig\Markup
+    {
+        return SmartLinkManager::$plugin->frontend->renderAutoRedirectScript($autoRedirectUrl);
+    }
+
+    /**
      * @inheritdoc
      */
     public function getStatus(): ?string

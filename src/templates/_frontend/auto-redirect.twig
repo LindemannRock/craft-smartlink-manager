@@ -1,0 +1,42 @@
+<script>
+	(function() {
+		var urlParams = new URLSearchParams(window.location.search);
+
+		{% if skipDebugRedirect %}
+		if (urlParams.get('debug') === '1') {
+			return;
+		}
+		{% endif %}
+
+		var source = urlParams.get('src');
+		var resolverUrl = new URL({{ autoRedirectUrl|json_encode|raw }}, window.location.href);
+		if (source === 'qr') {
+			resolverUrl.searchParams.set('src', 'qr');
+		}
+
+		fetch(resolverUrl.toString(), {
+			credentials: 'same-origin',
+			cache: 'no-store',
+			headers: {
+				'Accept': 'application/json'
+			}
+		})
+			.then(function(response) {
+				if (!response.ok) {
+					return null;
+				}
+				return response.json();
+			})
+			.then(function(data) {
+				if (!data || !data.autoRedirect || !data.goUrl) {
+					return;
+				}
+				setTimeout(function() {
+					window.location.replace(data.goUrl);
+				}, 100);
+			})
+			.catch(function() {
+				// Leave the landing page visible if the dynamic resolver cannot be reached.
+			});
+	})();
+</script>

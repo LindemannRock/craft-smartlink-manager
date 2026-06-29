@@ -50,6 +50,7 @@ use lindemannrock\smartlinkmanager\jobs\CleanupAnalyticsJob;
 use lindemannrock\smartlinkmanager\models\Settings;
 use lindemannrock\smartlinkmanager\services\AnalyticsService;
 use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
+use lindemannrock\smartlinkmanager\services\FrontendService;
 use lindemannrock\smartlinkmanager\services\IntegrationService;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\services\SmartLinksService;
@@ -70,6 +71,7 @@ use yii\base\Event;
  * @property-read DeviceDetectionService $deviceDetection
  * @property-read QrCodeService $qrCode
  * @property-read AnalyticsService $analytics
+ * @property-read FrontendService $frontend
  * @property-read IntegrationService $integration
  * @property-read Settings $settings
  * @method Settings getSettings()
@@ -136,6 +138,7 @@ class SmartLinkManager extends Plugin
             'deviceDetection' => DeviceDetectionService::class,
             'qrCode' => QrCodeService::class,
             'analytics' => AnalyticsService::class,
+            'frontend' => FrontendService::class,
             'integration' => IntegrationService::class,
         ]);
 
@@ -655,6 +658,8 @@ class SmartLinkManager extends Plugin
         $siteHandlePattern = !empty($siteHandles) ? implode('|', $siteHandles) : '[a-zA-Z0-9_-]+';
 
         $rules = [
+            'smartlink-manager/redirect/auto/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/auto-redirect',
+            '<siteHandle:' . $siteHandlePattern . '>/smartlink-manager/redirect/auto/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/auto-redirect',
             'smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
             '<siteHandle:' . $siteHandlePattern . '>/smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
