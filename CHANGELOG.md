@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.32.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.32.0...v5.32.1) (2026-06-29)
+## [5.32.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.32.0...v5.32.1) - 2026-06-29
 
 
 ### Fixed
