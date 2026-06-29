@@ -58,7 +58,7 @@
         {{ forms.textField({
             label: "Size"|t('smartlink-manager'),
             instructions: "Default size in pixels for generated QR codes"|t('smartlink-manager'),
-            id: 'defaultQrCodeSize',
+            id: 'defaultQrSize',
             name: 'settings[defaultQrSize]',
             value: settings.defaultQrSize ?? 256,
             type: 'number',
@@ -87,7 +87,7 @@
 
         {{ forms.colorField({
             label: "QR Code Color"|t('smartlink-manager'),
-            id: 'defaultQrCodeColor',
+            id: 'defaultQrColor',
             name: 'settings[defaultQrColor]',
             value: settings.defaultQrColor ?? '#000000',
             errors: settings.getErrors('defaultQrColor'),
@@ -98,7 +98,7 @@
 
         {{ forms.colorField({
             label: "Background Color"|t('smartlink-manager'),
-            id: 'defaultQrCodeBgColor',
+            id: 'defaultQrBgColor',
             name: 'settings[defaultQrBgColor]',
             value: settings.defaultQrBgColor ?? '#FFFFFF',
             errors: settings.getErrors('defaultQrBgColor'),
@@ -542,10 +542,10 @@ document.querySelector('form').addEventListener('submit', function(e) {
     const previewUrl = 'https://example.com/preview';
 
     // Get all relevant form elements
-    const sizeField = document.getElementById('defaultQrCodeSize');
+    const sizeField = document.getElementById('defaultQrSize');
     const formatField = document.getElementById('defaultQrFormat');
-    const colorField = document.getElementById('defaultQrCodeColor');
-    const bgColorField = document.getElementById('defaultQrCodeBgColor');
+    const colorField = document.getElementById('defaultQrColor');
+    const bgColorField = document.getElementById('defaultQrBgColor');
     const marginField = document.getElementById('defaultQrMargin');
     const errorCorrectionField = document.getElementById('defaultQrErrorCorrection');
     const moduleStyleField = document.getElementById('qrModuleStyle');
