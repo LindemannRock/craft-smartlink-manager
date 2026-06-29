@@ -129,12 +129,13 @@ The following variables are available in the redirect template:
 | `language` | `string\|null` | Detected language code, or `null` if undetected |
 | `goUrl` | `string` | Tracked URL for the auto-detected platform (the same value as `goUrls.auto`). Use it for an automatic redirect so the click is still counted. |
 | `goUrls` | `array` | Tracked URLs keyed by platform: `auto`, `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one routes through the `smartlink-manager/redirect/go/{slug}/{platform}` hop that records the click server-side before redirecting. |
+| `autoRedirectUrl` | `string` | Server-side resolver URL for the **cache-safe** auto-redirect (@since(5.32.0)). Pass it to `smartLink.renderAutoRedirectScript()` for the auto-forward. |
 | `source` | `string` | Traffic source for this view: `direct` or `qr` (from the `?src=` query parameter). |
 | `eventType` | `string` | The event name passed to SEOmatic tracking — `redirect` on the landing page. |
-| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL. |
+| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL for *this* request. For the actual auto-forward, use the cache-safe `renderAutoRedirectScript(autoRedirectUrl)` helper. |
 
 > [!IMPORTANT]
-> Point your platform buttons and any automatic redirect at the `goUrls` (or `goUrl`) values, **not** `smartLink.getUrl()` — the `goUrls` route through the tracked hop so the click is recorded before the visitor is sent on. See [Device Detection](device-detection.md#redirect-template-variables) for a complete custom-template example.
+> Point your platform buttons at the `goUrls` values, **not** `smartLink.getUrl()` — the `goUrls` route through the tracked hop so the click is recorded before the visitor is sent on. For the automatic forward, use the cache-safe `smartLink.renderAutoRedirectScript(autoRedirectUrl)` helper rather than redirecting to `goUrl` directly. See [Device Detection](device-detection.md#redirect-template-variables) and [Custom templates](../developers/custom-templates.md#cache-safe-auto-redirect) for complete examples.
 
 ## Querying Smart Links in Templates
 

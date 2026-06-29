@@ -127,9 +127,10 @@ When building a custom redirect template, these variables are available:
 | `language` | `string\|null` | The detected language code, or `null` if undetected |
 | `goUrl` | `string` | Tracked URL for the auto-detected platform (the same value as `goUrls.auto`). Use it for an automatic redirect so the click is still counted. |
 | `goUrls` | `array` | Tracked URLs keyed by platform: `auto`, `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one routes through the `smartlink-manager/redirect/go/{slug}/{platform}` action hop that records the click server-side before redirecting. |
+| `autoRedirectUrl` | `string` | Server-side resolver URL for the **cache-safe** auto-redirect (@since(5.32.0)). Pass it to `smartLink.renderAutoRedirectScript()` for the auto-forward. |
 | `source` | `string` | Traffic source for this view: `direct` or `qr` (resolved from the `?src=` query parameter). |
 | `eventType` | `string` | The event name passed to SEOmatic tracking — `redirect` on the landing page. |
-| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL. The shipped template uses this to auto-hop to `goUrl`. |
+| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL for *this* request. The shipped template forwards via the cache-safe `renderAutoRedirectScript(autoRedirectUrl)` helper rather than hard-coding a redirect. |
 
 > [!IMPORTANT]
 > Point your platform buttons and any automatic redirect at the `goUrls` (or `goUrl`) values, **not** `smartLink.getUrl()`. The `goUrls` route through the tracked `smartlink-manager/redirect/go/{slug}/{platform}` hop, so the click is recorded before the visitor is sent on. `smartLink.getRedirectUrl()` returns the resolved destination directly and bypasses click tracking.
@@ -137,19 +138,24 @@ When building a custom redirect template, these variables are available:
 Example custom redirect template:
 
 ```twig
-{# templates/smartlink-redirect.twig #}
+{# templates/smartlink-manager/redirect.twig #}
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0;url={{ goUrl }}">
-    <title>Redirecting...</title>
+    <title>Redirecting to {{ smartLink.title }}…</title>
 </head>
 <body>
-    <p>Redirecting to {{ smartLink.title }}...</p>
-    <p><a href="{{ goUrl }}">Click here if not redirected</a></p>
+    <p>Redirecting to {{ smartLink.title }}…</p>
+    <p><a href="{{ goUrls.fallback }}">Click here if not redirected</a></p>
+
+    {# Cache-safe auto-redirect — resolves the device-specific destination at request time #}
+    {{ smartLink.renderAutoRedirectScript(autoRedirectUrl) }}
 </body>
 </html>
 ```
+
+> [!IMPORTANT]
+> Use `renderAutoRedirectScript(autoRedirectUrl)` for the auto-forward — **don't** hard-code a redirect to `goUrl` (e.g. a `<meta http-equiv="refresh">` or `window.location` to `goUrl`). The landing page is platform-specific, so if it's cached, a baked-in `goUrl` would send later visitors to the wrong store. The helper fetches a no-store resolver at request time so the decision is always fresh. See [Custom templates → Cache-safe auto-redirect](../developers/custom-templates.md#cache-safe-auto-redirect).
 
 ## Modifying the Redirect URL
 

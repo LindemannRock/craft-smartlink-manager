@@ -47,13 +47,19 @@ It receives these variables:
 | `smartLink` | `SmartLink` | The resolved smart link element. |
 | `goUrl` | `string` | The tracked forwarding URL for the detected platform (`goUrls['auto']`). Send auto-redirects here so the click is recorded — do **not** use `smartLink.getRedirectUrl()`, which bypasses tracking. |
 | `goUrls` | `array` | Per-platform tracked URLs (e.g. `goUrls.ios`, `goUrls.android`, `goUrls.fallback`). Use these for platform buttons. |
-| `autoRedirect` | `bool` | Whether the visitor should be forwarded automatically (vs. shown a chooser). |
+| `autoRedirectUrl` | `string` | Server-side resolver URL for the **cache-safe** auto-redirect. Pass it to `smartLink.renderAutoRedirectScript()` (below) instead of redirecting from the template directly. @since(5.32.0) |
+| `autoRedirect` | `bool` | Whether *this* request resolves to an automatic forward (vs. showing a chooser). Handy for conditional markup or debug; for the actual forward use the cache-safe helper, not a hard-coded `goUrl` redirect. |
 | `source` | `string` | `direct` or `qr`. |
 | `eventType` | `string` | `redirect`. |
 | `device` | `array` | Detected device/platform details for the request. |
 | `language` | `string` | Detected request language. |
 
-The element also exposes `smartLink.renderSeomaticTracking(eventType)` for [SEOmatic](integrations.md) data-layer tracking. For the full redirect-template walkthrough (platform buttons, tracked hops), see [Device detection](../feature-tour/device-detection.md) and [Smart links](../feature-tour/smart-links.md).
+The element also exposes:
+
+- `smartLink.renderSeomaticTracking(eventType)` — [SEOmatic](integrations.md) data-layer tracking.
+- `smartLink.renderAutoRedirectScript(autoRedirectUrl)` @since(5.32.0) — the **cache-safe auto-redirect** script (see [below](#cache-safe-auto-redirect)).
+
+For the full redirect-template walkthrough (platform buttons, tracked hops), see [Device detection](../feature-tour/device-detection.md) and [Smart links](../feature-tour/smart-links.md).
 
 ```twig
 {# templates/smartlink-manager/redirect.twig #}
@@ -61,15 +67,25 @@ The element also exposes `smartLink.renderSeomaticTracking(eventType)` for [SEOm
 <html>
 <head>
     {{ smartLink.renderSeomaticTracking(eventType)|raw }}
-    {% if autoRedirect %}<script>window.location.replace({{ goUrl|json_encode|raw }});</script>{% endif %}
 </head>
 <body>
     <a href="{{ goUrls.ios }}">iOS</a>
     <a href="{{ goUrls.android }}">Android</a>
     <a href="{{ goUrls.fallback }}">Other</a>
+
+    {# Cache-safe auto-redirect (resolves the device-specific destination at request time) #}
+    {{ smartLink.renderAutoRedirectScript(autoRedirectUrl) }}
 </body>
 </html>
 ```
+
+#### Cache-safe auto-redirect
+
+The landing page is platform-aware, so the auto-forward **must not** be baked into the HTML — if a CDN or static cache served a page that hard-coded one platform's `goUrl`, every later visitor would be sent to the wrong store. `renderAutoRedirectScript(autoRedirectUrl)` avoids this: it outputs a small script that, on each load, fetches a **no-store** server-side resolver (`autoRedirectUrl`) which returns the correct `{ autoRedirect, goUrl }` for *that* request, then forwards. So the cached HTML stays generic and the redirect decision is always resolved fresh.
+
+- Use `renderAutoRedirectScript(autoRedirectUrl)` for the auto-forward — don't redirect to `goUrl` directly from the template.
+- The per-platform **buttons** still use the tracked `goUrls` values (those record the click via the `…/redirect/go/{slug}/{platform}` hop).
+- In `devMode`, the script skips the redirect when `?debug=1` is present.
 
 > [!TIP]
 > In `devMode`, append `?debug=1` to a smart link URL to stop the auto-redirect and log the generated `goUrl` in the browser console — useful for verifying custom-domain and multisite URLs. See [Troubleshooting](../resources/troubleshooting.md).
