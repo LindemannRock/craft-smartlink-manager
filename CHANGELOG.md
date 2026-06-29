@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.32.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.31.1...v5.32.0) - 2026-06-29
+
+
+### Added
+
+* **redirects:** add buildPublicActionUrl method for action routing ([7b0294a](https://github.com/LindemannRock/craft-smartlink-manager/commit/7b0294a4e798b62b9f525b2fa2c45065652285ee))
+
 ## [5.31.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.31.0...v5.31.1) - 2026-06-29
 
 
