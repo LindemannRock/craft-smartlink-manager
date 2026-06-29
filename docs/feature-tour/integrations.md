@@ -24,6 +24,8 @@ Three event types are dispatched to the data layer:
 | `smart_links_qr_scan` | A visitor accesses the QR code endpoint |
 | `smart_links_button_click` | A button that calls `renderSeomaticTracking()` is clicked |
 
+The `smart_links_` prefix is configurable via the `seomaticEventPrefix` setting (default `smart_links`) — if you change it, the event names change to match (e.g. `myapp_redirect`).
+
 ### Data Layer Structure
 
 Tracking is pushed **client-side** from the rendered redirect or QR page. A redirect event pushes this payload:
@@ -41,15 +43,15 @@ Tracking is pushed **client-side** from the rendered redirect or QR page. A redi
 }
 ```
 
-QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Button-click events use `click_type: "button_click"` and include the clicked platform value when it is available from the tracked go URL.
+QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Button-click events use `click_type: "button_click"` and include the clicked platform, read from the tracked go URL — the `{platform}` segment of `…/smartlink-manager/redirect/go/{slug}/{platform}` (or a `?platform=` query parameter if your custom template adds one), falling back to `unknown` if neither is present.
 
 ### Configuration
 
-Enable the integration in **Settings → Integrations → SEOmatic**. The integration is automatically detected — if SEOmatic is not installed, the option is not shown.
+Enable the integration in **Settings → Integrations → SEOmatic**. The integration is automatically detected. (When SEOmatic isn't installed, see [Integration requirements](#integration-requirements) below for what the card shows.)
 
 ### Content SEO and sitemaps
 
-When the integration is enabled, SEOmatic adds a **SmartLinks** source in **SEOmatic → Content SEO**. That source lets you manage the SEOmatic metadata bundle for rendered smart link and QR pages, including title, robots, canonical URL, and sitemap settings.
+When the integration is enabled, SEOmatic adds a **SmartLinks** source (named after the plugin's display name) in **SEOmatic → Content SEO**. That source lets you manage the SEOmatic metadata bundle for rendered smart link and QR pages, including title, robots, canonical URL, and sitemap settings.
 
 SmartLink Manager sets these defaults:
 
@@ -79,7 +81,7 @@ To fire a `smart_links_button_click` event when a user interacts with a specific
 </a>
 ```
 
-This outputs inline tracking markup that pushes the event object to `window.dataLayer`.
+This outputs a `<script>` block that pushes the event object to `window.dataLayer`. It does not add `data-gtm-*` attributes — use it when you want to fire the event from your own markup.
 
 ## Redirect Manager Integration
 
@@ -100,6 +102,12 @@ Enable the integration in **Settings → Integrations → Redirect Manager**. Th
 
 > [!NOTE]
 > The redirect is created using the `slugPrefix` setting. If you change the prefix, existing redirects created under the old prefix will still point to the old prefix path.
+
+### Fallback lookup
+
+When a visitor hits a smart link **landing URL** whose slug no longer resolves (the smart link was deleted or renamed), SmartLink Manager checks Redirect Manager for a matching redirect before falling back to `notFoundRedirectUrl`. This keeps old bookmarks and QR codes working after a slug change even if no automatic redirect was created.
+
+This applies to unresolved **landing** smart-link URLs. Tracking-hop URLs (the `…/redirect/go/{slug}/{platform}` action) go straight to the configured 404 when they fail — they are not routed through Redirect Manager.
 
 ## Craft Link Field Integration
 
@@ -130,6 +138,6 @@ The `SmartLinkType` class is registered automatically when Link Field is install
 | Redirect Manager | `lindemannrock/craft-redirect-manager` |
 | Craft Link Field | Craft CMS 5.3+ (native Link field) |
 
-All integrations are detected automatically. If the required plugin is not installed, the integration option is hidden in settings and no integration code runs.
+All integrations are detected automatically. If the required plugin is not installed, its card still shows with an **Install Plugin** link but the enable toggle is disabled, and no integration code runs until it is installed and enabled.
 
 For the `IntegrationInterface` API reference, see [Integrations API](../developers/integrations.md).

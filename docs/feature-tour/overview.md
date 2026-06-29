@@ -34,7 +34,7 @@ Every smart link is a native Craft element with its own slug, status, publish sc
 
 - **[Device Detection](device-detection.md)** — Matomo Device Detector identifies iOS, Android, Huawei, Amazon Fire, Windows, and Mac devices. Language detection supports browser headers, IP-based geolocation, or both combined.
 
-- **[Integrations](integrations.md)** — Built-in integrations with SEOmatic (GTM/GA4 data layer events), Redirect Manager (automatic 301 on slug change), and Craft Link Field (SmartLink as a link type).
+- **[Integrations](integrations.md)** — Built-in integrations with SEOmatic (Content SEO source and GTM/GA4 data layer events), Redirect Manager (automatic 301 on slug change), and Craft Link Field (SmartLink as a link type).
 
 - **[Dashboard Widgets](dashboard-widgets.md)** — Two Craft dashboard widgets: Analytics Summary and Top Links. Both are configurable by date range and respect user permissions.
 

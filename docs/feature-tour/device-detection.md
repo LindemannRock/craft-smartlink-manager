@@ -125,6 +125,14 @@ When building a custom redirect template, these variables are available:
 | `smartLink` | `SmartLink` | The smart link element being followed |
 | `device` | `DeviceInfo` | The detected device information |
 | `language` | `string\|null` | The detected language code, or `null` if undetected |
+| `goUrl` | `string` | Tracked URL for the auto-detected platform (the same value as `goUrls.auto`). Use it for an automatic redirect so the click is still counted. |
+| `goUrls` | `array` | Tracked URLs keyed by platform: `auto`, `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one routes through the `smartlink-manager/redirect/go/{slug}/{platform}` action hop that records the click server-side before redirecting. |
+| `source` | `string` | Traffic source for this view: `direct` or `qr` (resolved from the `?src=` query parameter). |
+| `eventType` | `string` | The event name passed to SEOmatic tracking — `redirect` on the landing page. |
+| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL. The shipped template uses this to auto-hop to `goUrl`. |
+
+> [!IMPORTANT]
+> Point your platform buttons and any automatic redirect at the `goUrls` (or `goUrl`) values, **not** `smartLink.getUrl()`. The `goUrls` route through the tracked `smartlink-manager/redirect/go/{slug}/{platform}` hop, so the click is recorded before the visitor is sent on. `smartLink.getRedirectUrl()` returns the resolved destination directly and bypasses click tracking.
 
 Example custom redirect template:
 
@@ -133,12 +141,12 @@ Example custom redirect template:
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0;url={{ smartLink.getUrl() }}">
+    <meta http-equiv="refresh" content="0;url={{ goUrl }}">
     <title>Redirecting...</title>
 </head>
 <body>
     <p>Redirecting to {{ smartLink.title }}...</p>
-    <p><a href="{{ smartLink.getUrl() }}">Click here if not redirected</a></p>
+    <p><a href="{{ goUrl }}">Click here if not redirected</a></p>
 </body>
 </html>
 ```

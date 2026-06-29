@@ -17,7 +17,7 @@ You create and manage smart links in **SmartLink Manager** in the Craft control 
 
 ## Creating and Editing Smart Links
 
-Go to **SmartLink Manager → New Smart Link** to create a link.
+Go to **SmartLink Manager → New SmartLink** to create a link.
 
 ![Creating a smart link in the Craft control panel](images/smart-links-create.webp)
 
@@ -124,9 +124,17 @@ The following variables are available in the redirect template:
 
 | Variable | Type | Description |
 |----------|------|-------------|
-| `smartLink` | `SmartLink` | The smart link element |
-| `device` | `DeviceInfo` | Detected device information |
-| `language` | `string\|null` | Detected language code |
+| `smartLink` | `SmartLink` | The smart link element being followed |
+| `device` | `DeviceInfo` | The detected device information |
+| `language` | `string\|null` | Detected language code, or `null` if undetected |
+| `goUrl` | `string` | Tracked URL for the auto-detected platform (the same value as `goUrls.auto`). Use it for an automatic redirect so the click is still counted. |
+| `goUrls` | `array` | Tracked URLs keyed by platform: `auto`, `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one routes through the `smartlink-manager/redirect/go/{slug}/{platform}` hop that records the click server-side before redirecting. |
+| `source` | `string` | Traffic source for this view: `direct` or `qr` (from the `?src=` query parameter). |
+| `eventType` | `string` | The event name passed to SEOmatic tracking — `redirect` on the landing page. |
+| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL. |
+
+> [!IMPORTANT]
+> Point your platform buttons and any automatic redirect at the `goUrls` (or `goUrl`) values, **not** `smartLink.getUrl()` — the `goUrls` route through the tracked hop so the click is recorded before the visitor is sent on. See [Device Detection](device-detection.md#redirect-template-variables) for a complete custom-template example.
 
 ## Querying Smart Links in Templates
 

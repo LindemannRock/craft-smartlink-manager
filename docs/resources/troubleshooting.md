@@ -179,7 +179,7 @@ If a date-format setting does not appear to change the index:
 
 1. **Use the generated URLs from the controller.** Custom redirect templates should use `goUrl` for auto-redirects and `goUrls.ios`, `goUrls.android`, `goUrls.fallback`, etc. for buttons. Do not rebuild action URLs manually in Twig.
 
-2. **Check debug mode in development.** When `devMode` is enabled, add `?debug=1` to a rendered smart link URL. The shipped redirect template logs the generated `goUrl` in the browser console, so you can confirm custom domains and multisite site parameters before the final redirect runs.
+2. **Check debug mode in development.** When `devMode` is enabled, add `?debug=1` to a rendered smart link URL to stop the browser before the second hop. The shipped redirect template logs the generated `goUrl` in the browser console, so you can confirm custom domains and multisite site parameters before the final redirect runs.
 
 3. **Check your base URL setting.** If `smartlinkBaseUrl` has no `{siteHandle}`, `{siteId}`, or `{siteUid}` token, SmartLink Manager adds the current link's site as a query parameter on generated tracking URLs.
 

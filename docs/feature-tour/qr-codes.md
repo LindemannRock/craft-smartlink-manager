@@ -35,7 +35,7 @@ On the smart link edit page, toggle **QR Code Enabled** to activate QR endpoints
 
 ## Customization Options
 
-QR code appearance is set globally in **Settings → QR Codes** and can be overridden per link on the smart link edit page. Per-link values left at `null` inherit from the global defaults.
+QR code appearance is set globally in **Settings → QR Codes** and can be overridden per link on the smart link edit page. Per-link values left at `null` inherit from the global defaults. A live preview updates as you change the size, colors, and styles — on both the settings page and the smart link edit page — so you can see the result before saving.
 
 ![Customizing QR code appearance in SmartLink Manager settings](images/qr-codes-customize.webp)
 
@@ -48,7 +48,7 @@ QR code appearance is set globally in **Settings → QR Codes** and can be overr
 | `defaultQrMargin` | `int` | `4` | Quiet zone in modules (0–10) |
 | `defaultQrErrorCorrection` | `string` | `'M'` | Error correction: `'L'` (7%), `'M'` (15%), `'Q'` (25%), `'H'` (30%) |
 | `qrModuleStyle` | `string` | `'square'` | Module shape: `'square'`, `'dots'`, `'rounded'` |
-| `qrEyeStyle` | `string` | `'square'` | Finder pattern shape: `'square'`, `'rounded'`, `'leaf'` |
+| `qrEyeStyle` | `string` | `'square'` | Finder pattern shape: `'square'`, `'rounded'`, `'pointed'` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (hex). Falls back to foreground color |
 
 ### Module Styles
@@ -65,7 +65,7 @@ QR code appearance is set globally in **Settings → QR Codes** and can be overr
 |-------|-----------|
 | `square` | Classic square finder pattern (default) |
 | `rounded` | Rounded finder pattern |
-| `leaf` | Leaf-shaped finder pattern |
+| `pointed` | Pointed-corner finder pattern |
 
 ## Logo Overlay
 

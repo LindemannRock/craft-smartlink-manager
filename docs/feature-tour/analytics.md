@@ -148,7 +148,7 @@ Export click data from the analytics dashboard using the **Export** button. Thre
 | **Excel** | Formatted spreadsheet with column headers |
 | **JSON** | API consumers, programmatic processing |
 
-Exports respect the currently active date range and site filters. The `exportAnalytics` permission is required to export. Export rows include traffic type, robot and system-agent flags, bot name, bot category, and bot producer when those values are available.
+Exports respect the currently active date range and site filters. The `exportAnalytics` permission is required to export. Export rows include device brand and model, OS, browser with version and engine, detected language, traffic type, robot and system-agent flags, bot name, bot category, bot producer, and the user agent — plus optional country and city when geolocation is enabled, and SmartLink-specific columns such as click type and platform/button.
 
 ## Clearing Analytics Data
 

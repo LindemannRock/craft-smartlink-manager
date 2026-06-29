@@ -35,6 +35,8 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `logLevel` | `string` | `'error'` | Log level: `error`, `warning`, `info`, `debug`. Debug requires `devMode` |
 | `itemsPerPage` | `int` | `100` | Items per page in element index (10–500) |
 
+> `redirectTemplate` / `qrTemplate` point at the templates SmartLink Manager renders. To override them — where to copy the reference templates and the variables each one receives — see [Custom templates](../developers/custom-templates.md).
+
 ## QR Code Settings
 
 ### Appearance
@@ -48,7 +50,7 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `defaultQrMargin` | `int` | `4` | QR code quiet zone in modules (0–10) |
 | `defaultQrErrorCorrection` | `string` | `'M'` | Error correction level: `L` (7%), `M` (15%), `Q` (25%), `H` (30%) |
 | `qrModuleStyle` | `string` | `'square'` | Module shape: `square`, `rounded`, `dots` |
-| `qrEyeStyle` | `string` | `'square'` | Eye shape: `square`, `rounded`, `leaf` |
+| `qrEyeStyle` | `string` | `'square'` | Eye shape: `square`, `rounded`, `pointed` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (`null` = same as foreground color) |
 
 ### Logo

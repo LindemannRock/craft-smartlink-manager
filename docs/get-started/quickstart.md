@@ -31,7 +31,7 @@ SMARTLINK_MANAGER_IP_SALT=your-generated-salt-here
 ## 3. Create Your First Smart Link
 
 1. Go to **SmartLink Manager** in the Craft control panel
-2. Click **New Smart Link**
+2. Click **New SmartLink**
 3. Enter a **Title** and a unique **Slug** (e.g., `my-app`)
 4. Add a **Fallback URL** — this is where users land when no platform-specific URL matches
 
