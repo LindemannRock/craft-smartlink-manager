@@ -377,7 +377,11 @@ class SmartlinksController extends Controller
             'smartLink'
         );
         } catch (\Exception $e) {
-            $this->logError('Smart link save error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            $context = ['error' => $e->getMessage()];
+            if (Craft::$app->getConfig()->getGeneral()->devMode) {
+                $context['trace'] = $e->getTraceAsString();
+            }
+            $this->logError('Smart link save error', $context);
 
             // Return error response
             $errorMsg = Craft::$app->getConfig()->getGeneral()->devMode

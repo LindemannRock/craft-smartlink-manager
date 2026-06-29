@@ -330,7 +330,7 @@ class RedirectController extends Controller
             // Only log if SEOmatic integration is enabled
             $seomatic = SmartLinkManager::$plugin->integration->getIntegration('seomatic');
             if ($seomatic && $seomatic->isAvailable() && $seomatic->isEnabled()) {
-                $this->logInfo("SEOmatic client-side tracking: {$clickType} event for '{$smartLink->slug}'", [
+                $this->logDebug("SEOmatic client-side tracking: {$clickType} event for '{$smartLink->slug}'", [
                     'event_type' => $clickType === 'redirect' ? 'redirect' : 'button_click',
                     'slug' => $smartLink->slug,
                     'platform' => $normalizedPlatform,

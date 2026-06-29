@@ -74,7 +74,7 @@ class AnalyticsTrackingService
      */
     public function saveAnalytics(int $linkId, array $deviceInfo, array $metadata = []): bool
     {
-        $this->logInfo('Saving Smart Link analytics', ['linkId' => $linkId]);
+        $this->logDebug('Saving Smart Link analytics', ['linkId' => $linkId]);
 
         try {
             $db = Craft::$app->getDb();

@@ -124,8 +124,7 @@ class QrCodeController extends Controller
         // Generate full URL for the smart link with QR tracking parameter
         $url = $smartLink->getRedirectUrl();
 
-        // Debug logging
-        $this->logInfo('SmartLink redirect URL (display)', ['url' => $url]);
+        $this->logDebug('SmartLink redirect URL (display)', ['url' => $url]);
 
         // The redirect URL should already be a full URL from UrlHelper::siteUrl()
         // Add the QR source parameter to track QR code scans
@@ -135,7 +134,7 @@ class QrCodeController extends Controller
         // Note: Tracking is handled client-side via JavaScript (redirect-tracking.js)
         // QR codes contain static URLs - no cache busting needed
 
-        $this->logInfo('Full URL for QR', ['fullUrl' => $fullUrl]);
+        $this->logDebug('Full URL for QR', ['fullUrl' => $fullUrl]);
 
         try {
             $qrCode = SmartLinkManager::$plugin->qrCode->generateQrCode($fullUrl, $options);
@@ -244,8 +243,7 @@ class QrCodeController extends Controller
             // Generate full URL for the smart link with QR tracking parameter
             $url = $smartLink->getRedirectUrl();
 
-            // Debug logging
-            $this->logInfo('SmartLink redirect URL (generate)', ['url' => $url]);
+            $this->logDebug('SmartLink redirect URL (generate)', ['url' => $url]);
 
             // The redirect URL should already be a full URL from UrlHelper::siteUrl()
             // Add the QR source parameter to track QR code scans
@@ -255,7 +253,7 @@ class QrCodeController extends Controller
             // Note: Tracking is handled client-side via JavaScript (redirect-tracking.js)
             // QR codes contain static URLs - no cache busting needed
 
-            $this->logInfo('Full URL for QR', ['fullUrl' => $fullUrl]);
+            $this->logDebug('Full URL for QR', ['fullUrl' => $fullUrl]);
         }
 
         // Get parameters

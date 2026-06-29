@@ -165,7 +165,12 @@ class AnalyticsController extends Controller
                 'data' => $data,
             ]);
         } catch (\Exception $e) {
-            $this->logError('Analytics getData error', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            $context = ['error' => $e->getMessage()];
+            if (Craft::$app->getConfig()->getGeneral()->devMode) {
+                $context['trace'] = $e->getTraceAsString();
+            }
+            $this->logError('Analytics getData error', $context);
+
             return $this->asJson([
                 'success' => false,
                 'error' => Craft::$app->getConfig()->getGeneral()->devMode
