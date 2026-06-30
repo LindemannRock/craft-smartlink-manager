@@ -34,12 +34,13 @@ class FrontendService extends Component
     }
 
     /**
-     * Render the cache-safe auto-redirect resolver script
+     * Render the client-side tracked redirect script.
      *
      * @param string $autoRedirectUrl Server-side resolver URL
+     * @param bool|null $allowDebugOverride Whether ?debug=1 should stop redirects; null limits it to devMode
      * @return Markup|null HTML script tag or null if rendering fails
      */
-    public function renderAutoRedirectScript(string $autoRedirectUrl): ?Markup
+    public function renderRedirectScript(string $autoRedirectUrl, ?bool $allowDebugOverride = null): ?Markup
     {
         $view = Craft::$app->getView();
         $oldMode = $view->getTemplateMode();
@@ -49,12 +50,12 @@ class FrontendService extends Component
 
             $html = $view->renderTemplate('smartlink-manager/_frontend/auto-redirect', [
                 'autoRedirectUrl' => $autoRedirectUrl,
-                'skipDebugRedirect' => Craft::$app->getConfig()->getGeneral()->devMode,
+                'skipDebugRedirect' => $allowDebugOverride ?? Craft::$app->getConfig()->getGeneral()->devMode,
             ]);
 
             return new Markup($html, 'UTF-8');
         } catch (\Throwable $e) {
-            $this->logError('Failed to render auto-redirect script', [
+            $this->logError('Failed to render redirect script', [
                 'error' => $e->getMessage(),
                 'autoRedirectUrl' => $autoRedirectUrl,
             ]);

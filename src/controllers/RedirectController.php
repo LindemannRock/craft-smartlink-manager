@@ -141,7 +141,10 @@ class RedirectController extends Controller
         $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
         $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
         $goUrls = $this->buildTrackedGoUrls($smartLink, $source);
+        $buttonGoUrls = $goUrls;
+        unset($buttonGoUrls['auto']);
         $autoRedirectUrl = $this->buildAutoRedirectUrl($smartLink);
+        $smartLink->setAutoRedirectScriptUrl($autoRedirectUrl);
 
         SmartLinkManager::$plugin->integration->prepareSeomaticMetadata($smartLink);
 
@@ -149,11 +152,8 @@ class RedirectController extends Controller
             'smartLink' => $smartLink,
             'device' => $deviceInfo,
             'language' => $language,
-            'goUrl' => $goUrls['auto'],
-            'goUrls' => $goUrls,
-            'autoRedirectUrl' => $autoRedirectUrl,
+            'goUrls' => $buttonGoUrls,
             'source' => $source,
-            'eventType' => 'redirect',
             'autoRedirect' => $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
         ]);
         $this->applyNoStoreHeaders($response);

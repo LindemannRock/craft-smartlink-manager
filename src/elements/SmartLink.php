@@ -131,6 +131,10 @@ class SmartLink extends Element
      */
     public bool $hideTitle = false;
 
+    /**
+     * @var string|null Runtime auto-redirect resolver URL prepared by the redirect controller
+     */
+    private ?string $autoRedirectScriptUrl = null;
 
     /**
      * @var bool QR code enabled
@@ -1019,15 +1023,52 @@ class SmartLink extends Element
     }
 
     /**
-     * Render the cache-safe auto-redirect resolver script for this smart link
+     * Render SEOmatic redirect-page tracking code for this smart link.
+     *
+     * @return \Twig\Markup|null
+     * @since 5.33.0
+     */
+    public function renderRedirectSeomaticTracking(): ?\Twig\Markup
+    {
+        return $this->renderSeomaticTracking('redirect');
+    }
+
+    /**
+     * Render SEOmatic QR scan tracking code for this smart link.
+     *
+     * @return \Twig\Markup|null
+     * @since 5.33.0
+     */
+    public function renderQrSeomaticTracking(): ?\Twig\Markup
+    {
+        return $this->renderSeomaticTracking('qr_scan');
+    }
+
+    /**
+     * Render the client-side tracked redirect script for this smart link.
+     *
+     * @param bool|null $allowDebugOverride Whether ?debug=1 should stop redirects; null limits it to devMode
+     * @return \Twig\Markup|null HTML script tag or null if rendering fails
+     * @since 5.33.0
+     */
+    public function renderRedirectScript(?bool $allowDebugOverride = null): ?\Twig\Markup
+    {
+        if ($this->autoRedirectScriptUrl === null) {
+            return null;
+        }
+
+        return SmartLinkManager::$plugin->frontend->renderRedirectScript($this->autoRedirectScriptUrl, $allowDebugOverride);
+    }
+
+    /**
+     * Set the runtime auto-redirect resolver URL used by renderRedirectScript().
      *
      * @param string $autoRedirectUrl Server-side resolver URL
-     * @return \Twig\Markup|null HTML script tag or null if rendering fails
-     * @since 5.31.1
+     * @since 5.32.0
      */
-    public function renderAutoRedirectScript(string $autoRedirectUrl): ?\Twig\Markup
+    public function setAutoRedirectScriptUrl(string $autoRedirectUrl): void
     {
-        return SmartLinkManager::$plugin->frontend->renderAutoRedirectScript($autoRedirectUrl);
+        $this->autoRedirectScriptUrl = $autoRedirectUrl;
     }
 
     /**

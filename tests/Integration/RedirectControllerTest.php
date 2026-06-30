@@ -64,31 +64,24 @@ final class RedirectControllerTest extends TestCase
             self::assertSame(200, $response->getStatusCode());
             self::assertSame('rendered:smartlink-manager/redirect', $response->content);
             self::assertSame('no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
-            self::assertSame('redirect', $controller->lastVariables['eventType'] ?? null);
+            self::assertArrayNotHasKey('eventType', $controller->lastVariables);
             self::assertSame('direct', $controller->lastVariables['source'] ?? null);
-            self::assertArrayHasKey('goUrl', $controller->lastVariables);
-            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['goUrl']);
+            self::assertArrayNotHasKey('goUrl', $controller->lastVariables);
+            self::assertArrayNotHasKey('auto', $controller->lastVariables['goUrls'] ?? []);
+            self::assertArrayNotHasKey('autoRedirectUrl', $controller->lastVariables);
+            $renderedSmartLink = $controller->lastVariables['smartLink'] ?? null;
+            self::assertInstanceOf(SmartLink::class, $renderedSmartLink);
+            $autoRedirectScript = (string)$renderedSmartLink->renderRedirectScript();
+            self::assertStringContainsString('smart.example', $autoRedirectScript);
             self::assertStringContainsString(
-                'actions/smartlink-manager/redirect/go',
-                (string) $controller->lastVariables['goUrl']
+                'actions\\/smartlink-manager\\/redirect\\/auto-redirect',
+                $autoRedirectScript
             );
-            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('platform=auto', (string) $controller->lastVariables['goUrl']);
-            self::assertStringNotContainsString('craftcms.ddev.site', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('site=en', (string) $controller->lastVariables['goUrl']);
-            self::assertArrayHasKey('autoRedirectUrl', $controller->lastVariables);
-            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringContainsString(
-                'actions/smartlink-manager/redirect/auto-redirect',
-                (string) $controller->lastVariables['autoRedirectUrl']
-            );
-            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringContainsString('site=en', (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringNotContainsString('/en/index.php', (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringNotContainsString("/smartlink-manager/redirect/auto/{$link->slug}", (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringNotContainsString('src=', (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertSame($controller->lastVariables['goUrl'], $controller->lastVariables['goUrls']['auto'] ?? null);
+            self::assertStringContainsString('slug=' . $link->slug, $autoRedirectScript);
+            self::assertStringContainsString('site=en', $autoRedirectScript);
+            self::assertStringNotContainsString('\\/en\\/index.php', $autoRedirectScript);
+            self::assertStringNotContainsString("smartlink-manager\\/redirect\\/auto\\/{$link->slug}", $autoRedirectScript);
+            self::assertStringNotContainsString('src=', $autoRedirectScript);
             self::assertStringContainsString(
                 'actions/smartlink-manager/redirect/go',
                 (string) ($controller->lastVariables['goUrls']['ios'] ?? '')
@@ -117,16 +110,16 @@ final class RedirectControllerTest extends TestCase
             $response = $controller->actionIndex($link->slug);
 
             self::assertSame(200, $response->getStatusCode());
-            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('actions/smartlink-manager/redirect/go', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('platform=auto', (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('site=' . $site->handle, (string) $controller->lastVariables['goUrl']);
-            self::assertStringContainsString('src=direct', (string) $controller->lastVariables['goUrl']);
-            self::assertStringStartsWith('https://smart.example/', (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringContainsString('actions/smartlink-manager/redirect/auto-redirect', (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringContainsString('slug=' . $link->slug, (string) $controller->lastVariables['autoRedirectUrl']);
-            self::assertStringContainsString('site=' . $site->handle, (string) $controller->lastVariables['autoRedirectUrl']);
+            self::assertArrayNotHasKey('goUrl', $controller->lastVariables);
+            self::assertArrayNotHasKey('auto', $controller->lastVariables['goUrls'] ?? []);
+            self::assertArrayNotHasKey('autoRedirectUrl', $controller->lastVariables);
+            $renderedSmartLink = $controller->lastVariables['smartLink'] ?? null;
+            self::assertInstanceOf(SmartLink::class, $renderedSmartLink);
+            $autoRedirectScript = (string)$renderedSmartLink->renderRedirectScript();
+            self::assertStringContainsString('smart.example', $autoRedirectScript);
+            self::assertStringContainsString('actions\\/smartlink-manager\\/redirect\\/auto-redirect', $autoRedirectScript);
+            self::assertStringContainsString('slug=' . $link->slug, $autoRedirectScript);
+            self::assertStringContainsString('site=' . $site->handle, $autoRedirectScript);
         });
     }
 
@@ -178,8 +171,15 @@ final class RedirectControllerTest extends TestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('qr', $controller->lastVariables['source'] ?? null);
-        self::assertStringContainsString('src=qr', (string) $controller->lastVariables['goUrl']);
-        self::assertStringNotContainsString('src=qr', (string) $controller->lastVariables['autoRedirectUrl']);
+        self::assertArrayNotHasKey('goUrl', $controller->lastVariables);
+        self::assertArrayNotHasKey('auto', $controller->lastVariables['goUrls'] ?? []);
+        self::assertArrayNotHasKey('autoRedirectUrl', $controller->lastVariables);
+        $renderedSmartLink = $controller->lastVariables['smartLink'] ?? null;
+        self::assertInstanceOf(SmartLink::class, $renderedSmartLink);
+        self::assertStringNotContainsString(
+            'src=qr',
+            (string)$renderedSmartLink->renderRedirectScript()
+        );
     }
 
     public function testAutoRedirectResolverReturnsTrackedGoUrlForMobile(): void
