@@ -12,6 +12,7 @@ namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use Craft;
 use craft\console\Request as ConsoleRequest;
+use craft\console\User as ConsoleUser;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use lindemannrock\smartlinkmanager\utilities\SmartLinkManagerUtility;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -25,6 +26,27 @@ use PHPUnit\Framework\Attributes\CoversClass;
 final class UtilityOverviewSiteFilterTest extends TestCase
 {
     private const TEST_SALT = '0123456789abcdef0123456789abcdef';
+
+    private mixed $originalUser = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->originalUser = Craft::$app->getUser();
+        Craft::$app->set('user', new UtilitySiteFilterUser($this->allEditSitePermissions()));
+        $this->resetEditableSiteIds();
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->originalUser !== null) {
+            Craft::$app->set('user', $this->originalUser);
+            $this->resetEditableSiteIds();
+        }
+
+        parent::tearDown();
+    }
 
     public function testMissingAndAllSiteParamUseAllEnabledSites(): void
     {
@@ -81,6 +103,30 @@ final class UtilityOverviewSiteFilterTest extends TestCase
 
             self::assertSame('all', $selection['selectedSiteHandle']);
             self::assertSame([(int) $enabledSite->id], $selection['siteIds']);
+        });
+    }
+
+    public function testSiteRestrictedIdentityCannotSelectUneditableEnabledSite(): void
+    {
+        $sites = Craft::$app->getSites()->getAllSites();
+        if (count($sites) < 2) {
+            self::markTestSkipped('Editable-site fallback requires at least two Craft sites.');
+        }
+
+        $editableSite = $sites[0];
+        $uneditableSite = $sites[1];
+
+        $this->withSettings(['enabledSites' => [(int) $editableSite->id, (int) $uneditableSite->id]], function() use ($editableSite, $uneditableSite): void {
+            $this->withEditableSitePermissions([$editableSite->uid], function() use ($editableSite, $uneditableSite): void {
+                $allowed = $this->withSiteQuery(['site' => $editableSite->handle], fn(): array => $this->siteSelection());
+                self::assertSame($editableSite->handle, $allowed['selectedSiteHandle']);
+                self::assertSame([(int) $editableSite->id], $allowed['siteIds']);
+
+                $blocked = $this->withSiteQuery(['site' => $uneditableSite->handle], fn(): array => $this->siteSelection());
+                self::assertSame('all', $blocked['selectedSiteHandle']);
+                self::assertSame([(int) $editableSite->id], $blocked['siteIds']);
+                self::assertArrayNotHasKey($uneditableSite->handle, $blocked['siteOptions']);
+            });
         });
     }
 
@@ -174,7 +220,9 @@ final class UtilityOverviewSiteFilterTest extends TestCase
         self::assertStringContainsString("margin: 'both'", $template);
         self::assertStringContainsString('<br>', $template);
         self::assertStringContainsString("Craft::t('lindemannrock-base', 'All Sites')", $utility);
+        self::assertStringContainsString('SmartLinkManager::$plugin->getEnabledSites()', $utility);
         self::assertStringNotContainsString("Craft::t('smartlink-manager', 'All Sites')", $utility);
+        self::assertStringNotContainsString('$settings->getEnabledSiteIds()', $utility);
     }
 
     public function testCacheCountsAndServdPurgeRemainGlobal(): void
@@ -214,6 +262,17 @@ final class UtilityOverviewSiteFilterTest extends TestCase
     }
 
     /**
+     * @return string[]
+     */
+    private function allEditSitePermissions(): array
+    {
+        return array_map(
+            static fn($site): string => "editSite:{$site->uid}",
+            Craft::$app->getSites()->getAllSites(),
+        );
+    }
+
+    /**
      * @param array<string, string> $queryParams
      * @template T
      * @param callable(): T $callback
@@ -229,6 +288,38 @@ final class UtilityOverviewSiteFilterTest extends TestCase
         } finally {
             Craft::$app->set('request', $request);
         }
+    }
+
+    /**
+     * @param string[] $siteUids
+     * @template T
+     * @param callable(): T $callback
+     * @return T
+     */
+    private function withEditableSitePermissions(array $siteUids, callable $callback): mixed
+    {
+        $user = Craft::$app->getUser();
+        $permissions = array_map(
+            static fn(string $siteUid): string => "editSite:{$siteUid}",
+            $siteUids,
+        );
+
+        Craft::$app->set('user', new UtilitySiteFilterUser($permissions));
+        $this->resetEditableSiteIds();
+
+        try {
+            return $callback();
+        } finally {
+            Craft::$app->set('user', $user);
+            $this->resetEditableSiteIds();
+        }
+    }
+
+    private function resetEditableSiteIds(): void
+    {
+        $property = new \ReflectionProperty(Craft::$app->getSites(), '_editableSiteIds');
+        $property->setAccessible(true);
+        $property->setValue(Craft::$app->getSites(), null);
     }
 
     /**
@@ -288,5 +379,31 @@ final class UtilitySiteFilterRequest extends ConsoleRequest
     public function getParam($name, $defaultValue = null): mixed
     {
         return $this->getQueryParam($name, $defaultValue);
+    }
+}
+
+final class UtilitySiteFilterUser extends ConsoleUser
+{
+    /**
+     * @param string[] $permissions
+     */
+    public function __construct(private readonly array $permissions)
+    {
+        parent::__construct();
+    }
+
+    public function checkPermission(string $permissionName): bool
+    {
+        return in_array(strtolower($permissionName), array_map('strtolower', $this->permissions), true);
+    }
+
+    public function getId(): ?int
+    {
+        return 1;
+    }
+
+    public function getIsGuest(): bool
+    {
+        return false;
     }
 }

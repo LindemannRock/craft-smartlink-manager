@@ -258,19 +258,13 @@ class SmartLinkManagerUtility extends Utility
      */
     private static function siteSelection(): array
     {
-        $settings = SmartLinkManager::$plugin->getSettings();
-        $enabledSiteIds = $settings->getEnabledSiteIds();
+        $enabledSites = SmartLinkManager::$plugin->getEnabledSites();
         $siteOptions = [
             'all' => Craft::t('lindemannrock-base', 'All Sites'),
         ];
         $sitesByHandle = [];
 
-        foreach ($enabledSiteIds as $siteId) {
-            $site = Craft::$app->getSites()->getSiteById((int) $siteId);
-            if (!$site instanceof Site) {
-                continue;
-            }
-
+        foreach ($enabledSites as $site) {
             $siteOptions[$site->handle] = $site->name ?: $site->handle;
             $sitesByHandle[$site->handle] = $site;
         }
