@@ -629,7 +629,6 @@ class SmartLinkManager extends Plugin
             'smartlink-manager/settings/general' => 'smartlink-manager/settings/general',
             'smartlink-manager/settings/analytics' => 'smartlink-manager/settings/analytics',
             'smartlink-manager/settings/integrations' => 'smartlink-manager/settings/integrations',
-            'smartlink-manager/settings/export' => 'smartlink-manager/settings/export',
             'smartlink-manager/settings/qr-code' => 'smartlink-manager/settings/qr-code',
             'smartlink-manager/settings/behavior' => 'smartlink-manager/settings/behavior',
             'smartlink-manager/settings/interface' => 'smartlink-manager/settings/interface',

@@ -135,23 +135,6 @@ class SettingsController extends Controller
     }
 
     /**
-     * Export settings
-     *
-     * @return Response
-     */
-    public function actionExport(): Response
-    {
-        // Get settings from plugin (includes config overrides)
-        $plugin = SmartLinkManager::getInstance();
-        $settings = $plugin->getSettings();
-
-        return $this->renderTemplate('smartlink-manager/settings/export', [
-            'settings' => $settings,
-            'readOnly' => $this->readOnly,
-        ]);
-    }
-
-    /**
      * QR Code settings
      *
      * @return Response
@@ -758,7 +741,6 @@ class SettingsController extends Controller
             'qr-code',
             'behavior',
             'interface',
-            'export',
             'cache',
             'integrations',
             'field-layout',
@@ -800,10 +782,6 @@ class SettingsController extends Controller
                 'seomaticTrackingEvents',
                 'seomaticEventPrefix',
                 'redirectManagerEvents',
-            ],
-            'export' => [
-                'includeDisabledInExport',
-                'includeExpiredInExport',
             ],
             'qr-code' => [
                 'defaultQrSize',

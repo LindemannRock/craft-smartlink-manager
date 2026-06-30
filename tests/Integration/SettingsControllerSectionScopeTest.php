@@ -53,10 +53,6 @@ final class SettingsControllerSectionScopeTest extends TestCase
                 'seomaticEventPrefix',
                 'redirectManagerEvents',
             ],
-            'export' => [
-                'includeDisabledInExport',
-                'includeExpiredInExport',
-            ],
             'qr-code' => [
                 'defaultQrSize',
                 'defaultQrFormat',

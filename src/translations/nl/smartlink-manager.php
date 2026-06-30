@@ -294,9 +294,6 @@ return [
     'Click to view QR code page' => 'Klik om QR-code pagina te bekijken',
     'Toggle preview' => 'Voorbeeld in-/uitschakelen',
     'QR code settings reset to defaults' => 'QR-code instellingen teruggezet naar standaard',
-    'Performance & Caching' => 'Prestaties en caching',
-    'Configure QR code caching to improve performance and reduce server load.' => 'Configureer QR-code caching om prestaties te verbeteren en de serverbelasting te verminderen.',
-    'Go to Cache Settings' => 'Naar cache-instellingen',
     'Square' => 'Vierkant',
     'Rounded' => 'Afgerond',
     'Dots' => 'Punten',
@@ -398,14 +395,6 @@ return [
     '{count} days' => '{count} dagen',
 
     // Settings: Export
-    'Export Settings' => 'Exportinstellingen',
-    'Analytics Export Options' => 'Analyse-exportopties',
-    'Include Disabled Links in Export' => 'Uitgeschakelde links opnemen in export',
-    'Include Disabled {pluginName} in Export' => 'Uitgeschakelde {pluginName} opnemen in export',
-    'When enabled, analytics exports will include data from disabled {pluginName}' => 'Wanneer ingeschakeld, bevatten analyse-exports gegevens van uitgeschakelde {pluginName}',
-    'Include Expired Links in Export' => 'Verlopen links opnemen in export',
-    'Include Expired {pluginName} in Export' => 'Verlopen {pluginName} opnemen in export',
-    'When enabled, analytics exports will include data from expired {pluginName}' => 'Wanneer ingeschakeld, bevatten analyse-exports gegevens van verlopen {pluginName}',
     'Export as CSV' => 'Exporteren als CSV',
 
     // Settings: Interface
@@ -813,8 +802,6 @@ return [
     'This is being overridden by the <code>deviceDetectionCacheDuration</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>deviceDetectionCacheDuration</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>languageDetectionMethod</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>cacheStorageMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>cacheStorageMethod</code> in <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>includeDisabledInExport</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>includeDisabledInExport</code> in <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>includeExpiredInExport</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>includeExpiredInExport</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enabledIntegrations</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>enabledIntegrations</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>seomaticTrackingEvents</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>seomaticTrackingEvents</code> in <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>seomaticEventPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'Dit wordt overschreven door de instelling <code>seomaticEventPrefix</code> in <code>config/smartlink-manager.php</code>.',

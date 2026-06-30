@@ -294,9 +294,6 @@ return [
     'Click to view QR code page' => 'クリックして QR コードページを表示する',
     'Toggle preview' => 'プレビューを切り替える',
     'QR code settings reset to defaults' => 'QR コードの設定をデフォルトにリセットしました',
-    'Performance & Caching' => 'パフォーマンスとキャッシュ',
-    'Configure QR code caching to improve performance and reduce server load.' => 'パフォーマンスを向上させサーバー負荷を軽減するために QR コードのキャッシュを設定してください。',
-    'Go to Cache Settings' => 'キャッシュ設定に移動する',
     'Square' => '正方形',
     'Rounded' => '角丸',
     'Dots' => 'ドット',
@@ -398,14 +395,6 @@ return [
     '{count} days' => '{count} 日',
 
     // Settings: Export
-    'Export Settings' => 'エクスポート設定',
-    'Analytics Export Options' => 'アナリティクスエクスポートオプション',
-    'Include Disabled Links in Export' => '無効なリンクをエクスポートに含める',
-    'Include Disabled {pluginName} in Export' => '無効な {pluginName} をエクスポートに含める',
-    'When enabled, analytics exports will include data from disabled {pluginName}' => '有効にすると、アナリティクスのエクスポートに無効な {pluginName} のデータが含まれます',
-    'Include Expired Links in Export' => '期限切れのリンクをエクスポートに含める',
-    'Include Expired {pluginName} in Export' => '期限切れの {pluginName} をエクスポートに含める',
-    'When enabled, analytics exports will include data from expired {pluginName}' => '有効にすると、アナリティクスのエクスポートに期限切れの {pluginName} のデータが含まれます',
     'Export as CSV' => 'CSV としてエクスポートする',
 
     // Settings: Interface
@@ -813,8 +802,6 @@ return [
     'This is being overridden by the <code>deviceDetectionCacheDuration</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>deviceDetectionCacheDuration</code> 設定で上書きされています。',
     'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>languageDetectionMethod</code> 設定で上書きされています。',
     'This is being overridden by the <code>cacheStorageMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>cacheStorageMethod</code> 設定で上書きされています。',
-    'This is being overridden by the <code>includeDisabledInExport</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>includeDisabledInExport</code> 設定で上書きされています。',
-    'This is being overridden by the <code>includeExpiredInExport</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>includeExpiredInExport</code> 設定で上書きされています。',
     'This is being overridden by the <code>enabledIntegrations</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>enabledIntegrations</code> 設定で上書きされています。',
     'This is being overridden by the <code>seomaticTrackingEvents</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>seomaticTrackingEvents</code> 設定で上書きされています。',
     'This is being overridden by the <code>seomaticEventPrefix</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>seomaticEventPrefix</code> 設定で上書きされています。',

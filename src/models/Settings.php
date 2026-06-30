@@ -69,16 +69,6 @@ class Settings extends Model
     public int $analyticsRetention = 90;
 
     /**
-     * @var bool Include disabled smart links in analytics exports
-     */
-    public bool $includeDisabledInExport = false;
-
-    /**
-     * @var bool Include expired smart links in analytics exports
-     */
-    public bool $includeExpiredInExport = false;
-
-    /**
      * @var bool Anonymize IP addresses before storing (masks last octet for IPv4, last 80 bits for IPv6)
      */
     public bool $anonymizeIpAddress = false;
@@ -309,8 +299,6 @@ class Settings extends Model
         return [
             'usePrefix',
             'enableAnalytics',
-            'includeDisabledInExport',
-            'includeExpiredInExport',
             'anonymizeIpAddress',
             'enableQrCodeCache',
             'enableGeoDetection',
@@ -421,7 +409,7 @@ class Settings extends Model
             [['qrPrefix'], RoutePrefixValidator::class, 'translationCategory' => 'smartlink-manager'],
             [['slugPrefix'], 'validateSlugPrefix'],
             [['qrPrefix'], 'validateQrPrefix'],
-            [['enableAnalytics', 'enableGeoDetection', 'enableQrCodeCache', 'cacheDeviceDetection', 'includeDisabledInExport', 'includeExpiredInExport', 'anonymizeIpAddress'], 'boolean'],
+            [['enableAnalytics', 'enableGeoDetection', 'enableQrCodeCache', 'cacheDeviceDetection', 'anonymizeIpAddress'], 'boolean'],
             [['analyticsRetention', 'defaultQrSize', 'qrCodeCacheDuration', 'deviceDetectionCacheDuration'], 'integer'],
             [['analyticsRetention'], 'integer', 'min' => 0, 'max' => 3650], // 0 for unlimited, up to 10 years
             [['defaultQrSize'], 'integer', 'min' => 100, 'max' => 1000],
@@ -877,8 +865,6 @@ class Settings extends Model
             'enableAnalytics' => Craft::t('smartlink-manager', 'Enable Analytics'),
             'analyticsRetention' => Craft::t('smartlink-manager', 'Analytics Retention (days)'),
             'anonymizeIpAddress' => Craft::t('smartlink-manager', 'Anonymize IP Addresses'),
-            'includeDisabledInExport' => Craft::t('smartlink-manager', 'Include Disabled Links in Export'),
-            'includeExpiredInExport' => Craft::t('smartlink-manager', 'Include Expired Links in Export'),
             'defaultQrSize' => Craft::t('smartlink-manager', 'Default QR Code Size'),
             'defaultQrColor' => Craft::t('smartlink-manager', 'Default QR Code Color'),
             'defaultQrBgColor' => Craft::t('smartlink-manager', 'Default QR Background Color'),

@@ -209,9 +209,6 @@ class Install extends Migration
                 'notFoundRedirectUrl' => $this->string()->notNull()->defaultValue('/'),
                 // Interface settings
                 'itemsPerPage' => $this->integer()->notNull()->defaultValue(100),
-                // Export settings
-                'includeDisabledInExport' => $this->boolean()->defaultValue(false),
-                'includeExpiredInExport' => $this->boolean()->notNull()->defaultValue(false),
                 // Integration settings
                 'enabledIntegrations' => $this->text()->null()->comment('JSON array of enabled integration handles'),
                 'redirectManagerEvents' => $this->text()->null()->comment('JSON array of redirect manager event types'),

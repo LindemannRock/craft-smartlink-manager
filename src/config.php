@@ -136,15 +136,6 @@ return [
 
 
         // ========================================
-        // EXPORT SETTINGS
-        // ========================================
-        // Options for analytics exports
-
-        'includeDisabledInExport' => false, // Include disabled smart links in analytics exports
-        'includeExpiredInExport' => false,  // Include expired smart links in analytics exports
-
-
-        // ========================================
         // CACHE SETTINGS
         // ========================================
         // Performance and caching configuration
