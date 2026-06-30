@@ -46,7 +46,7 @@ class SeomaticTrackingTemplateTest extends TestCase
     public function testRedirectTemplatesOwnTrackedAutoNavigation(): void
     {
         $pluginTemplate = (string)file_get_contents(dirname(__DIR__, 2) . '/src/templates/redirect.twig');
-        $autoRedirectTemplate = (string)file_get_contents(dirname(__DIR__, 2) . '/src/templates/_frontend/auto-redirect.twig');
+        $redirectScriptTemplate = (string)file_get_contents(dirname(__DIR__, 2) . '/src/templates/_frontend/redirect.twig');
 
         $this->assertStringContainsString('smartLink.renderRedirectScript()', $pluginTemplate);
         $this->assertStringContainsString('smartLink.renderRedirectSeomaticTracking()', $pluginTemplate);
@@ -63,11 +63,11 @@ class SeomaticTrackingTemplateTest extends TestCase
         $this->assertStringNotContainsString('DEBUG MODE', $pluginTemplate);
         $this->assertStringNotContainsString('debugMode', $pluginTemplate);
 
-        $this->assertStringContainsString('var resolverUrl = new URL({{ autoRedirectUrl|json_encode|raw }}, window.location.href);', $autoRedirectTemplate);
-        $this->assertStringContainsString('fetch(resolverUrl.toString(), {', $autoRedirectTemplate);
-        $this->assertStringContainsString('cache: \'no-store\'', $autoRedirectTemplate);
-        $this->assertStringContainsString('window.location.replace(data.goUrl);', $autoRedirectTemplate);
-        $this->assertStringContainsString('{% if skipDebugRedirect %}', $autoRedirectTemplate);
+        $this->assertStringContainsString('var resolverUrl = new URL({{ autoRedirectUrl|json_encode|raw }}, window.location.href);', $redirectScriptTemplate);
+        $this->assertStringContainsString('fetch(resolverUrl.toString(), {', $redirectScriptTemplate);
+        $this->assertStringContainsString('cache: \'no-store\'', $redirectScriptTemplate);
+        $this->assertStringContainsString('window.location.replace(data.goUrl);', $redirectScriptTemplate);
+        $this->assertStringContainsString('{% if skipDebugRedirect %}', $redirectScriptTemplate);
     }
 
     public function testQrTemplateUsesIntentBasedSeomaticHelper(): void

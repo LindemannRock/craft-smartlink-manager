@@ -133,7 +133,7 @@
 		</div>
 	</div>
 
-	{# Custom/staging templates can pass true to allow ?debug=1 outside devMode. #}
+	{# Cache-safe redirect helper. Pass true only in custom/staging templates to allow ?debug=1 outside devMode. #}
 	{{ smartLink.renderRedirectScript() }}
 
 	</body>

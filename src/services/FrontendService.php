@@ -48,7 +48,7 @@ class FrontendService extends Component
         try {
             $view->setTemplateMode(View::TEMPLATE_MODE_CP);
 
-            $html = $view->renderTemplate('smartlink-manager/_frontend/auto-redirect', [
+            $html = $view->renderTemplate('smartlink-manager/_frontend/redirect', [
                 'autoRedirectUrl' => $autoRedirectUrl,
                 'skipDebugRedirect' => $allowDebugOverride ?? Craft::$app->getConfig()->getGeneral()->devMode,
             ]);

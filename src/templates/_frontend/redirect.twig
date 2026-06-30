@@ -4,8 +4,8 @@
 
 		{% if skipDebugRedirect %}
 		if (urlParams.get('debug') === '1') {
-			console.log('🐛 DEBUG MODE ENABLED - Auto redirect is disabled for testing');
-			console.log('➡️ Auto Redirect Resolver URL:', {{ autoRedirectUrl|json_encode|raw }});
+			console.log('🐛 DEBUG MODE ENABLED - Redirect is disabled for testing');
+			console.log('➡️ Redirect resolver URL:', {{ autoRedirectUrl|json_encode|raw }});
 
 			return;
 		}
