@@ -1064,7 +1064,7 @@ class SmartLink extends Element
      * Set the runtime auto-redirect resolver URL used by renderRedirectScript().
      *
      * @param string $autoRedirectUrl Server-side resolver URL
-     * @since 5.32.0
+     * @since 5.33.0
      */
     public function setAutoRedirectScriptUrl(string $autoRedirectUrl): void
     {

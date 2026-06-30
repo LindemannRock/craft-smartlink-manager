@@ -39,6 +39,7 @@ class FrontendService extends Component
      * @param string $autoRedirectUrl Server-side resolver URL
      * @param bool|null $allowDebugOverride Whether ?debug=1 should stop redirects; null limits it to devMode
      * @return Markup|null HTML script tag or null if rendering fails
+     * @since 5.33.0
      */
     public function renderRedirectScript(string $autoRedirectUrl, ?bool $allowDebugOverride = null): ?Markup
     {
