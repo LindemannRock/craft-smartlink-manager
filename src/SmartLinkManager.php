@@ -277,7 +277,7 @@ class SmartLinkManager extends Plugin
                             'pluginName' => $this->getSettings()->getFullName(),
                             'count' => $cleared,
                         ]);
-                        $this->servdStaticCache->purgeAllSmartLinks();
+                        $this->servdStaticCache->purgeAllUrls();
                     },
                 ];
             }
@@ -321,7 +321,7 @@ class SmartLinkManager extends Plugin
             Elements::EVENT_AFTER_SAVE_ELEMENT,
             function(ElementEvent $event) {
                 if ($event->element instanceof SmartLink) {
-                    $this->servdStaticCache->purgeSmartLink($event->element);
+                    $this->servdStaticCache->purgeElement($event->element);
                 }
             }
         );
@@ -331,7 +331,7 @@ class SmartLinkManager extends Plugin
             Elements::EVENT_BEFORE_DELETE_ELEMENT,
             function(DeleteElementEvent $event) {
                 if ($event->element instanceof SmartLink) {
-                    $this->servdStaticCache->purgeSmartLink($event->element);
+                    $this->servdStaticCache->purgeElement($event->element);
                 }
             }
         );

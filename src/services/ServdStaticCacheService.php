@@ -50,25 +50,25 @@ class ServdStaticCacheService extends Component
     }
 
     /**
-     * Queue purges for the public URLs for a smart link's current slug.
+     * Queue purges for the public URLs for an element's current slug.
      */
-    public function purgeSmartLink(SmartLink $smartLink): void
+    public function purgeElement(SmartLink $smartLink): void
     {
-        $this->purgeUrls($this->urlsForSmartLink($smartLink));
+        $this->purgeUrls($this->urlsForElement($smartLink));
     }
 
     /**
-     * Queue purges for the public URLs for a previously-used smart link slug.
+     * Queue purges for the public URLs for a previously-used slug.
      */
-    public function purgeSmartLinkSlug(string $slug): void
+    public function purgeSlug(string $slug): void
     {
         $this->purgeUrls($this->urlsForSlug($slug));
     }
 
     /**
-     * Queue purges for every public smart link URL known to the plugin.
+     * Queue purges for every public URL known to the plugin.
      */
-    public function purgeAllSmartLinks(): void
+    public function purgeAllUrls(): void
     {
         if (!$this->isAvailable()) {
             return;
@@ -90,11 +90,11 @@ class ServdStaticCacheService extends Component
     }
 
     /**
-     * Return public URLs that can become stale for a smart link.
+     * Return public URLs that can become stale for an element.
      *
      * @return list<string>
      */
-    public function urlsForSmartLink(SmartLink $smartLink): array
+    public function urlsForElement(SmartLink $smartLink): array
     {
         return $this->urlsForSlug((string)$smartLink->slug);
     }
