@@ -164,7 +164,7 @@ class RedirectController extends Controller
     /**
      * Resolve whether this visitor should auto-hop from a cache-safe landing page.
      *
-     * @since 5.32.0
+     * @since 5.31.1
      */
     public function actionAutoRedirect(string $slug, ?string $siteHandle = null): Response
     {

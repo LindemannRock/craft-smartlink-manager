@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use Craft;
+use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 
 /**
@@ -120,6 +121,47 @@ final class PublicUrlGenerationTest extends TestCase
         ], function() use ($link): void {
             self::assertStringStartsWith('https://smart.example/qr/smartlink-test-qr-standalone?', $link->getQrCodeUrl());
             self::assertStringStartsWith('https://smart.example/qr/smartlink-test-qr-standalone/view?', $link->getQrCodeDisplayUrl());
+        });
+    }
+
+    public function testBuildPublicActionUrlUsesCustomDomainHost(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+
+        $this->withSettings([
+            'smartlinkBaseUrl' => 'https://smart.example',
+        ], function() use ($site): void {
+            $url = SmartLinkManager::$plugin->getSettings()->buildPublicActionUrl(
+                'smartlink-manager/redirect/auto-redirect',
+                $site->id,
+                ['slug' => 'smartlink-test-action-url'],
+            );
+
+            // Same-origin guarantee: the cache-safe resolver / tracking hop must land on the
+            // configured custom Base URL host, not Craft's default action host. A regression
+            // here reintroduces the cross-origin "Failed to fetch" the cache-safe rework fixed.
+            self::assertSame('smart.example', (string) parse_url($url, PHP_URL_HOST));
+            self::assertStringStartsWith('https://smart.example/', $url);
+            self::assertStringContainsString('slug=smartlink-test-action-url', $url);
+        });
+    }
+
+    public function testBuildPublicActionUrlFallsBackToActionUrlWithoutCustomDomain(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+
+        $this->withSettings([
+            'smartlinkBaseUrl' => null,
+        ], function() use ($site): void {
+            $url = SmartLinkManager::$plugin->getSettings()->buildPublicActionUrl(
+                'smartlink-manager/redirect/auto-redirect',
+                $site->id,
+                ['slug' => 'smartlink-test-action-url-default'],
+            );
+
+            // No custom Base URL configured → standard Craft action URL (still a valid host).
+            self::assertNotEmpty((string) parse_url($url, PHP_URL_HOST));
+            self::assertStringContainsString('slug=smartlink-test-action-url-default', $url);
         });
     }
 }

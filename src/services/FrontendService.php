@@ -18,7 +18,7 @@ use Twig\Markup;
 /**
  * Frontend rendering helpers for SmartLink templates
  *
- * @since 5.32.0
+ * @since 5.31.1
  */
 class FrontendService extends Component
 {

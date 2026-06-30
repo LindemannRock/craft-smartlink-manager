@@ -1023,7 +1023,7 @@ class SmartLink extends Element
      *
      * @param string $autoRedirectUrl Server-side resolver URL
      * @return \Twig\Markup|null HTML script tag or null if rendering fails
-     * @since 5.32.0
+     * @since 5.31.1
      */
     public function renderAutoRedirectScript(string $autoRedirectUrl): ?\Twig\Markup
     {
