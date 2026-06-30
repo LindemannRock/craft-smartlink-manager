@@ -310,8 +310,6 @@ return [
     '404 Redirect URL' => '404 リダイレクト URL',
     'Where to redirect when a {singularName} is not found or disabled' => '{singularName} が見つからないか無効な場合のリダイレクト先',
     'Can be a relative path (/) or full URL (https://example.com)' => '相対パス (/) または完全な URL (https://example.com) を指定できます',
-    'Browser preference' => 'ブラウザの設定',
-    'IP geolocation' => 'IP ジオロケーション',
     'Both' => '両方',
 
     // Settings: Analytics
@@ -349,10 +347,6 @@ return [
     'Cache Device Detection' => 'デバイス検出をキャッシュする',
     'Cache device detection results for better performance' => 'パフォーマンス向上のためにデバイス検出結果をキャッシュする',
     'Device Detection Cache Duration (seconds)' => 'デバイス検出キャッシュ期間 (秒)',
-    'Language Detection Method' => '言語検出方法',
-    'How to detect user language preference' => 'ユーザーの言語設定を検出する方法',
-    'Language Detection' => '言語検出',
-    'Enable automatic language detection to redirect users based on their browser or location' => 'ブラウザや場所に基づいてユーザーをリダイレクトするために自動言語検出を有効にする',
 
     // Settings: Cache
     'Cache Settings' => 'キャッシュ設定',
@@ -559,7 +553,6 @@ return [
     'QR Format (png/svg)' => 'QR フォーマット (png/svg)',
     'QR Logo Asset ID' => 'QR ロゴアセット ID',
     'Hide Title (1/0)' => 'タイトルを非表示 (1/0)',
-    'Language Detection (1/0)' => '言語検出 (1/0)',
     'Metadata (JSON)' => 'メタデータ (JSON)',
     'Unknown' => '不明',
     'Please select a CSV file to upload.' => 'アップロードする CSV ファイルを選択してください。',
@@ -800,7 +793,6 @@ return [
     'This is being overridden by the <code>enableGeoDetection</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>enableGeoDetection</code> 設定で上書きされています。',
     'This is being overridden by the <code>cacheDeviceDetection</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>cacheDeviceDetection</code> 設定で上書きされています。',
     'This is being overridden by the <code>deviceDetectionCacheDuration</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>deviceDetectionCacheDuration</code> 設定で上書きされています。',
-    'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>languageDetectionMethod</code> 設定で上書きされています。',
     'This is being overridden by the <code>cacheStorageMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>cacheStorageMethod</code> 設定で上書きされています。',
     'This is being overridden by the <code>enabledIntegrations</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>enabledIntegrations</code> 設定で上書きされています。',
     'This is being overridden by the <code>seomaticTrackingEvents</code> setting in <code>config/smartlink-manager.php</code>.' => 'この設定は <code>config/smartlink-manager.php</code> の <code>seomaticTrackingEvents</code> 設定で上書きされています。',

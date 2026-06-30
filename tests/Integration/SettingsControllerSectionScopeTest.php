@@ -71,7 +71,6 @@ final class SettingsControllerSectionScopeTest extends TestCase
                 'qrDownloadFilename',
             ],
             'behavior' => [
-                'languageDetectionMethod',
                 'notFoundRedirectUrl',
             ],
             'interface' => [

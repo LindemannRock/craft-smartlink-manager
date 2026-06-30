@@ -172,16 +172,6 @@ class SmartLink extends Element
     public ?int $qrLogoId = null;
 
     /**
-     * @var bool Language detection enabled
-     */
-    public bool $languageDetection = false;
-
-    /**
-     * @var array|null Localized URLs
-     */
-    public ?array $localizedUrls = null;
-
-    /**
      * @var int Total click/hit count (stored in DB column)
      * @since 5.21.0
      */
@@ -627,7 +617,6 @@ class SmartLink extends Element
             'qrCodeFormat' => null,
             'qrCodeEyeColor' => null,
             'qrLogoId' => null,
-            'languageDetection' => false,
             'metadata' => null,
         ];
     }
@@ -1385,7 +1374,6 @@ class SmartLink extends Element
             $record->qrCodeFormat = $this->qrCodeFormat;
             $record->qrCodeEyeColor = $this->qrCodeEyeColor;
             $record->qrLogoId = $this->qrLogoId;
-            $record->languageDetection = $this->languageDetection;
             $record->metadata = $this->_metadata ? json_encode($this->_metadata) : null;
 
             $record->save(false);

@@ -163,11 +163,6 @@ class SmartLinkType extends ObjectType
                 'type' => Type::boolean(),
                 'description' => 'Whether the public redirect page hides the title.',
             ],
-            'languageDetection' => [
-                'name' => 'languageDetection',
-                'type' => Type::boolean(),
-                'description' => 'Whether language-aware destinations are enabled.',
-            ],
             'hits' => [
                 'name' => 'hits',
                 'type' => Type::int(),

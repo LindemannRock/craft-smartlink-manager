@@ -131,9 +131,8 @@ class RedirectController extends Controller
             return $this->redirectToNotFound();
         }
 
-        // Get device info and language for template display
+        // Get device info for template display and analytics.
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
-        $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
         // Render the template - all links will point to action URLs for tracking
         $settings = SmartLinkManager::$plugin->getSettings();
@@ -151,7 +150,6 @@ class RedirectController extends Controller
         $response = $this->renderTemplate($template, [
             'smartLink' => $smartLink,
             'device' => $deviceInfo,
-            'language' => $language,
             'goUrls' => $buttonGoUrls,
             'source' => $source,
         ]);
@@ -204,13 +202,12 @@ class RedirectController extends Controller
         }
 
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
-        $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
         $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
         $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
         $goUrls = $this->buildTrackedGoUrls($smartLink, $source);
 
         return $this->autoRedirectResponse(
-            $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
+            $this->shouldAutoRedirect($smartLink, $deviceInfo),
             $goUrls['auto']
         );
     }
@@ -318,7 +315,6 @@ class RedirectController extends Controller
 
         // Get device info for tracking
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
-        $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
         // Get source parameter for QR tracking.
         $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
@@ -332,8 +328,7 @@ class RedirectController extends Controller
             // Auto-detect platform and redirect (for mobile auto-redirect)
             $destinationUrl = SmartLinkManager::$plugin->deviceDetection->getRedirectUrl(
                 $smartLink,
-                $deviceInfo,
-                $language
+                $deviceInfo
             );
             $clickType = 'redirect';
             $platform = $deviceInfo->platform ?? 'unknown';
@@ -376,7 +371,6 @@ class RedirectController extends Controller
                     'referrer' => Craft::$app->request->getReferrer(),
                     'source' => $source,
                     'siteId' => $siteId, // Pass the detected site ID
-                    'language' => $language,
                 ]
             );
 
@@ -443,13 +437,13 @@ class RedirectController extends Controller
     /**
      * Auto-hop only when a mobile device resolves to a configured platform URL.
      */
-    private function shouldAutoRedirect(SmartLink $smartLink, DeviceInfo $deviceInfo, ?string $language): bool
+    private function shouldAutoRedirect(SmartLink $smartLink, DeviceInfo $deviceInfo): bool
     {
         if (!$deviceInfo->isMobile && !$deviceInfo->isTablet && !$deviceInfo->isMobileApp) {
             return false;
         }
 
-        return SmartLinkManager::$plugin->deviceDetection->getRedirectUrl($smartLink, $deviceInfo, $language) !== '';
+        return SmartLinkManager::$plugin->deviceDetection->getRedirectUrl($smartLink, $deviceInfo) !== '';
     }
 
     /**

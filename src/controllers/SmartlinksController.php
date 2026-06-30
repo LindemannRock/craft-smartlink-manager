@@ -301,8 +301,6 @@ class SmartlinksController extends Controller
             // Smart Link image size
             $smartLink->imageSize = $request->getBodyParam('imageSize', 'xl');
 
-            $smartLink->languageDetection = (bool)$request->getBodyParam('languageDetection');
-
             // Handle enabled status - set BEFORE setFieldValuesFromRequest
             // This is per-site and managed by Craft's element system
             $enabledParam = $request->getBodyParam('enabled');

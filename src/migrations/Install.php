@@ -42,7 +42,6 @@ class Install extends Migration
                 'qrCodeFormat' => $this->string(10)->null(),
                 'qrLogoId' => $this->integer()->null(),
                 'hideTitle' => $this->boolean()->defaultValue(false)->notNull(),
-                'languageDetection' => $this->boolean()->defaultValue(false),
                 'metadata' => $this->json()->null(),
                 'authorId' => $this->integer()->null(),
                 'postDate' => $this->dateTime()->null(),
@@ -204,7 +203,6 @@ class Install extends Migration
                 'geoApiKey' => $this->string(255)->null(),
                 'cacheDeviceDetection' => $this->boolean()->notNull()->defaultValue(true),
                 'deviceDetectionCacheDuration' => $this->integer()->notNull()->defaultValue(3600),
-                'languageDetectionMethod' => $this->string(10)->notNull()->defaultValue('browser'),
                 // Redirect/Behavior settings
                 'notFoundRedirectUrl' => $this->string()->notNull()->defaultValue('/'),
                 // Interface settings

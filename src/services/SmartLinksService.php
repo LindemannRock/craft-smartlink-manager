@@ -87,6 +87,7 @@ class SmartLinksService extends Component
             // Handle slug changes - create redirect from old to new
             if ($oldSlug && $oldSlug !== $smartLink->slug) {
                 $this->handleSlugChange($oldSlug, $smartLink);
+                SmartLinkManager::$plugin->servdStaticCache->purgeSmartLinkSlug($oldSlug);
             }
         }
 

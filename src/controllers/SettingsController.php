@@ -801,7 +801,6 @@ class SettingsController extends Controller
                 'qrDownloadFilename',
             ],
             'behavior' => [
-                'languageDetectionMethod',
                 'notFoundRedirectUrl',
             ],
             'interface' => [

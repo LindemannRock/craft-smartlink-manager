@@ -310,8 +310,6 @@ return [
     '404 Redirect URL' => 'URL de redirection 404',
     'Where to redirect when a {singularName} is not found or disabled' => 'Où rediriger lorsqu\'un {singularName} est introuvable ou désactivé',
     'Can be a relative path (/) or full URL (https://example.com)' => 'Peut être un chemin relatif (/) ou une URL complète (https://example.com)',
-    'Browser preference' => 'Préférence du navigateur',
-    'IP geolocation' => 'Géolocalisation IP',
     'Both' => 'Les deux',
 
     // Settings: Analytics
@@ -349,10 +347,6 @@ return [
     'Cache Device Detection' => 'Mettre en cache la détection des appareils',
     'Cache device detection results for better performance' => 'Mettre en cache les résultats de détection des appareils pour de meilleures performances',
     'Device Detection Cache Duration (seconds)' => 'Durée du cache de détection des appareils (secondes)',
-    'Language Detection Method' => 'Méthode de détection de la langue',
-    'How to detect user language preference' => 'Comment détecter la préférence de langue de l\'utilisateur',
-    'Language Detection' => 'Détection de la langue',
-    'Enable automatic language detection to redirect users based on their browser or location' => 'Activer la détection automatique de la langue pour rediriger les utilisateurs selon leur navigateur ou leur localisation',
 
     // Settings: Cache
     'Cache Settings' => 'Paramètres du cache',
@@ -559,7 +553,6 @@ return [
     'QR Format (png/svg)' => 'Format QR (png/svg)',
     'QR Logo Asset ID' => 'ID de ressource logo QR',
     'Hide Title (1/0)' => 'Masquer le titre (1/0)',
-    'Language Detection (1/0)' => 'Détection de langue (1/0)',
     'Metadata (JSON)' => 'Métadonnées (JSON)',
     'Unknown' => 'Inconnu',
     'Please select a CSV file to upload.' => 'Veuillez sélectionner un fichier CSV à télécharger.',
@@ -800,7 +793,6 @@ return [
     'This is being overridden by the <code>enableGeoDetection</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>enableGeoDetection</code> dans <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>cacheDeviceDetection</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>cacheDeviceDetection</code> dans <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>deviceDetectionCacheDuration</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>deviceDetectionCacheDuration</code> dans <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>languageDetectionMethod</code> dans <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>cacheStorageMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>cacheStorageMethod</code> dans <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enabledIntegrations</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>enabledIntegrations</code> dans <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>seomaticTrackingEvents</code> setting in <code>config/smartlink-manager.php</code>.' => 'Ce paramètre est remplacé par <code>seomaticTrackingEvents</code> dans <code>config/smartlink-manager.php</code>.',

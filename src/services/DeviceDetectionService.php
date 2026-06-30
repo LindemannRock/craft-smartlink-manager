@@ -84,20 +84,10 @@ class DeviceDetectionService extends Component
      *
      * @param SmartLink $smartLink
      * @param DeviceInfo $deviceInfo
-     * @param string|null $language
      * @return string
      */
-    public function getRedirectUrl(SmartLink $smartLink, DeviceInfo $deviceInfo, ?string $language = null): string
+    public function getRedirectUrl(SmartLink $smartLink, DeviceInfo $deviceInfo): string
     {
-        // Check for localized URLs first
-        if ($language && $smartLink->localizedUrls) {
-            $localizedUrls = $smartLink->localizedUrls[$language] ?? null;
-            if ($localizedUrls) {
-                return $this->_getUrlForPlatform($deviceInfo->platform, $localizedUrls, $smartLink);
-            }
-        }
-        
-        // Use default URLs
         return $this->_getUrlForPlatform($deviceInfo->platform, [
             'iosUrl' => $smartLink->iosUrl,
             'androidUrl' => $smartLink->androidUrl,
@@ -107,16 +97,6 @@ class DeviceDetectionService extends Component
             'macUrl' => $smartLink->macUrl,
             'fallbackUrl' => $smartLink->fallbackUrl,
         ], $smartLink);
-    }
-
-    /**
-     * Detect language from request
-     *
-     * @return string
-     */
-    public function detectLanguage(): string
-    {
-        return $this->detectLanguageFromConfig();
     }
 
     /**
@@ -203,7 +183,6 @@ class DeviceDetectionService extends Component
             'cacheKeySet' => PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device'),
             'includeLanguage' => true,
             'includePlatform' => true,
-            'languageDetectionMethod' => $settings->languageDetectionMethod ?? 'browser',
             'enableGeoDetection' => (bool) $settings->enableGeoDetection,
             'geoLookupCallback' => function(string $ip): ?array {
                 return SmartLinkManager::$plugin->analytics->getLocationFromIp($ip);

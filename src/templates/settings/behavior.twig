@@ -28,22 +28,6 @@
 
         <h2 class="first">{{ "Redirect Behavior"|t('smartlink-manager') }}</h2>
 
-        {{ forms.selectField({
-            label: "Language Detection Method"|t('smartlink-manager'),
-            instructions: "How to detect user language preference"|t('smartlink-manager'),
-            id: 'languageDetectionMethod',
-            name: 'settings[languageDetectionMethod]',
-            value: settings.languageDetectionMethod ?? 'browser',
-            options: [
-                {label: 'Browser preference'|t('smartlink-manager'), value: 'browser'},
-                {label: 'IP geolocation'|t('smartlink-manager'), value: 'ip'},
-                {label: 'Both'|t('smartlink-manager'), value: 'both'},
-            ],
-            disabled: settings.isOverriddenByConfig('languageDetectionMethod'),
-            warning: settings.isOverriddenByConfig('languageDetectionMethod') ?
-                "This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
-        }) }}
-
         {{ forms.autosuggestField({
             label: "404 Redirect URL"|t('smartlink-manager'),
             instructions: "Where to redirect when a {singularName} is not found or disabled"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),

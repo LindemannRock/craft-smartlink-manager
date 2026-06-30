@@ -100,7 +100,7 @@ class ImportExportController extends Controller
             'slug', 'title', 'description', 'iosUrl', 'androidUrl', 'huaweiUrl', 'amazonUrl', 'windowsUrl', 'macUrl', 'fallbackUrl',
             'imageId', 'imageSize', 'enabled', 'siteId', 'siteHandle', 'trackAnalytics',
             'qrCodeEnabled', 'qrCodeSize', 'qrCodeColor', 'qrCodeBgColor', 'qrCodeEyeColor', 'qrCodeFormat', 'qrLogoId',
-            'hideTitle', 'languageDetection', 'postDate', 'dateExpired',
+            'hideTitle', 'postDate', 'dateExpired',
         ];
 
         $smartLinks = SmartLink::find()->site('*')->status(null)->orderBy(['elements.dateCreated' => SORT_DESC])->all();
@@ -136,7 +136,6 @@ class ImportExportController extends Controller
                 'qrCodeFormat' => $smartLink->qrCodeFormat,
                 'qrLogoId' => $smartLink->qrLogoId,
                 'hideTitle' => $smartLink->hideTitle ? '1' : '0',
-                'languageDetection' => $smartLink->languageDetection ? '1' : '0',
                 'postDate' => $smartLink->postDate,
                 'dateExpired' => $smartLink->dateExpired,
             ];
@@ -282,7 +281,6 @@ class ImportExportController extends Controller
                 'qrCodeFormat' => null,
                 'qrLogoId' => null,
                 'hideTitle' => false,
-                'languageDetection' => false,
                 'postDate' => null,
                 'dateExpired' => null,
             ];
@@ -295,7 +293,7 @@ class ImportExportController extends Controller
                 $value = trim((string)$row[$colIndex]);
                 $value = CsvImportHelper::stripFormulaEscapePrefix($value);
 
-                if (in_array($fieldName, ['enabled', 'trackAnalytics', 'qrCodeEnabled', 'hideTitle', 'languageDetection'], true)) {
+                if (in_array($fieldName, ['enabled', 'trackAnalytics', 'qrCodeEnabled', 'hideTitle'], true)) {
                     $item[$fieldName] = $this->parseBool($value);
                     continue;
                 }
@@ -641,7 +639,6 @@ class ImportExportController extends Controller
                 SmartLinkManager::$plugin->getSettings()->qrLogoVolumeUid,
             );
             $smartLink->hideTitle = (bool)($row['hideTitle'] ?? false);
-            $smartLink->languageDetection = (bool)($row['languageDetection'] ?? false);
             $smartLink->postDate = $row['postDate'] instanceof \DateTime ? $row['postDate'] : null;
             $smartLink->dateExpired = $row['dateExpired'] instanceof \DateTime ? $row['dateExpired'] : null;
         }

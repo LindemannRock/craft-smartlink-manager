@@ -116,7 +116,7 @@ class AnalyticsTrackingService
                 'isSystemAgent' => $deviceInfo['isSystemAgent'] ?? false,
                 'trafficType' => $deviceInfo['trafficType'] ?? 'human',
                 'country' => null,
-                'language' => $metadata['language'] ?? null,
+                'language' => $deviceInfo['language'] ?? null,
                 'referrer' => $metadata['referrer'] ?? null,
                 'ip' => $ipHash,
                 'userAgent' => $deviceInfo['userAgent'] ?? null,

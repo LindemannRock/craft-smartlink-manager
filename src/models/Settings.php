@@ -214,11 +214,6 @@ class Settings extends Model
     public int $deviceDetectionCacheDuration = 3600;
 
     /**
-     * @var string Default language detection method (browser, ip, or both)
-     */
-    public string $languageDetectionMethod = 'browser';
-
-    /**
      * @var string URL prefix for smart links (default: 'go')
      */
     public string $slugPrefix = 'go';
@@ -436,7 +431,6 @@ class Settings extends Model
             [['redirectTemplate', 'qrTemplate', 'notFoundRedirectUrl'], 'string'],
             [['notFoundRedirectUrl'], UrlOrPathValidator::class, 'translationCategory' => 'smartlink-manager'],
             [['redirectTemplate', 'qrTemplate'], TemplatePathValidator::class, 'translationCategory' => 'smartlink-manager', 'checkTemplateExists' => true],
-            [['languageDetectionMethod'], 'in', 'range' => ['browser', 'ip', 'both']],
             [['enabledSites'], 'each', 'rule' => ['integer']],
             [['enabledIntegrations', 'seomaticTrackingEvents'], 'each', 'rule' => ['string']],
             [['seomaticEventPrefix'], 'string', 'max' => 50],
@@ -889,7 +883,6 @@ class Settings extends Model
             'enableGeoDetection' => Craft::t('smartlink-manager', 'Enable Geographic Detection'),
             'cacheDeviceDetection' => Craft::t('smartlink-manager', 'Cache Device Detection'),
             'deviceDetectionCacheDuration' => Craft::t('smartlink-manager', 'Device Detection Cache Duration (seconds)'),
-            'languageDetectionMethod' => Craft::t('smartlink-manager', 'Language Detection Method'),
             'notFoundRedirectUrl' => Craft::t('smartlink-manager', '404 Redirect URL'),
             'enabledSites' => Craft::t('smartlink-manager', 'Enabled Sites'),
             'enabledIntegrations' => Craft::t('smartlink-manager', 'Enabled Integrations'),

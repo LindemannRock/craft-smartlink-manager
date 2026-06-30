@@ -182,7 +182,6 @@ class SmartLinkQuery extends ElementQuery
             'smartlinkmanager.qrCodeFormat',
             'smartlinkmanager.qrCodeEyeColor',
             'smartlinkmanager.qrLogoId',
-            'smartlinkmanager.languageDetection',
             'smartlinkmanager.hits',
             'smartlinkmanager.metadata',
             // Ensure we get the enabled status from elements_sites

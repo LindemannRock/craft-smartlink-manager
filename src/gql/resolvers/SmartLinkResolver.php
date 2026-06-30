@@ -124,7 +124,6 @@ class SmartLinkResolver extends Resolver
             'enabled' => $smartLink->enabled,
             'trackAnalytics' => $smartLink->trackAnalytics,
             'hideTitle' => $smartLink->hideTitle,
-            'languageDetection' => $smartLink->languageDetection,
             'hits' => $smartLink->hits,
             'dateExpired' => $smartLink->dateExpired?->format('Y-m-d H:i:s'),
         ];
@@ -173,11 +172,10 @@ class SmartLinkResolver extends Resolver
     {
         $platform = strtolower(trim($platform)) ?: 'auto';
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
-        $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
         if ($platform === 'auto') {
             return [
-                SmartLinkManager::$plugin->deviceDetection->getRedirectUrl($smartLink, $deviceInfo, $language),
+                SmartLinkManager::$plugin->deviceDetection->getRedirectUrl($smartLink, $deviceInfo),
                 $deviceInfo->platform ?? 'unknown',
                 'redirect',
             ];
@@ -207,7 +205,6 @@ class SmartLinkResolver extends Resolver
         string $source,
     ): void {
         $deviceInfo = SmartLinkManager::$plugin->deviceDetection->detectDevice();
-        $language = SmartLinkManager::$plugin->deviceDetection->detectLanguage();
 
         $normalizedPlatform = match ($platform) {
             'mac' => 'macos',
@@ -225,7 +222,6 @@ class SmartLinkResolver extends Resolver
                 'referrer' => Craft::$app->request->getReferrer(),
                 'source' => $source !== '' ? $source : 'graphql',
                 'siteId' => $siteId,
-                'language' => $language,
             ],
         );
     }

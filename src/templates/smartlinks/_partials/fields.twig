@@ -191,17 +191,3 @@
     on: smartLink.hideTitle ?? false,
     disabled: disabled
 }) }}
-
-<hr>
-
-<h2>{{ "Advanced Settings"|t('smartlink-manager') }}</h2>
-
-{{ forms.lightswitchField({
-    label: "Language Detection"|t('smartlink-manager'),
-    instructions: "Enable automatic language detection to redirect users based on their browser or location"|t('smartlink-manager'),
-    id: 'languageDetection',
-    name: 'languageDetection',
-    on: smartLink.languageDetection ?? false,
-    disabled: disabled
-}) }}
-

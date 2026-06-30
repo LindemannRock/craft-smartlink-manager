@@ -92,9 +92,8 @@ return [
         // ========================================
         // REDIRECT SETTINGS
         // ========================================
-        // Language detection and redirect behavior
+        // Redirect behavior
 
-        'languageDetectionMethod' => 'browser', // Options: 'browser', 'ip', 'both'
         'notFoundRedirectUrl' => '/',      // Where to redirect for 404/disabled links
 
 

@@ -310,8 +310,6 @@ return [
     '404 Redirect URL' => '404-omdirigerings-URL',
     'Where to redirect when a {singularName} is not found or disabled' => 'Vart omdirigeringen sker när en {singularName} inte hittas eller är inaktiverad',
     'Can be a relative path (/) or full URL (https://example.com)' => 'Kan vara en relativ sökväg (/) eller fullständig URL (https://example.com)',
-    'Browser preference' => 'Webbläsarinställning',
-    'IP geolocation' => 'IP-geolokalisering',
     'Both' => 'Båda',
 
     // Settings: Analytics
@@ -349,10 +347,6 @@ return [
     'Cache Device Detection' => 'Cache för enhetsidentifiering',
     'Cache device detection results for better performance' => 'Cacha enhetsidentifieringsresultat för bättre prestanda',
     'Device Detection Cache Duration (seconds)' => 'Cache-varaktighet för enhetsidentifiering (sekunder)',
-    'Language Detection Method' => 'Metod för språkidentifiering',
-    'How to detect user language preference' => 'Hur användarens språkpreferens identifieras',
-    'Language Detection' => 'Språkidentifiering',
-    'Enable automatic language detection to redirect users based on their browser or location' => 'Aktivera automatisk språkidentifiering för att omdirigera användare baserat på webbläsare eller plats',
 
     // Settings: Cache
     'Cache Settings' => 'Cacheinställningar',
@@ -559,7 +553,6 @@ return [
     'QR Format (png/svg)' => 'QR-format (png/svg)',
     'QR Logo Asset ID' => 'QR-logotyps tillgångs-ID',
     'Hide Title (1/0)' => 'Dölj rubrik (1/0)',
-    'Language Detection (1/0)' => 'Språkidentifiering (1/0)',
     'Metadata (JSON)' => 'Metadata (JSON)',
     'Unknown' => 'Okänd',
     'Please select a CSV file to upload.' => 'Välj en CSV-fil att ladda upp.',
@@ -800,7 +793,6 @@ return [
     'This is being overridden by the <code>enableGeoDetection</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>enableGeoDetection</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>cacheDeviceDetection</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>cacheDeviceDetection</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>deviceDetectionCacheDuration</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>deviceDetectionCacheDuration</code> i <code>config/smartlink-manager.php</code>.',
-    'This is being overridden by the <code>languageDetectionMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>languageDetectionMethod</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>cacheStorageMethod</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>cacheStorageMethod</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>enabledIntegrations</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>enabledIntegrations</code> i <code>config/smartlink-manager.php</code>.',
     'This is being overridden by the <code>seomaticTrackingEvents</code> setting in <code>config/smartlink-manager.php</code>.' => 'Den här inställningen åsidosätts av inställningen <code>seomaticTrackingEvents</code> i <code>config/smartlink-manager.php</code>.',

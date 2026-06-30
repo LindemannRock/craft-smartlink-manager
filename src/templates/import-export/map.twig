@@ -66,7 +66,6 @@
             {value: 'qrCodeFormat', label: 'QR Format (png/svg)'|t('smartlink-manager')},
             {value: 'qrLogoId', label: 'QR Logo Asset ID'|t('smartlink-manager')},
             {value: 'hideTitle', label: 'Hide Title (1/0)'|t('smartlink-manager')},
-            {value: 'languageDetection', label: 'Language Detection (1/0)'|t('smartlink-manager')},
             {value: 'postDate', label: 'Post Date (YYYY-MM-DD HH:MM:SS)'|t('smartlink-manager')},
             {value: 'dateExpired', label: 'Date Expired (YYYY-MM-DD HH:MM:SS)'|t('smartlink-manager')},
         ] %}
@@ -115,7 +114,6 @@
                                                 {% if option.value == 'qrCodeFormat' and lowerHeader in ['qrcodeformat', 'qrformat'] %}{% set isMatch = true %}{% endif %}
                                                 {% if option.value == 'qrLogoId' and lowerHeader in ['qrlogoid', 'qr_logo_id'] %}{% set isMatch = true %}{% endif %}
                                                 {% if option.value == 'hideTitle' and lowerHeader in ['hidetitle', 'hide_title'] %}{% set isMatch = true %}{% endif %}
-                                                {% if option.value == 'languageDetection' and lowerHeader in ['languagedetection', 'language_detection'] %}{% set isMatch = true %}{% endif %}
                                                 {% if option.value == 'postDate' and lowerHeader in ['postdate', 'post_date', 'post date', 'datecreated', 'createdat'] %}{% set isMatch = true %}{% endif %}
                                                 {% if option.value == 'dateExpired' and lowerHeader in ['dateexpired', 'date_expired', 'expiresat'] %}{% set isMatch = true %}{% endif %}
                                                 <option value="{{ option.value }}" {% if isMatch %}selected{% endif %}>{{ option.label }}</option>

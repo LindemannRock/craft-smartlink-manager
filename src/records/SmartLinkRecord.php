@@ -27,7 +27,6 @@ use yii\db\ActiveQueryInterface;
  * @property string|null $qrCodeFormat
  * @property int|null $qrLogoId
  * @property bool $hideTitle
- * @property bool|null $languageDetection
  * @property int $hits
  * @property string|null $metadata
  * @property int|null $authorId
