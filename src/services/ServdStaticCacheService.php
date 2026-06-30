@@ -1,0 +1,179 @@
+<?php
+/**
+ * SmartLink Manager plugin for Craft CMS 5.x
+ *
+ * @link      https://lindemannrock.com
+ * @copyright Copyright (c) 2026 LindemannRock
+ */
+
+namespace lindemannrock\smartlinkmanager\services;
+
+use craft\base\Component;
+use craft\db\Query;
+use craft\helpers\Queue;
+use lindemannrock\base\helpers\PluginHelper;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
+use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\SmartLinkManager;
+
+/**
+ * Queues Servd static-cache purges for public smart link URLs when Servd is present.
+ *
+ * @since 5.34.0
+ */
+class ServdStaticCacheService extends Component
+{
+    use LoggingTrait;
+
+    private const SERVD_PLUGIN_HANDLE = 'servd-asset-storage';
+    private const PURGE_URLS_JOB = 'servd\\AssetStorage\\StaticCache\\Jobs\\PurgeUrlsJob';
+    private const STATIC_CACHE = 'servd\\AssetStorage\\StaticCache\\StaticCache';
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle(SmartLinkManager::$plugin->id);
+    }
+
+    /**
+     * Return whether the Servd static-cache purge API can be used.
+     */
+    public function isAvailable(): bool
+    {
+        return PluginHelper::isPluginEnabled(self::SERVD_PLUGIN_HANDLE)
+            && class_exists(self::PURGE_URLS_JOB)
+            && class_exists(self::STATIC_CACHE);
+    }
+
+    /**
+     * Queue purges for the public URLs for a smart link's current slug.
+     */
+    public function purgeSmartLink(SmartLink $smartLink): void
+    {
+        $this->purgeUrls($this->urlsForSmartLink($smartLink));
+    }
+
+    /**
+     * Queue purges for the public URLs for a previously-used smart link slug.
+     */
+    public function purgeSmartLinkSlug(string $slug): void
+    {
+        $this->purgeUrls($this->urlsForSlug($slug));
+    }
+
+    /**
+     * Queue purges for every public smart link URL known to the plugin.
+     */
+    public function purgeAllSmartLinks(): void
+    {
+        $urls = [];
+
+        foreach ($this->allSlugs() as $slug) {
+            array_push($urls, ...$this->urlsForSlug($slug));
+        }
+
+        $this->purgeUrls($urls);
+    }
+
+    /**
+     * Return public URLs that can become stale for a smart link.
+     *
+     * @return list<string>
+     */
+    public function urlsForSmartLink(SmartLink $smartLink): array
+    {
+        return $this->urlsForSlug((string)$smartLink->slug);
+    }
+
+    /**
+     * Return public URLs that can become stale for a smart link slug.
+     *
+     * @return list<string>
+     */
+    public function urlsForSlug(string $slug): array
+    {
+        $slug = trim($slug, '/');
+        if ($slug === '') {
+            return [];
+        }
+
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $urls = [];
+
+        foreach ($settings->getEnabledSiteIds() as $siteId) {
+            $siteId = (int)$siteId;
+            foreach ($this->pathsForSlug($slug) as $path) {
+                $urls[] = $settings->buildPublicUrl($path, $siteId);
+            }
+        }
+
+        return array_values(array_unique(array_filter($urls)));
+    }
+
+    /**
+     * Queue a Servd URL purge job if Servd is installed and enabled.
+     *
+     * @param list<string> $urls
+     */
+    public function purgeUrls(array $urls): void
+    {
+        $urls = array_values(array_unique(array_filter($urls)));
+        if ($urls === [] || !$this->isAvailable()) {
+            return;
+        }
+
+        try {
+            /** @var class-string $jobClass */
+            $jobClass = self::PURGE_URLS_JOB;
+            $job = new $jobClass(['urls' => $urls]);
+
+            $staticCacheClass = self::STATIC_CACHE;
+            Queue::push($job, $staticCacheClass::purgePriority());
+        } catch (\Throwable $e) {
+            $this->logWarning('Failed to queue Servd static-cache URL purge', [
+                'error' => $e->getMessage(),
+                'urls' => $urls,
+            ]);
+        }
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function pathsForSlug(string $slug): array
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+
+        $slugPrefix = trim((string)($settings->slugPrefix ?? 'go'), '/');
+        $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
+        $qrPrefix = trim((string)($settings->qrPrefix ?? 'qr'), '/');
+        $qrPrefix = $qrPrefix !== '' ? $qrPrefix : 'qr';
+        $usePrefix = (bool)($settings->usePrefix ?? true);
+
+        $smartLinkPath = $usePrefix ? $slugPrefix . '/' . $slug : $slug;
+
+        return [
+            $smartLinkPath,
+            $qrPrefix . '/' . $slug . '/view',
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function allSlugs(): array
+    {
+        $slugs = (new Query())
+            ->select(['slug'])
+            ->from('{{%smartlinkmanager}}')
+            ->where(['not', ['slug' => null]])
+            ->column();
+
+        return array_values(array_unique(array_filter(
+            array_map(static fn($slug): string => trim((string)$slug), $slugs)
+        )));
+    }
+}

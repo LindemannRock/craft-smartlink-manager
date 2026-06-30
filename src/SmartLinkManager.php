@@ -13,6 +13,8 @@ namespace lindemannrock\smartlinkmanager;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\events\DeleteElementEvent;
+use craft\events\ElementEvent;
 use craft\events\ExecuteGqlQueryEvent;
 use craft\events\RegisterCacheOptionsEvent;
 use craft\events\RegisterComponentTypesEvent;
@@ -53,6 +55,7 @@ use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
 use lindemannrock\smartlinkmanager\services\FrontendService;
 use lindemannrock\smartlinkmanager\services\IntegrationService;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
+use lindemannrock\smartlinkmanager\services\ServdStaticCacheService;
 use lindemannrock\smartlinkmanager\services\SmartLinksService;
 use lindemannrock\smartlinkmanager\utilities\SmartLinkManagerUtility;
 use lindemannrock\smartlinkmanager\variables\SmartLinkManagerVariable;
@@ -73,6 +76,7 @@ use yii\base\Event;
  * @property-read AnalyticsService $analytics
  * @property-read FrontendService $frontend
  * @property-read IntegrationService $integration
+ * @property-read ServdStaticCacheService $servdStaticCache
  * @property-read Settings $settings
  * @method Settings getSettings()
  */
@@ -140,6 +144,7 @@ class SmartLinkManager extends Plugin
             'analytics' => AnalyticsService::class,
             'frontend' => FrontendService::class,
             'integration' => IntegrationService::class,
+            'servdStaticCache' => ServdStaticCacheService::class,
         ]);
 
         // Schedule analytics cleanup if retention is enabled
@@ -318,10 +323,13 @@ class SmartLinkManager extends Plugin
                             'pluginName' => $this->getSettings()->getFullName(),
                             'count' => $cleared,
                         ]);
+                        $this->servdStaticCache->purgeAllSmartLinks();
                     },
                 ];
             }
         );
+
+        $this->installEventListeners();
 
         // DO NOT log in init() - it's called on every request
     }
@@ -345,6 +353,32 @@ class SmartLinkManager extends Plugin
             'registerSeoElementTypes',
             static function(RegisterComponentTypesEvent $event): void {
                 $event->types[] = SeoSmartLink::class;
+            }
+        );
+    }
+
+    /**
+     * Install event listeners for SmartLink element changes.
+     */
+    private function installEventListeners(): void
+    {
+        Event::on(
+            Elements::class,
+            Elements::EVENT_AFTER_SAVE_ELEMENT,
+            function(ElementEvent $event) {
+                if ($event->element instanceof SmartLink) {
+                    $this->servdStaticCache->purgeSmartLink($event->element);
+                }
+            }
+        );
+
+        Event::on(
+            Elements::class,
+            Elements::EVENT_BEFORE_DELETE_ELEMENT,
+            function(DeleteElementEvent $event) {
+                if ($event->element instanceof SmartLink) {
+                    $this->servdStaticCache->purgeSmartLink($event->element);
+                }
             }
         );
     }
