@@ -87,7 +87,7 @@ final class RedirectControllerTest extends TestCase
                 (string) ($controller->lastVariables['goUrls']['ios'] ?? '')
             );
             self::assertStringContainsString('platform=ios', (string) ($controller->lastVariables['goUrls']['ios'] ?? ''));
-            self::assertTrue($controller->lastVariables['autoRedirect'] ?? null);
+            self::assertArrayNotHasKey('autoRedirect', $controller->lastVariables);
         });
     }
 
@@ -137,7 +137,7 @@ final class RedirectControllerTest extends TestCase
         $response = $controller->actionIndex($link->slug);
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertFalse($controller->lastVariables['autoRedirect'] ?? true);
+        self::assertArrayNotHasKey('autoRedirect', $controller->lastVariables);
     }
 
     public function testLandingPageDoesNotAutoRedirectDesktop(): void
@@ -154,7 +154,7 @@ final class RedirectControllerTest extends TestCase
         $response = $controller->actionIndex($link->slug);
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertFalse($controller->lastVariables['autoRedirect'] ?? true);
+        self::assertArrayNotHasKey('autoRedirect', $controller->lastVariables);
     }
 
     public function testLandingPagePreservesQrSourceOnTrackedAutoHop(): void

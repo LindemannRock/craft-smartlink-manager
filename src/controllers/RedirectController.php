@@ -154,7 +154,6 @@ class RedirectController extends Controller
             'language' => $language,
             'goUrls' => $buttonGoUrls,
             'source' => $source,
-            'autoRedirect' => $this->shouldAutoRedirect($smartLink, $deviceInfo, $language),
         ]);
         $this->applyNoStoreHeaders($response);
 
