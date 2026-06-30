@@ -1,3 +1,11 @@
+{#
+  SmartLink redirect template.
+
+  Rendered as the smart-link landing page. Store buttons must point to the
+  tracked `goUrls` values so button analytics are recorded before the final
+  destination. Auto-redirect is handled by `renderRedirectScript()`, which
+  calls the cache-safe resolver before navigating.
+#}
 <!DOCTYPE html>
 <html lang="{{ currentSite.language }}">
 <head>
@@ -10,12 +18,7 @@
 
 	<script src="https://cdn.tailwindcss.com"></script>
 
-	{# Include SEOmatic tracking - this pushes events to GTM dataLayer #}
-	{% set seomaticTracking = null %}
-	{% if smartLink.renderSeomaticTracking is defined %}
-		{% set seomaticTracking = smartLink.renderSeomaticTracking(eventType ?? 'redirect') %}
-		{{ seomaticTracking }}
-	{% endif %}
+	{{ smartLink.renderRedirectSeomaticTracking() }}
 </head>
 <body>
 	<div
@@ -130,47 +133,8 @@
 		</div>
 	</div>
 
-	{% if craft.app.config.general.devMode %}
-	{# Debug mode - Add ?debug=1 to URL to see SEOmatic tracking details (devMode only) #}
-	<script>
-		(function() {
-			var urlParams = new URLSearchParams(window.location.search);
-			var debugMode = urlParams.get('debug') === '1';
-
-			if (debugMode) {
-				console.log('🐛 DEBUG MODE ENABLED');
-				console.log('🔗 Smart Link Slug:', {{ smartLink.slug|json_encode|raw }});
-				console.log('📊 Event Type:', 'redirect');
-				console.log('📱 Detected Device:', {{ (device ? device.toArray() : null)|json_encode|raw }});
-				console.log('🚦 Auto Redirect:', {{ autoRedirect|json_encode|raw }});
-				console.log('➡️ Go URL:', {{ goUrl|json_encode|raw }});
-
-				console.log('\n📡 SEOmatic Integration:');
-				{% if seomaticTracking %}
-					console.log('✅ SEOmatic tracking enabled');
-					console.log('📝 Tracking script rendered (see page source for details)');
-
-					if (typeof window.dataLayer !== 'undefined') {
-						console.log('✅ GTM dataLayer detected:', window.dataLayer);
-					} else {
-						console.log('⚠️ GTM dataLayer not found (SEOmatic may not be configured)');
-					}
-				{% else %}
-					console.log('❌ SEOmatic tracking not available');
-					console.log('   - Plugin may not be installed/enabled');
-					console.log('   - Or integration may be disabled in settings');
-				{% endif %}
-
-				var debugBanner = document.createElement('div');
-				debugBanner.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: #ff6b6b; color: white; padding: 10px; text-align: center; font-weight: bold; z-index: 9999;';
-				debugBanner.textContent = '🐛 DEBUG MODE - Check browser console for generated Go URL';
-				document.body.insertBefore(debugBanner, document.body.firstChild);
-			}
-		})();
-	</script>
-	{% endif %}
-
-	{{ smartLink.renderAutoRedirectScript(autoRedirectUrl) }}
+	{# Custom/staging templates can pass true to allow ?debug=1 outside devMode. #}
+	{{ smartLink.renderRedirectScript() }}
 
 	</body>
 	</html>
