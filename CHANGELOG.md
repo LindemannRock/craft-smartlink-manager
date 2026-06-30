@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.33.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.32.1...v5.33.0) (2026-06-30)
+
+
+### Added
+
+* **redirects:** add auto-redirect script URL handling for smart links ([1449633](https://github.com/LindemannRock/craft-smartlink-manager/commit/1449633ddacba9730c6b3ea61a8af6e6fe4120a5))
+
+
+### Fixed
+
+* add debug logging for auto redirect script ([ab7d667](https://github.com/LindemannRock/craft-smartlink-manager/commit/ab7d667e1894e819b552e8745f31d36b32e73988))
+* correct [@since](https://github.com/since) version for auto redirect and rendering methods ([ad9f34a](https://github.com/LindemannRock/craft-smartlink-manager/commit/ad9f34a85b4d1327d5b9a58e72c68316dac417a9))
+
 ## [5.32.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.32.0...v5.32.1) - 2026-06-29
 
 
