@@ -11,8 +11,9 @@
 
 {% set hasNavigation = canManageLinks or (settings.enableAnalytics and canViewAnalytics) or canManageSettings %}
 {% set hasCacheManagement = (settings.enableQrCodeCache or settings.cacheDeviceDetection) and canClearCache %}
+{% set hasServdStaticCacheManagement = servdStaticCacheAvailable and canClearCache %}
 {% set hasAnalyticsManagement = settings.enableAnalytics and canClearAnalytics %}
-{% set hasAnyQuickAction = hasNavigation or hasCacheManagement or hasAnalyticsManagement %}
+{% set hasAnyQuickAction = hasNavigation or hasCacheManagement or hasServdStaticCacheManagement or hasAnalyticsManagement %}
 
 {% set utilitiesConfig = {
     plugin: {
@@ -151,12 +152,24 @@
             } only %}
         {% endif %}
 
+        {# Servd Static Cache Section #}
+        {% if hasServdStaticCacheManagement %}
+            {% include 'lindemannrock-base/_layouts/cp-utilities/_action-section' with {
+                title: 'Servd Static Cache'|t('smartlink-manager'),
+                description: 'Queue a Servd purge for all public {linksName} URLs and QR landing pages. This does not clear Craft’s cache or other plugins’ caches.'|t('smartlink-manager', {linksName: linksName}),
+                showSeparator: hasNavigation or hasCacheManagement,
+                buttons: [
+                    {id: 'purge-servd-static-cache', label: 'Purge Servd static cache'|t('smartlink-manager'), class: 'btn secondary'},
+                ],
+            } only %}
+        {% endif %}
+
         {# Analytics Management Section #}
         {% if hasAnalyticsManagement %}
             {% include 'lindemannrock-base/_layouts/cp-utilities/_action-section' with {
                 title: 'Analytics Data Management'|t('smartlink-manager'),
                 description: 'Permanently delete all analytics tracking data. This action cannot be undone!'|t('smartlink-manager'),
-                showSeparator: hasNavigation or hasCacheManagement,
+                showSeparator: hasNavigation or hasCacheManagement or hasServdStaticCacheManagement,
                 buttons: [
                     {id: 'clear-all-analytics', label: 'Clear All Analytics'|t('smartlink-manager'), class: 'btn secondary', count: totalClicks},
                 ],
@@ -189,6 +202,15 @@
     action: actionUrl('smartlink-manager/settings/clear-all-caches'),
     confirm: 'Are you sure you want to clear all {pluginName} caches?'|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}),
     errorMessage: 'Failed to clear caches'|t('smartlink-manager'),
+} only %}
+{% endif %}
+
+{% if hasServdStaticCacheManagement %}
+{% include 'lindemannrock-base/_layouts/cp-utilities/_ajax-button' with {
+    id: 'purge-servd-static-cache',
+    action: actionUrl('smartlink-manager/settings/purge-servd-static-cache'),
+    confirm: 'Purge Servd static cache for all {linksName}?'|t('smartlink-manager', {linksName: linksName}),
+    errorMessage: 'Servd static cache is not available.'|t('smartlink-manager'),
 } only %}
 {% endif %}
 

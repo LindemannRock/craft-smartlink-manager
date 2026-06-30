@@ -173,6 +173,8 @@ class SmartLinkManagerUtility extends Utility
             'settings' => $settings,
             'pluginName' => $pluginName,
             'singularName' => $singularName,
+            'linksName' => $settings->getPluralLowerDisplayName(),
+            'servdStaticCacheAvailable' => SmartLinkManager::$plugin->servdStaticCache->isAvailable(),
         ]);
     }
 }

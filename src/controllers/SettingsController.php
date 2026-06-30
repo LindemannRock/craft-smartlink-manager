@@ -53,7 +53,7 @@ class SettingsController extends Controller
     public function beforeAction($action): bool
     {
         // Cache/analytics clearing actions use their own granular permissions
-        $selfPermittedActions = ['clear-all-caches', 'clear-all-analytics', 'clear-qr-cache', 'clear-device-cache', 'cleanup-analytics'];
+        $selfPermittedActions = ['clear-all-caches', 'clear-all-analytics', 'clear-qr-cache', 'clear-device-cache', 'cleanup-analytics', 'purge-servd-static-cache'];
         if (!in_array($action->id, $selfPermittedActions, true)) {
             $this->requirePermission('smartLinkManager:manageSettings');
         }
@@ -568,6 +568,43 @@ class SettingsController extends Controller
             return $this->asJson([
                 'success' => true,
                 'message' => $message,
+            ]);
+        } catch (\Exception $e) {
+            $this->logError($e->getMessage());
+            return $this->asJson([
+                'success' => false,
+                'error' => Craft::$app->getConfig()->getGeneral()->devMode
+                    ? $e->getMessage()
+                    : Craft::t('smartlink-manager', 'An unexpected error occurred.'),
+            ]);
+        }
+    }
+
+    /**
+     * Queue a Servd static-cache purge for public SmartLink URLs
+     *
+     * @return Response
+     * @since 5.34.0
+     */
+    public function actionPurgeServdStaticCache(): Response
+    {
+        $this->requirePostRequest();
+        $this->requirePermission('smartLinkManager:clearCache');
+        $this->requireAcceptsJson();
+
+        try {
+            if (!SmartLinkManager::$plugin->servdStaticCache->isAvailable()) {
+                return $this->asJson([
+                    'success' => false,
+                    'error' => Craft::t('smartlink-manager', 'Servd static cache is not available.'),
+                ]);
+            }
+
+            SmartLinkManager::$plugin->servdStaticCache->purgeAllUrls();
+
+            return $this->asJson([
+                'success' => true,
+                'message' => Craft::t('smartlink-manager', 'Servd static cache purge queued.'),
             ]);
         } catch (\Exception $e) {
             $this->logError($e->getMessage());
