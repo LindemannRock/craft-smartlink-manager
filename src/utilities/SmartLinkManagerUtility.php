@@ -11,6 +11,7 @@ namespace lindemannrock\smartlinkmanager\utilities;
 use Craft;
 use craft\base\Utility;
 use craft\db\Query;
+use lindemannrock\base\helpers\CacheHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\DbHelper;
 use lindemannrock\base\helpers\PluginHelper;
@@ -149,11 +150,8 @@ class SmartLinkManagerUtility extends Utility
         $deviceCacheFiles = 0;
 
         if ($user->getIdentity() && $user->checkPermission('smartLinkManager:clearCache') && $settings->cacheStorageMethod === 'file') {
-            $qrCachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'qr');
-            $deviceCachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device');
-
-            $qrCacheFiles = is_dir($qrCachePath) ? count(glob($qrCachePath . '*.cache')) : 0;
-            $deviceCacheFiles = is_dir($deviceCachePath) ? count(glob($deviceCachePath . '*.cache')) : 0;
+            $qrCacheFiles = CacheHelper::countCacheFiles(PluginHelper::getCachePath(SmartLinkManager::$plugin, 'qr'));
+            $deviceCacheFiles = CacheHelper::countCacheFiles(PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device'));
         }
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/utilities/index', [

@@ -10,7 +10,6 @@ namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
 use craft\web\Controller;
-use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\helpers\SettingsPostHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -483,41 +482,11 @@ class SettingsController extends Controller
 
         try {
             $settings = SmartLinkManager::$plugin->getSettings();
-            $cleared = 0;
-
-            if ($settings->cacheStorageMethod === 'redis') {
-                // Clear Redis cache
-                $cache = PluginHelper::getRedisCacheOrLog(SmartLinkManager::$plugin->id);
-                if ($cache !== null) {
-                    $redis = $cache->redis;
-
-                    // Get all QR cache keys from tracking set
-                    $keys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'qr')]) ?: [];
-
-                    // Delete QR cache keys using Craft's cache component
-                    foreach ($keys as $key) {
-                        $cache->delete($key);
-                    }
-
-                    // Clear the tracking set
-                    $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'qr')]);
-                }
-            } else {
-                // Clear file cache
-                $cachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'qr');
-                if (is_dir($cachePath)) {
-                    $files = glob($cachePath . '*.cache');
-                    foreach ($files as $file) {
-                        if (@unlink($file)) {
-                            $cleared++;
-                        }
-                    }
-                }
-            }
+            $cleared = SmartLinkManager::$plugin->localCache->clearQrCache();
 
             $message = $settings->cacheStorageMethod === 'redis'
                 ? Craft::t('smartlink-manager', 'QR code cache cleared successfully.')
-                : Craft::t('smartlink-manager', 'Cleared {count} QR code caches.', ['count' => $cleared]);
+                : Craft::t('smartlink-manager', 'Cleared {count, plural, =1{# QR code cache} other{# QR code caches}}.', ['count' => $cleared]);
 
             return $this->asJson([
                 'success' => true,
@@ -535,7 +504,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Clear device detection cache
+     * Clear device cache
      *
      * @return Response
      * @since 5.9.0
@@ -548,41 +517,11 @@ class SettingsController extends Controller
 
         try {
             $settings = SmartLinkManager::$plugin->getSettings();
-            $cleared = 0;
-
-            if ($settings->cacheStorageMethod === 'redis') {
-                // Clear Redis cache
-                $cache = PluginHelper::getRedisCacheOrLog(SmartLinkManager::$plugin->id);
-                if ($cache !== null) {
-                    $redis = $cache->redis;
-
-                    // Get all device cache keys from tracking set
-                    $keys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]) ?: [];
-
-                    // Delete device cache keys using Craft's cache component
-                    foreach ($keys as $key) {
-                        $cache->delete($key);
-                    }
-
-                    // Clear the tracking set
-                    $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]);
-                }
-            } else {
-                // Clear file cache
-                $cachePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device');
-                if (is_dir($cachePath)) {
-                    $files = glob($cachePath . '*.cache');
-                    foreach ($files as $file) {
-                        if (@unlink($file)) {
-                            $cleared++;
-                        }
-                    }
-                }
-            }
+            $cleared = SmartLinkManager::$plugin->localCache->clearDeviceCache();
 
             $message = $settings->cacheStorageMethod === 'redis'
                 ? Craft::t('smartlink-manager', 'Device cache cleared successfully.')
-                : Craft::t('smartlink-manager', 'Cleared {count} device detection caches.', ['count' => $cleared]);
+                : Craft::t('smartlink-manager', 'Cleared {count, plural, =1{# device cache} other{# device caches}}.', ['count' => $cleared]);
 
             return $this->asJson([
                 'success' => true,
@@ -613,61 +552,18 @@ class SettingsController extends Controller
 
         try {
             $settings = SmartLinkManager::$plugin->getSettings();
-            $totalCleared = 0;
 
             if ($settings->cacheStorageMethod === 'redis') {
-                // Clear Redis cache
-                $cache = PluginHelper::getRedisCacheOrLog(SmartLinkManager::$plugin->id);
-                if ($cache !== null) {
-                    $redis = $cache->redis;
-
-                    // Get all QR cache keys from tracking set
-                    $qrKeys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'qr')]) ?: [];
-
-                    // Delete QR cache keys using Craft's cache component
-                    foreach ($qrKeys as $key) {
-                        $cache->delete($key);
-                    }
-
-                    // Get all device cache keys from tracking set
-                    $deviceKeys = $redis->executeCommand('SMEMBERS', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]) ?: [];
-
-                    // Delete device cache keys using Craft's cache component
-                    foreach ($deviceKeys as $key) {
-                        $cache->delete($key);
-                    }
-
-                    // Clear the tracking sets
-                    $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'qr')]);
-                    $redis->executeCommand('DEL', [PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device')]);
-                }
+                SmartLinkManager::$plugin->localCache->clearAllCaches();
+                $message = Craft::t('smartlink-manager', 'All caches cleared successfully.');
             } else {
-                // Clear QR code file caches
-                $qrPath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'qr');
-                if (is_dir($qrPath)) {
-                    $files = glob($qrPath . '*.cache');
-                    foreach ($files as $file) {
-                        if (@unlink($file)) {
-                            $totalCleared++;
-                        }
-                    }
-                }
-
-                // Clear device detection file caches
-                $devicePath = PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device');
-                if (is_dir($devicePath)) {
-                    $files = glob($devicePath . '*.cache');
-                    foreach ($files as $file) {
-                        if (@unlink($file)) {
-                            $totalCleared++;
-                        }
-                    }
-                }
+                $qrCount = SmartLinkManager::$plugin->localCache->clearQrCache();
+                $deviceCount = SmartLinkManager::$plugin->localCache->clearDeviceCache();
+                $message = Craft::t('smartlink-manager', 'Cleared {qrCount, plural, =1{# QR code cache} other{# QR code caches}} and {deviceCount, plural, =1{# device cache} other{# device caches}}.', [
+                    'qrCount' => $qrCount,
+                    'deviceCount' => $deviceCount,
+                ]);
             }
-
-            $message = $settings->cacheStorageMethod === 'redis'
-                ? Craft::t('smartlink-manager', 'All caches cleared successfully.')
-                : Craft::t('smartlink-manager', 'Cleared {count} cache entries.', ['count' => $totalCleared]);
 
             return $this->asJson([
                 'success' => true,
