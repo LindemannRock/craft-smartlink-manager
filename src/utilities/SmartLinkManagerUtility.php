@@ -87,7 +87,6 @@ class SmartLinkManagerUtility extends Utility
         $platformStats = [];
         $clickTypes = [];
         $dailyClicks = [];
-        $recentAnalytics = [];
 
         if ($settings->enableAnalytics && $user->getIdentity() && $user->checkPermission('smartLinkManager:viewAnalytics')) {
             $analyticsStats = self::analyticsStats($selectedSiteIds);
@@ -98,7 +97,6 @@ class SmartLinkManagerUtility extends Utility
             $platformStats = $analyticsStats['platformStats'];
             $clickTypes = $analyticsStats['clickTypes'];
             $dailyClicks = $analyticsStats['dailyClicks'];
-            $recentAnalytics = $analyticsStats['recentAnalytics'];
         }
 
         // Get cache counts only if user can clear cache
@@ -123,7 +121,6 @@ class SmartLinkManagerUtility extends Utility
             'platformStats' => $platformStats,
             'clickTypes' => $clickTypes,
             'dailyClicks' => $dailyClicks,
-            'recentAnalytics' => $recentAnalytics,
             'qrCacheFiles' => $qrCacheFiles,
             'deviceCacheFiles' => $deviceCacheFiles,
             'settings' => $settings,
@@ -176,8 +173,7 @@ class SmartLinkManagerUtility extends Utility
      *     buttonClicks: int,
      *     platformStats: list<array<string, mixed>>,
      *     clickTypes: list<array<string, mixed>>,
-     *     dailyClicks: list<array<string, mixed>>,
-     *     recentAnalytics: array<string, mixed>
+     *     dailyClicks: list<array<string, mixed>>
      * }
      */
     private static function analyticsStats(array $siteIds): array
@@ -244,7 +240,6 @@ class SmartLinkManagerUtility extends Utility
             'platformStats' => $platformStats,
             'clickTypes' => $clickTypes,
             'dailyClicks' => $dailyClicks,
-            'recentAnalytics' => SmartLinkManager::$plugin->analytics->getAnalyticsSummary('last7days', null, $siteIds),
         ];
     }
 

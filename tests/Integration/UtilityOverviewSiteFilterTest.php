@@ -223,6 +223,8 @@ final class UtilityOverviewSiteFilterTest extends TestCase
         self::assertStringContainsString('SmartLinkManager::$plugin->getEnabledSites()', $utility);
         self::assertStringNotContainsString("Craft::t('smartlink-manager', 'All Sites')", $utility);
         self::assertStringNotContainsString('$settings->getEnabledSiteIds()', $utility);
+        self::assertStringNotContainsString('recentAnalytics', $utility);
+        self::assertStringNotContainsString("getAnalyticsSummary('last7days', null, \$siteIds)", $utility);
     }
 
     public function testCacheCountsAndServdPurgeRemainGlobal(): void
