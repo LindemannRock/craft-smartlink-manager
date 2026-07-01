@@ -49,7 +49,6 @@ Click **Export CSV** to download every smart link, across all sites, as a single
 | `qrCodeFormat` | `png` or `svg` |
 | `qrLogoId` | Asset ID for the QR logo (empty if none) |
 | `hideTitle` | `1` or `0` |
-| `languageDetection` | `1` or `0` |
 | `postDate` | Post date |
 | `dateExpired` | Expiry date (empty if not set) |
 
@@ -100,7 +99,7 @@ To create the same slug on more than one site, include one row per site with the
 | URL format | `fallbackUrl` and any platform URLs must be valid URLs |
 | Safe content | Rows whose title or description contain markup that could be unsafe are skipped |
 | `qrCodeSize` | Clamped to 100–1000 pixels |
-| Boolean columns | `enabled`, `trackAnalytics`, `qrCodeEnabled`, `hideTitle`, `languageDetection` accept truthy/falsy values (e.g. `1`/`0`) |
+| Boolean columns | `enabled`, `trackAnalytics`, `qrCodeEnabled`, `hideTitle` accept truthy/falsy values (e.g. `1`/`0`) |
 
 If `title` is left empty, the slug is used as the title.
 

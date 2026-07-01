@@ -8,7 +8,7 @@
 [![Logging Library](https://img.shields.io/badge/Logging%20Library-5.13.1%2B-green.svg)](https://github.com/LindemannRock/craft-logging-library)
 [![License](https://img.shields.io/packagist/l/lindemannrock/craft-smartlink-manager.svg)](LICENSE)
 
-Intelligent device detection and app store routing for Craft CMS. Create smart links that detect a visitor's device and redirect them to the right app store, download page, or URL — automatically.
+Intelligent device detection and app store routing for Craft CMS. Create smart links that detect a visitor's device and redirect them to the right app store, download page, or fallback URL automatically.
 
 ## Features
 
@@ -51,6 +51,9 @@ Generate the IP hash salt used by privacy-conscious analytics:
 
 ```bash
 php craft smartlink-manager/security/generate-salt
+```
+
+```bash
 ddev craft smartlink-manager/security/generate-salt
 ```
 

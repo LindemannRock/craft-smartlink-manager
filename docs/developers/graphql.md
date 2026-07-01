@@ -62,7 +62,7 @@ Or pass a site handle:
 }
 ```
 
-By default, SmartLink Manager auto-detects the device and language, then chooses the destination URL the same way the public redirect route does. You can pass a platform when the frontend already knows which destination button the visitor selected:
+By default, SmartLink Manager auto-detects the device, then chooses the destination URL the same way the public redirect route does. You can pass a platform when the frontend already knows which destination button the visitor selected:
 
 ```graphql
 query ResolveSmartLink($slug: String!, $site: String, $platform: String) {
@@ -125,7 +125,7 @@ This query behaves like a real smart link hit:
 
 - matched, enabled smart links increment `hits` when analytics tracking is enabled for the link and plugin
 - matched, enabled smart links record analytics with `source = graphql`
-- `platform: "auto"` uses device and language detection
+- `platform: "auto"` uses device detection
 - auto resolution falls back to `fallbackUrl` when the detected platform has no configured destination URL
 - `platform: "ios"`, `android`, `huawei`, `amazon`, `windows`, `mac`, or `fallback` resolves the matching destination URL
 - disabled, pending, expired, or site-disabled smart links return `null`
@@ -320,7 +320,6 @@ The SmartLink Manager object exposes these fields in resolver queries, list quer
 | `enabled` | `Boolean` | Whether the smart link is enabled |
 | `trackAnalytics` | `Boolean` | Whether per-link analytics tracking is enabled |
 | `hideTitle` | `Boolean` | Whether the public redirect page hides the title |
-| `languageDetection` | `Boolean` | Whether language-aware destinations are enabled |
 | `hits` | `Int` | Number of tracked hits |
 | `dateExpired` | `String` | Expiry datetime |
 

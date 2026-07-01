@@ -22,7 +22,7 @@ Each click event records:
 | **Agent** | Bot/system-agent name, category, and producer when detected |
 | **Country** | Visitor's country (requires geo-detection enabled) |
 | **City** | Visitor's city (requires geo-detection enabled) |
-| **Detected language** | Detected language code from the configured language detection method |
+| **Detected language** | Detected browser language code captured with device analytics |
 | **Referrer** | HTTP referrer URL |
 | **Click type** | `redirect` (followed the link), `qr_scan` (scanned QR), `button_click` (SEOmatic event) |
 | **Site** | Which Craft site the smart link belongs to |

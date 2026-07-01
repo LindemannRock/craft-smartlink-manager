@@ -6,7 +6,6 @@ SmartLink Manager identifies the visiting device using Matomo Device Detector an
 
 - **Right store, every time** — iOS visitors reach the App Store, Android visitors reach Google Play, and Huawei, Amazon, Windows, and Mac visitors each get their platform's URL.
 - **Graceful fallbacks** — when no platform-specific URL is set, visitors fall through to the next-best match and finally the generic fallback URL.
-- **Localized routing** — combine device detection with language detection to send visitors to a region- or language-specific destination.
 
 ## How Device Detection Works
 
@@ -76,25 +75,6 @@ The `DeviceInfo` model is available as the `device` variable in redirect templat
 
 Bot traffic is recorded in analytics with `isBot: true` but still follows the normal redirect logic — bots will hit the fallback URL unless a specific platform URL matches.
 
-## Language Detection
-
-SmartLink Manager can detect a visitor's language to route them to a localized URL. Configure the detection method in **Settings → General → Language Detection**:
-
-| Method | How It Works |
-|--------|-------------|
-| `browser` | Reads the `Accept-Language` HTTP header and parses the preferred language |
-| `ip` | Queries the configured geo-detection API for the visitor's country, then maps country to a default language |
-| `both` | Tries browser detection first; if that returns no result, falls back to IP-based detection |
-
-```php
-// config/smartlink-manager.php
-return [
-    'languageDetectionMethod' => 'browser',  // 'browser', 'ip', or 'both'
-];
-```
-
-Language codes follow the IETF BCP 47 format (e.g., `en`, `de`, `fr`, `en-US`, `zh-Hant`). When a localized URL on the smart link matches the detected language, it takes priority over the platform URL.
-
 ## Device Detection Caching
 
 Device detection results are cached to avoid parsing the same `User-Agent` repeatedly. The cache uses the same storage method as QR code caching (`'file'` or `'redis'`). The cache key is based on the `User-Agent` string.
@@ -110,10 +90,9 @@ return [
 
 The full resolution order for a redirect URL:
 
-1. **Language-specific URL** — if a localized URL matches the detected language
-2. **Platform-specific URL** — if a URL is set for the detected platform
-3. **Platform fallback** — Huawei → Android, Amazon → Android
-4. **Fallback URL** — the smart link's generic fallback
+1. **Platform-specific URL** — if a URL is set for the detected platform
+2. **Platform fallback** — Huawei → Android, Amazon → Android
+3. **Fallback URL** — the smart link's generic fallback
 5. **404** — no match found
 
 ## Redirect Template Variables
@@ -124,16 +103,11 @@ When building a custom redirect template, these variables are available:
 |----------|------|-------------|
 | `smartLink` | `SmartLink` | The smart link element being followed |
 | `device` | `DeviceInfo` | The detected device information |
-| `language` | `string\|null` | The detected language code, or `null` if undetected |
-| `goUrl` | `string` | Tracked URL for the auto-detected platform (the same value as `goUrls.auto`). Use it for an automatic redirect so the click is still counted. |
-| `goUrls` | `array` | Tracked URLs keyed by platform: `auto`, `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one routes through the `smartlink-manager/redirect/go/{slug}/{platform}` action hop that records the click server-side before redirecting. |
-| `autoRedirectUrl` | `string` | Server-side resolver URL for the **cache-safe** auto-redirect (@since(5.32.0)). Pass it to `smartLink.renderAutoRedirectScript()` for the auto-forward. |
+| `goUrls` | `array` | Tracked button URLs keyed by platform: `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one is a tracked `smartlink-manager/redirect/go` action URL that records the click server-side before redirecting. |
 | `source` | `string` | Traffic source for this view: `direct` or `qr` (resolved from the `?src=` query parameter). |
-| `eventType` | `string` | The event name passed to SEOmatic tracking — `redirect` on the landing page. |
-| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL for *this* request. The shipped template forwards via the cache-safe `renderAutoRedirectScript(autoRedirectUrl)` helper rather than hard-coding a redirect. |
 
 > [!IMPORTANT]
-> Point your platform buttons and any automatic redirect at the `goUrls` (or `goUrl`) values, **not** `smartLink.getUrl()`. The `goUrls` route through the tracked `smartlink-manager/redirect/go/{slug}/{platform}` hop, so the click is recorded before the visitor is sent on. `smartLink.getRedirectUrl()` returns the resolved destination directly and bypasses click tracking.
+> Point your platform buttons at the `goUrls` values, **not** `smartLink.getUrl()`. The `goUrls` route through the tracked `smartlink-manager/redirect/go` action, so the click is recorded before the visitor is sent on. `smartLink.getRedirectUrl()` returns the resolved destination directly and bypasses click tracking. For automatic forwarding, use `smartLink.renderRedirectScript()`.
 
 Example custom redirect template:
 
@@ -145,17 +119,17 @@ Example custom redirect template:
     <title>Redirecting to {{ smartLink.title }}…</title>
 </head>
 <body>
-    <p>Redirecting to {{ smartLink.title }}…</p>
+    <p>Choose a store, or wait while we check your device.</p>
     <p><a href="{{ goUrls.fallback }}">Click here if not redirected</a></p>
 
     {# Cache-safe auto-redirect — resolves the device-specific destination at request time #}
-    {{ smartLink.renderAutoRedirectScript(autoRedirectUrl) }}
+    {{ smartLink.renderRedirectScript() }}
 </body>
 </html>
 ```
 
 > [!IMPORTANT]
-> Use `renderAutoRedirectScript(autoRedirectUrl)` for the auto-forward — **don't** hard-code a redirect to `goUrl` (e.g. a `<meta http-equiv="refresh">` or `window.location` to `goUrl`). The landing page is platform-specific, so if it's cached, a baked-in `goUrl` would send later visitors to the wrong store. The helper fetches a no-store resolver at request time so the decision is always fresh. See [Custom templates → Cache-safe auto-redirect](../developers/custom-templates.md#cache-safe-auto-redirect).
+> Use `renderRedirectScript()` for the auto-forward. The landing page is platform-specific, so template-level auto redirects can send later cached visitors to the wrong store. The helper fetches a no-store resolver at request time so the decision is always fresh. See [Custom templates → Cache-safe auto-redirect](../developers/custom-templates.md#cache-safe-auto-redirect).
 
 ## Modifying the Redirect URL
 
@@ -182,5 +156,4 @@ See [Events](../developers/events.md) for the full event reference.
 
 - Detection accuracy depends on the `User-Agent` string — some browsers and apps send minimal or no user agent data
 - Headless browsers, server-side rendering, and prerendering tools may not send a meaningful user agent
-- Language detection via IP requires a configured geo-detection provider (see [Analytics](analytics.md#geo-detection))
 - Bot filtering identifies known crawlers but cannot detect all bots — some bot traffic will appear as real visits

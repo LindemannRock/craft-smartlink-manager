@@ -32,7 +32,7 @@ Every smart link is a native Craft element with its own slug, status, publish sc
 
 - **[Analytics](analytics.md)** — Track every click with device type, OS, browser, country, city, language, referrer, and click type (redirect, QR scan, button click). Configurable retention policy. Exportable to CSV, Excel, and JSON.
 
-- **[Device Detection](device-detection.md)** — Matomo Device Detector identifies iOS, Android, Huawei, Amazon Fire, Windows, and Mac devices. Language detection supports browser headers, IP-based geolocation, or both combined.
+- **[Device Detection](device-detection.md)** — Matomo Device Detector identifies iOS, Android, Huawei, Amazon Fire, Windows, and Mac devices and routes each visitor to the right platform URL.
 
 - **[Integrations](integrations.md)** — Built-in integrations with SEOmatic (Content SEO source and GTM/GA4 data layer events), Redirect Manager (automatic 301 on slug change), and Craft Link Field (SmartLink as a link type).
 
@@ -70,6 +70,8 @@ QR codes follow the same pattern but are accessed via `/{qrPrefix}/{slug}` (defa
 | CP Utility panel | Utilities → SmartLink Manager |
 | Console command for salt generation | `smartlink-manager/security/generate-salt` |
 
+The CP Utility panel includes a site selector for overview link and analytics stats: choose **All Sites** for the aggregate view, or select one enabled site available to the current user to narrow those counts. QR/device cache counts and Servd static-cache purge actions remain global because they operate at the plugin/cache layer, not a single site's analytics scope.
+
 ## Dashboard Widgets
 
 SmartLink Manager provides two Craft dashboard widgets. Add them via **Dashboard → New Widget**.
@@ -86,7 +88,7 @@ Both widgets require the `smartLinkManager:viewAnalytics` permission and can be 
 If you're new to SmartLink Manager, start here:
 
 1. [Quickstart](../get-started/quickstart.md) — install the plugin, generate the IP salt, create your first link
-2. [Smart Links](smart-links.md) — learn about platform URLs, statuses, and language detection
+2. [Smart Links](smart-links.md) — learn about platform URLs and statuses
 3. [QR Codes](qr-codes.md) — generate and customize QR codes
 4. [Analytics](analytics.md) — understand what's tracked and how to export data
 5. [Integrations](integrations.md) — connect SEOmatic, Redirect Manager, and Craft Link Field

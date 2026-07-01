@@ -43,7 +43,7 @@ Tracking is pushed **client-side** from the rendered redirect or QR page. A redi
 }
 ```
 
-QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Button-click events use `click_type: "button_click"` and include the clicked platform, read from the tracked go URL — the `{platform}` segment of `…/smartlink-manager/redirect/go/{slug}/{platform}` (or a `?platform=` query parameter if your custom template adds one), falling back to `unknown` if neither is present.
+QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Button-click events use `click_type: "button_click"` and include the clicked platform, read from the `?platform=` query parameter on the tracked go URL (`…/actions/smartlink-manager/redirect/go`), falling back to `unknown` if it is absent.
 
 ### Configuration
 
@@ -107,7 +107,7 @@ Enable the integration in **Settings → Integrations → Redirect Manager**. Th
 
 When a visitor hits a smart link **landing URL** whose slug no longer resolves (the smart link was deleted or renamed), SmartLink Manager checks Redirect Manager for a matching redirect before falling back to `notFoundRedirectUrl`. This keeps old bookmarks and QR codes working after a slug change even if no automatic redirect was created.
 
-This applies to unresolved **landing** smart-link URLs. Tracking-hop URLs (the `…/redirect/go/{slug}/{platform}` action) go straight to the configured 404 when they fail — they are not routed through Redirect Manager.
+This applies to unresolved **landing** smart-link URLs. Tracking-hop URLs (the `smartlink-manager/redirect/go` action) go straight to the configured 404 when they fail — they are not routed through Redirect Manager.
 
 ## Craft Link Field Integration
 
@@ -130,6 +130,16 @@ If the smart link is disabled or expired, the URL returns `null` — the same be
 
 The `SmartLinkType` class is registered automatically when Link Field is installed. There is no additional configuration required.
 
+## Servd static cache
+
+When the [Servd Asset Storage](https://plugins.craftcms.com/servd-asset-storage) plugin is installed and enabled, SmartLink Manager automatically purges Servd's static cache for the affected URLs whenever a smart link changes — there's no settings toggle to turn it on.
+
+- **What's purged:** the public smart link URL and the QR landing URL, across all enabled sites (generated with `Settings::buildPublicUrl()`, so `smartlinkBaseUrl`, custom domains, and `{siteHandle}` tokens are respected).
+- **When:** on save/update, before delete, after a slug change (the old slug is purged too), and when SmartLink Manager caches are cleared.
+- **Prerequisites:** purging only runs on Servd's hosting infrastructure with static cache enabled — the PHP `redis` extension must be loaded and Servd's runtime environment variables (`SERVD_CACHE_ENABLED`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_STATIC_CACHE_DB`, `ENVIRONMENT`, `SERVD_PROJECT_SLUG`) must be present. On a standard Servd deployment these are already set; anywhere else the purge is silently skipped.
+
+This keeps Servd from serving stale redirect/QR landing responses after a change. See [Troubleshooting](../resources/troubleshooting.md).
+
 ## Integration Requirements
 
 | Integration | Required Plugin |
@@ -137,6 +147,7 @@ The `SmartLinkType` class is registered automatically when Link Field is install
 | SEOmatic | `nystudio107/craft-seomatic` |
 | Redirect Manager | `lindemannrock/craft-redirect-manager` |
 | Craft Link Field | Craft CMS 5.3+ (native Link field) |
+| Servd static cache | `servd/craft-asset-storage` (optional — auto-detected; Servd hosting only) |
 
 All integrations are detected automatically. If the required plugin is not installed, its card still shows with an **Install Plugin** link but the enable toggle is disabled, and no integration code runs until it is installed and enabled.
 

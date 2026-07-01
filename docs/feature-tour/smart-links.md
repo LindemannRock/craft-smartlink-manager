@@ -12,7 +12,6 @@ You create and manage smart links in **SmartLink Manager** in the Craft control 
 
 - **App marketing** — one link that lands iOS visitors in the App Store, Android visitors in Google Play, and everyone else on a fallback page.
 - **Multi-store apps** — reach Huawei AppGallery and Amazon Appstore audiences alongside the major stores, from the same link.
-- **Localized destinations** — send visitors to a region- or language-specific URL based on their browser or location.
 - **Scheduled launches** — set a publish date so a link goes live the moment a campaign starts, and an expiry date so it retires itself.
 
 ## Creating and Editing Smart Links
@@ -96,20 +95,6 @@ Smart links support four statuses, matching the standard Craft element lifecycle
 
 Set a `postDate` to schedule a link to go live in the future. Set a `dateExpired` to automatically retire it after a campaign ends.
 
-## Language Detection and Localized URLs
-
-SmartLink Manager can detect a visitor's language and route them to a language-specific URL. Configure the detection method in **Settings → General**:
-
-| Method | How it works |
-|--------|-------------|
-| `browser` | Reads the `Accept-Language` HTTP header |
-| `ip` | Queries a geo-detection API to determine country, then maps to language |
-| `both` | Tries browser header first, falls back to IP-based detection |
-
-Add localized URLs to a smart link using the **Localized URLs** section on the edit page. Each entry maps a language code (e.g., `de`, `fr`, `en-US`) to a destination URL.
-
-When a localized URL matches the visitor's detected language, it takes priority over the platform URL.
-
 ## Image Attachments
 
 Each smart link can have an associated image asset. This image is used on the QR code display page and can be rendered in templates via `smartLink.getImage()`.
@@ -126,16 +111,11 @@ The following variables are available in the redirect template:
 |----------|------|-------------|
 | `smartLink` | `SmartLink` | The smart link element being followed |
 | `device` | `DeviceInfo` | The detected device information |
-| `language` | `string\|null` | Detected language code, or `null` if undetected |
-| `goUrl` | `string` | Tracked URL for the auto-detected platform (the same value as `goUrls.auto`). Use it for an automatic redirect so the click is still counted. |
-| `goUrls` | `array` | Tracked URLs keyed by platform: `auto`, `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one routes through the `smartlink-manager/redirect/go/{slug}/{platform}` hop that records the click server-side before redirecting. |
-| `autoRedirectUrl` | `string` | Server-side resolver URL for the **cache-safe** auto-redirect (@since(5.32.0)). Pass it to `smartLink.renderAutoRedirectScript()` for the auto-forward. |
+| `goUrls` | `array` | Tracked button URLs keyed by platform: `ios`, `android`, `huawei`, `amazon`, `windows`, `mac`, `fallback`. Each one is a tracked `smartlink-manager/redirect/go` action URL that records the click server-side before redirecting. |
 | `source` | `string` | Traffic source for this view: `direct` or `qr` (from the `?src=` query parameter). |
-| `eventType` | `string` | The event name passed to SEOmatic tracking — `redirect` on the landing page. |
-| `autoRedirect` | `bool` | `true` when a mobile, tablet, or in-app visitor resolves to a configured platform URL for *this* request. For the actual auto-forward, use the cache-safe `renderAutoRedirectScript(autoRedirectUrl)` helper. |
 
 > [!IMPORTANT]
-> Point your platform buttons at the `goUrls` values, **not** `smartLink.getUrl()` — the `goUrls` route through the tracked hop so the click is recorded before the visitor is sent on. For the automatic forward, use the cache-safe `smartLink.renderAutoRedirectScript(autoRedirectUrl)` helper rather than redirecting to `goUrl` directly. See [Device Detection](device-detection.md#redirect-template-variables) and [Custom templates](../developers/custom-templates.md#cache-safe-auto-redirect) for complete examples.
+> Point your platform buttons at the `goUrls` values, **not** `smartLink.getUrl()` — the `goUrls` route through the tracked hop so the click is recorded before the visitor is sent on. For the automatic forward, use `smartLink.renderRedirectScript()`. See [Device Detection](device-detection.md#redirect-template-variables) and [Custom templates](../developers/custom-templates.md#cache-safe-auto-redirect) for complete examples.
 
 ## Querying Smart Links in Templates
 
@@ -158,4 +138,3 @@ See [Template Variables](../developers/template-variables.md) for the full query
 
 - Slugs must be unique across all sites — there is no per-site slug scoping
 - Platform detection depends on the `User-Agent` header — clients that send no user agent fall through to the fallback URL
-- Language detection via IP requires a configured geo-detection provider (see [Configuration](../get-started/configuration.md))

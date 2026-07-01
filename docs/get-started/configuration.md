@@ -85,8 +85,6 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `analyticsRetention` | `int` | `90` | Analytics data retention in days (0 = unlimited, max 3650) |
 | `anonymizeIpAddress` | `bool` | `false` | Anonymize IP addresses before storing (masks last octet for IPv4, last 80 bits for IPv6) |
 | `ipHashSalt` | `?string` | `null` | IP hash salt for privacy protection. Falls back to `SMARTLINK_MANAGER_IP_SALT` env var. **Config/env only — not stored in DB** |
-| `includeDisabledInExport` | `bool` | `false` | Include disabled smart links in analytics exports |
-| `includeExpiredInExport` | `bool` | `false` | Include expired smart links in analytics exports |
 
 ## Detection Settings
 
@@ -100,13 +98,12 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `defaultCountry` | `?string` | `null` | Default 2-letter country code for local dev. Falls back to `SMARTLINK_MANAGER_DEFAULT_COUNTRY` env var. Requires `defaultCity`; otherwise private/local IP geo fields stay empty. **Config/env only — not stored in DB** |
 | `defaultCity` | `?string` | `null` | Default city for local dev. Falls back to `SMARTLINK_MANAGER_DEFAULT_CITY` env var. Requires `defaultCountry`; otherwise private/local IP geo fields stay empty. **Config/env only — not stored in DB** |
 
-### Device & Language Detection
+### Device Detection
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `cacheDeviceDetection` | `bool` | `true` | Cache device detection results |
 | `deviceDetectionCacheDuration` | `int` | `3600` | Device detection cache duration in seconds (default: 1 hour) |
-| `languageDetectionMethod` | `string` | `'browser'` | Language detection method: `browser`, `ip`, or `both` |
 
 ## Asset Settings
 

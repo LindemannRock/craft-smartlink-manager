@@ -63,4 +63,4 @@ You should see the redirect happen and, after a moment, click data appear on the
 
 - [Configuration](configuration.md) — customize URL prefixes, QR defaults, analytics retention, and geo-detection
 - [Feature Tour](../feature-tour/overview.md) — explore QR codes, analytics, device detection, and integrations
-- [Smart Links](../feature-tour/smart-links.md) — platform URLs, statuses, language detection, and image attachments
+- [Smart Links](../feature-tour/smart-links.md) — platform URLs, statuses, scheduling, and image attachments

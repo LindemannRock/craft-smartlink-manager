@@ -177,9 +177,9 @@ If a date-format setting does not appear to change the index:
 
 **Quick checks:**
 
-1. **Use the generated URLs from the controller.** Custom redirect templates should use `goUrl` for auto-redirects and `goUrls.ios`, `goUrls.android`, `goUrls.fallback`, etc. for buttons. Do not rebuild action URLs manually in Twig.
+1. **Use the generated URLs from the controller.** Custom redirect templates should use `goUrls.ios`, `goUrls.android`, `goUrls.fallback`, etc. for buttons, and `smartLink.renderRedirectScript()` for the automatic forward. Do not rebuild action URLs manually in Twig.
 
-2. **Check debug mode in development.** When `devMode` is enabled, add `?debug=1` to a rendered smart link URL to stop the browser before the second hop. The shipped redirect template logs the generated `goUrl` in the browser console, so you can confirm custom domains and multisite site parameters before the final redirect runs.
+2. **Check debug mode in development.** With the shipped template (`{{ smartLink.renderRedirectScript() }}`), `?debug=1` works **only when `devMode` is enabled** — it does nothing on staging or production. In a `devMode` environment, add `?debug=1` to a rendered smart link URL to stop the browser before the auto-forward; the script then logs the resolver URL in the browser console, so you can confirm custom domains and multisite site parameters. To debug on staging without `devMode`, switch your custom template to `{{ smartLink.renderRedirectScript(true) }}` (allows `?debug=1` regardless of `devMode`). Otherwise diagnose caching from the **response headers** — `curl -sI 'https://example.com/go/your-link'` and check `x-cache` (a `HIT`, or a non-zero `age`, means a CDN served a cached copy) and `cache-control`.
 
 3. **Check your base URL setting.** If `smartlinkBaseUrl` has no `{siteHandle}`, `{siteId}`, or `{siteUid}` token, SmartLink Manager adds the current link's site as a query parameter on generated tracking URLs.
 
@@ -202,6 +202,8 @@ If a date-format setting does not appear to change the index:
 3. **Clear manually** — go to **Utilities → SmartLink Manager** and use the **Clear Cache** button. Alternatively, use **Utilities → Caches → Clear All Caches** to flush all Craft caches.
 
 4. **Check the `clearCache` permission** — users need the `smartLinkManager:clearCache` permission to clear the cache from the CP. Admins always have access.
+
+If the Servd Asset Storage plugin is installed and enabled, SmartLink Manager queues targeted Servd static-cache purges for the public smart link URL and QR landing URL when a smart link is saved, deleted, renamed, or when SmartLink Manager caches are cleared. This helps clear stale cached redirect and QR landing responses after content changes. Purging only runs on Servd's own hosting — it also requires the PHP `redis` extension and Servd's runtime environment variables, otherwise it is silently skipped (see [Integrations → Servd static cache](../feature-tour/integrations.md#servd-static-cache)).
 
 ---
 
