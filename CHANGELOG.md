@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.34.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.33.0...v5.34.0) (2026-07-01)
+
+
+### Added
+
+* add event listeners for SmartLink element changes ([a2f5c45](https://github.com/LindemannRock/craft-smartlink-manager/commit/a2f5c45496a2358702309890c86e5ae0d91bc196))
+* add site selection dropdown and link status analytics ([e52ab07](https://github.com/LindemannRock/craft-smartlink-manager/commit/e52ab07780064262b07aaea44c16e4e928287295))
+* **cache:** implement local cache service for QR and device detection ([e7a6f80](https://github.com/LindemannRock/craft-smartlink-manager/commit/e7a6f80f76957708e2abba4ef8bb600f8736fbc1))
+* **i18n:** add Servd static cache purge messages in multiple languages ([83d3862](https://github.com/LindemannRock/craft-smartlink-manager/commit/83d3862034243f88036eee04f6cd07432f75ae3b))
+* **servdstaticcache:** add runtime config validation for Servd cache ([50acdd1](https://github.com/LindemannRock/craft-smartlink-manager/commit/50acdd10040be361b617407586f00e7a0398fc22))
+* **settings:** add action to purge Servd static cache for SmartLinks ([8ce5f14](https://github.com/LindemannRock/craft-smartlink-manager/commit/8ce5f14d0ad1baccabe0b63aef71b93f5097182f))
+
+
+### Fixed
+
+* fail closed for empty analytics site scopes ([7791968](https://github.com/LindemannRock/craft-smartlink-manager/commit/779196866c284c67588e7851deb7beb17fd0de41))
+
 ## [5.33.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.32.1...v5.33.0) - 2026-06-30
 
 
