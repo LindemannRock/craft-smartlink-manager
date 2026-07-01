@@ -50,7 +50,7 @@ class AnalyticsSummaryService
             $query->andWhere(['linkId' => $smartLinkId]);
         }
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -59,10 +59,14 @@ class AnalyticsSummaryService
 
         $activeLinksQuery = SmartLink::find()
             ->status(SmartLink::STATUS_ENABLED);
-        if ($siteId) {
+        if ($siteId === []) {
+            $activeLinks = 0;
+        } elseif ($siteId !== null) {
             $activeLinksQuery->siteId($siteId);
+            $activeLinks = $activeLinksQuery->count();
+        } else {
+            $activeLinks = $activeLinksQuery->count();
         }
-        $activeLinks = $activeLinksQuery->count();
 
         $totalLinks = SmartLink::find()->count();
 
@@ -76,7 +80,7 @@ class AnalyticsSummaryService
 
         $this->applyDateRangeFilter($linksQuery, $dateRange, 'a.dateCreated');
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $linksQuery->andWhere(['a.siteId' => $siteId]);
         }
 
@@ -109,7 +113,7 @@ class AnalyticsSummaryService
             ->from('{{%smartlinkmanager_analytics}}')
             ->where(['linkId' => $smartLinkId]);
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -267,7 +271,7 @@ class AnalyticsSummaryService
 
         $this->applyDateRangeFilter($query, $dateRange, 'a.dateCreated');
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['a.siteId' => $siteId]);
         }
 
@@ -425,7 +429,7 @@ class AnalyticsSummaryService
 
         $this->applyDateRangeFilter($query, $dateRange, 'a.dateCreated');
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['a.siteId' => $siteId]);
         }
 
@@ -504,7 +508,7 @@ class AnalyticsSummaryService
             $query->andWhere(['linkId' => $smartLinkId]);
         }
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -549,7 +553,7 @@ class AnalyticsSummaryService
             $query->andWhere(['linkId' => $smartLinkId]);
         }
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -607,7 +611,7 @@ class AnalyticsSummaryService
             ->groupBy(DbHelper::jsonExtractExpression('metadata', 'platform'))
             ->orderBy(['clicks' => SORT_DESC]);
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 

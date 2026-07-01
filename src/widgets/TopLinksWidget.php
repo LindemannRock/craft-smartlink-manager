@@ -126,7 +126,10 @@ class TopLinksWidget extends Widget
             return '<p class="light">' . Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.') . '</p>';
         }
 
-        $analyticsData = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $this->effectiveSiteId());
+        $siteId = $this->effectiveSiteId();
+        $analyticsData = $siteId === []
+            ? $this->emptyAnalyticsSummary()
+            : SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $siteId);
         $topLinks = array_slice($analyticsData['topLinks'] ?? [], 0, $this->limit);
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/widgets/top-links/body', [

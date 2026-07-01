@@ -56,4 +56,20 @@ trait SiteFilterTrait
             SmartLinkManager::$plugin->getEnabledSites()
         );
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function emptyAnalyticsSummary(): array
+    {
+        return [
+            'totalClicks' => 0,
+            'uniqueVisitors' => 0,
+            'activeLinks' => 0,
+            'totalLinks' => 0,
+            'linksUsed' => 0,
+            'linksUsedPercentage' => 0,
+            'topLinks' => [],
+        ];
+    }
 }

@@ -54,7 +54,7 @@ class AnalyticsChartService
             $query->andWhere(['linkId' => $smartLinkId]);
         }
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -139,7 +139,7 @@ class AnalyticsChartService
             $query->andWhere(['linkId' => $smartLinkId]);
         }
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -215,7 +215,7 @@ class AnalyticsChartService
 
         $this->applyDateRangeFilter($query, $dateRange);
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 
@@ -245,7 +245,7 @@ class AnalyticsChartService
 
         $this->applyDateRangeFilter($browserByCountry, $dateRange);
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $browserByCountry->andWhere(['siteId' => $siteId]);
         }
 
@@ -276,7 +276,7 @@ class AnalyticsChartService
 
         $this->applyDateRangeFilter($topCountriesQuery, $dateRange);
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $topCountriesQuery->andWhere(['siteId' => $siteId]);
         }
 
@@ -300,7 +300,7 @@ class AnalyticsChartService
 
             $this->applyDateRangeFilter($brandsByCountry, $dateRange);
 
-            if ($siteId) {
+            if ($siteId !== null) {
                 $brandsByCountry->andWhere(['siteId' => $siteId]);
             }
 

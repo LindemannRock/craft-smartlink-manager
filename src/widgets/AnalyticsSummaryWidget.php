@@ -119,7 +119,10 @@ class AnalyticsSummaryWidget extends Widget
             return '<p class="light">' . Craft::t('smartlink-manager', 'Analytics are disabled in plugin settings.') . '</p>';
         }
 
-        $analyticsData = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $this->effectiveSiteId());
+        $siteId = $this->effectiveSiteId();
+        $analyticsData = $siteId === []
+            ? $this->emptyAnalyticsSummary()
+            : SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $siteId);
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/widgets/analytics-summary/body', [
             'widget' => $this,

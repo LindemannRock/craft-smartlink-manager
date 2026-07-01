@@ -77,7 +77,7 @@ class AnalyticsExportService
             $query->andWhere(['linkId' => $smartLinkId]);
         }
 
-        if ($siteId) {
+        if ($siteId !== null) {
             $query->andWhere(['siteId' => $siteId]);
         }
 

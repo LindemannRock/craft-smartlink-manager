@@ -72,7 +72,9 @@ class AnalyticsController extends Controller
         $variables['sites'] = SmartLinkManager::$plugin->getEnabledSites();
 
         // Get analytics data (scoped to user's allowed sites)
-        $variables['analyticsData'] = SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, null, $resolvedSiteId);
+        $variables['analyticsData'] = $resolvedSiteId === []
+            ? self::emptyAnalyticsSummary()
+            : SmartLinkManager::$plugin->analytics->getAnalyticsSummary($dateRange, null, $resolvedSiteId);
 
         // Pass settings to template
         $variables['settings'] = $settings;
@@ -138,6 +140,13 @@ class AnalyticsController extends Controller
         }
 
         try {
+            if ($resolvedSiteId === []) {
+                return $this->asJson([
+                    'success' => true,
+                    'data' => self::emptyAnalyticsData($type),
+                ]);
+            }
+
             $data = match ($type) {
                 'clicks' => SmartLinkManager::$plugin->analytics->getClicksData($smartLinkId, $dateRange, $resolvedSiteId),
                 'devices' => SmartLinkManager::$plugin->analytics->getDeviceBreakdown($smartLinkId, $dateRange, $resolvedSiteId),
@@ -230,11 +239,13 @@ class AnalyticsController extends Controller
         }
 
         // Get export data (scoped to user's allowed sites)
-        $exportData = SmartLinkManager::$plugin->analytics->getExportData(
-            $smartLinkId ? (int)$smartLinkId : null,
-            $dateRange,
-            $resolvedSiteId
-        );
+        $exportData = $resolvedSiteId === []
+            ? []
+            : SmartLinkManager::$plugin->analytics->getExportData(
+                $smartLinkId ? (int)$smartLinkId : null,
+                $dateRange,
+                $resolvedSiteId
+            );
 
         // Check for empty data
         if (empty($exportData)) {
@@ -341,6 +352,54 @@ class AnalyticsController extends Controller
             fn($site) => $site->id,
             SmartLinkManager::$plugin->getEnabledSites()
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private static function emptyAnalyticsSummary(): array
+    {
+        return [
+            'totalClicks' => 0,
+            'uniqueVisitors' => 0,
+            'activeLinks' => 0,
+            'totalLinks' => 0,
+            'linksUsed' => 0,
+            'linksUsedPercentage' => 0,
+            'topLinks' => [],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|list<array<string, mixed>>
+     */
+    private static function emptyAnalyticsData(string $type): array
+    {
+        return match ($type) {
+            'clicks', 'devices', 'platforms' => ['labels' => [], 'values' => []],
+            'device-types' => [
+                'labels' => [],
+                'values' => [],
+                'categories' => ['mobile' => 0, 'desktop' => 0, 'other' => 0, 'unknown' => 0],
+                'categoryPercentages' => ['mobile' => 0, 'desktop' => 0, 'other' => 0, 'unknown' => 0],
+                'totalClicks' => 0,
+            ],
+            'device-brands', 'os-breakdown', 'browsers' => [
+                'labels' => [],
+                'values' => [],
+                'percentages' => [],
+                'totalClicks' => 0,
+            ],
+            'traffic-types' => ['labels' => [], 'types' => [], 'values' => []],
+            'hourly' => [
+                'data' => array_fill(0, 24, 0),
+                'peakHour' => 0,
+                'peakHourFormatted' => DateFormatHelper::formatTime('00:00:00', 'cascade', false, false, SmartLinkManager::$plugin->id) ?? '00:00',
+            ],
+            'insights' => ['cityMobileUsage' => [], 'browserByCountry' => [], 'brandsByCountry' => []],
+            'top-agents', 'countries', 'all-countries', 'all-cities', 'languages', 'recent-clicks' => [],
+            default => self::emptyAnalyticsSummary(),
+        };
     }
 
     /**
