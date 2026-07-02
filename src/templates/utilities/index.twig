@@ -127,7 +127,7 @@
                 {% set navButtons = navButtons|merge([{type: 'link', label: 'Manage {pluginName}'|t('smartlink-manager', {pluginName: smartlinkHelper.pluralDisplayName}), url: url('smartlink-manager')}]) %}
             {% endif %}
             {% if canManageSettings %}
-                {% set navButtons = navButtons|merge([{type: 'link', label: 'Manage settings'|t('smartlink-manager'), url: url('smartlink-manager/settings')}]) %}
+                {% set navButtons = navButtons|merge([{type: 'link', label: 'Manage Settings'|t('smartlink-manager'), url: url('smartlink-manager/settings')}]) %}
             {% endif %}
             {% if settings.enableAnalytics and canViewAnalytics %}
                 {% set navButtons = navButtons|merge([{type: 'link', label: 'View Analytics'|t('smartlink-manager'), url: url('smartlink-manager/analytics')}]) %}
@@ -181,7 +181,7 @@
                 description: 'Queue a Servd purge for all public {linksName} URLs and QR landing pages. This does not clear Craft’s cache or other plugins’ caches.'|t('smartlink-manager', {linksName: linksName}),
                 showSeparator: hasNavigation or hasCacheManagement,
                 buttons: [
-                    {id: 'purge-servd-static-cache', label: 'Purge Servd static cache'|t('smartlink-manager'), class: 'btn secondary'},
+                    {id: 'purge-servd-static-cache', label: 'Purge Servd Static Cache'|t('smartlink-manager'), class: 'btn secondary'},
                 ],
             } only %}
         {% endif %}
