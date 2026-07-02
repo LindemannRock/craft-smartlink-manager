@@ -41,6 +41,10 @@
             return div.innerHTML;
         }
 
+        function escAttr(str) {
+            return esc(str).replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
         function fmtNum(n) {
             return Number(n).toLocaleString();
         }
@@ -372,7 +376,7 @@
                     '<td>' + esc(click.clickTypeLabel || '') + '</td>' +
                     '<td>' + esc(click.platformLabel || '\u2014') + '</td>' +
                     '<td>' + esc(click.sourceLabel || '') + '</td>' +
-                    '<td>' + (destUrl ? '<span title="' + esc(destUrl) + '">' + esc(destDisplay) + '</span>' : '\u2014') + '</td>' +
+                    '<td>' + (destUrl ? '<span title="' + escAttr(destUrl) + '">' + esc(destDisplay) + '</span>' : '\u2014') + '</td>' +
                     '<td>' + esc(agentLabel(click)) + '</td>' +
                     '<td>' + esc(click.deviceType || '\u2014') + '</td>' +
                     '<td>' + esc(click.browser || '\u2014') + '</td>' +
