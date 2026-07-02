@@ -25,12 +25,13 @@
     {{ actionInput('smartlink-manager/settings/save') }}
     {{ redirectInput('smartlink-manager/settings/behavior') }}
     {{ hiddenInput('section', 'behavior') }}
+    {% set smartlinkLowerNameHtml = smartlinkHelper.lowerDisplayName|e %}
 
         <h2 class="first">{{ "Redirect Behavior"|t('smartlink-manager') }}</h2>
 
         {{ forms.autosuggestField({
             label: "404 Redirect URL"|t('smartlink-manager'),
-            instructions: "Where to redirect when a {singularName} is not found or disabled"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+            instructions: "Where to redirect when a {singularName} is not found or disabled"|t('smartlink-manager', {singularName: smartlinkLowerNameHtml}),
             id: 'notFoundRedirectUrl',
             name: 'settings[notFoundRedirectUrl]',
             value: settings.notFoundRedirectUrl ?? '/',

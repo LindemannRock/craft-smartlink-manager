@@ -25,12 +25,13 @@
     {{ actionInput('smartlink-manager/settings/save') }}
     {{ redirectInput('smartlink-manager/settings/analytics') }}
     {{ hiddenInput('section', 'analytics') }}
+    {% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}
 
         <h2 class="first">{{ "Analytics"|t('smartlink-manager') }}</h2>
 
         {{ forms.lightswitchField({
             label: "Enable Analytics"|t('smartlink-manager'),
-            instructions: "Track clicks and visitor data for {pluginName}"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
+            instructions: "Track clicks and visitor data for {pluginName}"|t('smartlink-manager', {pluginName: smartlinkPluralLowerNameHtml}),
             id: 'enableAnalytics',
             name: 'settings[enableAnalytics]',
             on: settings.enableAnalytics ?? true,

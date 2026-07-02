@@ -4,11 +4,12 @@
 {% set locale = craft.app.i18n.getLocaleById(currentSite.language) %}
 {% set textDir = locale.getOrientation() %}
 {% set disabled = smartLink.getIsRevision() %}
+{% set smartlinkLowerNameHtml = smartlinkHelper.lowerDisplayName|e %}
 
 
 {{ forms.textField({
     label: "Title"|t('smartlink-manager'),
-    instructions: "The title of this {singularName}"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    instructions: "The title of this {singularName}"|t('smartlink-manager', {singularName: smartlinkLowerNameHtml}),
     id: 'title',
     name: 'title',
     value: smartLink.title ?? '',
@@ -24,7 +25,7 @@
 
 {{ forms.textareaField({
     label: "Description"|t('smartlink-manager'),
-    instructions: "A brief description of this {singularName}"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    instructions: "A brief description of this {singularName}"|t('smartlink-manager', {singularName: smartlinkLowerNameHtml}),
     id: 'description',
     name: 'description',
     value: smartLink.description ?? '',
@@ -43,7 +44,7 @@
 
 {{ forms.elementSelectField({
     label: "Image"|t('smartlink-manager'),
-    instructions: "Select an image for this {singularName}"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    instructions: "Select an image for this {singularName}"|t('smartlink-manager', {singularName: smartlinkLowerNameHtml}),
     id: 'imageId',
     name: 'imageId',
     elementType: 'craft\\elements\\Asset',
@@ -60,7 +61,7 @@
 
 {{ forms.selectField({
     label: "Image Size"|t('smartlink-manager'),
-    instructions: "Select the size for the {singularName} image"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    instructions: "Select the size for the {singularName} image"|t('smartlink-manager', {singularName: smartlinkLowerNameHtml}),
     id: 'imageSize',
     name: 'imageSize',
     value: smartLink.imageSize ?? 'xl',
@@ -185,7 +186,7 @@
 
 {{ forms.lightswitchField({
     label: "Hide Title on Landing Pages"|t('smartlink-manager'),
-    instructions: "Hide the {singularName} title on both redirect and QR code landing pages"|t('smartlink-manager', {singularName: smartlinkHelper.lowerDisplayName}),
+    instructions: "Hide the {singularName} title on both redirect and QR code landing pages"|t('smartlink-manager', {singularName: smartlinkLowerNameHtml}),
     id: 'hideTitle',
     name: 'hideTitle',
     on: smartLink.hideTitle ?? false,

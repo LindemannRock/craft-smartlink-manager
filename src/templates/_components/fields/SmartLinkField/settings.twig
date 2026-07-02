@@ -1,4 +1,5 @@
 {% import "_includes/forms" as forms %}
+{% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}
 
 {{ forms.textField({
     label: "Selection Label"|t('smartlink-manager'),
@@ -11,7 +12,7 @@
 
 {{ forms.lightswitchField({
     label: "Allow Multiple"|t('smartlink-manager'),
-    instructions: "Whether to allow multiple {pluginName} to be selected"|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
+    instructions: "Whether to allow multiple {pluginName} to be selected"|t('smartlink-manager', {pluginName: smartlinkPluralLowerNameHtml}),
     id: 'allowMultiple',
     name: 'allowMultiple',
     on: field.allowMultiple,
@@ -21,7 +22,7 @@
 <div id="limit-container" class="{{ not field.allowMultiple ? 'hidden' }}">
     {{ forms.textField({
         label: "Limit"|t('smartlink-manager'),
-        instructions: "The maximum number of {pluginName} that can be selected."|t('smartlink-manager', {pluginName: smartlinkHelper.pluralLowerDisplayName}),
+        instructions: "The maximum number of {pluginName} that can be selected."|t('smartlink-manager', {pluginName: smartlinkPluralLowerNameHtml}),
         id: 'limit',
         name: 'limit',
         value: field.limit,
