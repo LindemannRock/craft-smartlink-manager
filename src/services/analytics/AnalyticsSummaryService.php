@@ -68,7 +68,16 @@ class AnalyticsSummaryService
             $activeLinks = $activeLinksQuery->count();
         }
 
-        $totalLinks = SmartLink::find()->count();
+        if ($siteId === []) {
+            $totalLinks = 0;
+        } else {
+            $totalLinksQuery = SmartLink::find()
+                ->status(null);
+            if ($siteId !== null) {
+                $totalLinksQuery->siteId($siteId);
+            }
+            $totalLinks = $totalLinksQuery->count();
+        }
 
         $linksQuery = (new Query())
             ->from('{{%smartlinkmanager_analytics}} a')
