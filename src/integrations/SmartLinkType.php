@@ -27,6 +27,11 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 class SmartLinkType extends BaseElementLinkType
 {
     /**
+     * @var array<string, SmartLink|false>
+     */
+    private static array $fetchedElements = [];
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -310,6 +315,11 @@ class SmartLinkType extends BaseElementLinkType
             return null;
         }
 
+        $cacheKey = sprintf('%s:%s', $elementId, $currentSiteId);
+        if (array_key_exists($cacheKey, self::$fetchedElements)) {
+            return self::$fetchedElements[$cacheKey] ?: null;
+        }
+
         $smartLink = SmartLink::find()
             ->id($elementId)
             ->siteId($currentSiteId)
@@ -324,6 +334,8 @@ class SmartLinkType extends BaseElementLinkType
                 ->status(null)
                 ->one();
         }
+
+        self::$fetchedElements[$cacheKey] = $smartLink instanceof SmartLink ? $smartLink : false;
 
         return $smartLink;
     }
