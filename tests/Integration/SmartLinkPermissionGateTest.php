@@ -70,6 +70,24 @@ final class SmartLinkPermissionGateTest extends TestCase
         });
     }
 
+    public function testDeleteAndRestoreFailClosedWhenElementSiteIsMissing(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 2) . '/src/controllers/SmartlinksController.php');
+        self::assertIsString($source);
+
+        foreach (['actionDelete', 'actionRestore', 'actionHardDelete'] as $method) {
+            $start = strpos($source, 'public function ' . $method);
+            self::assertIsInt($start);
+            $nextMethod = strpos($source, "\n    /**", $start + 1);
+            self::assertIsInt($nextMethod);
+            $block = substr($source, $start, $nextMethod - $start);
+
+            self::assertStringContainsString("throw new \\yii\\web\\BadRequestHttpException('Invalid site.');", $block);
+            self::assertStringContainsString("\$this->requirePermission('editSite:' . \$site->uid);", $block);
+            self::assertStringNotContainsString("if (\$site) {\n                \$this->requirePermission('editSite:' . \$site->uid);", $block);
+        }
+    }
+
     public function testNativeElementActionsRequireEditableSiteForExistingLinks(): void
     {
         $sites = Craft::$app->getSites()->getAllSites();

@@ -418,9 +418,11 @@ class SmartlinksController extends Controller
         // Enforce site edit permission (multi-site only)
         if (Craft::$app->getIsMultiSite()) {
             $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
-            if ($site) {
-                $this->requirePermission('editSite:' . $site->uid);
+            if (!$site) {
+                throw new \yii\web\BadRequestHttpException('Invalid site.');
             }
+
+            $this->requirePermission('editSite:' . $site->uid);
         }
 
         if (!SmartLinkManager::$plugin->smartLinks->deleteSmartLink($smartLink)) {
@@ -458,9 +460,11 @@ class SmartlinksController extends Controller
         // Enforce site edit permission (multi-site only)
         if (Craft::$app->getIsMultiSite()) {
             $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
-            if ($site) {
-                $this->requirePermission('editSite:' . $site->uid);
+            if (!$site) {
+                throw new \yii\web\BadRequestHttpException('Invalid site.');
             }
+
+            $this->requirePermission('editSite:' . $site->uid);
         }
 
         // Restore the element
@@ -498,9 +502,11 @@ class SmartlinksController extends Controller
         // Enforce site edit permission (multi-site only)
         if (Craft::$app->getIsMultiSite()) {
             $site = Craft::$app->getSites()->getSiteById($smartLink->siteId);
-            if ($site) {
-                $this->requirePermission('editSite:' . $site->uid);
+            if (!$site) {
+                throw new \yii\web\BadRequestHttpException('Invalid site.');
             }
+
+            $this->requirePermission('editSite:' . $site->uid);
         }
 
         // Permanently delete the element
