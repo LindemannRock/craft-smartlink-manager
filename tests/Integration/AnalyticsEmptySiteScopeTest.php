@@ -15,6 +15,7 @@ use craft\console\User as ConsoleUser;
 use lindemannrock\smartlinkmanager\controllers\AnalyticsController;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use lindemannrock\smartlinkmanager\widgets\AnalyticsSummaryWidget;
+use lindemannrock\smartlinkmanager\widgets\TopLinksWidget;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -24,6 +25,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
  */
 #[CoversClass(AnalyticsController::class)]
 #[CoversClass(AnalyticsSummaryWidget::class)]
+#[CoversClass(TopLinksWidget::class)]
 final class AnalyticsEmptySiteScopeTest extends TestCase
 {
     private mixed $originalUser = null;
@@ -156,6 +158,17 @@ final class AnalyticsEmptySiteScopeTest extends TestCase
         $summary = file_get_contents($pluginRoot . '/src/services/analytics/AnalyticsSummaryService.php');
         self::assertIsString($summary);
         self::assertStringContainsString('$siteId === []', $summary);
+    }
+
+    public function testTopLinksWidgetUsesDirectTopLinksQuery(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 2) . '/src/widgets/TopLinksWidget.php');
+        self::assertIsString($source);
+
+        self::assertStringContainsString('getTopLinks($this->dateRange, $this->limit, $siteId)', $source);
+        self::assertStringContainsString('$siteId === []', $source);
+        self::assertStringNotContainsString('getAnalyticsSummary(', $source);
+        self::assertStringNotContainsString('array_slice($analyticsData', $source);
     }
 
     /**

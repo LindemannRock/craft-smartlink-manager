@@ -127,10 +127,9 @@ class TopLinksWidget extends Widget
         }
 
         $siteId = $this->effectiveSiteId();
-        $analyticsData = $siteId === []
-            ? $this->emptyAnalyticsSummary()
-            : SmartLinkManager::$plugin->analytics->getAnalyticsSummary($this->dateRange, null, $siteId);
-        $topLinks = array_slice($analyticsData['topLinks'] ?? [], 0, $this->limit);
+        $topLinks = $siteId === []
+            ? []
+            : SmartLinkManager::$plugin->analytics->getTopLinks($this->dateRange, $this->limit, $siteId);
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/widgets/top-links/body', [
             'widget' => $this,
