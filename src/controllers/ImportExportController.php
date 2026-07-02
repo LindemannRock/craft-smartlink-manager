@@ -202,7 +202,10 @@ class ImportExportController extends Controller
             return $this->redirect('smartlink-manager/import-export/map');
         } catch (\Throwable $e) {
             $this->logError('Failed to parse smartlink CSV', ['error' => $e->getMessage()]);
-            Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Failed to parse CSV: {error}', ['error' => $e->getMessage()]));
+            $error = Craft::$app->getConfig()->getGeneral()->devMode
+                ? $e->getMessage()
+                : Craft::t('smartlink-manager', 'An unexpected error occurred.');
+            Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Failed to parse CSV: {error}', ['error' => $error]));
             return $this->redirect('smartlink-manager/import-export');
         }
     }
