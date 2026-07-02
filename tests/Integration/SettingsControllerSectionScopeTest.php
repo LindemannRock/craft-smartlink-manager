@@ -98,4 +98,27 @@ final class SettingsControllerSectionScopeTest extends TestCase
             self::assertSame($attributes, $method->invoke($controller, $section), "Unexpected {$section} settings scope.");
         }
     }
+
+    public function testRawSettingsInfoBoxesEscapeConfiguredPluginName(): void
+    {
+        $pluginRoot = dirname(__DIR__, 2);
+        $general = file_get_contents($pluginRoot . '/src/templates/settings/general.twig');
+        $integrations = file_get_contents($pluginRoot . '/src/templates/settings/integrations.twig');
+        self::assertIsString($general);
+        self::assertIsString($integrations);
+
+        self::assertStringContainsString('{% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}', $general);
+        self::assertStringContainsString('{% set smartlinkDisplayNameHtml = smartlinkHelper.displayName|e %}', $general);
+        self::assertStringContainsString('smartName: smartlinkFullNameHtml', $general);
+        self::assertStringContainsString('singularName: smartlinkDisplayNameHtml', $general);
+        self::assertStringNotContainsString('smartName: smartlinkHelper.fullName', $general);
+        self::assertStringNotContainsString('message: "URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>."|t(\'smartlink-manager\', {singularName: smartlinkHelper.displayName})|raw', $general);
+        self::assertStringNotContainsString('singularName: smartlinkHelper.displayName, siteHandle:', $general);
+
+        self::assertStringContainsString('{% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}', $integrations);
+        self::assertStringContainsString('pluginName: smartlinkFullNameHtml', $integrations);
+        self::assertStringContainsString('~ smartlinkFullNameHtml ~', $integrations);
+        self::assertStringNotContainsString("|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}) ~", $integrations);
+        self::assertStringNotContainsString('~ smartlinkHelper.fullName ~', $integrations);
+    }
 }

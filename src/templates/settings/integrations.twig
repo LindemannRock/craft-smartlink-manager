@@ -25,6 +25,7 @@
     {{ actionInput('smartlink-manager/settings/save') }}
     {{ redirectInput('smartlink-manager/settings/integrations') }}
     {{ hiddenInput('section', 'integrations') }}
+    {% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}
 
         <h2 class="first">{{ "Third-Party Integrations"|t('smartlink-manager') }}</h2>
 
@@ -243,12 +244,12 @@
                     message: '<strong>' ~ "How Events Are Sent"|t('smartlink-manager') ~ ':</strong>
                         <ul class="lr-integration-help-list">
                             <li>
-                                <strong>' ~ "{pluginName} pushes events to GTM or GA4 dataLayer only"|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}) ~ '</strong><br>
+                                <strong>' ~ "{pluginName} pushes events to GTM or GA4 dataLayer only"|t('smartlink-manager', {pluginName: smartlinkFullNameHtml}) ~ '</strong><br>
                                 <span class="light">' ~ "Only Google Tag Manager and Google Analytics 4 support the dataLayer format in SEOmatic"|t('smartlink-manager') ~ '</span>
                             </li>
                             <li>
                                 <strong>' ~ "Use GTM to forward to other platforms"|t('smartlink-manager') ~ '</strong><br>
-                                <span class="light">' ~ "Configure GTM triggers and tags to forward {pluginName} events to Facebook Pixel, LinkedIn, HubSpot, etc."|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}) ~ '</span>
+                                <span class="light">' ~ "Configure GTM triggers and tags to forward {pluginName} events to Facebook Pixel, LinkedIn, HubSpot, etc."|t('smartlink-manager', {pluginName: smartlinkFullNameHtml}) ~ '</span>
                             </li>
                             <li>
                                 <span class="light">' ~ "Events are only sent when analytics tracking is enabled both globally and per-link"|t('smartlink-manager') ~ '</span>
@@ -256,7 +257,7 @@
                         </ul>
                         <p class="lr-integration-help-note">
                             <strong>' ~ "Architecture"|t('smartlink-manager') ~ ':</strong>
-                            ' ~ smartlinkHelper.fullName ~ ' → GTM/GA4 dataLayer → GTM Triggers → Facebook/LinkedIn/HubSpot/etc.
+                            ' ~ smartlinkFullNameHtml ~ ' → GTM/GA4 dataLayer → GTM Triggers → Facebook/LinkedIn/HubSpot/etc.
                         </p>'
                 } %}
             {% endblock %}
