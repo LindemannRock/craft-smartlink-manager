@@ -779,7 +779,7 @@ class SmartLink extends Element
             return $user->can('smartLinkManager:createLinks');
         }
 
-        return $user->can('smartLinkManager:editLinks');
+        return $user->can('smartLinkManager:editLinks') && $this->canEditCurrentSite($user);
     }
 
     /**
@@ -787,7 +787,7 @@ class SmartLink extends Element
      */
     public function canDelete(User $user): bool
     {
-        return $user->can('smartLinkManager:deleteLinks');
+        return $user->can('smartLinkManager:deleteLinks') && $this->canEditCurrentSite($user);
     }
 
     /**
@@ -795,7 +795,22 @@ class SmartLink extends Element
      */
     public function canDuplicate(User $user): bool
     {
-        return $user->can('smartLinkManager:createLinks');
+        return $user->can('smartLinkManager:createLinks') && $this->canEditCurrentSite($user);
+    }
+
+    private function canEditCurrentSite(User $user): bool
+    {
+        if (!Craft::$app->getIsMultiSite()) {
+            return true;
+        }
+
+        if (!$this->siteId) {
+            return false;
+        }
+
+        $site = Craft::$app->getSites()->getSiteById((int)$this->siteId);
+
+        return $site !== null && $user->can('editSite:' . $site->uid);
     }
     
     /**
