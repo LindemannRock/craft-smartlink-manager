@@ -22,6 +22,17 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(SmartLink::class)]
 final class SmartLinkPermissionGateTest extends TestCase
 {
+    public function testImportExportUsesEditablePluginSiteFilter(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 2) . '/src/controllers/ImportExportController.php');
+        self::assertIsString($source);
+
+        self::assertStringContainsString('SmartLinkManager::$plugin->getEnabledSites()', $source);
+        self::assertStringContainsString('->siteId($siteIds)', $source);
+        self::assertStringNotContainsString("SmartLink::find()->site('*')", $source);
+        self::assertStringContainsString('in_array((int)$site->id, $siteIds, true)', $source);
+    }
+
     public function testNativeElementActionsRequireEditableSiteForExistingLinks(): void
     {
         $sites = Craft::$app->getSites()->getAllSites();

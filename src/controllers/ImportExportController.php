@@ -103,9 +103,25 @@ class ImportExportController extends Controller
             'hideTitle', 'postDate', 'dateExpired',
         ];
 
-        $smartLinks = SmartLink::find()->site('*')->status(null)->orderBy(['elements.dateCreated' => SORT_DESC])->all();
+        $siteIds = array_values(array_map(
+            static fn($site): int => (int)$site->id,
+            SmartLinkManager::$plugin->getEnabledSites(),
+        ));
+        if (empty($siteIds)) {
+            Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'No smart links to export.'));
+            return $this->redirect('smartlink-manager/import-export');
+        }
+
+        $smartLinks = SmartLink::find()
+            ->siteId($siteIds)
+            ->status(null)
+            ->orderBy(['elements.dateCreated' => SORT_DESC])
+            ->all();
         $sitesById = [];
         foreach (Craft::$app->getSites()->getAllSites() as $site) {
+            if (!in_array((int)$site->id, $siteIds, true)) {
+                continue;
+            }
             $sitesById[$site->id] = $site;
         }
 
