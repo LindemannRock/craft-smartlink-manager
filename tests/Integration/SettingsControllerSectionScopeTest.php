@@ -154,4 +154,61 @@ final class SettingsControllerSectionScopeTest extends TestCase
         self::assertStringNotContainsString("|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}) ~", $integrations);
         self::assertStringNotContainsString('~ smartlinkHelper.fullName ~', $integrations);
     }
+
+    public function testRawInfoBoxMessagesEscapeDynamicPlaceholders(): void
+    {
+        $pluginRoot = dirname(__DIR__, 2);
+        $files = [
+            '/src/templates/settings/cache.twig' => [
+                'contains' => [
+                    '{% set smartlinkCacheBasePathHtml = smartlinkHelper.cacheBasePath|e %}',
+                    'path: smartlinkCacheBasePathHtml',
+                ],
+                'notContains' => [
+                    'path: smartlinkHelper.cacheBasePath',
+                ],
+            ],
+            '/src/templates/settings/integrations.twig' => [
+                'contains' => [
+                    '{% set smartlinkLowerNameHtml = smartlinkHelper.lowerDisplayName|e %}',
+                    '{% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}',
+                    '{% set seomaticPluginNameHtml = seomaticPluginName|e %}',
+                    '{% set rmPluginNameHtml = rmPluginName|e %}',
+                    'pluginName: seomaticPluginNameHtml',
+                    'pluginName: smartlinkPluralLowerNameHtml',
+                    'pluginName: smartlinkLowerNameHtml',
+                    'rmPluginName: rmPluginNameHtml',
+                ],
+                'notContains' => [
+                    'message: \'<strong>\' ~ "Note"|t(\'smartlink-manager\') ~ \':</strong> \' ~ "No tracking scripts are currently configured in {pluginName}. Events will be queued but not sent until you configure GTM or Google Analytics in {pluginName}."|t(\'smartlink-manager\', { pluginName: seomaticPluginName })',
+                    ' ~ "View and manage all redirects ({pluginName} + regular pages) in one place"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
+                    ' ~ "See how many people try to access deleted or changed {pluginName}, their devices, browsers, and countries"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
+                    ' ~ "Redirects persist even if {pluginName} is deleted, preventing broken links permanently"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.lowerDisplayName}) ~ ',
+                    ' ~ "{rmPluginName} shows which plugin created each redirect for better organization"|t(\'smartlink-manager\', {rmPluginName: rmPluginName}) ~ ',
+                ],
+            ],
+            '/src/templates/utilities/index.twig' => [
+                'contains' => [
+                    '{% set selectedSiteLabelHtml = selectedSiteLabel|e %}',
+                    '~ selectedSiteLabelHtml',
+                ],
+                'notContains' => [
+                    '~ selectedSiteLabel,',
+                ],
+            ],
+        ];
+
+        foreach ($files as $file => $expectations) {
+            $source = file_get_contents($pluginRoot . $file);
+            self::assertIsString($source);
+
+            foreach ($expectations['contains'] as $expected) {
+                self::assertStringContainsString($expected, $source, $file);
+            }
+
+            foreach ($expectations['notContains'] as $unexpected) {
+                self::assertStringNotContainsString($unexpected, $source, $file);
+            }
+        }
+    }
 }

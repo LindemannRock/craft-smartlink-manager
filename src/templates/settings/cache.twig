@@ -25,6 +25,7 @@
     {{ actionInput('smartlink-manager/settings/save') }}
     {{ redirectInput('smartlink-manager/settings/cache') }}
     {{ hiddenInput('section', 'cache') }}
+    {% set smartlinkCacheBasePathHtml = smartlinkHelper.cacheBasePath|e %}
 
         <h2 class="first">{{ "Cache Storage Settings"|t('smartlink-manager') }}</h2>
 
@@ -48,7 +49,7 @@
         <div id="cache-location-file" class="{{ (settings.cacheStorageMethod ?? 'file') == 'redis' ? 'hidden' }}">
             {% include 'lindemannrock-base/_components/info-box' with {
                 message: '<strong>Cache Location:</strong> <code>{path}</code>'|t('smartlink-manager', {
-                    path: smartlinkHelper.cacheBasePath
+                    path: smartlinkCacheBasePathHtml
                 }),
                 type: 'info'
             } %}
