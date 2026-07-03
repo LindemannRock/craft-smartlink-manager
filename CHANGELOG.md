@@ -1,5 +1,35 @@
 # Changelog
 
+## [5.35.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.34.0...v5.35.0) - 2026-07-03
+
+
+### Added
+
+* cache fetched SmartLink elements for improved performance ([aa5438b](https://github.com/LindemannRock/craft-smartlink-manager/commit/aa5438b29e8e2523f0240767ea7b839311bb27e9))
+* **i18n:** escape smartlink names in settings templates ([f47a2ab](https://github.com/LindemannRock/craft-smartlink-manager/commit/f47a2ab22be47dc159f6df30b8b847c727007753))
+* **qrcode:** normalize color options and add fallback handling ([4c53662](https://github.com/LindemannRock/craft-smartlink-manager/commit/4c53662564b7f8e659ee4c7bd90657d348167910))
+
+
+### Fixed
+
+* **analytics:** handle total links count for empty site ID ([757f23d](https://github.com/LindemannRock/craft-smartlink-manager/commit/757f23d14e22f2520f5632a4cb6a1abd8b8b76f1))
+* **controllers:** enforce site edit permission checks in SmartlinksController ([2ce546a](https://github.com/LindemannRock/craft-smartlink-manager/commit/2ce546ab89c2cd8adb634c548d0e4d5dd4d4a249))
+* enforce required runtime environment for Servd static cache ([2a43bda](https://github.com/LindemannRock/craft-smartlink-manager/commit/2a43bdac5afb2ec242905ed019baae95ca9667c6))
+* escape plugin name placeholders in cache, utilities and integrations settings ([80fb95a](https://github.com/LindemannRock/craft-smartlink-manager/commit/80fb95a275819367e4611ef66c46a384c80331f1))
+* **i18n:** correct translations across multiple locales ([7f89fd3](https://github.com/LindemannRock/craft-smartlink-manager/commit/7f89fd39db5e3410f64a536241be5d23db9b8e7c))
+* **i18n:** escape smartlink names in settings templates ([d13425e](https://github.com/LindemannRock/craft-smartlink-manager/commit/d13425ea00bc2e6e4cabd281a35f6bd59c1f7fe2))
+* **import-export:** enforce site-specific import permissions for SmartLink ([0b0fb05](https://github.com/LindemannRock/craft-smartlink-manager/commit/0b0fb054bc056758fd94be090842dffe69924a8c))
+* **import-export:** ensure export only includes enabled sites ([466d1f3](https://github.com/LindemannRock/craft-smartlink-manager/commit/466d1f3513a64056caf611227950550b105e8013))
+* **import-export:** handle CSV parse errors with user-friendly messages ([9d1c225](https://github.com/LindemannRock/craft-smartlink-manager/commit/9d1c225427c488f26bcf7467112001deae0bf4af))
+* **permissions:** enforce site-specific editing permissions for SmartLink ([71803e6](https://github.com/LindemannRock/craft-smartlink-manager/commit/71803e66da057386d6d2e2dab334ca9349d295f8))
+* **settings:** update slug and QR prefix migration tips for clarity ([49a3a56](https://github.com/LindemannRock/craft-smartlink-manager/commit/49a3a5630715b01745f01f258023d6c2235baa5e))
+* **widget:** return empty array for top links when no site ID is set ([9ecad0b](https://github.com/LindemannRock/craft-smartlink-manager/commit/9ecad0bdc9709a501c5c56067ab6eef3605d65b8))
+
+
+### Security
+
+* **analytics:** add attribute escaping for destination titles to prevent XSS ([5a09c48](https://github.com/LindemannRock/craft-smartlink-manager/commit/5a09c48d5155f3c548f2376a349e8f26818c7446))
+
 ## [5.34.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.33.0...v5.34.0) - 2026-07-01
 
 
