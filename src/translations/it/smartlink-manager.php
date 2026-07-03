@@ -313,7 +313,7 @@ return [
     'Both' => 'Entrambi',
 
     // Settings: Analytics
-    'Analytics Settings' => 'Impostazioni Analytics',
+    'Analytics Settings' => 'Impostazioni analisi',
     'Enable Analytics' => 'Abilita Analytics',
     'Track Analytics' => 'Monitora Analytics',
     'Track clicks and visitor data for {pluginName}' => 'Monitora i clic e i dati dei visitatori per {pluginName}',
@@ -344,7 +344,7 @@ return [
     'Detect user location for analytics' => 'Rilevare la posizione dell\'utente per Analytics',
     'View Geographic Details' => 'Visualizza dettagli geografici',
     'Loading geographic data...' => 'Caricamento dati geografici...',
-    'Cache Device Detection' => 'Cache rilevamento dispositivo',
+    'Cache Device Detection' => 'Cache rilevamento dispositivi',
     'Cache device detection results for better performance' => 'Memorizzare nella cache i risultati del rilevamento dispositivo per migliorare le prestazioni',
     'Device Detection Cache Duration (seconds)' => 'Durata cache rilevamento dispositivo (secondi)',
 
@@ -352,9 +352,9 @@ return [
     'Cache Settings' => 'Impostazioni cache',
     'Cache Storage Settings' => 'Impostazioni archiviazione cache',
     'Cache Storage Method' => 'Metodo di archiviazione cache',
-    'How to store cache data. Use Redis/Database for load-balanced or multi-server environments.' => 'Come archiviare i dati della cache. Usare Redis/Database per ambienti con bilanciamento del carico o multi-server.',
+    'How to store cache data. Use Redis/Database for load-balanced or multi-server environments.' => 'Come archiviare i dati della cache. Usare Redis/Database per ambienti con load balancing o multi-server.',
     'File System (default, single server)' => 'File System (predefinito, server singolo)',
-    'Redis/Database (load-balanced, multi-server, cloud hosting)' => 'Redis/Database (bilanciamento del carico, multi-server, cloud hosting)',
+    'Redis/Database (load-balanced, multi-server, cloud hosting)' => 'Redis/Database (load balancing, multi-server, cloud hosting)',
     'QR Code Caching' => 'Cache QR Code',
     'Enable QR Code Cache' => 'Abilita cache QR Code',
     'Cache generated QR codes for better performance' => 'Memorizzare nella cache i QR Code generati per migliorare le prestazioni',
@@ -364,7 +364,7 @@ return [
     'Cache duration in seconds' => 'Durata cache in secondi',
     'Min: 60 (1 minute), Max: 604800 (7 days)' => 'Min: 60 (1 minuto), Max: 604800 (7 giorni)',
     'Caching' => 'Cache',
-    'Device Detection Caching' => 'Cache rilevamento dispositivo',
+    'Device Detection Caching' => 'Caching rilevamento dispositivi',
     'Device Detection Cache Duration' => 'Durata cache rilevamento dispositivo',
     '<strong>Cache Location:</strong> <code>{path}</code>' => '<strong>Posizione cache:</strong> <code>{path}</code>',
     '<strong>Cache Location:</strong> Using Craft\'s configured Redis cache from <code>config/app.php</code>' => '<strong>Posizione cache:</strong> utilizzo della cache Redis configurata di Craft da <code>config/app.php</code>',
@@ -713,7 +713,7 @@ return [
     'Last 90 days' => 'Ultimi 90 giorni',
     'All time' => 'Sempre',
     'Date Range' => 'Intervallo date',
-    'Device Breakdown' => 'Analisi dispositivi',
+    'Device Breakdown' => 'Ripartizione dispositivi',
 
     // Utilities
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Monitorare le prestazioni dei link, tracciare Analytics e gestire la cache per i reindirizzamenti {singularName} e i QR Code.',

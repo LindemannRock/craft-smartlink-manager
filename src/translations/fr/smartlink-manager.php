@@ -114,7 +114,7 @@ return [
     'Link' => 'Lien',
     'Number of Links' => 'Nombre de liens',
     'How many top links to display (1-20)' => 'Nombre de top liens à afficher (1-20)',
-    'View all {pluginName}' => 'Voir tous les {pluginName}',
+    'View all {pluginName}' => 'Afficher tous les {pluginName}',
     'No {pluginName} yet' => 'Pas encore de {pluginName}',
     'Create your first {singularName} to see it here.' => 'Créez votre premier {singularName} pour l\'afficher ici.',
 
@@ -284,7 +284,7 @@ return [
     'Extra Large (2048px)' => 'Très grand (2048px)',
     'Custom Size...' => 'Taille personnalisée...',
     'QR Code Actions' => 'Actions QR Code',
-    'View QR Code' => 'Voir le QR Code',
+    'View QR Code' => 'Afficher le QR Code',
     'QR Code Image' => 'Image QR Code',
     'QR Code Page' => 'Page QR Code',
     'Reset to Defaults' => 'Réinitialiser aux valeurs par défaut',
@@ -342,7 +342,7 @@ return [
     'Geographic Distribution' => 'Distribution géographique',
     'Enable Geographic Detection' => 'Activer la détection géographique',
     'Detect user location for analytics' => 'Détecter la localisation de l\'utilisateur pour l\'analytique',
-    'View Geographic Details' => 'Voir les détails géographiques',
+    'View Geographic Details' => 'Afficher les détails géographiques',
     'Loading geographic data...' => 'Chargement des données géographiques...',
     'Cache Device Detection' => 'Mettre en cache la détection des appareils',
     'Cache device detection results for better performance' => 'Mettre en cache les résultats de détection des appareils pour de meilleures performances',
@@ -459,7 +459,7 @@ return [
     'No field layout available.' => 'Aucune disposition de champs disponible.',
 
     // Smartlinks: Index
-    'View Analytics' => 'Voir l\'analytique',
+    'View Analytics' => 'Afficher les analytiques',
     'Clicks:' => 'Clics :',
 
     // Smartlinks: Edit

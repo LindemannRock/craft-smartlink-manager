@@ -571,7 +571,7 @@ return [
     'Auto (detect)' => 'Automático (detectar)',
     'Comma (,)' => 'Coma (,)',
     'Semicolon (;)' => 'Punto y coma (;)',
-    'Tab' => 'Tabulador',
+    'Tab' => 'Tabulación',
     'Pipe (|)' => 'Barra vertical (|)',
     'The maximum file size is {size} and the import is limited to {rows} rows per file.' => 'El tamaño máximo del archivo es {size} y la importación está limitada a {rows} filas por archivo.',
     'Upload & Map Columns' => 'Cargar y mapear columnas',

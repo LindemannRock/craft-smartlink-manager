@@ -528,7 +528,7 @@ return [
     'Import completed: {imported} imported, {failed} failed.' => 'インポート完了: {imported} 件インポート済み、{failed} 件失敗。',
     'Import completed: {imported} {pluginName} imported.' => 'インポート完了: {imported} 件の {pluginName} をインポートしました。',
     'Import completed: {imported} {pluginName} imported, {failed} failed.' => 'インポート完了: {imported} 件の {pluginName} をインポートしました、{failed} 件失敗。',
-    'Failed to clear import history.' => 'インポート履歴のクリアに失敗しました。',
+    'Failed to clear import history.' => 'インポート履歴の削除に失敗しました。',
     'Missing required field: {field}' => '必須フィールドがありません: {field}',
     'Invalid fallback URL' => '無効なフォールバック URL です',
     'Invalid URL in field: {field}' => 'フィールド内の URL が無効です: {field}',

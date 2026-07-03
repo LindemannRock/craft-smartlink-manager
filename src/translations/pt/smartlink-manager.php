@@ -344,7 +344,7 @@ return [
     'Detect user location for analytics' => 'Detetar a localização do utilizador para análise',
     'View Geographic Details' => 'Ver detalhes geográficos',
     'Loading geographic data...' => 'A carregar dados geográficos...',
-    'Cache Device Detection' => 'Cache de deteção de dispositivo',
+    'Cache Device Detection' => 'Cache de deteção de dispositivos',
     'Cache device detection results for better performance' => 'Guardar em cache os resultados da deteção de dispositivo para melhor desempenho',
     'Device Detection Cache Duration (seconds)' => 'Duração da cache de deteção de dispositivo (segundos)',
 
@@ -364,7 +364,7 @@ return [
     'Cache duration in seconds' => 'Duração da Cache em segundos',
     'Min: 60 (1 minute), Max: 604800 (7 days)' => 'Mín.: 60 (1 minuto), Máx.: 604800 (7 dias)',
     'Caching' => 'Cache',
-    'Device Detection Caching' => 'Cache de deteção de dispositivo',
+    'Device Detection Caching' => 'Caching de deteção de dispositivos',
     'Device Detection Cache Duration' => 'Duração da Cache de deteção de dispositivo',
     '<strong>Cache Location:</strong> <code>{path}</code>' => '<strong>Localização da cache:</strong> <code>{path}</code>',
     '<strong>Cache Location:</strong> Using Craft\'s configured Redis cache from <code>config/app.php</code>' => '<strong>Localização da cache:</strong> A usar a cache Redis configurada do Craft em <code>config/app.php</code>',
@@ -713,7 +713,7 @@ return [
     'Last 90 days' => 'Últimos 90 dias',
     'All time' => 'Sempre',
     'Date Range' => 'Intervalo de datas',
-    'Device Breakdown' => 'Análise de dispositivos',
+    'Device Breakdown' => 'Distribuição de dispositivos',
 
     // Utilities
     'Monitor link performance, track analytics, and manage cache for your {singularName} redirects and QR codes.' => 'Monitorize o desempenho dos links, acompanhe as análises e gira a cache para os seus redirecionamentos {singularName} e QR Codes.',

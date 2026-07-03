@@ -723,7 +723,7 @@ return [
     'Total {pluginName}' => 'Totaal {pluginName}',
     'Performance' => 'Prestaties',
     'Total interactions tracked' => 'Totaal bijgehouden interacties',
-    'Redirects' => 'Doorverwijzingen',
+    'Redirects' => 'Redirects',
     'QR Codes' => 'QR-codes',
     'Devices' => 'Apparaten',
     'Cache Status' => 'Cache-status',
