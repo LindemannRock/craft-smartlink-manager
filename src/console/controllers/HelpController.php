@@ -29,12 +29,46 @@ final class HelpController extends AbstractHelpController
                 'php craft',
                 'ddev craft',
             ],
-            'summary' => 'Use these commands to generate the IP hash salt used for privacy-safe SmartLink analytics and add demo QR click data during development.',
+            'summary' => 'Use these commands to copy starter templates, generate the IP hash salt used for privacy-safe SmartLink analytics, and add demo QR click data during development.',
             'common' => [
+                'setup/copy-templates',
                 'security/generate-salt',
                 'demo/add-qr-click',
             ],
             'groups' => [
+                [
+                    'name' => 'setup',
+                    'label' => 'Setup',
+                    'description' => 'Copy frontend starter templates into the configured site template paths.',
+                    'commands' => [
+                        [
+                            'path' => 'setup/copy-templates',
+                            'summary' => 'Copy missing starter templates.',
+                            'description' => 'Copy bundled redirect and QR templates into the configured paths in your site templates folder.',
+                            'usageOptions' => '[--template=<redirect|qr>] [--overwrite]',
+                            'options' => [
+                                [
+                                    'name' => '--template',
+                                    'description' => 'Copy only one template: redirect or qr.',
+                                ],
+                                [
+                                    'name' => '--overwrite',
+                                    'description' => 'Replace existing destination templates without prompting.',
+                                ],
+                            ],
+                            'examples' => [
+                                'smartlink-manager/setup/copy-templates',
+                                'smartlink-manager/setup/copy-templates --template=redirect',
+                                'smartlink-manager/setup/copy-templates --template=qr --overwrite',
+                            ],
+                            'notes' => [
+                                'By default, existing destination templates are skipped.',
+                                'The command respects custom template paths configured in settings or config.',
+                                'Review and customize copied templates before going live.',
+                            ],
+                        ],
+                    ],
+                ],
                 [
                     'name' => 'security',
                     'label' => 'Security',
