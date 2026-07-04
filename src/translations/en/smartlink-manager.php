@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smart links not restored.',
     'Add a smart link' => 'Add a smart link',
     'No smart links selected' => 'No smart links selected',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.',
     'Create a new smart link' => 'Create a new smart link',
     'Active' => 'Active',
     'Pending' => 'Pending',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'User does not have permission to export smart links.',
     'User does not have permission to clear import history.' => 'User does not have permission to clear import history.',
 
+    'Analytics cleanup job queued' => 'Analytics cleanup job queued',
+    'Failed to queue cleanup job' => 'Failed to queue cleanup job',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Found {count, number} {count, plural, =1{error} other{errors}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Only letters, numbers, hyphens, and underscores are allowed.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Smart link base URL cannot contain spaces.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Download filename pattern cannot contain spaces.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Unsupported token "{token}". Allowed tokens: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} contains markup that is not allowed.',
+    'You can only select up to {limit} {label}.' => 'You can only select up to {limit} {label}.',
     // Settings: General
     'General Settings' => 'General Settings',
     'Plugin Settings' => 'Plugin Settings',

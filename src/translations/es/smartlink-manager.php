@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Los smart links no pudieron ser restaurados.',
     'Add a smart link' => 'Añadir un smart link',
     'No smart links selected' => 'Ningún smart link seleccionado',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Solo puede seleccionar hasta {limit} smart link(s).',
     'Create a new smart link' => 'Crear un nuevo smart link',
     'Active' => 'Activo',
     'Pending' => 'Pendiente',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'El usuario no tiene permiso para exportar smart links.',
     'User does not have permission to clear import history.' => 'El usuario no tiene permiso para borrar el historial de importaciones.',
 
+    'Analytics cleanup job queued' => 'Tarea de limpieza de analytics en cola',
+    'Failed to queue cleanup job' => 'Error al poner en cola la tarea de limpieza',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Se encontró {count, number} {count, plural, =1{error} other{errores}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Solo se permiten letras, números, guiones y guiones bajos.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'La URL base del smart link no puede contener espacios.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token no compatible en la URL base del smart link. Tokens compatibles: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'El patrón del nombre de archivo de descarga no puede contener espacios.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Token no admitido "{token}". Tokens permitidos: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'El patrón del nombre de archivo de descarga contiene caracteres no válidos. Use solo letras, números, guión (-), guión bajo (_), punto (.) y tokens admitidos.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} contiene marcado no permitido.',
+    'You can only select up to {limit} {label}.' => 'Solo puede seleccionar hasta {limit} {label}.',
     // Settings: General
     'General Settings' => 'Configuración general',
     'Plugin Settings' => 'Configuración del plugin',

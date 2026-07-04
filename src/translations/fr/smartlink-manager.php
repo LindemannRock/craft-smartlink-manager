@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Les smart links n\'ont pas pu être restaurés.',
     'Add a smart link' => 'Ajouter un smart link',
     'No smart links selected' => 'Aucun smart link sélectionné',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Vous ne pouvez sélectionner que {limit} smart link(s) au maximum.',
     'Create a new smart link' => 'Créer un nouveau smart link',
     'Active' => 'Actif',
     'Pending' => 'En attente',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'L\'utilisateur n\'a pas la permission d\'exporter des smart links.',
     'User does not have permission to clear import history.' => 'L\'utilisateur n\'a pas la permission d\'effacer l\'historique des imports.',
 
+    'Analytics cleanup job queued' => 'Tâche de nettoyage des analytics mise en file d\'attente',
+    'Failed to queue cleanup job' => 'Échec de la mise en file d\'attente de la tâche de nettoyage',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{erreur} other{erreurs}} trouvée(s)',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Seuls les lettres, chiffres, tirets et underscores sont autorisés.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'L\'URL de base du smart link ne peut pas contenir d\'espaces.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token non pris en charge dans l\'URL de base du smart link. Tokens pris en charge : {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Le modèle de nom de fichier de téléchargement ne peut pas contenir d\'espaces.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Jeton non supporté "{token}". Jetons autorisés : {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Le modèle de nom de fichier de téléchargement contient des caractères invalides. Utilisez uniquement des lettres, des chiffres, des traits d\'union (-), des tirets bas (_), des points (.) et des jetons supportés.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} contient du balisage non autorisé.',
+    'You can only select up to {limit} {label}.' => 'Vous ne pouvez sélectionner que {limit} {label} au maximum.',
     // Settings: General
     'General Settings' => 'Paramètres généraux',
     'Plugin Settings' => 'Paramètres du plugin',

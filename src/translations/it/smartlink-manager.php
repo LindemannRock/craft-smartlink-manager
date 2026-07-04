@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smart link non ripristinati.',
     'Add a smart link' => 'Aggiungi un smart link',
     'No smart links selected' => 'Nessun smart link selezionato',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'È possibile selezionare al massimo {limit} {limit, plural, =1{smart link} other{smart link}}.',
     'Create a new smart link' => 'Crea un nuovo smart link',
     'Active' => 'Attivo',
     'Pending' => 'In attesa',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'L\'utente non dispone dell\'autorizzazione per esportare smart link.',
     'User does not have permission to clear import history.' => 'L\'utente non dispone dell\'autorizzazione per cancellare la cronologia importazioni.',
 
+    'Analytics cleanup job queued' => 'Processo di pulizia analytics accodato',
+    'Failed to queue cleanup job' => 'Impossibile accodare il processo di pulizia',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Trovati {count, number} {count, plural, =1{errore} other{errori}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Sono consentiti solo lettere, numeri, trattini e trattini bassi.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'L\'URL base dello smart link non può contenere spazi.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token non supportato nell\'URL base dello smart link. Token supportati: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Il pattern del nome file di download non può contenere spazi.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Token non supportato "{token}". Token consentiti: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Il pattern del nome file di download contiene caratteri non validi. Usare solo lettere, numeri, trattino (-), trattino basso (_), punto (.) e token supportati.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} contiene markup non consentito.',
+    'You can only select up to {limit} {label}.' => 'È possibile selezionare al massimo {limit} {label}.',
     // Settings: General
     'General Settings' => 'Impostazioni generali',
     'Plugin Settings' => 'Impostazioni plugin',

@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'تعذّرت استعادة smart links.',
     'Add a smart link' => 'إضافة smart link',
     'No smart links selected' => 'لم يتم تحديد أي smart link',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'يمكنك تحديد ما يصل إلى {limit} smart link كحد أقصى.',
     'Create a new smart link' => 'إنشاء smart link جديد',
     'Active' => 'نشط',
     'Pending' => 'قيد الانتظار',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'ليس لدى المستخدم صلاحية لتصدير smart links.',
     'User does not have permission to clear import history.' => 'ليس لدى المستخدم صلاحية لمسح سجل الاستيراد.',
 
+    'Analytics cleanup job queued' => 'تمت إضافة مهمة تنظيف Analytics إلى قائمة الانتظار',
+    'Failed to queue cleanup job' => 'فشل إضافة مهمة التنظيف إلى قائمة الانتظار',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'تم العثور على {count, number} {count, plural, =1{خطأ} other{أخطاء}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'يُسمح فقط بالأحرف والأرقام والشرطات والشرطات السفلية.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'لا يمكن أن يحتوي URL الأساسي لـ smart link على مسافات.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'رمز غير مدعوم في URL الأساسي لـ smart link. الرموز المدعومة: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'لا يمكن أن يحتوي نمط اسم ملف التنزيل على مسافات.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'رمز مميز غير مدعوم "{token}". الرموز المسموح بها: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'يحتوي نمط اسم ملف التنزيل على أحرف غير صالحة. استخدم فقط الحروف والأرقام والشرطة (-) والشرطة السفلية (_) والنقطة (.) والرموز المدعومة.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} يحتوي على ترميز غير مسموح به.',
+    'You can only select up to {limit} {label}.' => 'يمكنك تحديد ما يصل إلى {limit} {label} كحد أقصى.',
     // Settings: General
     'General Settings' => 'الإعدادات العامة',
     'Plugin Settings' => 'إعدادات الإضافة',

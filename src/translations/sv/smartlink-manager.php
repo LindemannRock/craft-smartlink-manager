@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smarta länkar återställdes inte.',
     'Add a smart link' => 'Lägg till en smart link',
     'No smart links selected' => 'Inga smarta länkar valda',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Du kan bara välja upp till {limit} {limit, plural, =1{smart link} other{smarta länkar}}.',
     'Create a new smart link' => 'Skapa en ny smart link',
     'Active' => 'Aktiv',
     'Pending' => 'Väntande',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'Användaren har inte behörighet att exportera smarta länkar.',
     'User does not have permission to clear import history.' => 'Användaren har inte behörighet att rensa importhistoriken.',
 
+    'Analytics cleanup job queued' => 'Analysrensningsjobb i kö',
+    'Failed to queue cleanup job' => 'Kunde inte ställa rensningsjobbet i kö',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Hittade {count, number} {count, plural, =1{fel} other{fel}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Endast bokstäver, siffror, bindestreck och understreck är tillåtna.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Smart link-bas-URL:en får inte innehålla mellanslag.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token som inte stöds i smart link-bas-URL:en. Tokens som stöds: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Nedladdningsfilnamnsmönstret får inte innehålla mellanslag.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Token som inte stöds: "{token}". Tokens som är tillåtna: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Nedladdningsfilnamnsmönstret innehåller ogiltiga tecken. Använd bara bokstäver, siffror, bindestreck (-), understreck (_), punkt (.) och tokens som stöds.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} innehåller otillåten markup.',
+    'You can only select up to {limit} {label}.' => 'Du kan bara välja upp till {limit} {label}.',
     // Settings: General
     'General Settings' => 'Allmänna inställningar',
     'Plugin Settings' => 'Plugininställningar',

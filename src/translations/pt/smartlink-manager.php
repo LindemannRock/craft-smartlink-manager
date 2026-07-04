@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smart links não restaurados.',
     'Add a smart link' => 'Adicionar um smart link',
     'No smart links selected' => 'Nenhum smart link selecionado',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Só é possível selecionar até {limit} {limit, plural, =1{smart link} other{smart links}}.',
     'Create a new smart link' => 'Criar um novo smart link',
     'Active' => 'Ativo',
     'Pending' => 'Pendente',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'O utilizador não tem permissão para exportar smart links.',
     'User does not have permission to clear import history.' => 'O utilizador não tem permissão para limpar o histórico de importações.',
 
+    'Analytics cleanup job queued' => 'Tarefa de limpeza de análise colocada em fila',
+    'Failed to queue cleanup job' => 'Falha ao colocar a tarefa de limpeza em fila',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Encontrado(s) {count, number} {count, plural, =1{erro} other{erros}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Apenas letras, números, hífenes e underscores são permitidos.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'O URL base do smart link não pode conter espaços.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token não suportado no URL base do smart link. Tokens suportados: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'O padrão do nome do ficheiro de transferência não pode conter espaços.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Token não suportado "{token}". Tokens permitidos: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'O padrão do nome do ficheiro de transferência contém caracteres inválidos. Use apenas letras, números, hífen (-), sublinhado (_), ponto (.) e tokens suportados.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} contém marcação não permitida.',
+    'You can only select up to {limit} {label}.' => 'Só é possível selecionar até {limit} {label}.',
     // Settings: General
     'General Settings' => 'Definições gerais',
     'Plugin Settings' => 'Definições do plugin',

@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smart Links konnten nicht wiederhergestellt werden.',
     'Add a smart link' => 'Smart Link hinzufügen',
     'No smart links selected' => 'Keine Smart Links ausgewählt',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Sie können maximal {limit} Smart Links auswählen.',
     'Create a new smart link' => 'Neuen Smart Link erstellen',
     'Active' => 'Aktiv',
     'Pending' => 'Ausstehend',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'Der Benutzer hat keine Berechtigung, Smart Links zu exportieren.',
     'User does not have permission to clear import history.' => 'Der Benutzer hat keine Berechtigung, den Import-Verlauf zu leeren.',
 
+    'Analytics cleanup job queued' => 'Analyse-Bereinigung in Warteschlange gestellt',
+    'Failed to queue cleanup job' => 'Bereinigungs-Job konnte nicht in die Warteschlange gestellt werden',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{Fehler} other{Fehler}} gefunden',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Nur Buchstaben, Zahlen, Bindestriche und Unterstriche sind erlaubt.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Smart Link Basis-URL darf keine Leerzeichen enthalten.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Nicht unterstütztes Token in der Smart Link Basis-URL. Unterstützte Tokens: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Das Download-Dateinamenmuster darf keine Leerzeichen enthalten.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Nicht unterstütztes Token „{token}". Erlaubte Token: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Das Download-Dateinamenmuster enthält ungültige Zeichen. Verwenden Sie nur Buchstaben, Zahlen, Bindestrich (-), Unterstrich (_), Punkt (.) und unterstützte Token.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} enthält nicht erlaubtes Markup.',
+    'You can only select up to {limit} {label}.' => 'Sie können maximal {limit} {label} auswählen.',
     // Settings: General
     'General Settings' => 'Allgemeine Einstellungen',
     'Plugin Settings' => 'Plugin-Einstellungen',

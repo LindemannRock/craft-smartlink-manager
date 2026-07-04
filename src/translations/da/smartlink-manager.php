@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smarte links blev ikke gendannet.',
     'Add a smart link' => 'Tilføj et smart link',
     'No smart links selected' => 'Ingen smarte links valgt',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Du kan kun vælge op til {limit} {limit, plural, =1{smart link} other{smarte links}}.',
     'Create a new smart link' => 'Opret et nyt smart link',
     'Active' => 'Aktiv',
     'Pending' => 'Afventer',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'Brugeren har ikke tilladelse til at eksportere smarte links.',
     'User does not have permission to clear import history.' => 'Brugeren har ikke tilladelse til at rydde importhistorikken.',
 
+    'Analytics cleanup job queued' => 'Analytics-oprydningsjob sat i kø',
+    'Failed to queue cleanup job' => 'Kunne ikke sætte oprydningsjobbet i kø',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Fandt {count, number} {count, plural, =1{fejl} other{fejl}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Kun bogstaver, tal, bindestreger og underscores er tilladt.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Smart link-basis-URL må ikke indeholde mellemrum.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Ikke-understøttet token i smart link-basis-URL. Understøttede tokens: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Downloadfilnavnsmønsteret må ikke indeholde mellemrum.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Ikke-understøttet token "{token}". Tilladte tokens: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Downloadfilnavnsmønsteret indeholder ugyldige tegn. Brug kun bogstaver, tal, bindestreg (-), understregning (_), punktum (.) og understøttede tokens.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} indeholder ikke-tilladt markup.',
+    'You can only select up to {limit} {label}.' => 'Du kan kun vælge op til {limit} {label}.',
     // Settings: General
     'General Settings' => 'Generelle indstillinger',
     'Plugin Settings' => 'Plugin-indstillinger',

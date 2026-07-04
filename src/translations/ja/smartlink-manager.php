@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'スマートリンクを復元できませんでした。',
     'Add a smart link' => 'スマートリンクを追加する',
     'No smart links selected' => 'スマートリンクが選択されていません',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'スマートリンクは最大 {limit} 件まで選択できます。',
     'Create a new smart link' => '新しいスマートリンクを作成する',
     'Active' => 'アクティブ',
     'Pending' => '保留中',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'ユーザーにスマートリンクをエクスポートする権限がありません。',
     'User does not have permission to clear import history.' => 'ユーザーにインポート履歴を削除する権限がありません。',
 
+    'Analytics cleanup job queued' => 'アナリティクスの整理ジョブをキューに追加しました',
+    'Failed to queue cleanup job' => '整理ジョブのキューへの追加に失敗しました',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} 件のエラーが見つかりました',
     'Only letters, numbers, hyphens, and underscores are allowed.' => '文字、数字、ハイフン、アンダースコアのみ使用できます。',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'スマートリンクのベース URL にスペースを含めることはできません。',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'スマートリンクのベース URL に未対応のトークンが含まれています。対応トークン: {siteHandle}, {siteId}, {siteUid}。',
 
+    'Download filename pattern cannot contain spaces.' => 'ダウンロードファイル名のパターンにスペースを含めることはできません。',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => '未サポートのトークン "{token}" が含まれています。許可されているトークン: {allowed}。',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'ダウンロードファイル名のパターンに無効な文字が含まれています。文字、数字、ダッシュ (-)、アンダースコア (_)、ドット (.)、およびサポートされているトークンのみ使用してください。',
+    '{attribute} contains markup that is not allowed.' => '{attribute} に許可されていないマークアップが含まれています。',
+    'You can only select up to {limit} {label}.' => '{label} は最大 {limit} 件まで選択できます。',
     // Settings: General
     'General Settings' => '一般設定',
     'Plugin Settings' => 'プラグイン設定',

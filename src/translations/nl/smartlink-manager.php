@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smart links konden niet worden hersteld.',
     'Add a smart link' => 'Een smart link toevoegen',
     'No smart links selected' => 'Geen smart links geselecteerd',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'U kunt maximaal {limit} smart link(s) selecteren.',
     'Create a new smart link' => 'Een nieuwe smart link aanmaken',
     'Active' => 'Actief',
     'Pending' => 'In behandeling',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'De gebruiker heeft geen toestemming om smart links te exporteren.',
     'User does not have permission to clear import history.' => 'De gebruiker heeft geen toestemming om de importgeschiedenis te wissen.',
 
+    'Analytics cleanup job queued' => 'Opschoontaak voor analyses in wachtrij geplaatst',
+    'Failed to queue cleanup job' => 'Opschoontaak in wachtrij plaatsen mislukt',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{fout} other{fouten}} gevonden',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Alleen letters, cijfers, koppeltekens en underscores zijn toegestaan.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Basis-URL van smart link mag geen spaties bevatten.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Niet-ondersteund token in basis-URL van smart link. Ondersteunde tokens: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Het patroon voor de downloadbestandsnaam mag geen spaties bevatten.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Niet-ondersteund token "{token}". Toegestane tokens: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Het patroon voor de downloadbestandsnaam bevat ongeldige tekens. Gebruik alleen letters, cijfers, koppelteken (-), underscore (_), punt (.) en ondersteunde tokens.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} bevat niet-toegestane markup.',
+    'You can only select up to {limit} {label}.' => 'U kunt maximaal {limit} {label} selecteren.',
     // Settings: General
     'General Settings' => 'Algemene instellingen',
     'Plugin Settings' => 'Plugin-instellingen',

@@ -98,7 +98,6 @@ return [
     'Smart links not restored.' => 'Smarte lenker ble ikke gjenopprettet.',
     'Add a smart link' => 'Legg til en smart lenke',
     'No smart links selected' => 'Ingen smarte lenker valgt',
-    'You can only select up to {limit} {limit, plural, =1{smart link} other{smart links}}.' => 'Du kan bare velge opptil {limit} {limit, plural, =1{smart lenke} other{smarte lenker}}.',
     'Create a new smart link' => 'Opprett en ny smart lenke',
     'Active' => 'Aktiv',
     'Pending' => 'Venter',
@@ -166,6 +165,8 @@ return [
     'User does not have permission to export smart links.' => 'Brukeren har ikke tillatelse til å eksportere smarte lenker.',
     'User does not have permission to clear import history.' => 'Brukeren har ikke tillatelse til å tømme importhistorikken.',
 
+    'Analytics cleanup job queued' => 'Analyseoppryddingsjobb lagt i kø',
+    'Failed to queue cleanup job' => 'Kunne ikke legge oppryddingsjobb i kø',
     // Validation messages
     'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Fant {count, number} {count, plural, =1{feil} other{feil}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Bare bokstaver, tall, bindestreker og understreker er tillatt.',
@@ -180,6 +181,11 @@ return [
     'Smart link base URL cannot contain spaces.' => 'Basis-URL for smart lenke kan ikke inneholde mellomrom.',
     'Unsupported token in smart link base URL. Supported tokens: {siteHandle}, {siteId}, {siteUid}.' => 'Token som ikke støttes i basis-URL for smart lenke. Støttede tokens: {siteHandle}, {siteId}, {siteUid}.',
 
+    'Download filename pattern cannot contain spaces.' => 'Nedlastingsfilnavnmønsteret kan ikke inneholde mellomrom.',
+    'Unsupported token "{token}". Allowed tokens: {allowed}.' => 'Ikke-støttet token «{token}». Tillatte tokens: {allowed}.',
+    'Download filename pattern contains invalid characters. Use only letters, numbers, dash (-), underscore (_), dot (.), and supported tokens.' => 'Nedlastingsfilnavnmønsteret inneholder ugyldige tegn. Bruk bare bokstaver, tall, bindestrek (-), understrek (_), punktum (.) og støttede tokens.',
+    '{attribute} contains markup that is not allowed.' => '{attribute} inneholder ikke tillatt markup.',
+    'You can only select up to {limit} {label}.' => 'Du kan bare velge opptil {limit} {label}.',
     // Settings: General
     'General Settings' => 'Generelle innstillinger',
     'Plugin Settings' => 'Plugin-innstillinger',
