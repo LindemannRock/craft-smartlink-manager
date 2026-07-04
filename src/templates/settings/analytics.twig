@@ -26,12 +26,16 @@
     {{ redirectInput('smartlink-manager/settings/analytics') }}
     {{ hiddenInput('section', 'analytics') }}
     {% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}
+    {% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}
 
         <h2 class="first">{{ "Analytics"|t('smartlink-manager') }}</h2>
 
         {{ forms.lightswitchField({
             label: "Enable Analytics"|t('smartlink-manager'),
-            instructions: "Track clicks and visitor data for {pluginName}"|t('smartlink-manager', {pluginName: smartlinkPluralLowerNameHtml}),
+            instructions: "Track clicks and visitor data for {pluralLowerName}. When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information."|t('smartlink-manager', {
+                pluralLowerName: smartlinkPluralLowerNameHtml,
+                pluginName: smartlinkFullNameHtml,
+            }),
             id: 'enableAnalytics',
             name: 'settings[enableAnalytics]',
             on: settings.enableAnalytics ?? true,
@@ -42,10 +46,6 @@
         }) }}
 
         <div id="analytics-settings" class="{{ not (settings.enableAnalytics ?? true) ? 'hidden' }}">
-            <div class="field">
-                <p class="light">{{ "When enabled, {pluginName} will track visitor interactions, device types, geographic data, and other analytics information."|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}) }}</p>
-            </div>
-
             <hr>
 
             <h2>{{ "Geographic Detection"|t('smartlink-manager') }}</h2>
