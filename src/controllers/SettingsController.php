@@ -9,6 +9,7 @@
 namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
+use craft\helpers\App;
 use craft\web\Controller;
 use lindemannrock\base\helpers\SettingsPostHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -95,7 +96,68 @@ class SettingsController extends Controller
             'settings' => $settings,
             'plugin' => $plugin,
             'readOnly' => $this->readOnly,
+            'templateStatuses' => $this->templateStatuses($settings),
         ]);
+    }
+
+    /**
+     * @return array<int, array{label: string, setting: string, template: string, source: string, destination: string, exists: bool}>
+     */
+    private function templateStatuses(Settings $settings): array
+    {
+        $templates = [
+            [
+                'label' => Craft::t('smartlink-manager', 'Redirect Template'),
+                'setting' => 'redirectTemplate',
+                'template' => $settings->redirectTemplate ?: 'smartlink-manager/redirect',
+                'source' => 'vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig',
+            ],
+            [
+                'label' => Craft::t('smartlink-manager', 'QR Code Template'),
+                'setting' => 'qrTemplate',
+                'template' => $settings->qrTemplate ?: 'smartlink-manager/qr',
+                'source' => 'vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig',
+            ],
+        ];
+
+        $statuses = [];
+        foreach ($templates as $template) {
+            $path = $this->normalizeTemplatePath($template['template']);
+            $statuses[] = [
+                'label' => $template['label'],
+                'setting' => $template['setting'],
+                'template' => $template['template'],
+                'source' => $template['source'],
+                'destination' => 'templates/' . $path . '.twig',
+                'exists' => $this->siteTemplateExists($path),
+            ];
+        }
+
+        return $statuses;
+    }
+
+    private function normalizeTemplatePath(string $template): string
+    {
+        $template = trim((string) App::parseEnv($template));
+        $template = trim($template, '/');
+
+        if (str_ends_with($template, '.twig')) {
+            $template = substr($template, 0, -5);
+        }
+
+        return $template;
+    }
+
+    private function siteTemplateExists(string $template): bool
+    {
+        if ($template === '' || str_contains($template, '..')) {
+            return false;
+        }
+
+        $templatesPath = Craft::$app->getPath()->getSiteTemplatesPath();
+        $file = $templatesPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $template) . '.twig';
+
+        return is_file($file);
     }
 
     /**

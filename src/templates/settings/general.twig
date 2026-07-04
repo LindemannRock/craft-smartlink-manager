@@ -28,6 +28,10 @@
     {% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}
     {% set smartlinkDisplayNameHtml = smartlinkHelper.displayName|e %}
     {% set smartlinkLowerNameHtml = smartlinkHelper.lowerDisplayName|e %}
+    {% set templateStatusesBySetting = {} %}
+    {% for templateStatus in templateStatuses ?? [] %}
+        {% set templateStatusesBySetting = templateStatusesBySetting|merge({(templateStatus.setting): templateStatus}) %}
+    {% endfor %}
     {% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}
 
         <h2 class="first">{{ "General Settings"|t('smartlink-manager') }}</h2>
@@ -281,9 +285,10 @@
 
         {% include 'lindemannrock-base/_components/info-box' with {
             type: 'info',
-            message: "These templates must exist in your site's <code>templates/</code> folder. Copy the reference templates from <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/</code> to <code>templates/smartlink-manager/</code> and customize as needed."|t('smartlink-manager')
+            message: "These templates must exist in your site's <code>templates/</code> folder at the paths configured below. Copy each matching reference template into its configured destination and customize as needed."|t('smartlink-manager')
         } %}
 
+        {% set redirectTemplateStatus = templateStatusesBySetting.redirectTemplate ?? null %}
         {{ forms.autosuggestField({
             label: "Redirect Template"|t('smartlink-manager'),
             instructions: "Template path in your templates/ folder. Leave empty to use the default path."|t('smartlink-manager'),
@@ -298,10 +303,16 @@
             errors: settings.getErrors('redirectTemplate')
         }) }}
 
-        <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
-            {{ "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/redirect.twig</code> to <code>templates/smartlink-manager/redirect.twig</code>"|t('smartlink-manager')|raw }}
-        </p>
+        {% if redirectTemplateStatus %}
+            <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
+                {{ "Required: copy <code>{source}</code> to <code>{destination}</code>"|t('smartlink-manager', {
+                    source: redirectTemplateStatus.source|e,
+                    destination: redirectTemplateStatus.destination|e,
+                })|raw }}
+            </p>
+        {% endif %}
 
+        {% set qrTemplateStatus = templateStatusesBySetting.qrTemplate ?? null %}
         {{ forms.autosuggestField({
             label: "QR Code Template"|t('smartlink-manager'),
             instructions: "Template path in your templates/ folder. Leave empty to use the default path."|t('smartlink-manager'),
@@ -316,9 +327,14 @@
             errors: settings.getErrors('qrTemplate')
         }) }}
 
-        <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
-            {{ "Required: copy <code>vendor/lindemannrock/craft-smartlink-manager/src/templates/qr.twig</code> to <code>templates/smartlink-manager/qr.twig</code>"|t('smartlink-manager')|raw }}
-        </p>
+        {% if qrTemplateStatus %}
+            <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
+                {{ "Required: copy <code>{source}</code> to <code>{destination}</code>"|t('smartlink-manager', {
+                    source: qrTemplateStatus.source|e,
+                    destination: qrTemplateStatus.destination|e,
+                })|raw }}
+            </p>
+        {% endif %}
 
         <hr>
 
