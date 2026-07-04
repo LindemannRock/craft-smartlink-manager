@@ -57,6 +57,7 @@ use lindemannrock\smartlinkmanager\services\IntegrationService;
 use lindemannrock\smartlinkmanager\services\LocalCacheService;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\services\ServdStaticCacheService;
+use lindemannrock\smartlinkmanager\services\SetupService;
 use lindemannrock\smartlinkmanager\services\SmartLinksService;
 use lindemannrock\smartlinkmanager\utilities\SmartLinkManagerUtility;
 use lindemannrock\smartlinkmanager\variables\SmartLinkManagerVariable;
@@ -79,6 +80,7 @@ use yii\base\Event;
  * @property-read IntegrationService $integration
  * @property-read LocalCacheService $localCache
  * @property-read ServdStaticCacheService $servdStaticCache
+ * @property-read SetupService $setup
  * @property-read Settings $settings
  * @method Settings getSettings()
  */
@@ -129,9 +131,9 @@ class SmartLinkManager extends Plugin
                 'installExperience' => [
                     'headline' => Craft::t('smartlink-manager', 'SmartLink Manager'),
                     'body' => Craft::t('smartlink-manager', 'Manage smart links, route users by device, and track engagement from one control panel workspace.'),
-                    'ctaLabel' => Craft::t('smartlink-manager', 'Open SmartLink Manager'),
-                    'ctaUrl' => 'smartlink-manager',
-                    'redirectUri' => 'smartlink-manager',
+                    'ctaLabel' => Craft::t('smartlink-manager', 'Complete setup'),
+                    'ctaUrl' => 'smartlink-manager/setup',
+                    'redirectUri' => 'smartlink-manager/setup',
                     'confettiPreset' => 'surprise',
                 ],
             ]
@@ -148,6 +150,7 @@ class SmartLinkManager extends Plugin
             'integration' => IntegrationService::class,
             'localCache' => LocalCacheService::class,
             'servdStaticCache' => ServdStaticCacheService::class,
+            'setup' => SetupService::class,
         ]);
 
         // Schedule analytics cleanup if retention is enabled
@@ -506,6 +509,13 @@ class SmartLinkManager extends Plugin
         }
 
         $sections[] = [
+            'key' => 'setup',
+            'label' => Craft::t('smartlink-manager', 'Setup'),
+            'url' => 'smartlink-manager/setup',
+            'permissionsAll' => ['smartLinkManager:manageSettings'],
+        ];
+
+        $sections[] = [
             'key' => 'settings',
             'label' => Craft::t('smartlink-manager', 'Settings'),
             'url' => 'smartlink-manager/settings',
@@ -613,6 +623,7 @@ class SmartLinkManager extends Plugin
             'smartlink-manager/import-export/import' => 'smartlink-manager/import-export/import',
             'smartlink-manager/import-export/export' => 'smartlink-manager/import-export/export',
             'smartlink-manager/import-export/clear-logs' => 'smartlink-manager/import-export/clear-logs',
+            'smartlink-manager/setup' => 'smartlink-manager/settings/setup',
             'smartlink-manager/settings' => 'smartlink-manager/settings/index',
             'smartlink-manager/settings/general' => 'smartlink-manager/settings/general',
             'smartlink-manager/settings/analytics' => 'smartlink-manager/settings/analytics',

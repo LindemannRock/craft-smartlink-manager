@@ -5,11 +5,10 @@
 {% set selectedSettingsItem = selectedSettingsItem ?? 'general' %}
 {% set selectedSubnavItem = 'settings' %}
 
-{% set plugin = craft.app.plugins.getPlugin('smartlink-manager') %}
-
-{% set ipSaltSummary = include('lindemannrock-base/_partials/ip-salt-error', {
-    pluginHandle: 'smartlink-manager'
-})|trim %}
+{% set setupIncompleteSummary = include('smartlink-manager/_partials/setup-incomplete-summary', {
+    selectedSubnavItem: selectedSubnavItem,
+    setupStatus: setupStatus ?? null,
+}, false)|trim %}
 {% set validationSummary = '' %}
 {% if settings is defined and settings.hasErrors() %}
     {% set validationSummary = include('lindemannrock-base/_partials/error-summary', {
@@ -18,7 +17,7 @@
         translationCategory: 'smartlink-manager'
     })|trim %}
 {% endif %}
-{% set errorSummary = (ipSaltSummary ~ validationSummary)|trim %}
+{% set errorSummary = (setupIncompleteSummary ~ validationSummary)|trim %}
 
 {% block sidebar %}
 	<nav id="settings-nav">

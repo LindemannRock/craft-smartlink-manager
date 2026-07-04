@@ -4,6 +4,10 @@
 {% set elementType = 'lindemannrock\\smartlinkmanager\\elements\\SmartLink' %}
 {% set selectedSubnavItem = 'links' %}
 {% set showSiteMenu = false %}
+{% set setupIncompleteSummary = include('smartlink-manager/_partials/setup-incomplete-summary', {
+    selectedSubnavItem: selectedSubnavItem,
+}, false)|trim %}
+{% set errorSummary = (setupIncompleteSummary ~ (errorSummary ?? ''))|trim %}
 
 {# Site switcher (first item) #}
 {% set crumbs = [] %}

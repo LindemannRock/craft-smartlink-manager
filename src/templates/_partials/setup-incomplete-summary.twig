@@ -1,0 +1,12 @@
+{% set currentSubnavItem = selectedSubnavItem ?? '' %}
+{% set setupStatus = setupStatus ?? craft.app.plugins.getPlugin('smartlink-manager').setup.getStatus() %}
+
+{% if currentSubnavItem != 'setup' %}
+    {% include 'lindemannrock-base/_components/setup-incomplete' with {
+        complete: setupStatus.complete,
+        setupUrl: setupStatus.setupUrl,
+        heading: 'Setup incomplete'|t('smartlink-manager'),
+        message: 'Finish setup before creating public smart links and QR landing pages.'|t('smartlink-manager'),
+        actionLabel: 'Open setup'|t('smartlink-manager'),
+    } only %}
+{% endif %}

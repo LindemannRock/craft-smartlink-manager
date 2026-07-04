@@ -445,7 +445,7 @@
                 name: 'qrCodeFormat',
                 value: smartLink.qrCodeFormat ?? '',
                 options: [
-                    {label: 'Use Default (' ~ defaultFormat|upper ~ ')'|t('smartlink-manager'), value: ''},
+                    {label: 'Use Default ({format|upper})'|t('smartlink-manager', {'format|upper': defaultFormat|upper}), value: ''},
                     {label: 'PNG', value: 'png'},
                     {label: 'SVG', value: 'svg'},
                 ],
