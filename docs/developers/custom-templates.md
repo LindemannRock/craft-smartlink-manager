@@ -11,7 +11,19 @@ SmartLink Manager renders two front-end pages — the redirect page and the QR c
 
 ## Where to find and copy them
 
-The reference templates ship inside the plugin. Copy the one you want to customize into your own `templates/` folder:
+The reference templates ship inside the plugin. The setup command copies any missing starter templates into the paths configured in settings:
+
+```bash title="PHP"
+php craft smartlink-manager/setup/copy-templates
+```
+
+```bash title="DDEV"
+ddev craft smartlink-manager/setup/copy-templates
+```
+
+Use `--template=redirect` or `--template=qr` to copy one template, and `--overwrite` when you intentionally want to replace an existing destination.
+
+You can also copy files manually:
 
 **Redirect / landing page**
 
