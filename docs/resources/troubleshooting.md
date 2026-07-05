@@ -28,6 +28,32 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 ---
 
+## Twig says it cannot find `smartlink-manager/redirect`
+
+If a public smart link or QR landing page fails with a Twig template loading error such as:
+
+```text
+Unable to find the template "smartlink-manager/redirect".
+```
+
+the starter templates have not been copied into your site's `templates/` folder, or the template path setting points at a custom location where no file exists.
+
+Open **SmartLink Manager → Setup** and follow the template task, or run:
+
+```bash title="PHP"
+php craft smartlink-manager/setup/copy-templates
+```
+
+```bash title="DDEV"
+ddev craft smartlink-manager/setup/copy-templates
+```
+
+The command copies missing starter templates into the paths configured in settings and skips existing files. If you changed `redirectTemplate` or `qrTemplate`, make sure the matching template exists at that configured path.
+
+For template source paths, manual copy commands, and available variables, see [Custom templates](../developers/custom-templates.md).
+
+---
+
 ## QR Code Not Generating
 
 **Symptom:** The QR endpoint (`/qr/{slug}`) returns a blank page, error, or 500.
@@ -62,13 +88,7 @@ Common issues encountered when setting up and using SmartLink Manager, with step
 
 **Quick checks:**
 
-1. **Is the IP hash salt configured?** This is the most common cause. Check your `.env` file for:
-
-    ```bash
-    SMARTLINK_MANAGER_IP_SALT=your-salt-here
-    ```
-
-    If missing, generate one:
+1. **Is the IP hash salt configured?** Open **SmartLink Manager → Setup** if the salt is missing. Public smart links can still resolve when templates are present, but setup remains incomplete and analytics privacy features are limited until the salt is configured. Set the salt with:
 
     ```bash title="PHP"
     php craft smartlink-manager/security/generate-salt

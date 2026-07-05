@@ -35,7 +35,9 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `logLevel` | `string` | `'error'` | Log level: `error`, `warning`, `info`, `debug`. Debug requires `devMode` |
 | `itemsPerPage` | `int` | `100` | Items per page in element index (10–500) |
 
-> `redirectTemplate` / `qrTemplate` point at the templates SmartLink Manager renders. To override them — where to copy the reference templates and the variables each one receives — see [Custom templates](../developers/custom-templates.md).
+SmartLink Manager renders the redirect and QR landing pages from your site's `templates/` folder. Complete [Installation & Setup](installation.md#post-install-setup) first so the starter templates exist before public links render.
+
+The `redirectTemplate` / `qrTemplate` fields only change where SmartLink Manager looks for those templates. Leave them empty to use the default paths, or point them at custom paths after you have placed templates there. For bundled template locations, manual copy commands, and the variables each template receives, see [Custom templates](../developers/custom-templates.md).
 
 ## QR Code Settings
 

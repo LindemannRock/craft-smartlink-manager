@@ -1,41 +1,19 @@
 # Quickstart
 
-Get SmartLink Manager running in under 5 minutes. By the end of this guide you'll have your first smart link live and routing visitors to the right app store or URL based on their device.
+Create a working smart link after installation setup is complete. By the end of this guide you'll have your first smart link live and routing visitors to the right app store or URL based on their device.
 
-## 1. Install the Plugin
+## Before you start
 
-See [Installation](installation.md) for full details including DDEV and manual options.
+Complete [Installation & Setup](installation.md#post-install-setup) first. The setup page should show that the IP hash salt is configured and all starter templates are present before you test public smart links or QR landing pages.
 
-## 2. Generate the IP Hash Salt
-
-SmartLink Manager hashes IP addresses for privacy. You need to generate a unique salt and add it to your `.env` file before analytics will work.
-
-```bash title="PHP"
-php craft smartlink-manager/security/generate-salt
-```
-
-```bash title="DDEV"
-ddev craft smartlink-manager/security/generate-salt
-```
-
-Copy the output and add it to your `.env` file:
-
-```bash
-# .env
-SMARTLINK_MANAGER_IP_SALT=your-generated-salt-here
-```
-
-> [!IMPORTANT]
-> Without the IP salt, analytics tracking will not record clicks. Do this step before creating your first link.
-
-## 3. Create Your First Smart Link
+## 1. Create your first smart link
 
 1. Go to **SmartLink Manager** in the Craft control panel
 2. Click **New SmartLink**
 3. Enter a **Title** and a unique **Slug** (e.g., `my-app`)
 4. Add a **Fallback URL** — this is where users land when no platform-specific URL matches
 
-## 4. Add Platform URLs
+## 2. Add platform URLs
 
 On the smart link edit page, expand the **Platform URLs** section and add URLs for the platforms you want to target:
 
@@ -47,7 +25,7 @@ On the smart link edit page, expand the **Platform URLs** section and add URLs f
 
 Leave any platform field empty and visitors on that platform will fall through to the **Fallback URL**.
 
-## 5. Test It
+## 3. Test it
 
 Save the smart link and visit:
 
@@ -59,8 +37,9 @@ SmartLink Manager detects the visitor's device and redirects them to the appropr
 
 You should see the redirect happen and, after a moment, click data appear on the **Analytics** tab of the smart link.
 
-## What's Next
+## What's next
 
 - [Configuration](configuration.md) — customize URL prefixes, QR defaults, analytics retention, and geo-detection
+- [Custom templates](../developers/custom-templates.md) — customize the redirect and QR landing pages
 - [Feature Tour](../feature-tour/overview.md) — explore QR codes, analytics, device detection, and integrations
 - [Smart Links](../feature-tour/smart-links.md) — platform URLs, statuses, scheduling, and image attachments
