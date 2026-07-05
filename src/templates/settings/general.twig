@@ -32,6 +32,8 @@
     {% for templateStatus in templateStatuses ?? [] %}
         {% set templateStatusesBySetting = templateStatusesBySetting|merge({(templateStatus.setting): templateStatus}) %}
     {% endfor %}
+    {% set missingTemplateStatuses = (templateStatuses ?? [])|filter(status => not status.exists) %}
+    {% set templatesReady = missingTemplateStatuses|length == 0 %}
     {% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}
 
         <h2 class="first">{{ "General Settings"|t('smartlink-manager') }}</h2>
@@ -284,8 +286,10 @@
         <h2>{{ "Template Settings"|t('smartlink-manager') }}</h2>
 
         {% include 'lindemannrock-base/_components/info-box' with {
-            type: 'info',
-            message: "These templates must exist in your site's <code>templates/</code> folder at the paths configured below. Copy each matching reference template into its configured destination and customize as needed."|t('smartlink-manager')
+            type: templatesReady ? 'success' : 'warning',
+            message: templatesReady
+                ? "All required frontend templates are available."|t('smartlink-manager')
+                : "Some frontend templates are missing. Open <a href=\"{url}\">setup</a> for guided copy instructions before creating public smart links or QR landing pages."|t('smartlink-manager', {url: url('smartlink-manager/setup')})|raw
         } %}
 
         {% set redirectTemplateStatus = templateStatusesBySetting.redirectTemplate ?? null %}
@@ -303,15 +307,6 @@
             errors: settings.getErrors('redirectTemplate')
         }) }}
 
-        {% if redirectTemplateStatus %}
-            <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
-                {{ "Required: copy <code>{source}</code> to <code>{destination}</code>"|t('smartlink-manager', {
-                    source: redirectTemplateStatus.source|e,
-                    destination: redirectTemplateStatus.destination|e,
-                })|raw }}
-            </p>
-        {% endif %}
-
         {% set qrTemplateStatus = templateStatusesBySetting.qrTemplate ?? null %}
         {{ forms.autosuggestField({
             label: "QR Code Template"|t('smartlink-manager'),
@@ -326,15 +321,6 @@
                 "This is being overridden by the <code>qrTemplate</code> setting in <code>config/smartlink-manager.php</code>."|t('smartlink-manager')|raw : null,
             errors: settings.getErrors('qrTemplate')
         }) }}
-
-        {% if qrTemplateStatus %}
-            <p class="light" style="margin-top: -12px; margin-bottom: 24px;">
-                {{ "Required: copy <code>{source}</code> to <code>{destination}</code>"|t('smartlink-manager', {
-                    source: qrTemplateStatus.source|e,
-                    destination: qrTemplateStatus.destination|e,
-                })|raw }}
-            </p>
-        {% endif %}
 
         <hr>
 
