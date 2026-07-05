@@ -1,5 +1,21 @@
 # Changelog
 
+## [5.36.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.35.0...v5.36.0) - 2026-07-05
+
+
+### Added
+
+* **help:** add setup commands for copying starter templates ([aba5f2b](https://github.com/LindemannRock/craft-smartlink-manager/commit/aba5f2b8027ffddf36ba81b774bd509b93240805))
+* **i18n:** add new translation keys and correct existing strings across multiple locales ([cd53ce3](https://github.com/LindemannRock/craft-smartlink-manager/commit/cd53ce3257e3076c28cc1dd3a216ad7fc3be2132))
+* **settings:** add template status checks and update messages for setup guidance ([e0094de](https://github.com/LindemannRock/craft-smartlink-manager/commit/e0094de8e699a60269ee7a184dae98261ee28686))
+* **settings:** add template status checks for redirect and QR code templates ([bd5c2bf](https://github.com/LindemannRock/craft-smartlink-manager/commit/bd5c2bf1a827aac94c0af3fa47faac4ff71c0dbb))
+* **setup:** add setup checklist and service for readiness verification ([9a9f9da](https://github.com/LindemannRock/craft-smartlink-manager/commit/9a9f9da057f3cb2274fc7f9884e8beb15298c70d))
+
+
+### Fixed
+
+* **analytics:** analytics settings instructions for clarity ([57e728d](https://github.com/LindemannRock/craft-smartlink-manager/commit/57e728d83705ab41b7b6130f5451596ce23486d9))
+
 ## [5.35.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.34.0...v5.35.0) - 2026-07-03
 
 
