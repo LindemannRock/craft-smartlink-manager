@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.37.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.36.0...v5.37.0) - 2026-07-06
+
+
+### Added
+
+* add smartlink full name to setup completion message ([58ad4bc](https://github.com/LindemannRock/craft-smartlink-manager/commit/58ad4bc8b1d8ea3d7b1f3ab894e78ba6598b8fe0))
+* **settings:** add default QR logo ID normalization and selection ([a12f9bd](https://github.com/LindemannRock/craft-smartlink-manager/commit/a12f9bd42e12f4b1dc8593d93ade025d33a0ea34))
+
 ## [5.36.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.35.0...v5.36.0) - 2026-07-05
 
 
