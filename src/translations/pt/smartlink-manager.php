@@ -783,7 +783,7 @@ return [
     'Finish setup before creating public smart links and QR landing pages.' => 'Conclua a configuração antes de criar smart links públicos e páginas de destino QR.',
     'Open setup' => 'Abrir configuração',
     'Setup complete.' => 'Configuração concluída.',
-    'SmartLink Manager is ready to create public smart links and QR landing pages.' => 'O SmartLink Manager está pronto para criar smart links públicos e páginas de destino QR.',
+    '{pluginName} is ready to create public smart links and QR landing pages.' => '{pluginName} está pronto para criar smart links públicos e páginas de destino QR.',
 
     // Frontend
     'Download our app for the best experience' => 'Transfira a nossa aplicação para obter a melhor experiência',

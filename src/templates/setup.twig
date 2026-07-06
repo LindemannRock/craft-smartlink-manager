@@ -6,6 +6,7 @@
 {% set missingTemplates = templateStatuses|filter(status => not status.exists) %}
 {% set templatesReady = missingTemplates|length == 0 %}
 {% set allComplete = ipSaltConfigured and templatesReady %}
+{% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}
 
 {% set ipSaltIncompleteBody %}
     <p>
@@ -133,11 +134,14 @@
         pluginIconSvg: pluginIconSvg,
         pluginHeroStyle: pluginHeroStyle,
         logoPaths: logoPaths,
+        smartlinkFullNameHtml: smartlinkFullNameHtml,
     } only %}
         {% block summary %}
             {% if allComplete %}
                 {% include 'lindemannrock-base/_components/info-box' with {
-                    message: '<strong>' ~ 'Setup complete.'|t('smartlink-manager') ~ '</strong> ' ~ 'SmartLink Manager is ready to create public smart links and QR landing pages.'|t('smartlink-manager'),
+                    message: '<strong>' ~ 'Setup complete.'|t('smartlink-manager') ~ '</strong> ' ~ '{pluginName} is ready to create public smart links and QR landing pages.'|t('smartlink-manager', {
+                        pluginName: smartlinkFullNameHtml,
+                    }),
                     type: 'success',
                     variant: 'colored',
                     margin: 'none',

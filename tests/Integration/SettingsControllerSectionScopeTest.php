@@ -140,6 +140,18 @@ final class SettingsControllerSectionScopeTest extends TestCase
         self::assertStringNotContainsString('elements: settings.defaultQrLogoId ? [craft.assets.id(settings.defaultQrLogoId).one()] : [],', $source);
     }
 
+    public function testSetupCompleteInfoBoxUsesConfiguredPluginName(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 2) . '/src/templates/setup.twig');
+        self::assertIsString($source);
+
+        self::assertStringContainsString('{% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}', $source);
+        self::assertStringContainsString('smartlinkFullNameHtml: smartlinkFullNameHtml,', $source);
+        self::assertStringContainsString("'{pluginName} is ready to create public smart links and QR landing pages.'|t('smartlink-manager', {", $source);
+        self::assertStringContainsString('pluginName: smartlinkFullNameHtml', $source);
+        self::assertStringNotContainsString("'SmartLink Manager is ready to create public smart links and QR landing pages.'|t('smartlink-manager')", $source);
+    }
+
     public function testRecentClicksDestinationTitleUsesAttributeEscaping(): void
     {
         $pluginRoot = dirname(__DIR__, 2);

@@ -783,7 +783,7 @@ return [
     'Finish setup before creating public smart links and QR landing pages.' => 'Fullfør oppsettet før du oppretter offentlige smarte lenker og QR-landingssider.',
     'Open setup' => 'Åpne oppsett',
     'Setup complete.' => 'Oppsettet er fullført.',
-    'SmartLink Manager is ready to create public smart links and QR landing pages.' => 'SmartLink Manager er klar til å opprette offentlige smarte lenker og QR-landingssider.',
+    '{pluginName} is ready to create public smart links and QR landing pages.' => '{pluginName} er klar til å opprette offentlige smarte lenker og QR-landingssider.',
 
     // Frontend
     'Download our app for the best experience' => 'Last ned appen vår for den beste opplevelsen',
