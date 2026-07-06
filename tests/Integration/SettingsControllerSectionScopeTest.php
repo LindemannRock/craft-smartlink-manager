@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
+use lindemannrock\base\helpers\SettingsPostHelper;
 use lindemannrock\smartlinkmanager\controllers\SettingsController;
+use lindemannrock\smartlinkmanager\models\Settings;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -97,6 +99,45 @@ final class SettingsControllerSectionScopeTest extends TestCase
         foreach ($expected as $section => $attributes) {
             self::assertSame($attributes, $method->invoke($controller, $section), "Unexpected {$section} settings scope.");
         }
+    }
+
+    public function testStaleDefaultQrLogoIdNormalizesToNull(): void
+    {
+        $controller = new SettingsController('settings', SmartLinkManager::$plugin);
+        $method = new \ReflectionMethod($controller, 'normalizeDefaultQrLogoId');
+        $settings = new Settings();
+
+        self::assertNull($method->invoke($controller, 54042, $settings));
+    }
+
+    public function testEmptyDefaultQrLogoElementSelectPayloadDoesNotAddIntegerError(): void
+    {
+        $controller = new SettingsController('settings', SmartLinkManager::$plugin);
+        $method = new \ReflectionMethod($controller, 'normalizeDefaultQrLogoId');
+        $settings = new Settings();
+
+        $result = SettingsPostHelper::apply(
+            model: $settings,
+            postedValues: ['defaultQrLogoId' => ['']],
+            allowedAttributes: ['defaultQrLogoId'],
+            adapters: [
+                'defaultQrLogoId' => fn(mixed $value): ?int => $method->invoke($controller, $value, $settings),
+            ],
+        );
+
+        self::assertFalse($result->hasErrors);
+        self::assertSame([], $settings->getErrors('defaultQrLogoId'));
+        self::assertNull($settings->defaultQrLogoId);
+    }
+
+    public function testQrSettingsTemplateDoesNotPassNullLogoElement(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 2) . '/src/templates/settings/qr-code.twig');
+        self::assertIsString($source);
+
+        self::assertStringContainsString('{% set selectedLogo = settings.defaultQrLogoId ? craft.assets.id(settings.defaultQrLogoId).one() : null %}', $source);
+        self::assertStringContainsString('elements: selectedLogo ? [selectedLogo] : [],', $source);
+        self::assertStringNotContainsString('elements: settings.defaultQrLogoId ? [craft.assets.id(settings.defaultQrLogoId).one()] : [],', $source);
     }
 
     public function testRecentClicksDestinationTitleUsesAttributeEscaping(): void

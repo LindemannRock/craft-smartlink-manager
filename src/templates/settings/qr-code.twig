@@ -262,6 +262,7 @@
 
             {# Default logo asset selection #}
             {% set logoSources = settings.qrLogoVolumeUid ? ['volume:' ~ settings.qrLogoVolumeUid] : '*' %}
+            {% set selectedLogo = settings.defaultQrLogoId ? craft.assets.id(settings.defaultQrLogoId).one() : null %}
             {{ forms.elementSelectField({
                 label: "Default Logo"|t('smartlink-manager'),
                 instructions: "Default logo to use for QR codes (can be overridden per smart link)"|t('smartlink-manager'),
@@ -273,7 +274,7 @@
                     kind: ['image']
                 },
                 limit: 1,
-                elements: settings.defaultQrLogoId ? [craft.assets.id(settings.defaultQrLogoId).one()] : [],
+                elements: selectedLogo ? [selectedLogo] : [],
                 required: true,
                 errors: settings.getErrors('defaultQrLogoId'),
             }) }}
