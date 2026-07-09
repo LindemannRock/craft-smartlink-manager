@@ -15,7 +15,7 @@ Use this when the smart link itself needs fields like campaign owner, app versio
 
 Go to **SmartLink Manager → Settings → Field Layout**.
 
-![SmartLink Manager field layout settings screen](images/field-layout-settings.webp)
+![SmartLink Manager field layout settings screen](../images/field-layout-settings.webp)
 
 Add any Craft fields you want SmartLink elements to carry. When a field-layout tab contains fields, it appears as an extra tab on the SmartLink edit screen.
 

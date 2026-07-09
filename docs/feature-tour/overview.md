@@ -11,7 +11,7 @@ When a visitor follows a smart link URL (e.g., `yoursite.com/go/my-app`), SmartL
 
 Every smart link is a native Craft element with its own slug, status, publish schedule, and analytics. You manage them in the control panel just like entries.
 
-![SmartLink Manager element index in the Craft control panel](images/overview-element-index.webp)
+![SmartLink Manager element index in the Craft control panel](../images/overview-element-index.webp)
 
 ## What you'll use it for
 

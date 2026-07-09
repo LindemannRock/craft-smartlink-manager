@@ -8,7 +8,7 @@ By default, SmartLink Manager generates smart link URLs using each site's base U
 - **Short, memorable URLs** — a dedicated domain keeps printed and spoken links easy to type.
 - **Multisite setups** — give each site its own custom domain with site-aware URL tokens.
 
-![Custom domain setting in SmartLink Manager](images/custom-domain-settings.webp)
+![Custom domain setting in SmartLink Manager](../images/custom-domain-settings.webp)
 
 ## Single-Site URLs
 

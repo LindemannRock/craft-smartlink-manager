@@ -37,7 +37,7 @@ On the smart link edit page, toggle **QR Code Enabled** to activate QR endpoints
 
 QR code appearance is set globally in **Settings → QR Codes** and can be overridden per link on the smart link edit page. Per-link values left at `null` inherit from the global defaults. A live preview updates as you change the size, colors, and styles — on both the settings page and the smart link edit page — so you can see the result before saving.
 
-![Customizing QR code appearance in SmartLink Manager settings](images/qr-codes-customize.webp)
+![Customizing QR code appearance in SmartLink Manager settings](../images/qr-codes-customize.webp)
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|

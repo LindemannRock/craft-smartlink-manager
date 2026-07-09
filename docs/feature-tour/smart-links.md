@@ -18,7 +18,7 @@ You create and manage smart links in **SmartLink Manager** in the Craft control 
 
 Go to **SmartLink Manager → New SmartLink** to create a link.
 
-![Creating a smart link in the Craft control panel](images/smart-links-create.webp)
+![Creating a smart link in the Craft control panel](../images/smart-links-create.webp)
 
 The edit screen has these main fields:
 

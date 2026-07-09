@@ -111,7 +111,7 @@ When a retention period is set, SmartLink Manager runs a `CleanupAnalyticsJob` q
 
 The analytics dashboard is available in the **SmartLink Manager** CP section under **Analytics**.
 
-![SmartLink Manager analytics dashboard](images/analytics-dashboard.webp)
+![SmartLink Manager analytics dashboard](../images/analytics-dashboard.webp)
 
 It shows:
 

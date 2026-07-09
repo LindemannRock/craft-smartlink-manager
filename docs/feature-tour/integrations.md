@@ -8,7 +8,7 @@ SmartLink Manager integrates with SEOmatic, Redirect Manager, and Craft Link Fie
 - **No broken links on slug changes** — let Redirect Manager create an automatic 301 when a smart link's slug changes.
 - **Native field picking** — offer SmartLink as a type in Craft's Link field so editors can pick one inline.
 
-![SmartLink Manager integrations settings](images/integrations-settings.webp)
+![SmartLink Manager integrations settings](../images/integrations-settings.webp)
 
 ## SEOmatic Integration
 

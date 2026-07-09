@@ -12,7 +12,7 @@ SmartLink Manager provides two Craft dashboard widgets for at-a-glance analytics
 
 Add widgets via **Dashboard → New Widget** and selecting either widget from the SmartLink Manager section. Both widgets require the `smartLinkManager:viewAnalytics` permission to display data.
 
-![SmartLink Manager dashboard widgets](images/dashboard-widgets-overview.webp)
+![SmartLink Manager dashboard widgets](../images/dashboard-widgets-overview.webp)
 
 ## Analytics Summary Widget
 

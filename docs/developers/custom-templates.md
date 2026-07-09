@@ -54,7 +54,7 @@ Each template receives a fixed set of variables from the plugin. Use these inste
 
 The default template renders a platform-aware landing page — app-store buttons for the visitor's device, a *Continue to Website* link, and the QR code:
 
-![The default SmartLink redirect page rendered by redirect.twig — app-store buttons and QR code](images/frontend-template.webp)
+![The default SmartLink redirect page rendered by redirect.twig — app-store buttons and QR code](../images/frontend-template.webp)
 
 It receives these variables:
 

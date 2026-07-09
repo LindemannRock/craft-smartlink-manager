@@ -21,7 +21,7 @@ When you add a SmartLink Field to an entry's field layout, editors can pick from
 
 ## Field Settings
 
-![SmartLink Field settings](images/smartlink-field-settings.webp)
+![SmartLink Field settings](../images/smartlink-field-settings.webp)
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|

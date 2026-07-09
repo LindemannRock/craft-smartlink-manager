@@ -17,7 +17,7 @@ Go to **SmartLink Manager → Import/Export**. The page shows up to three sectio
 - **Import** — upload a CSV and map its columns to smart link fields
 - **Import History** — a log of past imports
 
-![The Import/Export page in the SmartLink Manager Control Panel](images/import-export-main.webp)
+![The Import/Export page in the SmartLink Manager Control Panel](../images/import-export-main.webp)
 
 ## Exporting
 
@@ -66,7 +66,7 @@ Select your CSV and click **Upload**. The importer accepts UTF-8 CSV files up to
 
 A preview of your file appears with a dropdown per column. Map each column to a smart link field. **`slug` is required** — every other field is optional, and unmapped columns are ignored.
 
-![Mapping CSV columns to SmartLink Manager fields](images/import-export-map.webp)
+![Mapping CSV columns to SmartLink Manager fields](../images/import-export-map.webp)
 
 ### 3. Preview
 
@@ -76,7 +76,7 @@ Review what will happen before committing. Rows are sorted into:
 - **Duplicates** — the slug already exists, or appears more than once in the file (skipped)
 - **Errors** — failed validation, e.g. a missing slug or fallback URL, or an invalid URL (skipped)
 
-![Import preview showing valid smart links, duplicates, and error row counts](images/import-export-preview.webp)
+![Import preview showing valid smart links, duplicates, and error row counts](../images/import-export-preview.webp)
 
 ### 4. Import
 
