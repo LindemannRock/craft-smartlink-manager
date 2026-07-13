@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.37.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.0...v5.37.1) - 2026-07-13
+
+
+### Fixed
+
+* **redirects:** remove unused redirect manager events and clarify descriptions ([b06c1a2](https://github.com/LindemannRock/craft-smartlink-manager/commit/b06c1a2a2c32d40ca93bdcef2ac47a514d8f4033))
+
 ## [5.37.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.36.0...v5.37.0) - 2026-07-06
 
 
