@@ -136,7 +136,7 @@ When the [Servd Asset Storage](https://plugins.craftcms.com/servd-asset-storage)
 
 - **What's purged:** the public smart link URL and the QR landing URL, across all enabled sites (generated with `Settings::buildPublicUrl()`, so `smartlinkBaseUrl`, custom domains, and `{siteHandle}` tokens are respected).
 - **When:** on save/update, before delete, after a slug change (the old slug is purged too), and when SmartLink Manager caches are cleared.
-- **Prerequisites:** purging only runs on Servd's hosting infrastructure with static cache enabled — the PHP `redis` extension must be loaded and Servd's runtime environment variables (`SERVD_CACHE_ENABLED`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_STATIC_CACHE_DB`, `ENVIRONMENT`, `SERVD_PROJECT_SLUG`) must be present. On a standard Servd deployment these are already set; anywhere else the purge is silently skipped.
+- **Prerequisites:** purging only runs on Servd's hosting infrastructure with static cache enabled — the PHP `redis` extension must be loaded, Servd's runtime environment variables (`SERVD_CACHE_ENABLED`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_STATIC_CACHE_DB`, `SERVD_PROJECT_SLUG`) must be present, and `ENVIRONMENT` must be exactly `development`, `staging`, or `production`. On a standard Servd deployment these are already set; anywhere else the purge is silently skipped.
 
 This keeps Servd from serving stale redirect/QR landing responses after a change. See [Troubleshooting](../resources/troubleshooting.md).
 

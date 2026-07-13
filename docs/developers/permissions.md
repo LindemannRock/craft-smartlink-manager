@@ -83,3 +83,14 @@ Craft's nested permissions are a UI convenience — the parent permission does n
 - **Child permissions** (create, edit, delete, export, clear) control specific operations
 
 To give a user read-only access to analytics, grant `viewAnalytics` without `exportAnalytics` or `clearAnalytics`. For full access, grant the parent plus the specific child permissions needed.
+
+## Multisite: the native `editSite` permission
+
+On multi-site installs, SmartLink Manager's own permissions are not the whole story. Saving, deleting, or duplicating a smart link also requires Craft's **native site permission** (`editSite:<site-uid>` — the "Edit site" checkbox under the site's name in the user group's permissions) for the site the link belongs to. A user with `editLinks` but no edit access to the link's site cannot modify that link.
+
+The same site scoping applies across the plugin:
+
+- **CSV export** includes only links from sites that are both enabled for the plugin *and* editable by the exporting user. If no sites qualify, the export shows "No smart links to export."
+- **CSV import** counts a row as failed when it targets a site the importing user can't edit (or a site not enabled for the plugin) — see [Import & Export](../feature-tour/import-export.md).
+
+On single-site installs none of this applies — the plugin's own permissions are sufficient.

@@ -28,16 +28,22 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 | `slugPrefix` | `string` | `'go'` | URL prefix for smart links (e.g., `/go/your-link`) |
 | `qrPrefix` | `string` | `'qr'` | URL prefix for QR code pages. Supports nested patterns like `go/qr` |
 | `smartlinkBaseUrl` | `?string` | `null` | Optional absolute base URL for generated smart links and QR URLs (e.g., `https://go.example.com`). Supports tokens `{siteHandle}`, `{siteId}`, `{siteUid}` and env vars. @since(5.22.0) |
-| `notFoundRedirectUrl` | `string` | `'/'` | URL to redirect to when smart link is not found (404). Supports env vars |
 | `redirectTemplate` | `?string` | `null` | Custom redirect template path. Supports env vars |
 | `qrTemplate` | `?string` | `null` | Custom QR code display template path. Supports env vars |
 | `enabledSites` | `array` | `[]` | Site IDs where SmartLink Manager should be enabled (empty = all sites) |
 | `logLevel` | `string` | `'error'` | Log level: `error`, `warning`, `info`, `debug`. Debug requires `devMode` |
-| `itemsPerPage` | `int` | `100` | Items per page in element index (10–500) |
 
 SmartLink Manager renders the redirect and QR landing pages from your site's `templates/` folder. Complete [Installation & Setup](installation.md#post-install-setup) first so the starter templates exist before public links render.
 
 The `redirectTemplate` / `qrTemplate` fields only change where SmartLink Manager looks for those templates. Leave them empty to use the default paths, or point them at custom paths after you have placed templates there. For bundled template locations, manual copy commands, and the variables each template receives, see [Custom templates](../developers/custom-templates.md).
+
+## Behavior Settings
+
+Found on **SmartLink Manager → Settings → Behavior**.
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `notFoundRedirectUrl` | `string` | `'/'` | URL to redirect to when smart link is not found (404). Supports env vars |
 
 ## QR Code Settings
 
@@ -120,9 +126,34 @@ The `redirectTemplate` / `qrTemplate` fields only change where SmartLink Manager
 | `enabledIntegrations` | `array` | `[]` | Enabled integration handles (e.g., `['seomatic', 'redirect-manager']`) |
 | `seomaticTrackingEvents` | `array` | `['redirect', 'button_click', 'qr_scan']` | Event types to track via SEOmatic integration |
 | `seomaticEventPrefix` | `string` | `'smart_links'` | Event prefix for GTM/GA events (lowercase, numbers, underscores only) |
-| `redirectManagerEvents` | `array` | `['slug-change', 'delete']` | Event types that create redirects in Redirect Manager |
+| `redirectManagerEvents` | `array` | `['slug-change']` | Event types that create redirects in Redirect Manager. `slug-change` is currently the only supported event |
 
 Add `'seomatic'` to `enabledIntegrations` to activate both SEOmatic tracking and the SEOmatic Content SEO source for SmartLinks. When it is not enabled, SmartLink Manager does not register SmartLinks in SEOmatic.
+
+## Interface Settings
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `itemsPerPage` | `int` | `100` | Items per page in element index (10–500) |
+
+### Base Settings Overrides
+
+The **Settings → Interface** screen also includes base-owned display and export controls after **Items per page**.
+
+Each of these settings resolves in three steps: a value in `config/smartlink-manager.php` wins and locks the setting (the matching CP field is disabled with an override warning); otherwise a specific value picked in the Control Panel (anything other than **Use global default**) is saved with the plugin's settings and applies; otherwise the setting cascades from `config/lindemannrock-base.php` (or the built-in default when that file doesn't set it either). In practice you'll usually just pick a value in the CP — reach for the config file only when the value should be locked per environment.
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `timeFormat` | `string\|null` | `null` | Time display override: `'12'` (AM/PM) or `'24'` |
+| `monthFormat` | `string\|null` | `null` | Month display override: `'numeric'`, `'short'`, or `'long'` |
+| `dateOrder` | `string\|null` | `null` | Date order override: `'dmy'`, `'mdy'`, or `'ymd'` |
+| `dateSeparator` | `string\|null` | `null` | Date separator override: `'/'`, `'-'`, or `'.'` |
+| `showSeconds` | `bool\|null` | `null` | Whether timestamps include seconds |
+| `defaultDateRange` | `string\|null` | `null` | Default date range for analytics, logs, dashboard widgets, and other date-filtered views. Values: `today`, `yesterday`, `thisWeek`, `lastWeek`, `last7days`, `last14days`, `last30days`, `last90days`, `thisMonth`, `lastMonth`, `thisQuarter`, `lastQuarter`, `thisYear`, `lastYear`, `last12months`, `all` |
+| `exports` | `array\|null` | `null` | Export format overrides, e.g. `['csv' => true, 'json' => true, 'excel' => true]` |
+
+> [!NOTE]
+> `exports` is the config-file shape only. In the Control Panel these appear as three separate dropdowns (CSV, JSON, Excel) on **Settings → Interface**, stored internally as individual settings — there is no single "Exports" field.
 
 ## Example Configuration
 
@@ -152,6 +183,20 @@ return [
         'defaultQrErrorCorrection' => 'M',
         'qrModuleStyle' => 'square',
         'qrEyeStyle' => 'square',
+
+        // Optional base-setting overrides for this plugin only
+        // Leave unset to inherit from config/lindemannrock-base.php.
+        // 'timeFormat' => '24',
+        // 'monthFormat' => 'short',
+        // 'dateOrder' => 'dmy',
+        // 'dateSeparator' => '/',
+        // 'showSeconds' => false,
+        // 'defaultDateRange' => 'last7days',
+        // 'exports' => [
+        //     'csv' => true,
+        //     'json' => true,
+        //     'excel' => true,
+        // ],
     ],
 
     'dev' => [

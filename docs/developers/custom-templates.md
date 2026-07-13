@@ -44,6 +44,8 @@ Once a file exists at `templates/smartlink-manager/{name}.twig`, the default pat
 - Each path field accepts a `$ENV_VAR` in the Control Panel, or `App::env()` in the config file.
 - A value in `config/smartlink-manager.php` overrides the Control Panel field (the CP field is shown disabled with an override warning).
 
+The CP tells you whether the files are in place: **Settings → General → Template Settings** shows a live status box ("All required frontend templates are available." or a warning pointing you to setup), and the **Setup** page lists each template as Ready or Missing with its resolved destination path.
+
 See [Configuration → Template settings](../get-started/configuration.md) for the settings reference.
 
 ## Available variables

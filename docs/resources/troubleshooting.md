@@ -223,7 +223,7 @@ If a date-format setting does not appear to change the index:
 
 4. **Check the `clearCache` permission** — users need the `smartLinkManager:clearCache` permission to clear the cache from the CP. Admins always have access.
 
-If the Servd Asset Storage plugin is installed and enabled, SmartLink Manager queues targeted Servd static-cache purges for the public smart link URL and QR landing URL when a smart link is saved, deleted, renamed, or when SmartLink Manager caches are cleared. This helps clear stale cached redirect and QR landing responses after content changes. Purging only runs on Servd's own hosting — it also requires the PHP `redis` extension and Servd's runtime environment variables, otherwise it is silently skipped (see [Integrations → Servd static cache](../feature-tour/integrations.md#servd-static-cache)).
+If the Servd Asset Storage plugin is installed and enabled, SmartLink Manager queues targeted Servd static-cache purges for the public smart link URL and QR landing URL when a smart link is saved, deleted, renamed, or when SmartLink Manager caches are cleared. This helps clear stale cached redirect and QR landing responses after content changes. Purging only runs on Servd's own hosting — it also requires the PHP `redis` extension and Servd's runtime environment variables, with `ENVIRONMENT` set to exactly `development`, `staging`, or `production`; otherwise it is silently skipped (see [Integrations → Servd static cache](../feature-tour/integrations.md#servd-static-cache)).
 
 ---
 
@@ -251,6 +251,20 @@ If a settings save fails, keep the submitted form open and check the inline fiel
 3. For imports, correct the flagged rows in your CSV and re-upload — the preview step lists each rejected row with its reason.
 
 **Why it happens:** Restricting links to `http(s)` and rejecting markup in free-text fields prevents dangerous values (such as `javascript:` URLs or injected scripts) from being stored and later rendered.
+
+---
+
+## CSV Import Fails with "Failed to parse CSV"
+
+**Symptom:** Uploading a CSV on the Import step fails immediately with "Failed to parse CSV: …" before any rows are previewed.
+
+**Fix:**
+
+1. **Is the file valid UTF-8 CSV?** Re-save the file as UTF-8 CSV from your spreadsheet tool. Excel's default encodings and stray BOMs are the most common cause.
+2. **Is the file within limits?** Imports accept up to 4,000 rows and 5 MB per file.
+3. **Is the delimiter detected correctly?** If auto-detection struggles, specify the delimiter (comma, semicolon, or tab) manually on the upload step.
+
+**Why it happens:** In production the flash message intentionally shows a generic "An unexpected error occurred." — the underlying parse error is written to the plugin log. With `devMode` enabled, the flash message includes the real error instead. Check **SmartLink Manager → Logs** (or `storage/logs/`) for the specific cause.
 
 ---
 

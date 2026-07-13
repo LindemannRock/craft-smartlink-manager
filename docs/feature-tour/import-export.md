@@ -13,7 +13,7 @@ Move smart links in bulk using CSV. Export your whole library to edit offline or
 
 Go to **SmartLink Manager → Import/Export**. The page shows up to three sections depending on your permissions:
 
-- **Export** — download all smart links as a CSV file
+- **Export** — download your smart links as a CSV file
 - **Import** — upload a CSV and map its columns to smart link fields
 - **Import History** — a log of past imports
 
@@ -21,7 +21,7 @@ Go to **SmartLink Manager → Import/Export**. The page shows up to three sectio
 
 ## Exporting
 
-Click **Export CSV** to download every smart link, across all sites, as a single CSV with a timestamped filename. The file contains one column per smart link field:
+Click **Export CSV** to download your smart links as a single CSV with a timestamped filename. The export covers every site that is enabled for the plugin *and* that you have edit access to (Craft's native "Edit site" permission) — on multi-site installs, links on sites you can't edit are left out. If no sites qualify, the page shows "No smart links to export." The file contains one column per smart link field:
 
 | Column | Description |
 |--------|-------------|
@@ -88,6 +88,8 @@ To target a specific site, map a `siteId` or `siteHandle` column; if both are pr
 
 To create the same slug on more than one site, include one row per site with the same `slug` and different `siteId`/`siteHandle` values — the importer attaches each as a site variant of the same link.
 
+Rows are also permission-checked per site — see the "Site must be importable" rule below and [Permissions → Multisite](../developers/permissions.md#multisite-the-native-editsite-permission).
+
 ## Import validation rules
 
 | Rule | Detail |
@@ -100,6 +102,7 @@ To create the same slug on more than one site, include one row per site with the
 | Safe content | Rows whose title or description contain markup that could be unsafe are skipped |
 | `qrCodeSize` | Clamped to 100–1000 pixels |
 | Boolean columns | `enabled`, `trackAnalytics`, `qrCodeEnabled`, `hideTitle` accept truthy/falsy values (e.g. `1`/`0`) |
+| Site must be importable | The target site must be enabled for the plugin and editable by you (multi-site) — otherwise the row fails. This check runs at the final import step, so it isn't reflected in the preview counts |
 
 If `title` is left empty, the slug is used as the title.
 
