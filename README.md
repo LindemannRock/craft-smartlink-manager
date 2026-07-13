@@ -6,7 +6,7 @@
 [![Craft CMS](https://img.shields.io/badge/Craft%20CMS-5.10%2B-orange.svg)](https://craftcms.com/)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://php.net/)
 [![Logging Library](https://img.shields.io/badge/Logging%20Library-5.15%2B-green.svg)](https://github.com/LindemannRock/craft-logging-library)
-[![License](https://img.shields.io/packagist/l/lindemannrock/craft-smartlink-manager.svg)](LICENSE)
+[![License](https://img.shields.io/packagist/l/lindemannrock/craft-smartlink-manager.svg)](LICENSE.md)
 
 Intelligent device detection and app store routing for Craft CMS. Create smart links that detect a visitor's device and redirect them to the right app store, download page, or fallback URL automatically.
 
@@ -30,6 +30,7 @@ Intelligent device detection and app store routing for Craft CMS. Create smart l
 - Craft CMS 5.10+
 - PHP 8.2+
 - [Logging Library](https://github.com/LindemannRock/craft-logging-library) 5.15+ — optional, install in CP for logs
+- [bacon/bacon-qr-code](https://github.com/Bacon/BaconQrCode) ^2.0 or ^3.0
 
 ## Installation
 
