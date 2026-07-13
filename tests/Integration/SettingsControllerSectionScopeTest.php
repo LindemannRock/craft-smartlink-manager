@@ -223,20 +223,17 @@ final class SettingsControllerSectionScopeTest extends TestCase
             ],
             '/src/templates/settings/integrations.twig' => [
                 'contains' => [
-                    '{% set smartlinkLowerNameHtml = smartlinkHelper.lowerDisplayName|e %}',
                     '{% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}',
                     '{% set seomaticPluginNameHtml = seomaticPluginName|e %}',
                     '{% set rmPluginNameHtml = rmPluginName|e %}',
                     'pluginName: seomaticPluginNameHtml',
                     'pluginName: smartlinkPluralLowerNameHtml',
-                    'pluginName: smartlinkLowerNameHtml',
                     'rmPluginName: rmPluginNameHtml',
                 ],
                 'notContains' => [
                     'message: \'<strong>\' ~ "Note"|t(\'smartlink-manager\') ~ \':</strong> \' ~ "No tracking scripts are currently configured in {pluginName}. Events will be queued but not sent until you configure GTM or Google Analytics in {pluginName}."|t(\'smartlink-manager\', { pluginName: seomaticPluginName })',
                     ' ~ "View and manage all redirects ({pluginName} + regular pages) in one place"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
-                    ' ~ "See how many people try to access deleted or changed {pluginName}, their devices, browsers, and countries"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
-                    ' ~ "Redirects persist even if {pluginName} is deleted, preventing broken links permanently"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.lowerDisplayName}) ~ ',
+                    ' ~ "Track how many people access old {pluginName} slugs after changes"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
                     ' ~ "{rmPluginName} shows which plugin created each redirect for better organization"|t(\'smartlink-manager\', {rmPluginName: rmPluginName}) ~ ',
                 ],
             ],

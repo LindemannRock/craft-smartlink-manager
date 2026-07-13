@@ -26,7 +26,6 @@
     {{ redirectInput('smartlink-manager/settings/integrations') }}
     {{ hiddenInput('section', 'integrations') }}
     {% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}
-    {% set smartlinkLowerNameHtml = smartlinkHelper.lowerDisplayName|e %}
     {% set smartlinkPluralLowerNameHtml = smartlinkHelper.pluralLowerDisplayName|e %}
 
         <h2 class="first">{{ "Third-Party Integrations"|t('smartlink-manager') }}</h2>
@@ -357,11 +356,11 @@
                             </li>
                             <li>
                                 <strong>' ~ "Analytics Tracking"|t('smartlink-manager') ~ '</strong> –
-                                ' ~ "See how many people try to access deleted or changed {pluginName}, their devices, browsers, and countries"|t('smartlink-manager', {pluginName: smartlinkPluralLowerNameHtml}) ~ '
+                                ' ~ "Track how many people access old {pluginName} slugs after changes"|t('smartlink-manager', {pluginName: smartlinkPluralLowerNameHtml}) ~ '
                             </li>
                             <li>
                                 <strong>' ~ "Persistent Redirects"|t('smartlink-manager') ~ '</strong> –
-                                ' ~ "Redirects persist even if {pluginName} is deleted, preventing broken links permanently"|t('smartlink-manager', {pluginName: smartlinkLowerNameHtml}) ~ '
+                                ' ~ "Slug change redirects remain active permanently, preventing broken links"|t('smartlink-manager') ~ '
                             </li>
                             <li>
                                 <strong>' ~ "Source Tracking"|t('smartlink-manager') ~ '</strong> –

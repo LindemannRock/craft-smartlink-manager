@@ -25,7 +25,6 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
  *
  * Actual redirect creation happens in SmartLinksService:
  * - handleSlugChange() -> calls redirect-manager service methods with runtime checks
- * - handleDeletedSmartLink() -> calls redirect-manager service methods with runtime checks
  *
  * @since 5.4.0
  */
@@ -66,7 +65,6 @@ class RedirectManagerIntegration extends BaseIntegration
         // Redirect Manager integration doesn't use event pushing
         // Redirects are created via service method calls in the service layer:
         // - SmartLinksService::handleSlugChange() -> calls redirect-manager service
-        // - SmartLinksService::handleDeletedSmartLink() -> calls redirect-manager service
         return true;
     }
 
@@ -86,7 +84,7 @@ class RedirectManagerIntegration extends BaseIntegration
             'available' => $this->isAvailable(),
             'enabled' => $this->isEnabled(),
             'events' => $redirectManagerEvents,
-            'description' => Craft::t('smartlink-manager', 'Creates permanent redirects when {pluginName} slugs change or links are deleted', [
+            'description' => Craft::t('smartlink-manager', 'Create permanent redirect records when {pluginName} slugs change. Provides centralized redirect management and analytics tracking.', [
                 'pluginName' => SmartLinkManager::$plugin->getSettings()->getLowerDisplayName(),
             ]),
         ];

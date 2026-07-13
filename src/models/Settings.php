@@ -258,7 +258,7 @@ class Settings extends Model
     /**
      * @var array Event types that create redirects in Redirect Manager
      */
-    public array $redirectManagerEvents = ['slug-change', 'delete'];
+    public array $redirectManagerEvents = ['slug-change'];
 
     /**
      * @var string Event prefix for GTM/GA events
