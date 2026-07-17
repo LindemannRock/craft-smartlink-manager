@@ -51,6 +51,9 @@ class RedirectController extends Controller
      */
     public function actionIndex(string $slug, ?string $siteHandle = null): Response
     {
+        // Stored slugs are lowercase-normalized at write; lowercase the probe so
+        // the lookup stays case-insensitive on PostgreSQL too.
+        $slug = strtolower(trim($slug));
         $site = $this->resolveSite($siteHandle);
         if (!$site) {
             $this->logWarning('Invalid site handle for smart link request', ['slug' => $slug, 'siteHandle' => $siteHandle]);
@@ -165,6 +168,7 @@ class RedirectController extends Controller
      */
     public function actionAutoRedirect(string $slug, ?string $siteHandle = null): Response
     {
+        $slug = strtolower(trim($slug));
         $site = $this->resolveSite($siteHandle);
         if (!$site) {
             return $this->autoRedirectResponse(false);
@@ -222,6 +226,7 @@ class RedirectController extends Controller
      */
     public function actionGo(string $slug, string $platform = 'auto', ?string $siteHandle = null): Response
     {
+        $slug = strtolower(trim($slug));
         // Normalize platform parameter to lowercase first
         $platform = strtolower($platform);
 
