@@ -80,7 +80,9 @@ class SmartLinkManagerVariable
      */
     public function getBySlug(string $slug): ?SmartLink
     {
-        return SmartLink::find()->slug($slug)->one();
+        // Stored slugs are lowercase-normalized at write; lowercase the probe so
+        // the lookup stays case-insensitive on PostgreSQL too.
+        return SmartLink::find()->slug(strtolower(trim($slug)))->one();
     }
 
     /**
@@ -91,7 +93,7 @@ class SmartLinkManagerVariable
      */
     public function slug(string $slug): SmartLinkQuery
     {
-        return SmartLink::find()->slug($slug);
+        return SmartLink::find()->slug(strtolower(trim($slug)));
     }
 
     /**

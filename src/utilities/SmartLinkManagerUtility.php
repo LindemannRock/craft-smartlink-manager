@@ -212,7 +212,7 @@ class SmartLinkManagerUtility extends Utility
             ->all();
 
         $clickTypes = (new Query())
-            ->select([DbHelper::jsonExtract('metadata', 'clickType') . ' as clickType', 'COUNT(*) as count'])
+            ->select([DbHelper::jsonExtract('metadata', 'clickType') . ' as [[clickType]]', 'COUNT(*) as count'])
             ->from('{{%smartlinkmanager_analytics}}')
             ->where($siteCondition)
             ->groupBy('clickType')
