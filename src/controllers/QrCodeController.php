@@ -51,6 +51,9 @@ class QrCodeController extends Controller
      */
     public function actionDisplay(string $slug, ?string $siteHandle = null): Response
     {
+        // Stored slugs are lowercase-normalized at write; lowercase the probe so
+        // the lookup stays case-insensitive on PostgreSQL too.
+        $slug = strtolower(trim($slug));
         $site = $this->resolveSite($siteHandle);
         if (!$site) {
             throw new NotFoundHttpException('QR code not found.');
@@ -198,6 +201,7 @@ class QrCodeController extends Controller
             if (!$slug) {
                 throw new NotFoundHttpException('Smart link not specified.');
             }
+            $slug = strtolower(trim($slug));
             
             $site = $this->resolveSite($siteHandle);
             if (!$site) {
