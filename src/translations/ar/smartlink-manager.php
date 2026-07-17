@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'تمت إضافة مهمة تنظيف Analytics إلى قائمة الانتظار',
     'Failed to queue cleanup job' => 'فشل إضافة مهمة التنظيف إلى قائمة الانتظار',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => 'تم العثور على {count, number} {count, plural, =1{خطأ} other{أخطاء}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'يُسمح فقط بالأحرف والأرقام والشرطات والشرطات السفلية.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'يُسمح فقط بالأحرف والأرقام والشرطات والشرطات السفلية والشرطات المائلة.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'يُسمح فقط بالأحرف الصغيرة والأرقام والشرطات السفلية.',

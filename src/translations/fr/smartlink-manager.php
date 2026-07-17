@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'Tâche de nettoyage des analytics mise en file d\'attente',
     'Failed to queue cleanup job' => 'Échec de la mise en file d\'attente de la tâche de nettoyage',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{erreur} other{erreurs}} trouvée(s)',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Seuls les lettres, chiffres, tirets et underscores sont autorisés.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Seuls les lettres, chiffres, tirets, underscores et barres obliques sont autorisés.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Seules les lettres minuscules, chiffres et underscores sont autorisés.',

@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'アナリティクスの整理ジョブをキューに追加しました',
     'Failed to queue cleanup job' => '整理ジョブのキューへの追加に失敗しました',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} 件のエラーが見つかりました',
     'Only letters, numbers, hyphens, and underscores are allowed.' => '文字、数字、ハイフン、アンダースコアのみ使用できます。',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => '文字、数字、ハイフン、アンダースコア、スラッシュのみ使用できます。',
     'Only lowercase letters, numbers, and underscores are allowed.' => '小文字、数字、アンダースコアのみ使用できます。',

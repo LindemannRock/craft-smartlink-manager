@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'Analyse-Bereinigung in Warteschlange gestellt',
     'Failed to queue cleanup job' => 'Bereinigungs-Job konnte nicht in die Warteschlange gestellt werden',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => '{count, number} {count, plural, =1{Fehler} other{Fehler}} gefunden',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Nur Buchstaben, Zahlen, Bindestriche und Unterstriche sind erlaubt.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Nur Buchstaben, Zahlen, Bindestriche, Unterstriche und Schrägstriche sind erlaubt.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Nur Kleinbuchstaben, Zahlen und Unterstriche sind erlaubt.',

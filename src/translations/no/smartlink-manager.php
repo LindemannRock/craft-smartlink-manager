@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'Analyseoppryddingsjobb lagt i kø',
     'Failed to queue cleanup job' => 'Kunne ikke legge oppryddingsjobb i kø',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Fant {count, number} {count, plural, =1{feil} other{feil}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Bare bokstaver, tall, bindestreker og understreker er tillatt.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Bare bokstaver, tall, bindestreker, understreker og skråstreker er tillatt.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Bare små bokstaver, tall og understreker er tillatt.',

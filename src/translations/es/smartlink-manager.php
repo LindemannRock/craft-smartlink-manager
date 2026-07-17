@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'Tarea de limpieza de analytics en cola',
     'Failed to queue cleanup job' => 'Error al poner en cola la tarea de limpieza',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Se encontró {count, number} {count, plural, =1{error} other{errores}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Solo se permiten letras, números, guiones y guiones bajos.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Solo se permiten letras, números, guiones, guiones bajos y barras.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Solo se permiten letras minúsculas, números y guiones bajos.',

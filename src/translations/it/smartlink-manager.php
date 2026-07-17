@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'Processo di pulizia analytics accodato',
     'Failed to queue cleanup job' => 'Impossibile accodare il processo di pulizia',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Trovati {count, number} {count, plural, =1{errore} other{errori}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Sono consentiti solo lettere, numeri, trattini e trattini bassi.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Sono consentiti solo lettere, numeri, trattini, trattini bassi e barre.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Sono consentiti solo lettere minuscole, numeri e trattini bassi.',

@@ -168,7 +168,6 @@ return [
     'Analytics cleanup job queued' => 'Analytics cleanup job queued',
     'Failed to queue cleanup job' => 'Failed to queue cleanup job',
     // Validation messages
-    'Found {count, number} {count, plural, =1{error} other{errors}}' => 'Found {count, number} {count, plural, =1{error} other{errors}}',
     'Only letters, numbers, hyphens, and underscores are allowed.' => 'Only letters, numbers, hyphens, and underscores are allowed.',
     'Only letters, numbers, hyphens, underscores, and slashes are allowed.' => 'Only letters, numbers, hyphens, underscores, and slashes are allowed.',
     'Only lowercase letters, numbers, and underscores are allowed.' => 'Only lowercase letters, numbers, and underscores are allowed.',
