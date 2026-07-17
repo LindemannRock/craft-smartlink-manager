@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.37.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.1...v5.37.2) (2026-07-17)
+
+
+### Fixed
+
+* remove translationCategory from error summary includes ([a4a9339](https://github.com/LindemannRock/craft-smartlink-manager/commit/a4a9339167d930ec6e20362252e93f640af16431))
+
 ## [5.37.1](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.0...v5.37.1) - 2026-07-13
 
 
