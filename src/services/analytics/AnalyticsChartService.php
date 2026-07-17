@@ -204,12 +204,12 @@ class AnalyticsChartService
             ->from('{{%smartlinkmanager_analytics}}')
             ->select([
                 'city',
-                "SUM(CASE WHEN osName IN ('iOS', 'Android') THEN 1 ELSE 0 END) as mobile_clicks",
+                "SUM(CASE WHEN [[osName]] IN ('iOS', 'Android') THEN 1 ELSE 0 END) as mobile_clicks",
                 'COUNT(*) as total_clicks',
             ])
             ->where(['not', ['city' => null]])
             ->groupBy(['city'])
-            ->having(['>', 'total_clicks', 10])
+            ->having(['>', 'COUNT(*)', 10])
             ->orderBy(['total_clicks' => SORT_DESC])
             ->limit(5);
 

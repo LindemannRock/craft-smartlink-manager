@@ -81,10 +81,10 @@ class AnalyticsSummaryService
 
         $linksQuery = (new Query())
             ->from('{{%smartlinkmanager_analytics}} a')
-            ->innerJoin('{{%smartlinkmanager}} s', 'a.linkId = s.id')
+            ->innerJoin('{{%smartlinkmanager}} s', '[[a.linkId]] = [[s.id]]')
             ->innerJoin('{{%elements}} e', 's.id = e.id')
-            ->innerJoin('{{%elements_sites}} es', 'e.id = es.elementId')
-            ->select('COUNT(DISTINCT a.linkId)')
+            ->innerJoin('{{%elements_sites}} es', '[[e.id]] = [[es.elementId]]')
+            ->select('COUNT(DISTINCT [[a.linkId]])')
             ->where(['es.enabled' => true]);
 
         $this->applyDateRangeFilter($linksQuery, $dateRange, 'a.dateCreated');
@@ -270,9 +270,9 @@ class AnalyticsSummaryService
                 'a.linkId',
                 'a.siteId',
                 'COUNT(*) as clicks',
-                'MAX(a.dateCreated) as lastClick',
-                'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' = \'qr\' THEN 1 ELSE 0 END) as qrScans',
-                'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' != \'qr\' OR ' . DbHelper::jsonExtract('a.metadata', 'source') . ' IS NULL THEN 1 ELSE 0 END) as directVisits',
+                'MAX([[a.dateCreated]]) as [[lastClick]]',
+                'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' = \'qr\' THEN 1 ELSE 0 END) as [[qrScans]]',
+                'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' != \'qr\' OR ' . DbHelper::jsonExtract('a.metadata', 'source') . ' IS NULL THEN 1 ELSE 0 END) as [[directVisits]]',
             ])
             ->groupBy(['a.linkId', 'a.siteId'])
             ->orderBy(['clicks' => SORT_DESC])
@@ -299,7 +299,7 @@ class AnalyticsSummaryService
         if (!empty($linkIds)) {
             $maxDatesQuery = (new Query())
                 ->from('{{%smartlinkmanager_analytics}}')
-                ->select(['linkId', 'MAX(dateCreated) as maxDate'])
+                ->select(['linkId', 'MAX([[dateCreated]]) as [[maxDate]]'])
                 ->where(['linkId' => $linkIds])
                 ->groupBy(['linkId']);
             $this->applyDateRangeFilter($maxDatesQuery, $dateRange);
@@ -421,14 +421,14 @@ class AnalyticsSummaryService
     {
         $query = (new Query())
             ->from(['a' => '{{%smartlinkmanager_analytics}}'])
-            ->innerJoin(['s' => '{{%smartlinkmanager}}'], 'a.linkId = s.id')
+            ->innerJoin(['s' => '{{%smartlinkmanager}}'], '[[a.linkId]] = [[s.id]]')
             ->innerJoin(['e' => '{{%elements}}'], 's.id = e.id')
-            ->innerJoin(['es' => '{{%elements_sites}}'], 'e.id = es.elementId AND es.siteId = a.siteId')
-            ->leftJoin(['c' => '{{%smartlinkmanager_content}}'], 'c.smartLinkId = s.id AND c.siteId = a.siteId')
-            ->leftJoin(['sites' => '{{%sites}}'], 'sites.id = a.siteId')
+            ->innerJoin(['es' => '{{%elements_sites}}'], '[[e.id]] = [[es.elementId]] AND [[es.siteId]] = [[a.siteId]]')
+            ->leftJoin(['c' => '{{%smartlinkmanager_content}}'], '[[c.smartLinkId]] = [[s.id]] AND [[c.siteId]] = [[a.siteId]]')
+            ->leftJoin(['sites' => '{{%sites}}'], '[[sites.id]] = [[a.siteId]]')
             ->select([
                 'a.*',
-                'COALESCE(c.title, s.title) as smartLinkTitle',
+                'COALESCE(c.title, s.title) as [[smartLinkTitle]]',
                 's.slug as smartLinkSlug',
                 'sites.name as siteName',
             ])
