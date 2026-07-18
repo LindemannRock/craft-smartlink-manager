@@ -133,7 +133,7 @@ class Install extends Migration
                 'referrer' => $this->text()->null(),
                 'ip' => $this->string(64)->null(),
                 'userAgent' => $this->text()->null(),
-                'metadata' => $this->text()->null(),
+                'metadata' => $this->json()->null(),
                 'dateCreated' => $this->dateTime()->notNull(),
                 'dateUpdated' => $this->dateTime()->notNull(),
                 'uid' => $this->uid(),
