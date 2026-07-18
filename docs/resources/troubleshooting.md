@@ -303,3 +303,14 @@ Supported tokens: `{siteHandle}`, `{siteId}`, `{siteUid}`.
     ```
 
 3. **Permissions** — anonymous Twig queries are not restricted by user permissions, but if you're debugging from a logged-in user context, confirm no unexpected permission checks are filtering results.
+
+## SQL Errors on PostgreSQL (Column Does Not Exist / Ambiguous)
+
+```text
+SQLSTATE[42703]: column "..." does not exist
+SQLSTATE[42702]: column reference "..." is ambiguous
+```
+
+Either of these on a PostgreSQL install — in analytics pages, dashboards, or tracking — means you're on a version whose SQL was only exercised on MySQL. PostgreSQL folds unquoted identifiers to lowercase and resolves upsert column references differently; MySQL surfaces neither, so the issues were invisible there.
+
+**Fix:** Update to the latest version. All plugin SQL is now dialect-safe on both MySQL and PostgreSQL.
