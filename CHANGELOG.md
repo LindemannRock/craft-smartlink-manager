@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.37.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.2...v5.37.3) - 2026-07-18
+
+
+### Fixed
+
+* **analytics:** normalize clickType selection for case-insensitive queries ([0113377](https://github.com/LindemannRock/craft-smartlink-manager/commit/01133770ed8003d21ebfc2d32bed2c591ee51dd9))
+* **analytics:** normalize SQL queries for consistent behavior ([b1b293d](https://github.com/LindemannRock/craft-smartlink-manager/commit/b1b293db0cc81c2000347398652017520e53a129))
+* **qr-code:** normalize slug for case-insensitive lookup ([d845b5f](https://github.com/LindemannRock/craft-smartlink-manager/commit/d845b5f11edb606313ee606942ad243f949e8501))
+* **redirects:** normalize slug to lowercase for case-insensitive lookup ([66d83d8](https://github.com/LindemannRock/craft-smartlink-manager/commit/66d83d89a7b0fcc52953013085d8514fca91eb2e))
+* require PostgreSQL-compatible shared dependencies ([a6c53d1](https://github.com/LindemannRock/craft-smartlink-manager/commit/a6c53d167e135fcc4ec6a271e5ff3f203f119508))
+
 ## [5.37.2](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.1...v5.37.2) - 2026-07-17
 
 
