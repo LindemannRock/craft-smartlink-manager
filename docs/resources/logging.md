@@ -124,28 +124,6 @@ The level of detail depends on your configured `logLevel`.
 - Analytics payload details
 - Performance timing for routing and analytics work
 
-## Developer usage
-
-Most sites only need the configuration and CP viewer above. Custom modules or integrations can write to the same SmartLink Manager log when they need related diagnostics:
-
-```php
-use lindemannrock\smartlinkmanager\SmartLinkManager;
-
-SmartLinkManager::getInstance()->logError('Operation failed', [
-    'context' => 'import',
-    'error' => $e->getMessage(),
-]);
-
-SmartLinkManager::getInstance()->logInfo('Smart links exported', [
-    'count' => $count,
-]);
-
-SmartLinkManager::getInstance()->logDebug('Resolving smart link', [
-    'slug' => $slug,
-    'siteId' => $siteId,
-]);
-```
-
 ## Permissions
 
 | Action | Permission |
