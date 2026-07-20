@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'Kunne ikke fjerne analyse',
 
     // Setup
-    'Set up SmartLink Manager' => 'Sett opp SmartLink Manager',
+    'Set up {pluginName}' => 'Sett opp {pluginName}',
     'Complete these steps before creating public smart links and QR landing pages.' => 'Fullfør disse trinnene før du oppretter offentlige smarte lenker og QR-landingssider.',
     'Ready' => 'Klar',
     'v{version}' => 'v{version}',

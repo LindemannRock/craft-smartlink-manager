@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'アナリティクスの削除に失敗しました',
 
     // Setup
-    'Set up SmartLink Manager' => 'SmartLink Manager をセットアップする',
+    'Set up {pluginName}' => '{pluginName} をセットアップする',
     'Complete these steps before creating public smart links and QR landing pages.' => '公開スマートリンクと QR ランディングページを作成する前に、これらの手順を完了してください。',
     'Ready' => '準備完了',
     'v{version}' => 'v{version}',

@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'Impossibile svuotare i dati analisi',
 
     // Setup
-    'Set up SmartLink Manager' => 'Configura SmartLink Manager',
+    'Set up {pluginName}' => 'Configura {pluginName}',
     'Complete these steps before creating public smart links and QR landing pages.' => 'Completare questi passaggi prima di creare smart link pubblici e landing page QR.',
     'Ready' => 'Pronto',
     'v{version}' => 'v{version}',

@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'Failed to clear analytics',
 
     // Setup
-    'Set up SmartLink Manager' => 'Set up SmartLink Manager',
+    'Set up {pluginName}' => 'Set up {pluginName}',
     'Complete these steps before creating public smart links and QR landing pages.' => 'Complete these steps before creating public smart links and QR landing pages.',
     'Ready' => 'Ready',
     'v{version}' => 'v{version}',

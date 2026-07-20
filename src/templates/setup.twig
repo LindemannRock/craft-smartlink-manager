@@ -1,7 +1,9 @@
 {% extends "smartlink-manager/_layouts/cp" %}
 
 {% set selectedSubnavItem = 'setup' %}
-{% set title = "Set up SmartLink Manager"|t('smartlink-manager') %}
+{% set title = 'Set up {pluginName}'|t('smartlink-manager', {
+    pluginName: smartlinkHelper.fullName,
+}) %}
 
 {% set missingTemplates = templateStatuses|filter(status => not status.exists) %}
 {% set templatesReady = missingTemplates|length == 0 %}

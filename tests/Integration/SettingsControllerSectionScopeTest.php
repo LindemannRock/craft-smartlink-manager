@@ -145,6 +145,9 @@ final class SettingsControllerSectionScopeTest extends TestCase
         $source = file_get_contents(dirname(__DIR__, 2) . '/src/templates/setup.twig');
         self::assertIsString($source);
 
+        self::assertStringContainsString("{% set title = 'Set up {pluginName}'|t('smartlink-manager', {", $source);
+        self::assertStringContainsString('pluginName: smartlinkHelper.fullName', $source);
+        self::assertStringNotContainsString('Set up SmartLink Manager', $source);
         self::assertStringContainsString('{% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}', $source);
         self::assertStringContainsString('smartlinkFullNameHtml: smartlinkFullNameHtml,', $source);
         self::assertStringContainsString("'{pluginName} is ready to create public smart links and QR landing pages.'|t('smartlink-manager', {", $source);

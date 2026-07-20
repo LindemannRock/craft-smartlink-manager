@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'فشل في مسح التحليلات',
 
     // Setup
-    'Set up SmartLink Manager' => 'إعداد SmartLink Manager',
+    'Set up {pluginName}' => 'إعداد {pluginName}',
     'Complete these steps before creating public smart links and QR landing pages.' => 'أكمل هذه الخطوات قبل إنشاء smart links عامة وصفحات هبوط QR.',
     'Ready' => 'جاهز',
     'v{version}' => 'v{version}',

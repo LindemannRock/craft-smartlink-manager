@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'No se pudieron borrar las analíticas',
 
     // Setup
-    'Set up SmartLink Manager' => 'Configurar SmartLink Manager',
+    'Set up {pluginName}' => 'Configurar {pluginName}',
     'Complete these steps before creating public smart links and QR landing pages.' => 'Complete estos pasos antes de crear smart links públicos y páginas de destino QR.',
     'Ready' => 'Listo',
     'v{version}' => 'v{version}',

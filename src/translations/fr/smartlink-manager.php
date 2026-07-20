@@ -755,7 +755,7 @@ return [
     'Failed to clear analytics' => 'Échec de l\'effacement des analytiques',
 
     // Setup
-    'Set up SmartLink Manager' => 'Configurer SmartLink Manager',
+    'Set up {pluginName}' => 'Configurer {pluginName}',
     'Complete these steps before creating public smart links and QR landing pages.' => 'Terminez ces étapes avant de créer des smart links publics et des pages d\'atterrissage QR.',
     'Ready' => 'Prêt',
     'v{version}' => 'v{version}',
