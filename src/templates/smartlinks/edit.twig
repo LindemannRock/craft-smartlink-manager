@@ -225,7 +225,6 @@
     {% set errorSummary %}
         {% include 'lindemannrock-base/_partials/error-summary' with {
             errors: smartLink.getErrors(),
-            linkMode: 'data-key',
         } %}
     {% endset %}
 {% endif %}
