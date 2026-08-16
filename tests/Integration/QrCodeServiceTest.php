@@ -11,11 +11,17 @@ declare(strict_types=1);
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use Craft;
+use craft\cachecascade\CascadeCache;
 use craft\elements\Asset;
+use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use yii\caching\CacheInterface;
+
+require_once dirname(__DIR__) . '/Fixtures/CascadeCache.php';
 
 /**
  * @since 5.28.0
@@ -149,6 +155,113 @@ class QrCodeServiceTest extends TestCase
         $this->assertStringContainsString('if (is_string($logoPath) && is_file($logoPath))', $source);
         $this->assertStringContainsString('@unlink($logoPath);', $source);
         $this->assertStringNotContainsString("\n            unlink(\$logoPath);", $source);
+    }
+
+    public function testQrCacheIdentityPreservesEveryExistingResultAffectingInput(): void
+    {
+        $service = new QrCodeService();
+        $method = new \ReflectionMethod($service, '_getCacheKey');
+        $baseline = [
+            'https://example.com/site/smart-link',
+            256,
+            '010203',
+            'FDFCFB',
+            'png',
+            4,
+            'square',
+            'square',
+            'AABBCC',
+            '42',
+            20,
+        ];
+        $baselineKey = $method->invokeArgs($service, $baseline);
+        self::assertSame(
+            PluginHelper::getCacheKeyPrefix(SmartLinkManager::$plugin->id, 'qr') . md5(implode(':', $baseline)),
+            $baselineKey,
+        );
+
+        $alternatives = [
+            'https://other.example.com/site/smart-link',
+            257,
+            '111111',
+            'EEEEEE',
+            'svg',
+            5,
+            'dots',
+            'rounded',
+            'DDEEFF',
+            '43',
+            21,
+        ];
+        foreach ($alternatives as $index => $alternative) {
+            $changed = $baseline;
+            $changed[$index] = $alternative;
+            self::assertNotSame($baselineKey, $method->invokeArgs($service, $changed));
+        }
+
+        self::assertSame([
+            'url',
+            'size',
+            'color',
+            'bgColor',
+            'format',
+            'margin',
+            'moduleStyle',
+            'eyeStyle',
+            'eyeColor',
+            'logoId',
+            'logoSize',
+        ], array_map(static fn(\ReflectionParameter $parameter): string => $parameter->getName(), $method->getParameters()));
+    }
+
+    public function testQrBinaryCacheRoundTripUsesConfiguredFiniteTtlWithoutRendering(): void
+    {
+        $originalCache = Craft::$app->getCache();
+        self::assertInstanceOf(CacheInterface::class, $originalCache);
+        $cache = new CascadeCache();
+        Craft::$app->set('cache', $cache);
+
+        try {
+            $this->withSettings([
+                'cacheStorageMethod' => 'craft',
+                'enableQrCodeCache' => true,
+                'qrCodeCacheDuration' => 83,
+                'defaultQrSize' => 256,
+                'defaultQrColor' => '#000000',
+                'defaultQrBgColor' => '#FFFFFF',
+                'defaultQrFormat' => 'png',
+                'defaultQrMargin' => 4,
+                'qrModuleStyle' => 'square',
+                'qrEyeStyle' => 'square',
+                'qrEyeColor' => null,
+                'qrLogoSize' => 20,
+            ], function() use ($cache): void {
+                $url = 'https://example.com/cache-without-rendering';
+                $service = SmartLinkManager::$plugin->qrCode;
+                $keyMethod = new \ReflectionMethod($service, '_getCacheKey');
+                $identity = $keyMethod->invoke(
+                    $service,
+                    $url,
+                    256,
+                    '000000',
+                    'FFFFFF',
+                    'png',
+                    4,
+                    'square',
+                    'square',
+                    null,
+                    null,
+                    20,
+                );
+                $binary = "\x89PNG\r\n\x1a\n\x00cached";
+                $decision = SmartLinkManager::$plugin->cacheStorage->getStorageDecision();
+                self::assertTrue(SmartLinkManager::$plugin->cacheStorage->writeQrCode($identity, $binary, 83, $decision));
+                self::assertSame($binary, $service->generateQrCode($url));
+                self::assertContains(83, $cache->setDurations);
+            });
+        } finally {
+            Craft::$app->set('cache', $originalCache);
+        }
     }
 
     /**

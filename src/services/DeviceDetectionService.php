@@ -10,6 +10,7 @@ namespace lindemannrock\smartlinkmanager\services;
 
 use Craft;
 use craft\base\Component;
+use lindemannrock\base\cache\DisposableCacheStorageDecision;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\traits\DeviceDetectionTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -167,20 +168,37 @@ class DeviceDetectionService extends Component
     }
 
     /**
+     * Clear cached device detection results and the request-local detector.
+     *
+     * @since 5.38.0
+     */
+    public function clearCache(?DisposableCacheStorageDecision $decision = null): int
+    {
+        try {
+            return SmartLinkManager::$plugin->cacheStorage->clearFamily(CacheStorageService::FAMILY_DEVICE, $decision);
+        } finally {
+            $this->deviceDetection = null;
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getDeviceDetectionConfig(): array
     {
         $settings = SmartLinkManager::$plugin->getSettings();
+        $decision = SmartLinkManager::$plugin->cacheStorage->getStorageDecision();
+        $duration = (int) $settings->deviceDetectionCacheDuration;
 
         return [
-            'cacheEnabled' => (bool) $settings->cacheDeviceDetection,
-            'cacheStorageMethod' => $settings->cacheStorageMethod,
-            'cacheDuration' => (int) $settings->deviceDetectionCacheDuration,
+            'cacheEnabled' => (bool) $settings->cacheDeviceDetection && $duration > 0 && !$decision->isDisabled(),
+            'cacheStorageMethod' => $decision->usesApplicationCache() ? 'craft' : 'file',
+            'cacheDuration' => $duration,
             'pluginHandle' => SmartLinkManager::$plugin->id,
-            'cachePath' => PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device'),
+            'cachePath' => $decision->usesFileCache()
+                ? PluginHelper::getCachePath(SmartLinkManager::$plugin, CacheStorageService::FAMILY_DEVICE)
+                : null,
             'cacheKeyPrefix' => PluginHelper::getCacheKeyPrefix(SmartLinkManager::$plugin->id, 'device'),
-            'cacheKeySet' => PluginHelper::getCacheKeySet(SmartLinkManager::$plugin->id, 'device'),
             'includeLanguage' => true,
             'includePlatform' => true,
             'enableGeoDetection' => (bool) $settings->enableGeoDetection,

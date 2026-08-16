@@ -10,6 +10,8 @@ namespace lindemannrock\smartlinkmanager\controllers;
 
 use Craft;
 use craft\web\Controller;
+use lindemannrock\base\cache\DisposableCacheStoragePresenter;
+use lindemannrock\base\cache\DisposableCacheStorageResolver;
 use lindemannrock\base\helpers\AssetVolumeHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\helpers\PluginThemeStyleHelper;
@@ -226,6 +228,7 @@ class SettingsController extends Controller
         return $this->renderTemplate('smartlink-manager/settings/cache', [
             'settings' => $settings,
             'readOnly' => $this->readOnly,
+            'cacheStorage' => $this->cacheStorageTemplateVariables($settings),
         ]);
     }
 
@@ -435,9 +438,14 @@ class SettingsController extends Controller
             Craft::$app->getSession()->setError(Craft::t('smartlink-manager', 'Couldn\'t save settings.'));
 
             // Re-render the correct settings tab with errors
-            return $this->renderTemplate("smartlink-manager/settings/$section", [
+            $templateVariables = [
                 'settings' => $settings,
-            ]);
+            ];
+            if ($section === 'cache') {
+                $templateVariables['cacheStorage'] = $this->cacheStorageTemplateVariables($settings);
+            }
+
+            return $this->renderTemplate("smartlink-manager/settings/$section", $templateVariables);
         }
 
         // Save settings to database
@@ -456,10 +464,15 @@ class SettingsController extends Controller
             // Re-render the correct settings tab with errors
             $section = $this->_validSettingsSection();
 
-            return $this->renderTemplate("smartlink-manager/settings/$section", [
+            $templateVariables = [
                 'settings' => $settings,
                 'readOnly' => $this->readOnly,
-            ]);
+            ];
+            if ($section === 'cache') {
+                $templateVariables['cacheStorage'] = $this->cacheStorageTemplateVariables($settings);
+            }
+
+            return $this->renderTemplate("smartlink-manager/settings/$section", $templateVariables);
         }
 
         return $this->redirectToPostedUrl();
@@ -518,12 +531,12 @@ class SettingsController extends Controller
         $this->requireAcceptsJson();
 
         try {
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $cleared = SmartLinkManager::$plugin->localCache->clearQrCache();
+            $decision = SmartLinkManager::$plugin->cacheStorage->getStorageDecision();
+            $cleared = SmartLinkManager::$plugin->localCache->clearQrCache($decision);
 
-            $message = $settings->cacheStorageMethod === 'redis'
-                ? Craft::t('smartlink-manager', 'QR code cache cleared successfully.')
-                : Craft::t('smartlink-manager', 'Cleared {count, plural, =1{# QR code cache} other{# QR code caches}}.', ['count' => $cleared]);
+            $message = $decision->usesFileCache()
+                ? Craft::t('smartlink-manager', 'Cleared {count, plural, =1{# QR code cache} other{# QR code caches}}.', ['count' => $cleared])
+                : Craft::t('smartlink-manager', 'QR code cache cleared successfully.');
 
             return $this->asJson([
                 'success' => true,
@@ -553,12 +566,12 @@ class SettingsController extends Controller
         $this->requireAcceptsJson();
 
         try {
-            $settings = SmartLinkManager::$plugin->getSettings();
-            $cleared = SmartLinkManager::$plugin->localCache->clearDeviceCache();
+            $decision = SmartLinkManager::$plugin->cacheStorage->getStorageDecision();
+            $cleared = SmartLinkManager::$plugin->localCache->clearDeviceCache($decision);
 
-            $message = $settings->cacheStorageMethod === 'redis'
-                ? Craft::t('smartlink-manager', 'Device cache cleared successfully.')
-                : Craft::t('smartlink-manager', 'Cleared {count, plural, =1{# device cache} other{# device caches}}.', ['count' => $cleared]);
+            $message = $decision->usesFileCache()
+                ? Craft::t('smartlink-manager', 'Cleared {count, plural, =1{# device cache} other{# device caches}}.', ['count' => $cleared])
+                : Craft::t('smartlink-manager', 'Device cache cleared successfully.');
 
             return $this->asJson([
                 'success' => true,
@@ -588,18 +601,18 @@ class SettingsController extends Controller
         $this->requireAcceptsJson();
 
         try {
-            $settings = SmartLinkManager::$plugin->getSettings();
+            $decision = SmartLinkManager::$plugin->cacheStorage->getStorageDecision();
 
-            if ($settings->cacheStorageMethod === 'redis') {
-                SmartLinkManager::$plugin->localCache->clearAllCaches();
-                $message = Craft::t('smartlink-manager', 'All caches cleared successfully.');
-            } else {
-                $qrCount = SmartLinkManager::$plugin->localCache->clearQrCache();
-                $deviceCount = SmartLinkManager::$plugin->localCache->clearDeviceCache();
+            if ($decision->usesFileCache()) {
+                $qrCount = SmartLinkManager::$plugin->localCache->clearQrCache($decision);
+                $deviceCount = SmartLinkManager::$plugin->localCache->clearDeviceCache($decision);
                 $message = Craft::t('smartlink-manager', 'Cleared {qrCount, plural, =1{# QR code cache} other{# QR code caches}} and {deviceCount, plural, =1{# device cache} other{# device caches}}.', [
                     'qrCount' => $qrCount,
                     'deviceCount' => $deviceCount,
                 ]);
+            } else {
+                SmartLinkManager::$plugin->localCache->clearAllCaches($decision);
+                $message = Craft::t('smartlink-manager', 'All caches cleared successfully.');
             }
 
             return $this->asJson([
@@ -719,6 +732,30 @@ class SettingsController extends Controller
         $section = Craft::$app->getRequest()->getBodyParam('section', 'general');
 
         return in_array($section, $allowed, true) ? $section : 'general';
+    }
+
+    /**
+     * @return array{
+     *     applicationToken: string,
+     *     filePresentation: \lindemannrock\base\cache\DisposableCacheStoragePresentation,
+     *     applicationPresentation: \lindemannrock\base\cache\DisposableCacheStoragePresentation,
+     *     filePath: string|null
+     * }
+     */
+    private function cacheStorageTemplateVariables(Settings $settings): array
+    {
+        $storage = SmartLinkManager::$plugin->cacheStorage;
+        $presenter = new DisposableCacheStoragePresenter();
+        $applicationToken = DisposableCacheStorageResolver::applicationOptionToken($settings->cacheStorageMethod);
+        $fileDecision = $storage->getStorageDecision('file');
+        $applicationDecision = $storage->getStorageDecision($applicationToken);
+
+        return [
+            'applicationToken' => $applicationToken,
+            'filePresentation' => $presenter->present($fileDecision),
+            'applicationPresentation' => $presenter->present($applicationDecision),
+            'filePath' => $storage->getDisplayFilePath($fileDecision),
+        ];
     }
 
     /**

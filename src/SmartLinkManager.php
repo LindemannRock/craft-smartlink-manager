@@ -51,6 +51,7 @@ use lindemannrock\smartlinkmanager\integrations\SmartLinkType;
 use lindemannrock\smartlinkmanager\jobs\CleanupAnalyticsJob;
 use lindemannrock\smartlinkmanager\models\Settings;
 use lindemannrock\smartlinkmanager\services\AnalyticsService;
+use lindemannrock\smartlinkmanager\services\CacheStorageService;
 use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
 use lindemannrock\smartlinkmanager\services\FrontendService;
 use lindemannrock\smartlinkmanager\services\IntegrationService;
@@ -73,6 +74,7 @@ use yii\base\Event;
  * @since     1.0.0
  *
  * @property-read SmartLinksService $smartLinks
+ * @property-read CacheStorageService $cacheStorage
  * @property-read DeviceDetectionService $deviceDetection
  * @property-read QrCodeService $qrCode
  * @property-read AnalyticsService $analytics
@@ -143,6 +145,7 @@ class SmartLinkManager extends Plugin
         // Register services
         $this->setComponents([
             'smartLinks' => SmartLinksService::class,
+            'cacheStorage' => CacheStorageService::class,
             'deviceDetection' => DeviceDetectionService::class,
             'qrCode' => QrCodeService::class,
             'analytics' => AnalyticsService::class,
@@ -275,7 +278,8 @@ class SmartLinkManager extends Plugin
                     'key' => 'smartlink-manager-cache',
                     'label' => Craft::t('smartlink-manager', '{displayName} caches', ['displayName' => $displayName]),
                     'action' => function() {
-                        $cleared = $this->localCache->clearAllCaches();
+                        $decision = $this->cacheStorage->getStorageDecision();
+                        $cleared = $this->localCache->clearAllCaches($decision);
                         $this->logInfo('Cleared cache entries', [
                             'pluginName' => $this->getSettings()->getFullName(),
                             'count' => $cleared,

@@ -163,9 +163,10 @@ final class AssetDeliveryTest extends TestCase
         }
     }
 
-    public function testCustomerArchivesIncludeEveryBundleAsset(): void
+    public function testCustomerArchivesIncludeEveryBundleAssetAndPortableCacheRuntimeFile(): void
     {
         $expected = [
+            'src/services/CacheStorageService.php',
             'src/web/assets/analytics/dist/analytics.js',
             'src/web/assets/qrpreview/dist/qr-preview.js',
             'src/web/assets/edit/dist/edit.js',
@@ -179,6 +180,14 @@ final class AssetDeliveryTest extends TestCase
             self::assertFileExists($packageRoot . '/' . $path, $path);
         }
 
+        $candidateTree = trim($this->runProcess([
+            'git',
+            '-c',
+            'safe.directory=' . $packageRoot,
+            'write-tree',
+        ], $packageRoot));
+        self::assertMatchesRegularExpression('/^[0-9a-f]{40}$/', $candidateTree);
+
         $this->runProcess([
             'git',
             '-c',
@@ -186,7 +195,7 @@ final class AssetDeliveryTest extends TestCase
             'archive',
             '--worktree-attributes',
             '--output=' . $gitArchive,
-            'HEAD',
+            $candidateTree,
         ], $packageRoot);
         $this->runProcess([
             'composer',

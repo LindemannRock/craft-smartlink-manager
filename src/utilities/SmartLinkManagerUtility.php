@@ -12,10 +12,9 @@ use Craft;
 use craft\base\Utility;
 use craft\db\Query;
 use craft\models\Site;
-use lindemannrock\base\helpers\CacheHelper;
+use lindemannrock\base\cache\DisposableCacheStoragePresenter;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\DbHelper;
-use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 
@@ -99,13 +98,25 @@ class SmartLinkManagerUtility extends Utility
             $dailyClicks = $analyticsStats['dailyClicks'];
         }
 
-        // Get cache counts only if user can clear cache
+        // Resolve the effective storage once for status and file counting.
         $qrCacheFiles = 0;
         $deviceCacheFiles = 0;
+        $cacheDecision = $smartLinks->cacheStorage->getStorageDecision();
+        $cacheStorage = (new DisposableCacheStoragePresenter())->present(
+            $cacheDecision,
+            $settings->enableQrCodeCache || $settings->cacheDeviceDetection,
+        );
+        $showCacheCounts = false;
 
-        if ($user->getIdentity() && $user->checkPermission('smartLinkManager:clearCache') && $settings->cacheStorageMethod === 'file') {
-            $qrCacheFiles = CacheHelper::countCacheFiles(PluginHelper::getCachePath(SmartLinkManager::$plugin, 'qr'));
-            $deviceCacheFiles = CacheHelper::countCacheFiles(PluginHelper::getCachePath(SmartLinkManager::$plugin, 'device'));
+        if ($user->getIdentity() && $user->checkPermission('smartLinkManager:clearCache') && $cacheDecision->usesFileCache()) {
+            $showCacheCounts = true;
+            if ($settings->enableQrCodeCache) {
+                $qrCacheFiles = $smartLinks->cacheStorage->countFiles('qr', $cacheDecision);
+            }
+
+            if ($settings->cacheDeviceDetection) {
+                $deviceCacheFiles = $smartLinks->cacheStorage->countFiles('device', $cacheDecision);
+            }
         }
 
         return Craft::$app->getView()->renderTemplate('smartlink-manager/utilities/index', [
@@ -123,6 +134,9 @@ class SmartLinkManagerUtility extends Utility
             'dailyClicks' => $dailyClicks,
             'qrCacheFiles' => $qrCacheFiles,
             'deviceCacheFiles' => $deviceCacheFiles,
+            'cacheStorage' => $cacheStorage,
+            'showCacheCounts' => $showCacheCounts,
+            'cacheStorageDisabled' => $cacheDecision->isDisabled(),
             'settings' => $settings,
             'pluginName' => $pluginName,
             'singularName' => $singularName,

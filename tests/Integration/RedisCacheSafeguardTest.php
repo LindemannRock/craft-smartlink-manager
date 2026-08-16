@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
-use lindemannrock\base\helpers\CacheHelper;
+use lindemannrock\smartlinkmanager\services\CacheStorageService;
 use lindemannrock\smartlinkmanager\services\LocalCacheService;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
@@ -21,10 +21,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
  */
 #[CoversClass(SmartLinkManager::class)]
 #[CoversClass(LocalCacheService::class)]
-#[CoversClass(CacheHelper::class)]
+#[CoversClass(CacheStorageService::class)]
 class RedisCacheSafeguardTest extends TestCase
 {
-    public function testRuntimeSourceUsesRedisSafeguardHelper(): void
+    public function testRuntimeSourceUsesBackendNeutralScopedCacheWithoutRawRedisOperations(): void
     {
         $pluginRoot = dirname(__DIR__, 2);
         $sourceFiles = [
@@ -39,17 +39,18 @@ class RedisCacheSafeguardTest extends TestCase
             $this->assertStringNotContainsString('instanceof \yii\redis\Cache', $source);
         }
 
-        foreach ([
-            $pluginRoot . '/src/services/LocalCacheService.php',
-            $pluginRoot . '/src/services/QrCodeService.php',
-        ] as $sourceFile) {
+        foreach ($sourceFiles as $sourceFile) {
             $source = file_get_contents($sourceFile);
             $this->assertIsString($source);
-            if (str_ends_with($sourceFile, 'LocalCacheService.php')) {
-                $this->assertStringContainsString('CacheHelper::clearTrackedRedisKeys', $source);
-            } else {
-                $this->assertStringContainsString('PluginHelper::getRedisCacheOrLog', $source);
+            foreach (['getRedisCacheOrLog', 'clearTrackedRedisKeys', 'SADD', 'SMEMBERS', 'SREM', 'SSCAN'] as $legacyOperation) {
+                $this->assertStringNotContainsString($legacyOperation, $source);
             }
         }
+
+        $cacheStorage = file_get_contents($pluginRoot . '/src/services/CacheStorageService.php');
+        $this->assertIsString($cacheStorage);
+        $this->assertStringContainsString('new DisposableCacheStorageResolver()', $cacheStorage);
+        $this->assertStringContainsString('new ScopedCache(', $cacheStorage);
+        $this->assertStringContainsString('$decision->applicationCache', $cacheStorage);
     }
 }

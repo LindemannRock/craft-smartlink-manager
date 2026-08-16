@@ -217,11 +217,13 @@ final class SettingsControllerSectionScopeTest extends TestCase
         $files = [
             '/src/templates/settings/cache.twig' => [
                 'contains' => [
-                    '{% set smartlinkCacheBasePathHtml = smartlinkHelper.cacheBasePath|e %}',
-                    'path: smartlinkCacheBasePathHtml',
+                    "{% include 'lindemannrock-base/_partials/field-cache-storage' with {",
+                    'filePath: cacheStorage.filePath',
+                    '} only %}',
                 ],
                 'notContains' => [
                     'path: smartlinkHelper.cacheBasePath',
+                    'smartlinkHelper.cacheBasePath',
                 ],
             ],
             '/src/templates/settings/integrations.twig' => [
