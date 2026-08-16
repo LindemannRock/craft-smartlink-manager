@@ -10,7 +10,6 @@ namespace lindemannrock\smartlinkmanager\services\analytics;
 
 use Craft;
 use craft\db\Query;
-use craft\helpers\Json;
 use lindemannrock\base\helpers\GeoHelper;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -129,7 +128,7 @@ class AnalyticsExportService
                 $smartLinkUrl = $settings->buildPublicUrl($path, (int) $row['siteId']);
             }
 
-            $metadata = !empty($row['metadata']) ? Json::decode($row['metadata']) : [];
+            $metadata = AnalyticsMetadata::decode($row['metadata']);
             $sourceValue = $metadata['source'] ?? 'direct';
             $clickTypeValue = $metadata['clickType'] ?? 'redirect';
 

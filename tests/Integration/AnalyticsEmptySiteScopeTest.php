@@ -60,10 +60,13 @@ final class AnalyticsEmptySiteScopeTest extends TestCase
             }
 
             $ipPrefix = '198.51.100.' . random_int(1, 200);
+            $testUids = [];
             $allBefore = $this->analytics->getAnalyticsSummary('last7days', null, [(int) $siteA->id, (int) $siteB->id]);
 
             try {
                 foreach ([$siteA, $siteB] as $index => $site) {
+                    $uid = \craft\helpers\StringHelper::UUID();
+                    $testUids[] = $uid;
                     Craft::$app->getDb()->createCommand()->insert('{{%smartlinkmanager_analytics}}', [
                         'linkId' => (int) $linkId,
                         'siteId' => (int) $site->id,
@@ -74,7 +77,7 @@ final class AnalyticsEmptySiteScopeTest extends TestCase
                         'metadata' => '{}',
                         'dateCreated' => (new \DateTime())->format('Y-m-d H:i:s'),
                         'dateUpdated' => (new \DateTime())->format('Y-m-d H:i:s'),
-                        'uid' => \craft\helpers\StringHelper::UUID(),
+                        'uid' => $uid,
                     ])->execute();
                 }
 
@@ -91,7 +94,7 @@ final class AnalyticsEmptySiteScopeTest extends TestCase
                 self::assertSame([], $emptyScope['topLinks']);
             } finally {
                 Craft::$app->getDb()->createCommand()
-                    ->delete('{{%smartlinkmanager_analytics}}', ['like', 'ip', $ipPrefix, false])
+                    ->delete('{{%smartlinkmanager_analytics}}', ['uid' => $testUids])
                     ->execute();
             }
         });

@@ -139,10 +139,33 @@ final class AnalyticsFormattingTest extends TestCase
         ], $analytics['buttonClicks']['byPlatform']);
     }
 
-    /**
-     * @param array<string, mixed> $metadata
-     */
-    private function insertAnalyticsRow(int $linkId, int $siteId, \DateTime $dateCreated, array $metadata = []): void
+    public function testExportDataReadsLegacyAndUnusualMetadataWithoutOffsetErrors(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+        $link = $this->seedSmartLink(['siteId' => $site->id]);
+        $now = new \DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone()));
+
+        $this->insertAnalyticsRow($link->id, $site->id, $now, Json::encode([
+            'source' => 'landing',
+            'clickType' => 'button',
+            'platform' => 'ios',
+        ]));
+        $this->insertAnalyticsRow($link->id, $site->id, $now, null);
+        $this->insertAnalyticsRow($link->id, $site->id, $now, '');
+        $this->insertAnalyticsRow($link->id, $site->id, $now, 'not-json');
+
+        $rows = $this->analytics->getExportData($link->id, 'today', $site->id);
+        $sources = array_column($rows, 'source');
+        $clickTypes = array_column($rows, 'clickType');
+        sort($sources);
+        sort($clickTypes);
+
+        self::assertCount(4, $rows);
+        self::assertSame(['Direct', 'Direct', 'Direct', 'Landing'], $sources);
+        self::assertSame(['Button', 'Redirect', 'Redirect', 'Redirect'], $clickTypes);
+    }
+
+    private function insertAnalyticsRow(int $linkId, int $siteId, \DateTime $dateCreated, mixed $metadata = null): void
     {
         $dateCreated = clone $dateCreated;
         $dateCreated->setTimezone(new \DateTimeZone('UTC'));
@@ -158,7 +181,7 @@ final class AnalyticsFormattingTest extends TestCase
                 'browserEngine' => 'Blink',
                 'language' => 'en',
                 'isRobot' => true,
-                'metadata' => !empty($metadata) ? Json::encode($metadata) : null,
+                'metadata' => $metadata,
                 'dateCreated' => $date,
                 'dateUpdated' => $date,
                 'uid' => StringHelper::UUID(),

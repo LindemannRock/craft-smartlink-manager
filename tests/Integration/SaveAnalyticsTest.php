@@ -11,7 +11,9 @@ declare(strict_types=1);
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use craft\helpers\Json;
+use lindemannrock\base\helpers\DbHelper;
 use lindemannrock\smartlinkmanager\tests\TestCase;
+use yii\db\Expression;
 
 /**
  * Pins the contract for {@see \lindemannrock\smartlinkmanager\services\AnalyticsService::saveAnalytics()}
@@ -25,9 +27,9 @@ use lindemannrock\smartlinkmanager\tests\TestCase;
  *
  * Covers:
  *  - happy path: a save writes one row keyed by linkId with the expected
- *    deviceInfo fields, userAgent, referrer, and serialized metadata
+ *    deviceInfo fields, userAgent, referrer, and native JSON metadata
  *  - the IP NEVER appears in the stored `metadata` blob (the helper strips
- *    `metadata['ip']` before JSON-encoding — privacy contract)
+ *    `metadata['ip']` before persistence — privacy contract)
  *  - `ipHashSalt` controls the stored `ip` column — same IP + same salt →
  *    same hash, deterministic SHA-256
  *  - `anonymizeIpAddress` masks the last IPv4 octet *before* hashing so
@@ -97,12 +99,20 @@ final class SaveAnalyticsTest extends TestCase
         }
 
         $stored = Json::decode($row['metadata']);
+        $this->assertIsArray($stored, 'A single JSON decode must return the metadata object, not another JSON string.');
         $this->assertSame('qr', $stored['source']);
         $this->assertArrayNotHasKey(
             'ip',
             $stored,
             'IP must be stripped from the metadata blob — it only ever belongs in the hashed `ip` column.',
         );
+
+        $source = (new \craft\db\Query())
+            ->select(new Expression(DbHelper::jsonExtract('metadata', 'source')))
+            ->from('{{%smartlinkmanager_analytics}}')
+            ->where(['linkId' => $link->id])
+            ->scalar();
+        $this->assertSame('qr', $source, 'SQL JSON extraction must see the native metadata object.');
     }
 
     public function testSaveAnalyticsHashesIpDeterministicallyWithSalt(): void

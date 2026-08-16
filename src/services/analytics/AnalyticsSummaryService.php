@@ -329,7 +329,7 @@ class AnalyticsSummaryService
                 $lastDestinationUrl = '';
 
                 if ($lastInteraction && !empty($lastInteraction['metadata'])) {
-                    $metadata = Json::decodeIfJson($lastInteraction['metadata']);
+                    $metadata = AnalyticsMetadata::decode($lastInteraction['metadata']);
 
                     if (isset($metadata['action'])) {
                         $lastInteractionType = $metadata['action'] === 'redirect' ? 'Redirect' : 'Button';
@@ -399,6 +399,8 @@ class AnalyticsSummaryService
         $results = $query->all();
 
         foreach ($results as &$result) {
+            $result['metadata'] = Json::encode(AnalyticsMetadata::decode($result['metadata']));
+
             if (!empty($result['dateCreated'])) {
                 $utcDate = new \DateTime($result['dateCreated'], new \DateTimeZone('UTC'));
                 $utcDate->setTimezone(new \DateTimeZone(Craft::$app->getTimeZone()));
@@ -446,7 +448,7 @@ class AnalyticsSummaryService
         $clicks = [];
 
         foreach ($results as $row) {
-            $metadata = $row['metadata'] ? Json::decode($row['metadata']) : [];
+            $metadata = AnalyticsMetadata::decode($row['metadata']);
             $clickType = $metadata['clickType'] ?? 'redirect';
             $destinationUrl = '';
 

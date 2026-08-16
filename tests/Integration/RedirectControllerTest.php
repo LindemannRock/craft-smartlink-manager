@@ -248,8 +248,10 @@ final class RedirectControllerTest extends TestCase
 
             $row = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
             self::assertNotNull($row);
-            self::assertStringContainsString('"source":"qr"', (string) $row['metadata']);
-            self::assertStringContainsString('"clickType":"redirect"', (string) $row['metadata']);
+            $metadata = \craft\helpers\Json::decode($row['metadata']);
+            self::assertIsArray($metadata);
+            self::assertSame('qr', $metadata['source']);
+            self::assertSame('redirect', $metadata['clickType']);
         });
     }
 
@@ -274,7 +276,9 @@ final class RedirectControllerTest extends TestCase
 
             $row = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
             self::assertNotNull($row);
-            self::assertStringContainsString('"source":"direct"', (string) $row['metadata']);
+            $metadata = \craft\helpers\Json::decode($row['metadata']);
+            self::assertIsArray($metadata);
+            self::assertSame('direct', $metadata['source']);
         });
     }
 

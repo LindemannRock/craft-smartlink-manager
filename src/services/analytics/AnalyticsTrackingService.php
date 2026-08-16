@@ -11,7 +11,6 @@ namespace lindemannrock\smartlinkmanager\services\analytics;
 use Craft;
 use craft\helpers\App;
 use craft\helpers\Db;
-use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use lindemannrock\base\helpers\AnalyticsIpHelper;
 use lindemannrock\base\traits\GeoLookupTrait;
@@ -93,10 +92,13 @@ class AnalyticsTrackingService
 
             $ipHash = $ipState['hashedIp'];
             $geoLookupIp = $ipState['geoLookupIp'];
+            $siteId = $metadata['siteId'] ?? Craft::$app->getSites()->getCurrentSite()->id;
+            $referrer = $metadata['referrer'] ?? null;
+            unset($metadata['ip']);
 
             $data = [
                 'linkId' => $linkId,
-                'siteId' => $metadata['siteId'] ?? Craft::$app->getSites()->getCurrentSite()->id,
+                'siteId' => $siteId,
                 'deviceType' => $deviceInfo['deviceType'] ?? $deviceInfo['type'] ?? null,
                 'deviceBrand' => $deviceInfo['brand'] ?? null,
                 'deviceModel' => $deviceInfo['model'] ?? null,
@@ -117,10 +119,10 @@ class AnalyticsTrackingService
                 'trafficType' => $deviceInfo['trafficType'] ?? 'human',
                 'country' => null,
                 'language' => $deviceInfo['language'] ?? null,
-                'referrer' => $metadata['referrer'] ?? null,
+                'referrer' => $referrer,
                 'ip' => $ipHash,
                 'userAgent' => $deviceInfo['userAgent'] ?? null,
-                'metadata' => Json::encode($metadata),
+                'metadata' => $metadata,
                 'dateCreated' => Db::prepareDateForDb(new \DateTime()),
                 'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
                 'uid' => StringHelper::UUID(),
@@ -138,8 +140,6 @@ class AnalyticsTrackingService
                 }
             }
 
-            unset($metadata['ip']);
-            $data['metadata'] = Json::encode($metadata);
             $data = array_intersect_key($data, array_flip($db->getTableSchema('{{%smartlinkmanager_analytics}}')?->columnNames ?? []));
 
             return (bool) $db->createCommand()

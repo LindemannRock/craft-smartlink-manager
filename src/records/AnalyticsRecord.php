@@ -45,7 +45,7 @@ use yii\db\ActiveQueryInterface;
  * @property string|null $referrer
  * @property string|null $ip
  * @property string|null $userAgent
- * @property string|null $metadata
+ * @property array|string|null $metadata
  * @property string $dateCreated
  * @property string $dateUpdated
  * @property string $uid
