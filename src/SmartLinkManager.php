@@ -36,10 +36,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
 use lindemannrock\base\helpers\CpNavHelper;
-use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\PluginHelper;
-use lindemannrock\base\helpers\RecurringQueueHelper;
-use lindemannrock\base\helpers\ScheduleHelper;
 use lindemannrock\logginglibrary\LoggingLibrary;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
@@ -48,8 +45,8 @@ use lindemannrock\smartlinkmanager\gql\queries\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\gql\types\SmartLinkType as GqlSmartLinkType;
 use lindemannrock\smartlinkmanager\integrations\seomatic\SeoSmartLink;
 use lindemannrock\smartlinkmanager\integrations\SmartLinkType;
-use lindemannrock\smartlinkmanager\jobs\CleanupAnalyticsJob;
 use lindemannrock\smartlinkmanager\models\Settings;
+use lindemannrock\smartlinkmanager\services\AnalyticsCleanupScheduler;
 use lindemannrock\smartlinkmanager\services\AnalyticsService;
 use lindemannrock\smartlinkmanager\services\CacheStorageService;
 use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
@@ -74,6 +71,7 @@ use yii\base\Event;
  * @since     1.0.0
  *
  * @property-read SmartLinksService $smartLinks
+ * @property-read AnalyticsCleanupScheduler $analyticsCleanupScheduler
  * @property-read CacheStorageService $cacheStorage
  * @property-read DeviceDetectionService $deviceDetection
  * @property-read QrCodeService $qrCode
@@ -145,6 +143,7 @@ class SmartLinkManager extends Plugin
         // Register services
         $this->setComponents([
             'smartLinks' => SmartLinksService::class,
+            'analyticsCleanupScheduler' => AnalyticsCleanupScheduler::class,
             'cacheStorage' => CacheStorageService::class,
             'deviceDetection' => DeviceDetectionService::class,
             'qrCode' => QrCodeService::class,
@@ -157,7 +156,7 @@ class SmartLinkManager extends Plugin
         ]);
 
         // Schedule analytics cleanup if retention is enabled
-        $this->scheduleAnalyticsCleanup();
+        $this->analyticsCleanupScheduler->ensureScheduled();
 
         // Register project config event handlers
         $this->registerProjectConfigEventHandlers();
@@ -751,44 +750,6 @@ class SmartLinkManager extends Plugin
                 'label' => Craft::t('smartlink-manager', 'Manage settings'),
             ],
         ];
-    }
-
-    /**
-     * Schedule analytics cleanup job
-     *
-     * @return void
-     */
-    private function scheduleAnalyticsCleanup(): void
-    {
-        $settings = $this->getSettings();
-
-        if (!$settings->enableAnalytics || $settings->analyticsRetention <= 0) {
-            return;
-        }
-
-        $nextRun = ScheduleHelper::calculateNext('daily');
-        if ($nextRun === null) {
-            return;
-        }
-
-        $delay = max(0, $nextRun->getTimestamp() - DateFormatHelper::now()->getTimestamp());
-        $nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
-            $nextRun,
-            $settings,
-            null,
-            false,
-            pluginHandle: 'smartlink-manager',
-        );
-
-        RecurringQueueHelper::ensurePending(
-            pluginToken: 'smartlinkmanager',
-            jobClass: CleanupAnalyticsJob::class,
-            delay: $delay,
-            jobFactory: fn() => new CleanupAnalyticsJob([
-                'reschedule' => true,
-                'nextRunTime' => $nextRunTime,
-            ]),
-        );
     }
 
     /**

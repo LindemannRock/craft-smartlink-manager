@@ -364,6 +364,12 @@ class SettingsController extends Controller
 
         // Load current settings from database
         $settings = Settings::loadFromDatabase();
+        $oldEffectiveSettings = PluginHelper::applyConfigOverridesToSettings(
+            Settings::loadFromDatabase(),
+            'smartlink-manager',
+        );
+        $analyticsCleanupWasEnabled = SmartLinkManager::$plugin->analyticsCleanupScheduler
+            ->isEnabled($oldEffectiveSettings);
 
         $settingsData = (array)Craft::$app->getRequest()->getBodyParam('settings', []);
 
@@ -450,12 +456,11 @@ class SettingsController extends Controller
 
         // Save settings to database
         if ($settings->saveToDatabase($attributesToValidate)) {
-            // Update the plugin's cached settings if plugin is available
-            $plugin = SmartLinkManager::getInstance();
-            if ($plugin) {
-                // setSettings expects an array, not an object
-                $plugin->setSettings($settings->getAttributes());
-            }
+            PluginHelper::applyConfigOverridesToSettings($settings, 'smartlink-manager');
+            SmartLinkManager::$plugin->analyticsCleanupScheduler->replaceForEffectiveTransition(
+                $analyticsCleanupWasEnabled,
+                $settings,
+            );
 
             Craft::$app->getSession()->setNotice(Craft::t('smartlink-manager', 'Settings saved.'));
         } else {

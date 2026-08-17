@@ -166,6 +166,7 @@ final class AssetDeliveryTest extends TestCase
     public function testCustomerArchivesIncludeBundleAssetsAndRuntimeFiles(): void
     {
         $expected = [
+            'src/services/AnalyticsCleanupScheduler.php',
             'src/services/CacheStorageService.php',
             'src/services/analytics/AnalyticsMetadata.php',
             'src/migrations/m260816_000000_normalize_analytics_metadata.php',

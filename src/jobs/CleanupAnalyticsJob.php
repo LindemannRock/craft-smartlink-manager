@@ -13,8 +13,6 @@ use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Db;
 use craft\queue\BaseJob;
-use lindemannrock\base\helpers\DateFormatHelper;
-use lindemannrock\base\helpers\ScheduleHelper;
 use lindemannrock\base\traits\QueueTtrTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
@@ -34,6 +32,13 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
      * @var bool Whether to reschedule after completion
      */
     public bool $reschedule = false;
+
+    /**
+     * Stable owner token for the portable recurring cleanup chain.
+     *
+     * @since 5.38.0
+     */
+    public string $recurringOwner = '';
 
     /**
      * @var string|null Next run time display string
@@ -58,14 +63,11 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
 
         if ($this->reschedule && !$this->nextRunTime) {
             $settings = SmartLinkManager::$plugin->getSettings();
-            $nextRun = ScheduleHelper::calculateNext('daily');
+            $nextRun = SmartLinkManager::$plugin->analyticsCleanupScheduler->nextTarget();
             if ($nextRun !== null) {
-                $this->nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
+                $this->nextRunTime = SmartLinkManager::$plugin->analyticsCleanupScheduler->formatTarget(
                     $nextRun,
                     $settings,
-                    null,
-                    false,
-                    pluginHandle: 'smartlink-manager',
                 );
             }
         }
@@ -94,9 +96,13 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
         $settings = SmartLinkManager::$plugin->getSettings();
         $retentionDays = $settings->analyticsRetention;
 
-        // If retention is 0, keep forever
-        if ($retentionDays === 0) {
-            // Don't reschedule if retention is disabled
+        // A reserved recurring job must honor the current effective settings.
+        if ($this->reschedule && (!$settings->enableAnalytics || $retentionDays <= 0)) {
+            return;
+        }
+
+        // Manual cleanup remains available while retention is positive.
+        if ($retentionDays <= 0) {
             return;
         }
 
@@ -160,40 +166,15 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
         }
     }
 
-    /**
-     * Schedule the next cleanup (runs every 24 hours)
-     */
+    /** Schedule the next canonical daily cleanup. */
     private function scheduleNextCleanup(): void
     {
         $settings = SmartLinkManager::$plugin->getSettings();
+        $result = SmartLinkManager::$plugin->analyticsCleanupScheduler->scheduleSuccessor($settings);
 
-        // Only reschedule if analytics is enabled and retention is set
-        if (!$settings->enableAnalytics || $settings->analyticsRetention <= 0) {
-            return;
-        }
-
-        $nextRun = ScheduleHelper::calculateNext('daily');
-
-        if ($nextRun !== null) {
-            $delay = max(0, $nextRun->getTimestamp() - DateFormatHelper::now()->getTimestamp());
-            $nextRunTime = DateFormatHelper::formatCompactDatetimeFromSettings(
-                $nextRun,
-                $settings,
-                null,
-                false,
-                pluginHandle: 'smartlink-manager',
-            );
-            $job = new self([
-                'reschedule' => true,
-                'nextRunTime' => $nextRunTime,
-            ]);
-
-            Craft::$app->getQueue()->delay($delay)->push($job);
-
-            $this->logDebug('Scheduled next analytics cleanup', [
-                'delay' => $delay,
-                'nextRun' => $nextRunTime,
-            ]);
-        }
+        $this->logDebug('Scheduled next analytics cleanup', [
+            'status' => $result->status,
+            'jobId' => $result->jobId,
+        ]);
     }
 }
