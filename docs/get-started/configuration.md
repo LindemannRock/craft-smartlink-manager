@@ -56,10 +56,12 @@ Found on **SmartLink Manager → Settings → Behavior**.
 | `defaultQrColor` | `string` | `'#000000'` | QR code foreground color |
 | `defaultQrBgColor` | `string` | `'#FFFFFF'` | QR code background color |
 | `defaultQrMargin` | `int` | `4` | QR code quiet zone in modules (0–10) |
-| `defaultQrErrorCorrection` | `string` | `'M'` | Error correction level: `L` (7%), `M` (15%), `Q` (25%), `H` (30%) |
+| `defaultQrErrorCorrection` | `string` | `'M'` | Error correction for PNG and SVG: `L` (7%), `M` (15%), `Q` (25%), `H` (30%). The effective level is passed explicitly to Bacon QR Code |
 | `qrModuleStyle` | `string` | `'square'` | Module shape: `square`, `rounded`, `dots` |
 | `qrEyeStyle` | `string` | `'square'` | Eye shape: `square`, `rounded`, `pointed` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (`null` = same as foreground color) |
+
+Request-level error-correction values are trimmed and case-insensitive. Invalid request values fall back to `defaultQrErrorCorrection`; an invalid configured default falls back to `M`. The normalized effective level is part of the QR cache identity.
 
 ### Logo
 

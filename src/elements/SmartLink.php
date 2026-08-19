@@ -897,6 +897,7 @@ class SmartLink extends Element
             'color' => str_replace('#', '', $this->qrCodeColor ?: $settings->defaultQrColor),
             'bg' => str_replace('#', '', $this->qrCodeBgColor ?: $settings->defaultQrBgColor),
             'format' => $this->qrCodeFormat ?: ($settings->defaultQrFormat ?? 'png'),
+            'errorCorrection' => $settings->defaultQrErrorCorrection,
             'margin' => $settings->defaultQrMargin,
             'moduleStyle' => $settings->qrModuleStyle,
             'eyeStyle' => $settings->qrEyeStyle,
@@ -931,6 +932,7 @@ class SmartLink extends Element
             'color' => str_replace('#', '', $this->qrCodeColor ?: $settings->defaultQrColor),
             'bg' => str_replace('#', '', $this->qrCodeBgColor ?: $settings->defaultQrBgColor),
             'format' => $this->qrCodeFormat ?: ($settings->defaultQrFormat ?? 'png'),
+            'errorCorrection' => $settings->defaultQrErrorCorrection,
             'eyeColor' => $this->qrCodeEyeColor ? str_replace('#', '', $this->qrCodeEyeColor) : ($settings->qrEyeColor ? str_replace('#', '', $settings->qrEyeColor) : null),
         ], $options);
         
@@ -969,6 +971,7 @@ class SmartLink extends Element
             'bg' => str_replace('#', '', $this->qrCodeBgColor ?: $settings->defaultQrBgColor),
             'eyeColor' => $this->qrCodeEyeColor ? str_replace('#', '', $this->qrCodeEyeColor) : null,
             'format' => $this->qrCodeFormat,
+            'errorCorrection' => $settings->defaultQrErrorCorrection,
             'logo' => $logoId,
         ], $options);
 
@@ -1000,6 +1003,7 @@ class SmartLink extends Element
             'bg' => str_replace('#', '', $this->qrCodeBgColor ?: $settings->defaultQrBgColor),
             'eyeColor' => $this->qrCodeEyeColor ? str_replace('#', '', $this->qrCodeEyeColor) : null,
             'format' => $this->qrCodeFormat,
+            'errorCorrection' => $settings->defaultQrErrorCorrection,
             'logo' => $logoId,
         ], $options);
 

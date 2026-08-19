@@ -10,11 +10,22 @@ declare(strict_types=1);
 
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
+use BaconQrCode\Common\ErrorCorrectionLevel;
+use BaconQrCode\Encoder\Encoder;
+use BaconQrCode\Renderer\Color\Rgb;
+use BaconQrCode\Renderer\Eye\SquareEye;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Module\SquareModule;
+use BaconQrCode\Renderer\RendererStyle\Fill;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Craft;
 use craft\cachecascade\CascadeCache;
 use craft\elements\Asset;
 use craft\services\Images;
 use lindemannrock\base\helpers\PluginHelper;
+use lindemannrock\base\helpers\QrCodeRendererHelper;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
@@ -124,6 +135,110 @@ final class QrCodeServiceTest extends TestCase
         $this->assertValidSvg($svg, 180);
     }
 
+    public function testAppliesEverySupportedErrorCorrectionLevelToPngAndSvg(): void
+    {
+        if (!extension_loaded('gd')) {
+            $this->markTestSkipped('GD is not available.');
+        }
+
+        $url = 'https://example.com/explicit-error-correction-gd-svg';
+        foreach (['L', 'M', 'Q', 'H'] as $errorCorrection) {
+            $svg = $this->generatePinnedQrCode($url, 'svg', $errorCorrection);
+            self::assertSame(
+                $this->explicitBaconQrCode($url, 'svg', $errorCorrection),
+                $svg,
+                "SVG must use Bacon's explicit {$errorCorrection} level.",
+            );
+            $this->assertValidSvg($svg, 240);
+
+            $png = $this->withEffectiveImageDriver(
+                Images::DRIVER_GD,
+                fn(): string => $this->generatePinnedQrCode($url, 'png', $errorCorrection),
+            );
+            $expectedPng = $this->withEffectiveImageDriver(
+                Images::DRIVER_GD,
+                fn(): string => $this->explicitBaconQrCode($url, 'png', $errorCorrection),
+            );
+            self::assertSame($expectedPng, $png, "GD PNG must use Bacon's explicit {$errorCorrection} level.");
+            $this->assertValidPng($png, 240);
+        }
+    }
+
+    public function testAppliesEverySupportedErrorCorrectionLevelWithEffectiveImagickDriver(): void
+    {
+        if (!extension_loaded('imagick') || !class_exists(\Imagick::class)) {
+            $this->markTestSkipped('Imagick is not available.');
+        }
+
+        $url = 'https://example.com/explicit-error-correction-imagick';
+        $this->withEffectiveImageDriver(Images::DRIVER_IMAGICK, function() use ($url): void {
+            foreach (['L', 'M', 'Q', 'H'] as $errorCorrection) {
+                $png = $this->generatePinnedQrCode($url, 'png', $errorCorrection);
+                self::assertSame(
+                    $this->explicitBaconQrCode($url, 'png', $errorCorrection),
+                    $png,
+                    "Imagick PNG must use Bacon's explicit {$errorCorrection} level.",
+                );
+                $this->assertValidPng($png, 240);
+            }
+        });
+    }
+
+    public function testConfiguredErrorCorrectionControlsDefaultGeneration(): void
+    {
+        $url = 'https://example.com/configured-error-correction';
+        $actual = $this->withSettings(
+            $this->pinnedQrSettings(['defaultQrErrorCorrection' => 'Q']),
+            fn(): string => SmartLinkManager::$plugin->qrCode->generateQrCode(
+                $url,
+                $this->pinnedQrOptions('svg'),
+            ),
+        );
+
+        self::assertSame($this->explicitBaconQrCode($url, 'svg', 'Q'), $actual);
+    }
+
+    public function testNormalizesCaseInsensitiveErrorCorrectionOptions(): void
+    {
+        $url = 'https://example.com/normalized-error-correction';
+        $expected = $this->explicitBaconQrCode($url, 'svg', 'Q');
+
+        foreach (['q', ' Q ', "\tq\n"] as $requested) {
+            self::assertSame($expected, $this->generatePinnedQrCode($url, 'svg', $requested));
+        }
+    }
+
+    public function testInvalidErrorCorrectionFallsBackToEffectiveConfiguredDefault(): void
+    {
+        $url = 'https://example.com/invalid-error-correction';
+        $expected = $this->explicitBaconQrCode($url, 'svg', 'H');
+
+        $this->withSettings($this->pinnedQrSettings(['defaultQrErrorCorrection' => ' h ']), function() use ($url, $expected): void {
+            foreach (['invalid', '', [], new \stdClass()] as $requested) {
+                $options = $this->pinnedQrOptions('svg');
+                $options['errorCorrection'] = $requested;
+                self::assertSame(
+                    $expected,
+                    SmartLinkManager::$plugin->qrCode->generateQrCode($url, $options),
+                );
+            }
+        });
+    }
+
+    public function testInvalidConfiguredErrorCorrectionFallsBackToMedium(): void
+    {
+        $url = 'https://example.com/invalid-configured-error-correction';
+        $actual = $this->withSettings(
+            $this->pinnedQrSettings(['defaultQrErrorCorrection' => 'invalid']),
+            fn(): string => SmartLinkManager::$plugin->qrCode->generateQrCode(
+                $url,
+                $this->pinnedQrOptions('svg') + ['errorCorrection' => ['invalid']],
+            ),
+        );
+
+        self::assertSame($this->explicitBaconQrCode($url, 'svg', 'M'), $actual);
+    }
+
     public function testPngAndSvgPreserveDimensionsMarginAndColors(): void
     {
         if (!extension_loaded('gd')) {
@@ -180,6 +295,33 @@ final class QrCodeServiceTest extends TestCase
     public function testLogoOverlaySupportsRemoteVolumeAsset(): void
     {
         $this->assertLogoOverlayForTemporaryAsset('remote', 'png');
+    }
+
+    public function testLogoOverlayPreservesRequestedErrorCorrectionGeneration(): void
+    {
+        if (!extension_loaded('gd')) {
+            $this->markTestSkipped('GD is not available.');
+        }
+
+        $asset = new StubQrLogoAsset($this->createLogoFile('png'));
+        $service = new StubLogoQrCodeService();
+        $service->logoAsset = $asset;
+
+        $png = $this->withEffectiveImageDriver(
+            Images::DRIVER_GD,
+            fn(): string => $this->generateWithServiceWithoutCache($service, [
+                'format' => 'png',
+                'size' => 240,
+                'logo' => '42',
+                'errorCorrection' => ' h ',
+            ]),
+        );
+
+        self::assertSame(['H'], $service->generatedErrorCorrections);
+        $this->assertValidPng($png, 240);
+        foreach ($asset->createdCopies as $copy) {
+            self::assertFileDoesNotExist($copy);
+        }
     }
 
     public function testMissingLogoReturnsValidBasePng(): void
@@ -333,6 +475,108 @@ final class QrCodeServiceTest extends TestCase
         });
     }
 
+    public function testEquivalentErrorCorrectionInputsShareCacheIdentity(): void
+    {
+        $this->withCraftCache(function(CascadeCache $cache): void {
+            $this->withSettings($this->cacheSettings(['defaultQrFormat' => 'svg']), function() use ($cache): void {
+                $service = new CountingQrCodeService();
+                $url = 'https://example.com/equivalent-error-correction';
+                $outputs = [];
+
+                foreach (['m', 'M', ' M '] as $errorCorrection) {
+                    $outputs[] = $service->generateQrCode($url, [
+                        'format' => 'svg',
+                        'errorCorrection' => $errorCorrection,
+                    ]);
+                }
+
+                self::assertCount(1, array_unique($outputs));
+                self::assertSame(1, $service->generationCount);
+                self::assertNotEmpty($cache->setDurations);
+            });
+        });
+    }
+
+    public function testInvalidErrorCorrectionSharesConfiguredDefaultCacheIdentity(): void
+    {
+        $this->withCraftCache(function(CascadeCache $cache): void {
+            $this->withSettings($this->cacheSettings([
+                'defaultQrFormat' => 'svg',
+                'defaultQrErrorCorrection' => 'Q',
+            ]), function() use ($cache): void {
+                $service = new CountingQrCodeService();
+                $url = 'https://example.com/invalid-request-cache-identity';
+                $invalid = $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => ['invalid']]);
+                $configured = $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => 'q']);
+
+                self::assertSame($invalid, $configured);
+                self::assertSame(1, $service->generationCount);
+                self::assertNotEmpty($cache->setDurations);
+            });
+        });
+    }
+
+    public function testInvalidConfiguredErrorCorrectionSharesMediumCacheIdentity(): void
+    {
+        $this->withCraftCache(function(CascadeCache $cache): void {
+            $this->withSettings($this->cacheSettings([
+                'defaultQrFormat' => 'svg',
+                'defaultQrErrorCorrection' => 'invalid',
+            ]), function() use ($cache): void {
+                $service = new CountingQrCodeService();
+                $url = 'https://example.com/invalid-config-cache-identity';
+                $fallback = $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => new \stdClass()]);
+                $medium = $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => 'M']);
+
+                self::assertSame($fallback, $medium);
+                self::assertSame(1, $service->generationCount);
+                self::assertNotEmpty($cache->setDurations);
+            });
+        });
+    }
+
+    public function testErrorCorrectionChangeDoesNotReuseCachedOutput(): void
+    {
+        $this->withCraftCache(function(CascadeCache $cache): void {
+            $this->withSettings($this->cacheSettings(['defaultQrFormat' => 'svg']), function() use ($cache): void {
+                $service = new CountingQrCodeService();
+                $url = 'https://example.com/error-correction-cache-change';
+
+                $medium = $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => 'M']);
+                self::assertSame($medium, $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => 'm']));
+                $high = $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => 'H']);
+                self::assertSame($high, $service->generateQrCode($url, ['format' => 'svg', 'errorCorrection' => ' h ']));
+
+                self::assertNotSame($medium, $high);
+                self::assertSame(2, $service->generationCount);
+                self::assertGreaterThanOrEqual(2, count($cache->setDurations));
+            });
+        });
+    }
+
+    public function testGenerationRetainsCapturedCacheStorageDecisionForReadAndWrite(): void
+    {
+        $this->withCraftCache(function(CascadeCache $capturedCache): void {
+            $replacementCache = new CascadeCache();
+            $capturedCache->afterNextGet = static function() use ($replacementCache): void {
+                Craft::$app->set('cache', $replacementCache);
+            };
+
+            $this->withSettings($this->cacheSettings(['defaultQrFormat' => 'svg']), function() use ($capturedCache, $replacementCache): void {
+                $service = new CountingQrCodeService();
+                $svg = $service->generateQrCode('https://example.com/captured-cache-decision', [
+                    'format' => 'svg',
+                    'errorCorrection' => 'H',
+                ]);
+
+                $this->assertValidSvg($svg, 256);
+                self::assertSame(1, $service->generationCount);
+                self::assertNotEmpty($capturedCache->setDurations);
+                self::assertSame([], $replacementCache->setDurations);
+            });
+        });
+    }
+
     public function testConfigOverridesPreserveEffectiveRenderingOptions(): void
     {
         $this->withSettings([
@@ -354,20 +598,124 @@ final class QrCodeServiceTest extends TestCase
         });
     }
 
+    public function testSmartLinkHelpersForwardErrorCorrectionOptions(): void
+    {
+        $link = $this->seedSmartLink(['slug' => 'smartlink-test-qr-helper-forwarding']);
+        $link->qrCodeEnabled = true;
+        $service = new ForwardingRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        $this->withSettings(['defaultQrErrorCorrection' => 'M'], function() use ($link, $service): void {
+            parse_str((string)parse_url($link->getQrCodeUrl(['errorCorrection' => ' h ']), PHP_URL_QUERY), $imageParams);
+            parse_str((string)parse_url($link->getQrCodeDisplayUrl(['errorCorrection' => 'q']), PHP_URL_QUERY), $displayParams);
+            self::assertSame(' h ', $imageParams['errorCorrection']);
+            self::assertSame('q', $displayParams['errorCorrection']);
+
+            self::assertSame('binary-fixture', $link->getQrCode(['errorCorrection' => 'H']));
+            self::assertSame('H', $service->lastBinaryOptions['errorCorrection']);
+            self::assertSame('data:image/png;base64,fixture', $link->getQrCodeDataUri(['errorCorrection' => 'Q']));
+            self::assertSame('Q', $service->lastDataUrlOptions['errorCorrection']);
+        });
+    }
+
+    public function testSmartLinksServiceForwardsErrorCorrectionOptions(): void
+    {
+        $link = $this->seedSmartLink(['slug' => 'smartlink-test-qr-service-forwarding']);
+        $service = new ForwardingRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        self::assertSame('binary-fixture', SmartLinkManager::$plugin->smartLinks->generateQrCode($link, [
+            'errorCorrection' => 'L',
+        ]));
+        self::assertSame('L', $service->lastBinaryOptions['errorCorrection']);
+
+        self::assertSame('data:image/png;base64,fixture', SmartLinkManager::$plugin->smartLinks->generateQrCodeDataUrl($link, [
+            'errorCorrection' => 'H',
+        ]));
+        self::assertSame('H', $service->lastDataUrlOptions['errorCorrection']);
+    }
+
     public function testQrCacheIdentityPreservesEveryExistingResultAffectingInput(): void
     {
         $service = new QrCodeService();
         $method = new \ReflectionMethod($service, '_getCacheKey');
-        $baseline = ['https://example.com/site/smartlink', 256, '010203', 'FDFCFB', 'png', 4, 'square', 'square', 'AABBCC', '42', 20];
+        $baseline = ['https://example.com/site/smartlink', 256, '010203', 'FDFCFB', 'png', 'M', 4, 'square', 'square', 'AABBCC', '42', 20];
         $baselineKey = $method->invokeArgs($service, $baseline);
         self::assertSame(PluginHelper::getCacheKeyPrefix(SmartLinkManager::$plugin->id, 'qr') . md5(implode(':', $baseline)), $baselineKey);
 
-        $alternatives = ['https://other.example.com/site/smartlink', 257, '111111', 'EEEEEE', 'svg', 5, 'dots', 'rounded', 'DDEEFF', '43', 21];
+        $alternatives = ['https://other.example.com/site/smartlink', 257, '111111', 'EEEEEE', 'svg', 'H', 5, 'dots', 'rounded', 'DDEEFF', '43', 21];
         foreach ($alternatives as $index => $alternative) {
             $changed = $baseline;
             $changed[$index] = $alternative;
             self::assertNotSame($baselineKey, $method->invokeArgs($service, $changed));
         }
+    }
+
+    private function generatePinnedQrCode(string $url, string $format, mixed $errorCorrection): string
+    {
+        $options = $this->pinnedQrOptions($format);
+        $options['errorCorrection'] = $errorCorrection;
+
+        return $this->withSettings(
+            $this->pinnedQrSettings(),
+            fn(): string => SmartLinkManager::$plugin->qrCode->generateQrCode($url, $options),
+        );
+    }
+
+    /** @return array<string, mixed> */
+    private function pinnedQrOptions(string $format): array
+    {
+        return [
+            'format' => $format,
+            'size' => 240,
+            'margin' => 4,
+            'color' => '123456',
+            'bg' => 'F5E6D3',
+            'moduleStyle' => 'square',
+            'eyeStyle' => 'square',
+        ];
+    }
+
+    /** @param array<string, mixed> $overrides @return array<string, mixed> */
+    private function pinnedQrSettings(array $overrides = []): array
+    {
+        return array_merge([
+            'enableQrCodeCache' => false,
+            'defaultQrFormat' => 'png',
+            'defaultQrErrorCorrection' => 'M',
+            'defaultQrSize' => 240,
+            'defaultQrMargin' => 4,
+            'defaultQrColor' => '#123456',
+            'defaultQrBgColor' => '#F5E6D3',
+            'qrModuleStyle' => 'square',
+            'qrEyeStyle' => 'square',
+            'qrEyeColor' => null,
+        ], $overrides);
+    }
+
+    private function explicitBaconQrCode(string $url, string $format, string $errorCorrection): string
+    {
+        $rendererStyle = new RendererStyle(
+            240,
+            4,
+            SquareModule::instance(),
+            SquareEye::instance(),
+            Fill::uniformColor(new Rgb(245, 230, 211), new Rgb(18, 52, 86)),
+        );
+        $renderer = $format === 'svg'
+            ? new ImageRenderer($rendererStyle, new SvgImageBackEnd())
+            : QrCodeRendererHelper::createPngRenderer($rendererStyle);
+
+        return (new Writer($renderer))->writeString(
+            $url,
+            Encoder::DEFAULT_BYTE_MODE_ENCODING,
+            match ($errorCorrection) {
+                'L' => ErrorCorrectionLevel::L(),
+                'M' => ErrorCorrectionLevel::M(),
+                'Q' => ErrorCorrectionLevel::Q(),
+                'H' => ErrorCorrectionLevel::H(),
+            },
+        );
     }
 
     private function assertLogoOverlayForTemporaryAsset(string $volumeKind, string $format): void
@@ -486,6 +834,7 @@ final class QrCodeServiceTest extends TestCase
             'defaultQrColor' => '#000000',
             'defaultQrBgColor' => '#FFFFFF',
             'defaultQrFormat' => 'png',
+            'defaultQrErrorCorrection' => 'M',
             'defaultQrMargin' => 4,
             'qrModuleStyle' => 'square',
             'qrEyeStyle' => 'square',
@@ -498,7 +847,7 @@ final class QrCodeServiceTest extends TestCase
     {
         $method = new \ReflectionMethod($service, '_getCacheKey');
 
-        return $method->invoke($service, $url, 256, '000000', 'FFFFFF', 'png', 4, 'square', 'square', null, null, 20);
+        return $method->invoke($service, $url, 256, '000000', 'FFFFFF', 'png', 'M', 4, 'square', 'square', null, null, 20);
     }
 
     private function assertValidPng(string $png, ?int $size = null): void
@@ -628,6 +977,16 @@ class StubLogoQrCodeService extends QrCodeService
 {
     public ?Asset $logoAsset = null;
 
+    /** @var list<string> */
+    public array $generatedErrorCorrections = [];
+
+    protected function _generateQrCode(string $url, int $size, string $color, string $bgColor, string $format, string $errorCorrection, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
+    {
+        $this->generatedErrorCorrections[] = $errorCorrection;
+
+        return parent::_generateQrCode($url, $size, $color, $bgColor, $format, $errorCorrection, $margin, $moduleStyle, $eyeStyle, $eyeColor, $logoId, $logoSize);
+    }
+
     protected function resolveLogoAsset(string $logoId): ?Asset
     {
         return $this->logoAsset;
@@ -646,7 +1005,7 @@ final class FailingLogoEncodingQrCodeService extends StubLogoQrCodeService
 
 final class ThrowingQrCodeService extends QrCodeService
 {
-    protected function _generateQrCode(string $url, int $size, string $color, string $bgColor, string $format, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
+    protected function _generateQrCode(string $url, int $size, string $color, string $bgColor, string $format, string $errorCorrection, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
     {
         throw new \RuntimeException('Fixture renderer failure.');
     }
@@ -656,8 +1015,43 @@ final class InvalidOutputQrCodeService extends QrCodeService
 {
     public string $output = '';
 
-    protected function _generateQrCode(string $url, int $size, string $color, string $bgColor, string $format, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
+    protected function _generateQrCode(string $url, int $size, string $color, string $bgColor, string $format, string $errorCorrection, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
     {
         return $this->output;
+    }
+}
+
+final class CountingQrCodeService extends QrCodeService
+{
+    public int $generationCount = 0;
+
+    protected function _generateQrCode(string $url, int $size, string $color, string $bgColor, string $format, string $errorCorrection, int $margin, string $moduleStyle, string $eyeStyle, ?string $eyeColor, ?string $logoId, int $logoSize): string
+    {
+        $this->generationCount++;
+
+        return parent::_generateQrCode($url, $size, $color, $bgColor, $format, $errorCorrection, $margin, $moduleStyle, $eyeStyle, $eyeColor, $logoId, $logoSize);
+    }
+}
+
+final class ForwardingRecordingQrCodeService extends QrCodeService
+{
+    /** @var array<string, mixed> */
+    public array $lastBinaryOptions = [];
+
+    /** @var array<string, mixed> */
+    public array $lastDataUrlOptions = [];
+
+    public function generateQrCode(string $url, array $options = []): string
+    {
+        $this->lastBinaryOptions = $options;
+
+        return 'binary-fixture';
+    }
+
+    public function generateQrCodeDataUrl(string $url, array $options = []): string
+    {
+        $this->lastDataUrlOptions = $options;
+
+        return 'data:image/png;base64,fixture';
     }
 }

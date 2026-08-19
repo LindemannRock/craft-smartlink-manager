@@ -96,18 +96,22 @@ final class PublicUrlGenerationTest extends TestCase
         $this->withSettings([
             'smartlinkBaseUrl' => 'https://smart.example',
             'qrPrefix' => 'go/qr',
+            'defaultQrErrorCorrection' => 'M',
         ], function() use ($link): void {
             $imageUrl = $link->getQrCodeUrl();
             self::assertStringStartsWith('https://smart.example/go/qr/smartlink-test-qr-domain?', $imageUrl);
             self::assertStringContainsString('format=', $imageUrl);
+            self::assertStringContainsString('errorCorrection=M', $imageUrl);
 
-            $downloadUrl = $link->getQrCodeUrl(['format' => 'png', 'size' => 512, 'download' => 1]);
+            $downloadUrl = $link->getQrCodeUrl(['format' => 'png', 'size' => 512, 'errorCorrection' => 'H', 'download' => 1]);
             self::assertStringStartsWith('https://smart.example/go/qr/smartlink-test-qr-domain?', $downloadUrl);
             self::assertStringContainsString('download=1', $downloadUrl);
+            self::assertStringContainsString('errorCorrection=H', $downloadUrl);
             self::assertStringNotContainsString('/actions/', $downloadUrl);
 
             $displayUrl = $link->getQrCodeDisplayUrl();
             self::assertStringStartsWith('https://smart.example/go/qr/smartlink-test-qr-domain/view?', $displayUrl);
+            self::assertStringContainsString('errorCorrection=M', $displayUrl);
         });
     }
 

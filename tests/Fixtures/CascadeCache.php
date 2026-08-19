@@ -22,6 +22,17 @@ if (!class_exists(CascadeCache::class)) {
     {
         /** @var list<int> */
         public array $setDurations = [];
+        public ?\Closure $afterNextGet = null;
+
+        public function get($key)
+        {
+            $value = parent::get($key);
+            $afterNextGet = $this->afterNextGet;
+            $this->afterNextGet = null;
+            $afterNextGet?->__invoke();
+
+            return $value;
+        }
 
         public function set($key, $value, $duration = null, $dependency = null)
         {

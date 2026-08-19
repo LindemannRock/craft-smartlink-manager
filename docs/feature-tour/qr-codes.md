@@ -53,6 +53,12 @@ QR code appearance is set globally in **Settings → QR Codes** and can be overr
 | `qrEyeStyle` | `string` | `'square'` | Finder pattern shape: `'square'`, `'rounded'`, `'pointed'` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (hex). Falls back to foreground color |
 
+### Error Correction
+
+The `L`, `M`, `Q`, and `H` levels apply to both PNG and SVG generation. SmartLink Manager defaults to `M` and passes the effective level explicitly to Bacon QR Code rather than relying on the library's fallback.
+
+The `errorCorrection` request option is trimmed and case-insensitive, so `q`, `Q`, and ` Q ` all select `Q`. An invalid request value uses `defaultQrErrorCorrection`; if that configured default is also invalid, SmartLink Manager safely uses `M`.
+
 ### Module Styles
 
 | Value | Appearance |
@@ -90,7 +96,7 @@ Per-link logo overrides use the `qrLogoId` field on the smart link edit page.
 | `qrLogoSize` | `int` | `20` | Logo size as percentage of QR code (10–30) |
 
 > [!WARNING]
-> A logo reduces the scannable area. Use `defaultQrErrorCorrection: 'H'` (30% recovery) when adding a logo to ensure reliable scanning.
+> A logo reduces the scannable area. `H` (30% recovery) is appropriate for logo-bearing codes, but always test the finished code with representative scanners, print sizes, and materials before publishing it.
 
 ## QR Code URLs
 
@@ -118,9 +124,12 @@ The QR image URL accepts query parameters to customize on the fly:
 | `moduleStyle` | `?moduleStyle=dots` | Module shape |
 | `eyeStyle` | `?eyeStyle=rounded` | Eye shape |
 | `eyeColor` | `?eyeColor=0000ff` | Eye color override |
+| `errorCorrection` | `?errorCorrection=H` | Error correction level (`L`, `M`, `Q`, or `H`) |
 | `download` | `?download=1` | Trigger file download instead of inline display |
 
 Color parameters are forgiving: a value that isn't a valid 6-digit hex color (`color`, `bg`, or `eyeColor`) is silently ignored and the configured default is used instead — the QR code always renders rather than erroring.
+
+Error-correction parameters are forgiving too: values are trimmed and case-insensitive, invalid values fall back to the configured default, and an invalid configured default falls back to `M`.
 
 ## Downloading QR Codes
 
@@ -154,7 +163,7 @@ The `SmartLink` element provides methods for embedding QR codes in Twig template
     <a href="{{ link.qrCodeDisplayUrl }}">View QR Code</a>
 
     {# Custom options via method call #}
-    <img src="{{ link.getQrCodeUrl({size: 512, format: 'svg'}) }}" alt="QR Code">
+    <img src="{{ link.getQrCodeUrl({size: 512, format: 'svg', errorCorrection: 'Q'}) }}" alt="QR Code">
 
     {# Base64 data URI for email templates #}
     <img src="{{ link.getQrCodeDataUri({size: 150}) }}" alt="QR Code">
@@ -196,7 +205,7 @@ Generated QR codes are cached to avoid regenerating on every request.
 | `qrCodeCacheDuration` | `86400` | Cache TTL in seconds (24 hours) |
 | `cacheStorageMethod` | `'file'` | `'file'` (single server), `'redis'` (multi-server), or `'craft'` (Craft application cache) |
 
-The cache key includes the URL, normalized format, and all rendering options, so changing any option automatically generates a fresh QR code. SmartLink Manager validates cached PNG/SVG output before serving it; an empty, partial, or wrong-format hit is ignored and replaced only after fresh generation succeeds. Cache can be cleared from **Utilities → SmartLink Manager** (requires `smartLinkManager:clearCache` permission).
+The cache key includes the URL, normalized format, normalized effective error-correction level, and all other rendering options, so changing any effective option automatically generates a fresh QR code. Equivalent error-correction inputs such as `m`, `M`, and ` M ` share one cache entry; an invalid request value shares the configured-default entry. SmartLink Manager validates cached PNG/SVG output before serving it; an empty, partial, or wrong-format hit is ignored and replaced only after fresh generation succeeds. Cache can be cleared from **Utilities → SmartLink Manager** (requires `smartLinkManager:clearCache` permission).
 
 ```php
 // config/smartlink-manager.php
