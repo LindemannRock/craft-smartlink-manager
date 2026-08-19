@@ -18,6 +18,7 @@ use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\ServerErrorHttpException;
 
 /**
  * QR Code Controller
@@ -98,7 +99,9 @@ class QrCodeController extends Controller
         // Get parameters
         $request = Craft::$app->request;
         $size = $request->getQueryParam('size', SmartLinkManager::$plugin->getSettings()->defaultQrSize);
-        $format = $request->getQueryParam('format', SmartLinkManager::$plugin->getSettings()->defaultQrFormat);
+        $format = SmartLinkManager::$plugin->qrCode->normalizeFormat(
+            $request->getQueryParam('format', SmartLinkManager::$plugin->getSettings()->defaultQrFormat)
+        );
         
         // Generate QR code data
         $settings = SmartLinkManager::$plugin->getSettings();
@@ -162,9 +165,12 @@ class QrCodeController extends Controller
             SmartLinkManager::$plugin->integration->prepareSeomaticMetadata($smartLink);
 
             return $this->renderTemplate($template, $templateVars);
-        } catch (\Exception $e) {
-            $this->logError('Failed to generate QR code', ['error' => $e->getMessage()]);
-            throw new NotFoundHttpException('Failed to generate QR code.');
+        } catch (\Throwable $e) {
+            $this->logError('Failed to generate QR code', [
+                'format' => $format,
+                'error' => $e->getMessage(),
+            ]);
+            throw new ServerErrorHttpException('QR code generation failed.');
         }
     }
 
@@ -289,7 +295,7 @@ class QrCodeController extends Controller
 
             // Validate logo belongs to an allowed volume and user has access
             if ($logoId) {
-                $logoAsset = \craft\elements\Asset::find()->id($logoId)->one();
+                $logoAsset = $this->resolvePreviewLogoAsset($logoId);
                 $allowedVolumeUids = array_filter([
                     $settings->qrLogoVolumeUid,
                     $settings->imageVolumeUid,
@@ -297,7 +303,7 @@ class QrCodeController extends Controller
                 $volumeUid = $logoAsset?->getVolume()->uid;
                 if (!$logoAsset
                     || ($allowedVolumeUids && !in_array($volumeUid, $allowedVolumeUids, true))
-                    || !Craft::$app->getUser()->checkPermission('viewAssets:' . $volumeUid)
+                    || !$this->canViewAssetVolume($volumeUid)
                 ) {
                     $logoId = null;
                 }
@@ -320,15 +326,13 @@ class QrCodeController extends Controller
 
         // Remove null values
         $options = array_filter($options, fn($value) => $value !== null);
+        $format = SmartLinkManager::$plugin->qrCode->normalizeFormat($options['format'] ?? null);
+        $options['format'] = $format;
 
         // Generate QR code
         try {
             $qrCode = SmartLinkManager::$plugin->qrCode->generateQrCode($fullUrl, $options);
 
-            // Determine content type (validate format to known values)
-            $format = in_array($options['format'] ?? '', ['png', 'svg'], true)
-                ? $options['format']
-                : SmartLinkManager::$plugin->getSettings()->defaultQrFormat;
             $contentType = $format === 'svg' ? 'image/svg+xml' : 'image/png';
 
             // Return response
@@ -353,9 +357,12 @@ class QrCodeController extends Controller
             $response->content = $qrCode;
             
             return $response;
-        } catch (\Exception $e) {
-            $this->logError('Failed to generate QR code', ['error' => $e->getMessage()]);
-            throw new NotFoundHttpException('Failed to generate QR code.');
+        } catch (\Throwable $e) {
+            $this->logError('Failed to generate QR code', [
+                'format' => $format,
+                'error' => $e->getMessage(),
+            ]);
+            throw new ServerErrorHttpException('QR code generation failed.');
         }
     }
 
@@ -369,6 +376,24 @@ class QrCodeController extends Controller
         }
 
         return Craft::$app->getSites()->getCurrentSite();
+    }
+
+    /**
+     * Resolve a preview logo through Craft's Asset element query.
+     */
+    protected function resolvePreviewLogoAsset(mixed $logoId): ?\craft\elements\Asset
+    {
+        $asset = \craft\elements\Asset::find()->id($logoId)->one();
+
+        return $asset instanceof \craft\elements\Asset ? $asset : null;
+    }
+
+    /**
+     * Check whether the current user may view a preview logo's volume.
+     */
+    protected function canViewAssetVolume(?string $volumeUid): bool
+    {
+        return Craft::$app->getUser()->checkPermission('viewAssets:' . $volumeUid);
     }
 
     /**

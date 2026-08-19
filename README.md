@@ -14,7 +14,7 @@ Intelligent device detection and app store routing for Craft CMS. Create smart l
 
 - **Smart Links** — Custom element type with per-platform URLs (iOS, Android, Huawei, Amazon, Windows, Mac, Fallback)
 - **Device Detection** — Matomo Device Detector identifies platform and redirects automatically
-- **QR Codes** — Styled QR codes with custom colors, module/eye styles, logo overlay, and PNG/SVG export
+- **QR Codes** — Styled PNG/SVG codes with effective Imagick/GD rendering, custom colors, module/eye styles, and PNG logo overlays
 - **Analytics** — Click tracking with device, browser, country, city, language, referrer, and source breakdown
 - **Integrations** — SEOmatic (Content SEO source and GTM/GA4 events), Redirect Manager (auto-301), Craft Link Field
 - **Smart Link Field** — Element picker field for entries and other elements
@@ -29,8 +29,9 @@ Intelligent device detection and app store routing for Craft CMS. Create smart l
 
 - Craft CMS 5.10+
 - PHP 8.2+
+- [Base](https://github.com/LindemannRock/craft-plugin-base) 5.38+
 - [Logging Library](https://github.com/LindemannRock/craft-logging-library) 5.16+ (required by Composer; install in CP for log viewing)
-- [bacon/bacon-qr-code](https://github.com/Bacon/BaconQrCode) ^2.0 or ^3.0
+- [bacon/bacon-qr-code](https://github.com/Bacon/BaconQrCode) ^3.0
 
 ## Installation
 

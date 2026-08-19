@@ -60,25 +60,27 @@ For template source paths, manual copy commands, and available variables, see [C
 
 **Quick checks:**
 
-1. **Is the Imagick PHP extension installed?** QR code generation requires the `imagick` PHP extension. Check via:
+1. **Does Craft have an effective image driver?** PNG generation uses whichever raster driver Craft is configured to use: Imagick or GD. Check the available PHP extensions with:
 
     ```bash title="PHP"
-    php -m | grep imagick
+    php -m | grep -E 'imagick|gd'
     ```
 
     ```bash title="DDEV"
-    ddev exec php -m | grep imagick
+    ddev exec "php -m | grep -E 'imagick|gd'"
     ```
 
-    If not listed, install Imagick for your PHP version.
+    Make sure Craft's image driver configuration selects one of the installed extensions. SVG generation is independent of the raster driver, but PNG needs effective Imagick or GD support.
 
 2. **Is QR code enabled on the smart link?** On the smart link edit page, confirm **QR Code Enabled** is checked.
 
 3. **Is QR code enabled globally?** In **Settings → QR Codes**, confirm QR generation is not globally disabled.
 
-4. **Is the logo asset valid?** If you configured a logo overlay, confirm the asset exists and the volume is readable by the web process. Try disabling the logo temporarily to isolate the issue.
+4. **Is the logo asset valid?** PNG logos can be readable JPEG, PNG, or GIF Assets on local or remote volumes. SmartLink Manager asks Craft for a temporary copy, so the volume must be accessible to Craft. Missing, corrupt, inaccessible, and unsupported logos are omitted while the valid unbranded PNG is returned.
 
-5. **Check the logs.** Go to **SmartLink Manager → Logs** (or **Utilities → Logs** if enabled) for Imagick-specific error messages.
+5. **Could the cached output be stale or damaged?** SmartLink Manager rejects invalid cached PNG/SVG data and regenerates it. If regeneration also fails, check the cache and renderer messages separately in the logs.
+
+6. **Check the logs.** Go to **SmartLink Manager → Logs** (or **Utilities → Logs** if enabled). Renderer capability failures, logo/Asset-copy problems, and cache failures are logged separately.
 
 ---
 
