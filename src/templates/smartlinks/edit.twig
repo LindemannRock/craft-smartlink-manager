@@ -29,9 +29,14 @@
         qrBgColor: craft.smartLinks.settings.defaultQrBgColor,
         qrEyeColor: craft.smartLinks.settings.qrEyeColor ?? '',
         qrFormat: craft.smartLinks.settings.defaultQrFormat ?? 'png',
+        qrMargin: craft.smartLinks.settings.defaultQrMargin,
+        qrErrorCorrection: craft.smartLinks.settings.defaultQrErrorCorrection ?? 'M',
+        qrModuleStyle: craft.smartLinks.settings.qrModuleStyle ?? 'square',
+        qrEyeStyle: craft.smartLinks.settings.qrEyeStyle ?? 'square',
+        qrLogoSize: craft.smartLinks.settings.qrLogoSize ?? 20,
     },
     urls: {
-        qrPublicBaseUrl: smartLink.id ? craft.smartLinks.settings.buildPublicUrl((craft.smartLinks.settings.qrPrefix ?: 'qr') ~ '/' ~ smartLink.slug, smartLink.siteId) : null,
+        qrDownloadUrl: smartLink.id ? actionUrl('smartlink-manager/qr-code/generate', { linkId: smartLink.id, siteHandle: smartLinkSiteHandle }) : null,
     },
     messages: {
         enterCustomSize: 'Enter custom size (100-4096 pixels):'|t('smartlink-manager'),
@@ -45,7 +50,7 @@
 {% if smartLink.id %}
     {% do view.registerAssetBundle('lindemannrock\\smartlinkmanager\\web\\assets\\qrpreview\\QrPreviewAsset') %}
     {% set qrPreviewConfig = {
-        generateUrl: actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle }),
+        generateUrl: actionUrl('smartlink-manager/qr-code/generate', { linkId: smartLink.id, siteHandle: smartLinkSiteHandle }),
         fields: {
             size: 'qrCodeSize',
             format: 'qrCodeFormat',
@@ -386,7 +391,7 @@
                     <div class="input lr-text-center">
                         <a id="qr-preview-link" href="{{ smartLink.getQrCodeUrl() }}" target="_blank" title="{{ 'Click to view QR code image'|t('smartlink-manager') }}">
                             <img id="qr-preview"
-                                 src="{{ actionUrl('smartlink-manager/qr-code/generate', { slug: smartLink.slug, siteHandle: smartLinkSiteHandle, size: 150 }) }}"
+                                 src="{{ actionUrl('smartlink-manager/qr-code/generate', { linkId: smartLink.id, siteHandle: smartLinkSiteHandle }) }}"
                                  alt="QR Code Preview"
                                  style="max-width: 150px; height: auto; border: 1px solid #e3e5e8; background: {{ smartLink.qrCodeBgColor ?? '#FFFFFF' }}; cursor: pointer;">
                         </a>

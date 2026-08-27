@@ -61,7 +61,7 @@ Found on **SmartLink Manager → Settings → Behavior**.
 | `qrEyeStyle` | `string` | `'square'` | Eye shape: `square`, `rounded`, `pointed` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (`null` = same as foreground color) |
 
-Request-level error-correction values are trimmed and case-insensitive. Invalid request values fall back to `defaultQrErrorCorrection`; an invalid configured default falls back to `M`. The normalized effective level is part of the QR cache identity.
+The public QR image and display routes use saved per-link values with these defaults as fallbacks; public styling query parameters are ignored. Authenticated control-panel previews and downloads can render unsaved styling. Their error-correction values are trimmed and case-insensitive, with invalid values falling back to `defaultQrErrorCorrection` and then `M`.
 
 ### Logo
 
@@ -78,6 +78,8 @@ Request-level error-correction values are trimmed and case-insensitive. Invalid 
 |--------|------|---------|-------------|
 | `enableQrDownload` | `bool` | `true` | Allow users to download QR codes |
 | `qrDownloadFilename` | `string` | `'{slug}-qr-{size}'` | Download filename pattern. Tokens: `{slug}`, `{size}`, `{format}` |
+
+Public downloads use the saved canonical size and style. The authenticated edit-page menu provides 256px, 512px, 1024px, and 2048px presets plus custom sizes from 100–4096px. Saved and default QR sizes remain limited to 100–1000px. Prefer SVG when the output must scale for print.
 
 ### Caching
 

@@ -28,7 +28,7 @@ Every smart link is a native Craft element with its own slug, status, publish sc
 
 - **[Custom Domain](custom-domain.md)** — Serve smart links from a dedicated domain like `go.myapp.com`. Supports single-site and multisite setups with per-site URL tokens.
 
-- **[QR Codes](qr-codes.md)** — Generate styled QR codes for any smart link. Customize module style, eye style, colors, logo overlay, size, margin, and output format (PNG or SVG). Cacheable via file system or Redis.
+- **[QR Codes](qr-codes.md)** — Generate canonical public PNG/SVG codes from saved styling, with authenticated unsaved previews and downloads up to 4096px. Cacheable via file, Craft, or Redis storage.
 
 - **[Analytics](analytics.md)** — Track every click with device type, OS, browser, country, city, language, referrer, and click type (redirect, QR scan, button click). Configurable retention policy. Exportable to CSV, Excel, and JSON.
 

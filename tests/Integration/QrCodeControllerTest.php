@@ -76,30 +76,65 @@ final class QrCodeControllerTest extends TestCase
         });
     }
 
-    public function testPublicGenerationForwardsErrorCorrection(): void
+    public function testPublicGenerationUsesSavedCanonicalStyleDespiteQueryOverrides(): void
     {
         $link = $this->qrLink('smartlink-test-qr-public-error-correction', 'png');
-        $this->installRequest(['errorCorrection' => ' h ']);
+        $link->qrCodeSize = 320;
+        $link->qrCodeColor = '#123456';
+        $link->qrCodeBgColor = '#F5E6D3';
+        $link->qrCodeEyeColor = '#AA2244';
+        self::assertTrue(Craft::$app->getElements()->saveElement($link));
+        $this->installRequest([
+            'size' => 999,
+            'color' => '654321',
+            'bg' => 'FFFFFF',
+            'format' => 'svg',
+            'errorCorrection' => 'H',
+            'margin' => 1,
+            'moduleStyle' => 'dots',
+            'eyeStyle' => 'rounded',
+            'eyeColor' => '0000FF',
+            'logo' => '999',
+            'logoSize' => 30,
+        ]);
         $service = new ControllerRecordingQrCodeService();
         $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
 
-        $this->controller()->actionGenerate($link->slug);
+        $this->withSettings([
+            'defaultQrErrorCorrection' => 'Q',
+            'defaultQrMargin' => 4,
+            'qrModuleStyle' => 'square',
+            'qrEyeStyle' => 'pointed',
+            'enableQrLogo' => false,
+        ], function() use ($link, $service): void {
+            $this->controller()->actionGenerate($link->slug);
 
-        self::assertSame(' h ', $service->lastOptions['errorCorrection']);
+            self::assertSame([
+                'size' => 320,
+                'color' => '123456',
+                'bg' => 'F5E6D3',
+                'format' => 'png',
+                'errorCorrection' => 'Q',
+                'margin' => 4,
+                'moduleStyle' => 'square',
+                'eyeStyle' => 'pointed',
+                'eyeColor' => 'AA2244',
+            ], $service->lastOptions);
+        });
     }
 
     public function testGeneratedResponsePreservesMimeAndSignatureAcrossErrorCorrectionLevels(): void
     {
-        $link = $this->qrLink('smartlink-test-qr-level-responses', 'png');
-
-        $this->withSettings(['enableQrCodeCache' => false], function() use ($link): void {
+        $this->withSettings(['enableQrCodeCache' => false], function(): void {
             foreach (['L', 'M', 'Q', 'H'] as $errorCorrection) {
                 foreach (['png', 'svg'] as $format) {
                     $this->installRequest([
+                        'preview' => '1',
+                        'url' => 'https://example.com/qr-level-response',
                         'format' => $format,
                         'errorCorrection' => $errorCorrection,
                     ]);
-                    $response = $this->controller()->actionGenerate($link->slug);
+                    $response = $this->controller()->actionGenerate();
 
                     if ($format === 'svg') {
                         self::assertSame('image/svg+xml', $response->headers->get('Content-Type'));
@@ -165,11 +200,218 @@ final class QrCodeControllerTest extends TestCase
         $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
         $controller = $this->controller();
 
-        $controller->actionGenerate();
+        $response = $controller->actionGenerate();
 
         self::assertTrue($controller->loginRequired);
         self::assertSame(['smartLinkManager:editLinks'], $controller->requiredPermissions);
         self::assertSame('q', $service->lastOptions['errorCorrection']);
+        self::assertFalse($service->lastOptions['_cache']);
+        self::assertSame('private, no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
+    }
+
+    public function testAuthenticatedExistingLinkPreviewRequiresEditPermission(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-existing-permission', 'png');
+        $this->installRequest(['linkId' => $link->id]);
+        $controller = $this->controller();
+        $controller->denyPermission = true;
+
+        $this->expectException(ForbiddenHttpException::class);
+        try {
+            $controller->actionGenerate();
+        } finally {
+            self::assertTrue($controller->loginRequired);
+            self::assertSame(['smartLinkManager:editLinks'], $controller->requiredPermissions);
+        }
+    }
+
+    public function testAuthenticatedExistingLinkPreviewUsesUnsavedStyleAtFixedSizeWithoutCaching(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-existing-preview', 'png');
+        $this->installRequest([
+            'linkId' => $link->id,
+            'size' => 2048,
+            'format' => 'svg',
+            'color' => '123456',
+            'bg' => 'F5E6D3',
+            'errorCorrection' => 'H',
+            'margin' => 2,
+            'moduleStyle' => 'dots',
+            'eyeStyle' => 'rounded',
+            'eyeColor' => 'AA2244',
+            'logoSize' => 24,
+        ]);
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+        $controller = $this->controller();
+
+        $response = $controller->actionGenerate();
+
+        self::assertTrue($controller->loginRequired);
+        self::assertSame(150, $service->lastOptions['size']);
+        self::assertSame('svg', $service->lastOptions['format']);
+        self::assertSame('123456', $service->lastOptions['color']);
+        self::assertSame('F5E6D3', $service->lastOptions['bg']);
+        self::assertSame('H', $service->lastOptions['errorCorrection']);
+        self::assertSame('dots', $service->lastOptions['moduleStyle']);
+        self::assertSame('rounded', $service->lastOptions['eyeStyle']);
+        self::assertSame('AA2244', $service->lastOptions['eyeColor']);
+        self::assertFalse($service->lastOptions['_cache']);
+        self::assertSame(4096, $service->lastOptions['_sizeMax']);
+        self::assertSame('private, no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
+    }
+
+    public function testAuthenticatedDownloadsNormalizeExactSizeAndFilenameTogether(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-exact-download', 'png');
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        $this->withSettings([
+            'enableQrDownload' => true,
+            'qrDownloadFilename' => '{slug}-{size}-{format}',
+        ], function() use ($link, $service): void {
+            foreach ([
+                ['requested' => 99, 'expected' => 100, 'format' => 'png'],
+                ['requested' => 100, 'expected' => 100, 'format' => 'svg'],
+                ['requested' => 256, 'expected' => 256, 'format' => 'png'],
+                ['requested' => 512, 'expected' => 512, 'format' => 'svg'],
+                ['requested' => 1000, 'expected' => 1000, 'format' => 'png'],
+                ['requested' => 1001, 'expected' => 1001, 'format' => 'svg'],
+                ['requested' => 1024, 'expected' => 1024, 'format' => 'png'],
+                ['requested' => 2048, 'expected' => 2048, 'format' => 'svg'],
+                ['requested' => 4096, 'expected' => 4096, 'format' => 'png'],
+                ['requested' => 5000, 'expected' => 4096, 'format' => 'svg'],
+            ] as $case) {
+                $this->installRequest([
+                    'linkId' => $link->id,
+                    'download' => '1',
+                    'size' => $case['requested'],
+                    'format' => $case['format'],
+                ]);
+                $response = $this->controller()->actionGenerate();
+
+                self::assertSame($case['expected'], $service->lastOptions['size']);
+                self::assertSame($case['format'], $service->lastOptions['format']);
+                self::assertStringContainsString(
+                    "{$link->slug}-{$case['expected']}-{$case['format']}.{$case['format']}",
+                    (string)$response->headers->get('Content-Disposition'),
+                );
+                self::assertSame('private, no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
+            }
+        });
+    }
+
+    public function testAuthenticatedDownloadRespectsDisabledSetting(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-disabled-download', 'png');
+        $this->installRequest(['linkId' => $link->id, 'download' => '1', 'size' => 512]);
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', new ControllerThrowingQrCodeService());
+
+        $this->withSettings(['enableQrDownload' => false], function(): void {
+            $this->expectException(NotFoundHttpException::class);
+            $this->controller()->actionGenerate();
+        });
+    }
+
+    public function testMissingAuthenticatedExistingLinkIsNotFound(): void
+    {
+        $this->installRequest(['linkId' => 2147483647]);
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->controller()->actionGenerate();
+    }
+
+    public function testTrashedAuthenticatedExistingLinkIsNotFound(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-trashed-existing', 'png');
+        self::assertTrue(Craft::$app->getElements()->deleteElement($link));
+        $this->installRequest(['linkId' => $link->id]);
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->controller()->actionGenerate();
+    }
+
+    public function testQrDisabledAuthenticatedExistingLinkIsNotFound(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-unavailable-existing', 'png');
+        $link->qrCodeEnabled = false;
+        self::assertTrue(Craft::$app->getElements()->saveElement($link));
+        $this->installRequest(['linkId' => $link->id]);
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->controller()->actionGenerate();
+    }
+
+    public function testAuthenticatedLargePngDownloadHasExactBytesAndFilenameDimension(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-real-large-download', 'png');
+        $this->installRequest([
+            'linkId' => $link->id,
+            'download' => '1',
+            'size' => 2048,
+            'format' => 'png',
+        ]);
+
+        $this->withSettings([
+            'enableQrCodeCache' => true,
+            'enableQrDownload' => true,
+            'qrDownloadFilename' => '{slug}-{size}-{format}',
+        ], function() use ($link): void {
+            $response = $this->controller()->actionGenerate();
+            $dimensions = getimagesizefromstring((string)$response->content);
+
+            self::assertIsArray($dimensions);
+            self::assertSame(2048, $dimensions[0]);
+            self::assertSame(2048, $dimensions[1]);
+            self::assertSame('image/png', $dimensions['mime']);
+            self::assertStringContainsString(
+                "{$link->slug}-2048-png.png",
+                (string)$response->headers->get('Content-Disposition'),
+            );
+            self::assertSame('private, no-store, no-cache, must-revalidate, max-age=0', $response->headers->get('Cache-Control'));
+        });
+    }
+
+    public function testPublicSlugCannotBeSwitchedIntoAuthenticatedOverrideMode(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-mode-confusion', 'png');
+        $this->installRequest([
+            'linkId' => $link->id,
+            'preview' => '1',
+            'url' => 'https://attacker.example/override',
+            'size' => 4096,
+            'format' => 'svg',
+        ]);
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+        $controller = $this->controller();
+
+        $response = $controller->actionGenerate($link->slug);
+
+        self::assertFalse($controller->loginRequired);
+        self::assertSame($link->qrCodeSize, $service->lastOptions['size']);
+        self::assertSame('png', $service->lastOptions['format']);
+        self::assertArrayNotHasKey('_cache', $service->lastOptions);
+        self::assertSame('public, max-age=86400', $response->headers->get('Cache-Control'));
+    }
+
+    public function testNonScalarPublicStyleParametersAreIgnored(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-array-query', 'png');
+        $this->installRequest([
+            'size' => ['4096'],
+            'format' => ['svg'],
+            'color' => ['FFFFFF'],
+            'logo' => ['42'],
+        ]);
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        $this->controller()->actionGenerate($link->slug);
+
+        self::assertSame($link->qrCodeSize, $service->lastOptions['size']);
+        self::assertSame('png', $service->lastOptions['format']);
     }
 
     public function testPreviewLogoAcceptsOnlyPermittedConfiguredVolumes(): void
@@ -235,6 +477,7 @@ final class QrCodeControllerTest extends TestCase
             'enableQrCodeCache' => false,
             'enableQrDownload' => true,
             'defaultQrFormat' => 'png',
+            'defaultQrErrorCorrection' => 'M',
             'qrDownloadFilename' => '../{slug}-qr-{size}-{format}',
         ], function() use ($link, $service): void {
             $response = $this->controller()->actionGenerate($link->slug);
@@ -244,7 +487,8 @@ final class QrCodeControllerTest extends TestCase
             self::assertStringEndsWith('-png.png"', $disposition);
             self::assertStringNotContainsString('../', $disposition);
             self::assertStringContainsString($link->slug, $disposition);
-            self::assertSame('H', $service->lastOptions['errorCorrection']);
+            self::assertSame('M', $service->lastOptions['errorCorrection']);
+            self::assertStringContainsString('-' . $link->qrCodeSize . '-png.png"', $disposition);
         });
     }
 
@@ -278,17 +522,19 @@ final class QrCodeControllerTest extends TestCase
     public function testDisplayPreservesNormalizedPngTemplatePayload(): void
     {
         $link = $this->qrLink('smartlink-test-qr-display-png', 'png');
-        $this->installRequest(['format' => 'invalid', 'errorCorrection' => ' q ']);
+        $this->installRequest(['size' => 999, 'format' => 'svg', 'errorCorrection' => 'H']);
         $service = new ControllerRecordingQrCodeService();
         $service->pngOutput = "\x89PNG\r\n\x1a\nfixture";
         $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
 
-        $this->withSettings(['defaultQrFormat' => 'png'], function() use ($link, $service): void {
+        $this->withSettings(['defaultQrFormat' => 'png', 'defaultQrErrorCorrection' => 'M'], function() use ($link, $service): void {
             $controller = $this->controller();
             $controller->actionDisplay($link->slug);
 
+            self::assertSame($link->qrCodeSize, $service->lastOptions['size']);
             self::assertSame('png', $service->lastOptions['format']);
-            self::assertSame(' q ', $service->lastOptions['errorCorrection']);
+            self::assertSame('M', $service->lastOptions['errorCorrection']);
+            self::assertSame($link->qrCodeSize, $controller->lastTemplateVariables['size']);
             self::assertSame('png', $controller->lastTemplateVariables['format']);
             self::assertSame(base64_encode($service->pngOutput), $controller->lastTemplateVariables['qrCodeData']);
             self::assertArrayNotHasKey('qrCodeSvg', $controller->lastTemplateVariables);
@@ -303,7 +549,9 @@ final class QrCodeControllerTest extends TestCase
         $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
 
         $controller = $this->controller();
-        $controller->actionDisplay($link->slug);
+        $this->withSettings(['defaultQrErrorCorrection' => 'H'], function() use ($controller, $link): void {
+            $controller->actionDisplay($link->slug);
+        });
 
         self::assertSame('svg', $service->lastOptions['format']);
         self::assertSame('H', $service->lastOptions['errorCorrection']);

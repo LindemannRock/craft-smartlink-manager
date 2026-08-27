@@ -115,8 +115,8 @@ The landing page is platform-aware, so the auto-forward **must not** be baked in
 | Variable | Type | Description |
 |----------|------|-------------|
 | `smartLink` | `SmartLink` | The smart link the QR code points to. |
-| `size` | `int` | Requested QR size in pixels. |
-| `format` | `string` | `png` or `svg`. |
+| `size` | `int` | Saved canonical QR size in pixels. |
+| `format` | `string` | Saved canonical format: `png` or `svg`. |
 | `qrCodeData` | `string` | Base64-encoded PNG data (present when `format` is `png`). |
 | `qrCodeSvg` | `string` | Raw SVG markup (present when `format` is `svg`). |
 

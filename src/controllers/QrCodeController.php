@@ -16,6 +16,7 @@ use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
@@ -96,37 +97,10 @@ class QrCodeController extends Controller
             return $this->redirectToNotFound();
         }
 
-        // Get parameters
-        $request = Craft::$app->request;
-        $size = $request->getQueryParam('size', SmartLinkManager::$plugin->getSettings()->defaultQrSize);
-        $format = SmartLinkManager::$plugin->qrCode->normalizeFormat(
-            $request->getQueryParam('format', SmartLinkManager::$plugin->getSettings()->defaultQrFormat)
-        );
-        
-        // Generate QR code data
         $settings = SmartLinkManager::$plugin->getSettings();
-        $options = [
-            'size' => $size,
-            'color' => $request->getQueryParam('color', str_replace('#', '', $smartLink->qrCodeColor)),
-            'bg' => $request->getQueryParam('bg', str_replace('#', '', $smartLink->qrCodeBgColor)),
-            'format' => $format,
-            'errorCorrection' => $request->getQueryParam('errorCorrection'),
-            'margin' => $request->getQueryParam('margin'),
-            'moduleStyle' => $request->getQueryParam('moduleStyle'),
-            'eyeStyle' => $request->getQueryParam('eyeStyle'),
-            'eyeColor' => $request->getQueryParam('eyeColor', str_replace('#', '', $smartLink->qrCodeEyeColor)),
-        ];
-
-        // Add logo if enabled (don't accept from query params for security)
-        if ($settings->enableQrLogo) {
-            $logoId = $smartLink->qrLogoId ?: $settings->defaultQrLogoId;
-            if ($logoId) {
-                $options['logo'] = $logoId;
-            }
-        }
-
-        // Remove null values
-        $options = array_filter($options, fn($value) => $value !== null);
+        $options = $this->canonicalOptions($smartLink);
+        $size = (int)$options['size'];
+        $format = (string)$options['format'];
 
         // Generate full URL for the smart link with QR tracking parameter
         $url = $smartLink->getRedirectUrl();
@@ -185,149 +159,65 @@ class QrCodeController extends Controller
     public function actionGenerate(?string $slug = null, ?string $siteHandle = null): Response
     {
         $request = Craft::$app->request;
-        
-        // Check if this is a preview request
-        $isPreview = $request->getQueryParam('preview');
-        $url = $request->getQueryParam('url');
-        
-        if ($isPreview && $url) {
-            // Preview mode - generate QR code for any URL (requires login and edit permission)
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $isSettingsPreview = $slug === null
+            && $this->queryFlag('preview')
+            && is_string($request->getQueryParam('url'));
+        $linkId = $slug === null ? $this->queryScalar('linkId') : null;
+        $isExistingLinkMode = $linkId !== null;
+        $isAuthenticatedMode = $isSettingsPreview || $isExistingLinkMode;
+        $isDownload = $this->queryFlag('download');
+
+        if ($isAuthenticatedMode) {
             $this->requireLogin();
             $this->requirePermission('smartLinkManager:editLinks');
+        }
 
-            // Validate URL scheme (prevent javascript:, data:, etc.)
+        if ($isSettingsPreview) {
+            $url = (string)$request->getQueryParam('url');
             $scheme = parse_url($url, PHP_URL_SCHEME);
             if (!in_array(strtolower($scheme ?? ''), ['http', 'https'], true)) {
-                throw new \yii\web\BadRequestHttpException('Only http and https URLs are allowed.');
+                throw new BadRequestHttpException('Only http and https URLs are allowed.');
             }
 
-            $fullUrl = $url;
             $smartLink = null;
+            $fullUrl = $url;
+            $options = $this->authenticatedOptions();
+            $options['_cache'] = false;
+        } elseif ($isExistingLinkMode) {
+            $smartLink = $this->resolveExistingLink($linkId, $siteHandle);
+            if (!$settings->isSiteEnabled($smartLink->siteId) || !$smartLink->qrCodeEnabled) {
+                throw new NotFoundHttpException('QR code not found.');
+            }
+            if ($isDownload && !$settings->enableQrDownload) {
+                throw new NotFoundHttpException('QR code not found.');
+            }
+
+            $fullUrl = $this->trackedUrl($smartLink);
+            $options = $this->authenticatedOptions();
+            $options['size'] = $isDownload
+                ? $this->normalizeExportSize($this->queryScalar('size'), (int)$smartLink->qrCodeSize)
+                : 150;
+            $options['_cache'] = false;
+            $options['_sizeMax'] = 4096;
         } else {
-            // Normal mode - require a smart link
-            if (!$slug) {
+            if ($slug === null || trim($slug) === '') {
                 throw new NotFoundHttpException('Smart link not specified.');
             }
-            $slug = strtolower(trim($slug));
-            
-            $site = $this->resolveSite($siteHandle);
-            if (!$site) {
-                throw new NotFoundHttpException('QR code not found.');
-            }
 
-            // Get the smart link for the resolved site first, then fallback across sites.
-            $smartLink = SmartLink::find()
-                ->slug($slug)
-                ->siteId($site->id)
-                ->status(null) // Allow any status
-                ->one();
-
-            if (!$smartLink) {
-                $smartLink = SmartLink::find()
-                    ->slug($slug)
-                    ->site('*')
-                    ->status(null)
-                    ->one();
-            }
-
-            if (!$smartLink) {
-                throw new NotFoundHttpException('QR code not found.');
-            }
-
-            // Check if link is trashed
-            if ($smartLink->trashed) {
-                throw new NotFoundHttpException('QR code not found.');
-            }
-
-            // Check if SmartLink Manager is enabled for the smart link's site
-            $settings = SmartLinkManager::$plugin->getSettings();
+            $smartLink = $this->resolvePublicLink($slug, $siteHandle);
             if (!$settings->isSiteEnabled($smartLink->siteId)) {
                 $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
                 return $this->redirectToNotFound();
             }
-
-            // If QR is disabled, redirect to 404 redirect URL (consistent with smart link behavior)
             if (!$smartLink->qrCodeEnabled) {
                 return $this->redirectToNotFound();
             }
 
-            // Generate full URL for the smart link with QR tracking parameter
-            $url = $smartLink->getRedirectUrl();
-
-            $this->logDebug('SmartLink redirect URL (generate)', ['url' => $url]);
-
-            // The redirect URL should already be a full URL from UrlHelper::siteUrl()
-            // Add the QR source parameter to track QR code scans
-            $separator = strpos($url, '?') !== false ? '&' : '?';
-            $fullUrl = $url . $separator . 'src=qr';
-
-            // Note: Tracking is handled client-side via JavaScript (redirect-tracking.js)
-            // QR codes contain static URLs - no cache busting needed
-
-            $this->logDebug('Full URL for QR', ['fullUrl' => $fullUrl]);
+            $fullUrl = $this->trackedUrl($smartLink);
+            $options = $this->canonicalOptions($smartLink);
         }
 
-        // Get parameters
-        $settings = SmartLinkManager::$plugin->getSettings();
-
-        if ($smartLink) {
-            // Normal mode - use smartlink's configured settings, allow style overrides
-            $options = [
-                'size' => $request->getQueryParam('size', $smartLink->qrCodeSize),
-                'color' => $request->getQueryParam('color', str_replace('#', '', $smartLink->qrCodeColor ?: $settings->defaultQrColor)),
-                'bg' => $request->getQueryParam('bg', str_replace('#', '', $smartLink->qrCodeBgColor ?: $settings->defaultQrBgColor)),
-                'format' => $request->getQueryParam('format', $smartLink->qrCodeFormat ?: $settings->defaultQrFormat),
-                'errorCorrection' => $request->getQueryParam('errorCorrection', $settings->defaultQrErrorCorrection),
-                'margin' => $request->getQueryParam('margin', $settings->defaultQrMargin),
-                'moduleStyle' => $request->getQueryParam('moduleStyle', $settings->qrModuleStyle),
-                'eyeStyle' => $request->getQueryParam('eyeStyle', $settings->qrEyeStyle),
-                'eyeColor' => $request->getQueryParam('eyeColor', $smartLink->qrCodeEyeColor ? str_replace('#', '', $smartLink->qrCodeEyeColor) : ($settings->qrEyeColor ? str_replace('#', '', $settings->qrEyeColor) : null)),
-            ];
-
-            // Add logo if enabled (don't accept from query params for security)
-            if ($settings->enableQrLogo) {
-                $logoId = $smartLink->qrLogoId ?: $settings->defaultQrLogoId;
-                if ($logoId) {
-                    $options['logo'] = $logoId;
-                }
-            }
-        } else {
-            // Preview mode (requires login) - accept all params from query
-            $logoId = $request->getQueryParam('logo');
-
-            // Validate logo belongs to an allowed volume and user has access
-            if ($logoId) {
-                $logoAsset = $this->resolvePreviewLogoAsset($logoId);
-                $allowedVolumeUids = array_filter([
-                    $settings->qrLogoVolumeUid,
-                    $settings->imageVolumeUid,
-                ]);
-                $volumeUid = $logoAsset?->getVolume()->uid;
-                if (!$logoAsset
-                    || ($allowedVolumeUids && !in_array($volumeUid, $allowedVolumeUids, true))
-                    || !$this->canViewAssetVolume($volumeUid)
-                ) {
-                    $logoId = null;
-                }
-            }
-
-            $options = [
-                'size' => $request->getQueryParam('size'),
-                'color' => $request->getQueryParam('color'),
-                'bg' => $request->getQueryParam('bg'),
-                'format' => $request->getQueryParam('format'),
-                'margin' => $request->getQueryParam('margin'),
-                'moduleStyle' => $request->getQueryParam('moduleStyle'),
-                'eyeStyle' => $request->getQueryParam('eyeStyle'),
-                'eyeColor' => $request->getQueryParam('eyeColor'),
-                'logo' => $logoId,
-                'logoSize' => $request->getQueryParam('logoSize'),
-                'errorCorrection' => $request->getQueryParam('errorCorrection'),
-            ];
-        }
-
-        // Remove null values
-        $options = array_filter($options, fn($value) => $value !== null);
         $format = SmartLinkManager::$plugin->qrCode->normalizeFormat($options['format'] ?? null);
         $options['format'] = $format;
 
@@ -341,13 +231,16 @@ class QrCodeController extends Controller
             $response = Craft::$app->response;
             $response->format = Response::FORMAT_RAW;
             $response->headers->set('Content-Type', $contentType);
-            $response->headers->set('Cache-Control', 'public, max-age=86400'); // Cache for 1 day - tracking happens via redirect with ?src=qr
+            $response->headers->set(
+                'Cache-Control',
+                $isAuthenticatedMode ? 'private, no-store, no-cache, must-revalidate, max-age=0' : 'public, max-age=86400',
+            );
             
             // Handle download request
-            if ($request->getQueryParam('download') && $smartLink && $settings->enableQrDownload) {
+            if ($isDownload && $smartLink && $settings->enableQrDownload) {
                 $filename = strtr($settings->qrDownloadFilename, [
                     '{slug}' => $smartLink->slug,
-                    '{size}' => $options['size'] ?? $settings->defaultQrSize,
+                    '{size}' => (string)$options['size'],
                     '{format}' => $format,
                 ]);
                 $filename = SafeSegmentHelper::filenamePart($filename, 'qr-code', [
@@ -366,6 +259,168 @@ class QrCodeController extends Controller
             ]);
             throw new ServerErrorHttpException('QR code generation failed.');
         }
+    }
+
+    /**
+     * Return the saved QR configuration used by anonymous image and display routes.
+     *
+     * @return array<string, mixed>
+     */
+    private function canonicalOptions(SmartLink $smartLink): array
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $options = [
+            'size' => $smartLink->qrCodeSize ?: $settings->defaultQrSize,
+            'color' => str_replace('#', '', $smartLink->qrCodeColor ?: $settings->defaultQrColor),
+            'bg' => str_replace('#', '', $smartLink->qrCodeBgColor ?: $settings->defaultQrBgColor),
+            'format' => SmartLinkManager::$plugin->qrCode->normalizeFormat($smartLink->qrCodeFormat ?: $settings->defaultQrFormat),
+            'errorCorrection' => $settings->defaultQrErrorCorrection,
+            'margin' => $settings->defaultQrMargin,
+            'moduleStyle' => $settings->qrModuleStyle,
+            'eyeStyle' => $settings->qrEyeStyle,
+            'eyeColor' => $smartLink->qrCodeEyeColor
+                ? str_replace('#', '', $smartLink->qrCodeEyeColor)
+                : ($settings->qrEyeColor ? str_replace('#', '', $settings->qrEyeColor) : null),
+        ];
+
+        if ($settings->enableQrLogo) {
+            $logoId = $smartLink->qrLogoId ?: $settings->defaultQrLogoId;
+            if ($logoId) {
+                $options['logo'] = $logoId;
+            }
+        }
+
+        return array_filter($options, static fn(mixed $value): bool => $value !== null);
+    }
+
+    /**
+     * Return authenticated request styling after scalar and logo access checks.
+     *
+     * @return array<string, mixed>
+     */
+    private function authenticatedOptions(): array
+    {
+        $settings = SmartLinkManager::$plugin->getSettings();
+        $logoId = $this->queryScalar('logo');
+
+        if ($logoId !== null) {
+            $logoAsset = $this->resolvePreviewLogoAsset($logoId);
+            $allowedVolumeUids = array_filter([
+                $settings->qrLogoVolumeUid,
+                $settings->imageVolumeUid,
+            ]);
+            $volumeUid = $logoAsset?->getVolume()->uid;
+            if (!$logoAsset
+                || ($allowedVolumeUids && !in_array($volumeUid, $allowedVolumeUids, true))
+                || !$this->canViewAssetVolume($volumeUid)
+            ) {
+                $logoId = null;
+            }
+        }
+
+        $options = [
+            'size' => $this->queryScalar('size'),
+            'color' => $this->queryScalar('color'),
+            'bg' => $this->queryScalar('bg'),
+            'format' => $this->queryScalar('format'),
+            'margin' => $this->queryScalar('margin'),
+            'moduleStyle' => $this->queryScalar('moduleStyle'),
+            'eyeStyle' => $this->queryScalar('eyeStyle'),
+            'eyeColor' => $this->queryScalar('eyeColor'),
+            'logo' => $logoId,
+            'logoSize' => $this->queryScalar('logoSize'),
+            'errorCorrection' => $this->queryScalar('errorCorrection'),
+        ];
+
+        return array_filter($options, static fn(mixed $value): bool => $value !== null);
+    }
+
+    private function queryScalar(string $name): string|int|float|bool|null
+    {
+        $value = Craft::$app->getRequest()->getQueryParam($name);
+
+        return is_scalar($value) ? $value : null;
+    }
+
+    private function queryFlag(string $name): bool
+    {
+        $value = $this->queryScalar($name);
+
+        return $value !== null && !in_array($value, ['', '0', 0, false], true);
+    }
+
+    private function normalizeExportSize(string|int|float|bool|null $size, int $fallback): int
+    {
+        if (!is_numeric($size)) {
+            $size = $fallback;
+        }
+
+        return max(100, min(4096, (int)$size));
+    }
+
+    private function resolveExistingLink(string|int|float|bool $linkId, ?string $siteHandle): SmartLink
+    {
+        if (!is_numeric($linkId) || (int)$linkId < 1) {
+            throw new NotFoundHttpException('QR code not found.');
+        }
+
+        $query = SmartLink::find()
+            ->id((int)$linkId)
+            ->status(null);
+
+        if ($siteHandle !== null) {
+            $site = $this->resolveSite($siteHandle);
+            if (!$site) {
+                throw new NotFoundHttpException('QR code not found.');
+            }
+            $query->siteId($site->id);
+        } else {
+            $query->site('*');
+        }
+
+        $smartLink = $query->one();
+        if (!$smartLink instanceof SmartLink || $smartLink->trashed) {
+            throw new NotFoundHttpException('QR code not found.');
+        }
+
+        return $smartLink;
+    }
+
+    private function resolvePublicLink(string $slug, ?string $siteHandle): SmartLink
+    {
+        $slug = strtolower(trim($slug));
+        $site = $this->resolveSite($siteHandle);
+        if (!$site) {
+            throw new NotFoundHttpException('QR code not found.');
+        }
+
+        $smartLink = SmartLink::find()
+            ->slug($slug)
+            ->siteId($site->id)
+            ->status(null)
+            ->one();
+
+        if (!$smartLink) {
+            $smartLink = SmartLink::find()
+                ->slug($slug)
+                ->site('*')
+                ->status(null)
+                ->one();
+        }
+
+        if (!$smartLink instanceof SmartLink || $smartLink->trashed) {
+            throw new NotFoundHttpException('QR code not found.');
+        }
+
+        return $smartLink;
+    }
+
+    private function trackedUrl(SmartLink $smartLink): string
+    {
+        $url = $smartLink->getRedirectUrl();
+        $separator = str_contains($url, '?') ? '&' : '?';
+
+        return $url . $separator . 'src=qr';
     }
 
     /**

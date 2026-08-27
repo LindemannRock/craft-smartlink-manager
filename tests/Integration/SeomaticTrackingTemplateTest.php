@@ -79,5 +79,9 @@ class SeomaticTrackingTemplateTest extends TestCase
         $this->assertStringNotContainsString('renderQrSeomaticTracking is defined', $template);
         $this->assertStringNotContainsString('DEBUG MODE', $template);
         $this->assertStringNotContainsString('debugMode', $template);
+        $this->assertStringContainsString('{{ qrCodeSvg|raw }}', $template);
+        $this->assertStringContainsString('data:image/png;base64,{{ qrCodeData }}', $template);
+        $this->assertStringContainsString('smartLink.getQrCodeUrl({ download: 1 })', $template);
+        $this->assertStringNotContainsString('smartLink.getQrCodeUrl({ size:', $template);
     }
 }

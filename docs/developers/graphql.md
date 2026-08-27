@@ -305,7 +305,7 @@ The SmartLink Manager object exposes these fields in resolver queries, list quer
 | `description` | `String` | Smart link description |
 | `url` | `String` | Public smart link URL when enabled |
 | `redirectUrl` | `String` | Public redirect URL |
-| `qrCodeUrl` | `String` | Public QR code URL |
+| `qrCodeUrl` | `String` | Canonical public QR code URL using the link's saved styling |
 | `resolvedDestinationUrl` | `String` | Destination selected for the current response |
 | `resolvedPlatform` | `String` | Platform selected for the current response |
 | `clickType` | `String` | `redirect` for auto resolution, `button` for explicit platform resolution |

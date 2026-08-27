@@ -66,8 +66,13 @@ class QrCodeService extends Component
     {
         $settings = SmartLinkManager::$plugin->getSettings();
         
+        // Authenticated exports may opt into a larger, uncached render ceiling.
+        // All public and existing server-side callers retain the 1000px ceiling.
+        $sizeMax = ($options['_sizeMax'] ?? null) === 4096 ? 4096 : 1000;
+        $usePersistentCache = $settings->enableQrCodeCache && ($options['_cache'] ?? true) !== false;
+
         // Merge options with defaults and clamp values
-        $size = max(100, min(1000, (int)($options['size'] ?? $settings->defaultQrSize)));
+        $size = max(100, min($sizeMax, (int)($options['size'] ?? $settings->defaultQrSize)));
         $color = $this->normalizeHexColor($options['color'] ?? null, (string)$settings->defaultQrColor);
         $bgColor = $this->normalizeHexColor($options['bg'] ?? $options['backgroundColor'] ?? null, (string)$settings->defaultQrBgColor);
         $format = $this->normalizeFormat($options['format'] ?? null);
@@ -92,7 +97,7 @@ class QrCodeService extends Component
         $cacheDecision = null;
 
         // Check the configured disposable cache (if caching is enabled).
-        if ($settings->enableQrCodeCache) {
+        if ($usePersistentCache) {
             try {
                 $cacheDecision = SmartLinkManager::$plugin->cacheStorage->getStorageDecision();
             } catch (\Throwable $e) {
@@ -148,7 +153,7 @@ class QrCodeService extends Component
         }
 
         // Cache the result (if caching is enabled).
-        if ($settings->enableQrCodeCache && $cacheDecision !== null) {
+        if ($usePersistentCache && $cacheDecision !== null) {
             try {
                 if (!SmartLinkManager::$plugin->cacheStorage->writeQrCode(
                     $cacheKey,

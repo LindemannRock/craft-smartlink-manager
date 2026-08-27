@@ -56,9 +56,10 @@ const constituents = [
             '--test',
             'tests/js/pre-commit-hook.test.mjs',
             'tests/js/quality-gate-orchestration.test.mjs',
+            'tests/js/qr-editor-download.test.mjs',
             'tests/js/runner-cleanup.test.mjs',
         ]],
-        workspace: ['ddev', ['exec', 'cd plugins/smartlink-manager && node --test tests/js/pre-commit-hook.test.mjs tests/js/quality-gate-orchestration.test.mjs tests/js/runner-cleanup.test.mjs']],
+        workspace: ['ddev', ['exec', 'cd plugins/smartlink-manager && node --test tests/js/pre-commit-hook.test.mjs tests/js/quality-gate-orchestration.test.mjs tests/js/qr-editor-download.test.mjs tests/js/runner-cleanup.test.mjs']],
     },
 ];
 

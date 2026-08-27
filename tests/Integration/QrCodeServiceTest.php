@@ -460,6 +460,77 @@ final class QrCodeServiceTest extends TestCase
         });
     }
 
+    public function testAuthenticatedLargePngExportIsExactAndLeavesPersistentCacheUntouched(): void
+    {
+        if (!extension_loaded('gd')) {
+            $this->markTestSkipped('GD is not available.');
+        }
+
+        $this->withCraftCache(function(CascadeCache $cache): void {
+            $cache->set('smartlink-test-neighbor', 'neighbor-bytes', 300);
+            $cache->setDurations = [];
+
+            $png = $this->withSettings($this->cacheSettings(), fn(): string => $this->withEffectiveImageDriver(
+                Images::DRIVER_GD,
+                fn(): string => SmartLinkManager::$plugin->qrCode->generateQrCode(
+                    'https://example.com/authenticated-large-png',
+                    [
+                        'format' => 'png',
+                        'size' => 2048,
+                        '_cache' => false,
+                        '_sizeMax' => 4096,
+                    ],
+                ),
+            ));
+
+            $this->assertValidPng($png, 2048);
+            self::assertSame([], $cache->setDurations);
+            self::assertSame('neighbor-bytes', $cache->get('smartlink-test-neighbor'));
+        });
+    }
+
+    public function testAuthenticatedLargeSvgExportIsExactAndUncachedAtUpperBoundary(): void
+    {
+        $this->withCraftCache(function(CascadeCache $cache): void {
+            $cache->set('smartlink-test-svg-neighbor', 'neighbor-svg-bytes', 300);
+            $cache->setDurations = [];
+
+            $options = [
+                'format' => 'svg',
+                'size' => 4096,
+                '_cache' => false,
+                '_sizeMax' => 4096,
+            ];
+            $first = $this->withSettings(
+                $this->cacheSettings(['defaultQrFormat' => 'svg']),
+                fn(): string => SmartLinkManager::$plugin->qrCode->generateQrCode('https://example.com/authenticated-large-svg', $options),
+            );
+            $second = $this->withSettings(
+                $this->cacheSettings(['defaultQrFormat' => 'svg']),
+                fn(): string => SmartLinkManager::$plugin->qrCode->generateQrCode('https://example.com/authenticated-large-svg', $options),
+            );
+
+            $this->assertValidSvg($first, 4096);
+            self::assertSame($first, $second);
+            self::assertSame([], $cache->setDurations);
+            self::assertSame('neighbor-svg-bytes', $cache->get('smartlink-test-svg-neighbor'));
+        });
+    }
+
+    public function testLargeSizeCeilingRequiresTheExplicitAuthenticatedExportOptions(): void
+    {
+        $public = $this->generateWithoutCache(['format' => 'svg', 'size' => 4096]);
+        $authenticated = $this->generateWithoutCache([
+            'format' => 'svg',
+            'size' => 4096,
+            '_cache' => false,
+            '_sizeMax' => 4096,
+        ]);
+
+        $this->assertValidSvg($public, 1000);
+        $this->assertValidSvg($authenticated, 4096);
+    }
+
     public function testEquivalentRequestStylesShareCacheIdentity(): void
     {
         $this->withCraftCache(function(CascadeCache $cache): void {
@@ -598,7 +669,7 @@ final class QrCodeServiceTest extends TestCase
         });
     }
 
-    public function testSmartLinkHelpersForwardErrorCorrectionOptions(): void
+    public function testPublicUrlHelpersDiscardStyleWhileServerSideHelpersForwardIt(): void
     {
         $link = $this->seedSmartLink(['slug' => 'smartlink-test-qr-helper-forwarding']);
         $link->qrCodeEnabled = true;
@@ -608,8 +679,8 @@ final class QrCodeServiceTest extends TestCase
         $this->withSettings(['defaultQrErrorCorrection' => 'M'], function() use ($link, $service): void {
             parse_str((string)parse_url($link->getQrCodeUrl(['errorCorrection' => ' h ']), PHP_URL_QUERY), $imageParams);
             parse_str((string)parse_url($link->getQrCodeDisplayUrl(['errorCorrection' => 'q']), PHP_URL_QUERY), $displayParams);
-            self::assertSame(' h ', $imageParams['errorCorrection']);
-            self::assertSame('q', $displayParams['errorCorrection']);
+            self::assertSame([], $imageParams);
+            self::assertSame([], $displayParams);
 
             self::assertSame('binary-fixture', $link->getQrCode(['errorCorrection' => 'H']));
             self::assertSame('H', $service->lastBinaryOptions['errorCorrection']);

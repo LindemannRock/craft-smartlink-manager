@@ -84,6 +84,18 @@ For template source paths, manual copy commands, and available variables, see [C
 
 ---
 
+## Public QR Query Parameters Do Not Change the Image
+
+**Symptom:** Adding `size`, `format`, color, eye, module, margin, or logo parameters to a public `/qr/{slug}` or `/qr/{slug}/view` URL does not change the code.
+
+**Expected behavior:** Public QR URLs always use the smart link's saved canonical QR settings. Change and save the QR fields on the smart link to change public output. The authenticated edit-page preview reflects unsaved styling at 150px, and its download menu supports exact preset and custom exports from 100–4096px. Public `download=1` remains available when downloads are enabled, but uses the saved size and style.
+
+After upgrading from a version that generated public query-selected variants, go to **Utilities → SmartLink Manager** and clear the SmartLink Manager QR cache once. Use the plugin utility for this upgrade cleanup so unrelated application cache data is left alone.
+
+For large print output, choose SVG from the authenticated edit-page download menu.
+
+---
+
 ## Analytics Not Recording Clicks
 
 **Symptom:** Clicks happen but the analytics tab shows 0 clicks, or click counts don't increment.

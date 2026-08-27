@@ -889,27 +889,10 @@ class SmartLink extends Element
      */
     public function getQrCodeUrl(array $options = []): string
     {
-        // Get the current default format from settings
         $settings = SmartLinkManager::$plugin->getSettings();
-        
-        $params = array_merge([
-            'size' => $this->qrCodeSize,
-            'color' => str_replace('#', '', $this->qrCodeColor ?: $settings->defaultQrColor),
-            'bg' => str_replace('#', '', $this->qrCodeBgColor ?: $settings->defaultQrBgColor),
-            'format' => $this->qrCodeFormat ?: ($settings->defaultQrFormat ?? 'png'),
-            'errorCorrection' => $settings->defaultQrErrorCorrection,
-            'margin' => $settings->defaultQrMargin,
-            'moduleStyle' => $settings->qrModuleStyle,
-            'eyeStyle' => $settings->qrEyeStyle,
-            'eyeColor' => $this->qrCodeEyeColor ? str_replace('#', '', $this->qrCodeEyeColor) : ($settings->qrEyeColor ? str_replace('#', '', $settings->qrEyeColor) : null),
-        ], $options);
-        
-        // Add logo ID if logos are enabled and one is set
-        if ($settings->enableQrLogo) {
-            $logoId = $this->qrLogoId ?: $settings->defaultQrLogoId;
-            if ($logoId) {
-                $params['logo'] = $logoId;
-            }
+        $params = [];
+        if (isset($options['download']) && is_scalar($options['download'])) {
+            $params['download'] = $options['download'];
         }
 
         $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
@@ -924,26 +907,13 @@ class SmartLink extends Element
      */
     public function getQrCodeDisplayUrl(array $options = []): string
     {
-        // Get the same parameters as getQrCodeUrl to ensure consistency
         $settings = SmartLinkManager::$plugin->getSettings();
-        
-        $params = array_merge([
-            'size' => $this->qrCodeSize,
-            'color' => str_replace('#', '', $this->qrCodeColor ?: $settings->defaultQrColor),
-            'bg' => str_replace('#', '', $this->qrCodeBgColor ?: $settings->defaultQrBgColor),
-            'format' => $this->qrCodeFormat ?: ($settings->defaultQrFormat ?? 'png'),
-            'errorCorrection' => $settings->defaultQrErrorCorrection,
-            'eyeColor' => $this->qrCodeEyeColor ? str_replace('#', '', $this->qrCodeEyeColor) : ($settings->qrEyeColor ? str_replace('#', '', $settings->qrEyeColor) : null),
-        ], $options);
-        
-        // Remove null values
-        $params = array_filter($params, fn($value) => $value !== null);
 
         $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
         $qrPrefix = $qrPrefix !== '' ? $qrPrefix : 'qr';
         $slug = ltrim((string) $this->slug, '/');
 
-        return $settings->buildPublicUrl("{$qrPrefix}/{$slug}/view", $this->siteId, $params);
+        return $settings->buildPublicUrl("{$qrPrefix}/{$slug}/view", $this->siteId);
     }
 
     /**

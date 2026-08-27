@@ -34,7 +34,11 @@
 
 				{# QR Code display #}
 				<div class="my-8 mx-auto">
-					<img src="{{ smartLink.getQrCodeUrl({ size: size ?? 300 }) }}" alt="{{ smartLink.title }} QR Code" class="mx-auto">
+					{% if format == 'svg' %}
+						<div class="mx-auto" style="width: {{ size }}px; max-width: 100%;">{{ qrCodeSvg|raw }}</div>
+					{% else %}
+						<img src="data:image/png;base64,{{ qrCodeData }}" width="{{ size }}" height="{{ size }}" alt="{{ smartLink.title }} QR Code" class="mx-auto">
+					{% endif %}
 				</div>
 
 				{# Instructions #}
@@ -43,7 +47,7 @@
 
 					{# Download button #}
 					<div class="mt-6 hidden">
-						<a href="{{ smartLink.getQrCodeUrl({ download: 1, format: format, size: size }) }}" download="{{ smartLink.slug }}-qr.{{ format }}" class="inline-block px-6 py-3 bg-gray-100 text-gray-700 no-underline rounded-lg font-medium text-sm transition-all duration-200 hover:bg-gray-200">
+						<a href="{{ smartLink.getQrCodeUrl({ download: 1 }) }}" download="{{ smartLink.slug }}-qr.{{ format }}" class="inline-block px-6 py-3 bg-gray-100 text-gray-700 no-underline rounded-lg font-medium text-sm transition-all duration-200 hover:bg-gray-200">
 							{{ "Download QR Code"|t('smartlink-manager') }}
 						</a>
 					</div>

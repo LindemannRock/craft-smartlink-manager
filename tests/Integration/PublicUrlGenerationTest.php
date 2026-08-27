@@ -99,19 +99,18 @@ final class PublicUrlGenerationTest extends TestCase
             'defaultQrErrorCorrection' => 'M',
         ], function() use ($link): void {
             $imageUrl = $link->getQrCodeUrl();
-            self::assertStringStartsWith('https://smart.example/go/qr/smartlink-test-qr-domain?', $imageUrl);
-            self::assertStringContainsString('format=', $imageUrl);
-            self::assertStringContainsString('errorCorrection=M', $imageUrl);
+            self::assertSame('https://smart.example/go/qr/smartlink-test-qr-domain', $imageUrl);
 
             $downloadUrl = $link->getQrCodeUrl(['format' => 'png', 'size' => 512, 'errorCorrection' => 'H', 'download' => 1]);
             self::assertStringStartsWith('https://smart.example/go/qr/smartlink-test-qr-domain?', $downloadUrl);
             self::assertStringContainsString('download=1', $downloadUrl);
-            self::assertStringContainsString('errorCorrection=H', $downloadUrl);
+            self::assertStringNotContainsString('size=', $downloadUrl);
+            self::assertStringNotContainsString('format=', $downloadUrl);
+            self::assertStringNotContainsString('errorCorrection=', $downloadUrl);
             self::assertStringNotContainsString('/actions/', $downloadUrl);
 
             $displayUrl = $link->getQrCodeDisplayUrl();
-            self::assertStringStartsWith('https://smart.example/go/qr/smartlink-test-qr-domain/view?', $displayUrl);
-            self::assertStringContainsString('errorCorrection=M', $displayUrl);
+            self::assertSame('https://smart.example/go/qr/smartlink-test-qr-domain/view', $displayUrl);
         });
     }
 
@@ -123,8 +122,8 @@ final class PublicUrlGenerationTest extends TestCase
             'smartlinkBaseUrl' => 'https://smart.example',
             'qrPrefix' => 'qr',
         ], function() use ($link): void {
-            self::assertStringStartsWith('https://smart.example/qr/smartlink-test-qr-standalone?', $link->getQrCodeUrl());
-            self::assertStringStartsWith('https://smart.example/qr/smartlink-test-qr-standalone/view?', $link->getQrCodeDisplayUrl());
+            self::assertSame('https://smart.example/qr/smartlink-test-qr-standalone', $link->getQrCodeUrl());
+            self::assertSame('https://smart.example/qr/smartlink-test-qr-standalone/view', $link->getQrCodeDisplayUrl());
         });
     }
 

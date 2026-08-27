@@ -86,7 +86,7 @@ SmartLink Manager automatically registers site-aware routes in addition to the s
 | `/{qrPrefix}/{slug}/view` | QR code display page |
 | `/{siteHandle}/{qrPrefix}/{slug}/view` | QR code display page (site-aware) |
 
-The site-aware routes allow the controller to resolve which Craft site to look up the smart link in, based on the `{siteHandle}` in the URL path.
+The site-aware routes allow the controller to resolve which Craft site to look up the smart link in, based on the `{siteHandle}` in the URL path. QR image and display URLs remain canonical on custom domains: their output comes from the resolved link's saved QR settings, and public styling query parameters are ignored.
 
 ## How URLs Are Built
 

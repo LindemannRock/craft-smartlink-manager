@@ -14,7 +14,7 @@ Intelligent device detection and app store routing for Craft CMS. Create smart l
 
 - **Smart Links** — Custom element type with per-platform URLs (iOS, Android, Huawei, Amazon, Windows, Mac, Fallback)
 - **Device Detection** — Matomo Device Detector identifies platform and redirects automatically
-- **QR Codes** — Styled PNG/SVG codes with effective Imagick/GD rendering, custom colors, module/eye styles, and PNG logo overlays
+- **QR Codes** — Canonical public PNG/SVG codes with saved styling, authenticated unsaved previews, and downloads up to 4096px
 - **Analytics** — Click tracking with device, browser, country, city, language, referrer, and source breakdown
 - **Integrations** — SEOmatic (Content SEO source and GTM/GA4 events), Redirect Manager (auto-301), Craft Link Field
 - **Smart Link Field** — Element picker field for entries and other elements
