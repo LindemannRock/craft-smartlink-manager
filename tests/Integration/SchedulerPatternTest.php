@@ -21,7 +21,6 @@ use craft\web\Response;
 use lindemannrock\base\helpers\DateFormatHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\helpers\RecurringQueueHelper;
-use lindemannrock\base\helpers\ScheduleHelper;
 use lindemannrock\base\queue\DeferredQueueJob;
 use lindemannrock\base\queue\PortableQueueScheduler;
 use lindemannrock\smartlinkmanager\controllers\SettingsController;
@@ -86,8 +85,9 @@ final class SchedulerPatternTest extends TestCase
         }
     }
 
-    public function testApprovedBaseClassesLoadFromTheLocalCheckoutWithRequiredApis(): void
+    public function testApprovedBaseClassesLoadFromTheResolvedApprovedSourceWithRequiredApis(): void
     {
+        $baseSource = $this->baseSourceRoot() . DIRECTORY_SEPARATOR;
         foreach ([
             RecurringQueueHelper::class => ['hasPending'],
             PortableQueueScheduler::class => ['pushAt', 'continue'],
@@ -96,7 +96,7 @@ final class SchedulerPatternTest extends TestCase
             $reflection = new ReflectionClass($class);
             $filename = $reflection->getFileName();
             self::assertIsString($filename);
-            self::assertStringContainsString('/plugins/base/src/', str_replace('\\', '/', $filename));
+            self::assertStringStartsWith($baseSource, realpath($filename) ?: '');
 
             foreach ($methods as $method) {
                 self::assertTrue($reflection->hasMethod($method), "{$class}::{$method} must be available.");

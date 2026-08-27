@@ -51,13 +51,8 @@ final class AnalyticsEmptySiteScopeTest extends TestCase
         $siteB = $sites[1];
 
         $this->withSettings(['enabledSites' => [(int) $siteA->id, (int) $siteB->id]], function() use ($siteA, $siteB): void {
-            $linkId = (new \craft\db\Query())
-                ->from('{{%smartlinkmanager}}')
-                ->select(['id'])
-                ->scalar();
-            if ($linkId === false) {
-                self::markTestSkipped('Empty site-scope regression requires an existing smart link row.');
-            }
+            $link = $this->seedSmartLink(['siteId' => (int) $siteA->id]);
+            self::assertNotNull($link->id);
 
             $ipPrefix = '198.51.100.' . random_int(1, 200);
             $testUids = [];
@@ -68,7 +63,7 @@ final class AnalyticsEmptySiteScopeTest extends TestCase
                     $uid = \craft\helpers\StringHelper::UUID();
                     $testUids[] = $uid;
                     Craft::$app->getDb()->createCommand()->insert('{{%smartlinkmanager_analytics}}', [
-                        'linkId' => (int) $linkId,
+                        'linkId' => (int) $link->id,
                         'siteId' => (int) $site->id,
                         'deviceType' => 'desktop',
                         'trafficType' => 'human',

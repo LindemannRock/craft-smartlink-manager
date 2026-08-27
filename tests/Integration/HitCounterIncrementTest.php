@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace lindemannrock\smartlinkmanager\tests\Integration;
 
 use Craft;
-use lindemannrock\smartlinkmanager\models\DeviceInfo;
 use lindemannrock\base\testing\StubConsoleRequest;
+use lindemannrock\smartlinkmanager\models\DeviceInfo;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use yii\base\Request as YiiRequest;
 

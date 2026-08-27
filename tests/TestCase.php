@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace lindemannrock\smartlinkmanager\tests;
 
 use Craft;
-use lindemannrock\base\testing\IntegrationTestCase;
 use lindemannrock\base\helpers\DateFormatHelper;
+use lindemannrock\base\testing\IntegrationTestCase;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\services\AnalyticsService;
 use lindemannrock\smartlinkmanager\services\SmartLinksService;
@@ -118,6 +118,20 @@ abstract class TestCase extends IntegrationTestCase
         $this->assertNotNull($row, "Smart link row {$id} not found.");
 
         return (int) $row['hits'];
+    }
+
+    /**
+     * Resolve the approved Base package source in workspace and installed layouts.
+     */
+    protected function baseSourceRoot(): string
+    {
+        $file = (new \ReflectionClass(DateFormatHelper::class))->getFileName();
+        $this->assertIsString($file);
+
+        $sourceRoot = realpath(dirname($file, 2));
+        $this->assertIsString($sourceRoot);
+
+        return $sourceRoot;
     }
 
     /**

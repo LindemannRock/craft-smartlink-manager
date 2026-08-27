@@ -69,10 +69,9 @@ final class PortableDisposableCacheTest extends TestCase
         parent::tearDown();
     }
 
-    public function testApprovedBaseCacheContractLoadsFromTheLocalApprovedSource(): void
+    public function testApprovedBaseCacheContractLoadsFromTheResolvedApprovedSource(): void
     {
-        $baseSource = realpath(dirname(__DIR__, 3) . '/base/src');
-        self::assertIsString($baseSource);
+        $baseSource = $this->baseSourceRoot();
 
         foreach ([
             CacheBackendStatus::class,
@@ -117,7 +116,7 @@ final class PortableDisposableCacheTest extends TestCase
         self::assertSame(CacheBackendStatus::BACKEND_MEMORY, CacheBackendStatus::fromCache(new ArrayCache())->backend);
         self::assertSame(CacheBackendStatus::BACKEND_UNKNOWN, CacheBackendStatus::fromCache(new PortablePersistentCache())->backend);
 
-        $managedSource = (string) file_get_contents(dirname(__DIR__, 3) . '/base/src/cache/CacheBackendStatus.php');
+        $managedSource = (string) file_get_contents($this->baseSourceRoot() . '/cache/CacheBackendStatus.php');
         self::assertStringNotContainsString('hiddenPrimary', $managedSource);
         self::assertStringNotContainsString('Reflection', $managedSource);
     }

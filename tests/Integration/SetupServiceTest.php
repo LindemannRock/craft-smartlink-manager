@@ -55,7 +55,7 @@ final class SetupServiceTest extends TestCase
             $this->withSettings([
                 'redirectTemplate' => $dir . '/redirect',
                 'qrTemplate' => $dir . '/qr',
-            ], function() use ($dir): void {
+            ], function(): void {
                 $settings = SmartLinkManager::$plugin->getSettings();
                 $bySetting = $this->indexBySetting($this->setup->templateStatuses($settings));
 
@@ -72,7 +72,7 @@ final class SetupServiceTest extends TestCase
             if (in_array('html', Craft::$app->getConfig()->getGeneral()->defaultTemplateExtensions, true)) {
                 $this->withSettings([
                     'redirectTemplate' => $dir . '/alt',
-                ], function() use ($dir): void {
+                ], function(): void {
                     $settings = SmartLinkManager::$plugin->getSettings();
                     $bySetting = $this->indexBySetting($this->setup->templateStatuses($settings));
 
@@ -93,7 +93,7 @@ final class SetupServiceTest extends TestCase
 
         $this->withSettings([
             'redirectTemplate' => $dir . '/redirect',
-        ], function() use ($dir): void {
+        ], function(): void {
             $settings = SmartLinkManager::$plugin->getSettings();
             $bySetting = $this->indexBySetting($this->setup->templateStatuses($settings));
 

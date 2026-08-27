@@ -20,6 +20,7 @@ use lindemannrock\smartlinkmanager\migrations\m260816_000000_normalize_analytics
 use lindemannrock\smartlinkmanager\services\analytics\AnalyticsMetadata;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use yii\db\ColumnSchema;
 use yii\db\JsonExpression;
 use yii\db\Schema;
 
@@ -31,7 +32,7 @@ use yii\db\Schema;
 final class AnalyticsMetadataStorageTest extends TestCase
 {
     /**
-     * @param class-string<yii\db\ColumnSchema> $columnSchemaClass
+     * @param class-string<ColumnSchema> $columnSchemaClass
      */
     #[DataProvider('nativeJsonColumnSchemas')]
     public function testNativeJsonColumnsEncodeArraysOnceAndPreEncodedStringsTwice(
@@ -228,14 +229,12 @@ final class AnalyticsMetadataStorageTest extends TestCase
             }
             self::assertSame($afterSecond, $this->rowsByMarker($table));
         } finally {
-            if ($db->tableExists($table)) {
-                $db->createCommand()->dropTable($table)->execute();
-            }
+            $this->dropTableIfExists($table);
         }
     }
 
     /**
-     * @return iterable<string, array{class-string<yii\db\ColumnSchema>, string}>
+     * @return iterable<string, array{class-string<ColumnSchema>, string}>
      */
     public static function nativeJsonColumnSchemas(): iterable
     {
@@ -253,5 +252,13 @@ final class AnalyticsMetadataStorageTest extends TestCase
             ->orderBy(['id' => SORT_ASC])
             ->indexBy('marker')
             ->all();
+    }
+
+    private function dropTableIfExists(string $table): void
+    {
+        $db = Craft::$app->getDb();
+        if ($db->tableExists($table)) {
+            $db->createCommand()->dropTable($table)->execute();
+        }
     }
 }

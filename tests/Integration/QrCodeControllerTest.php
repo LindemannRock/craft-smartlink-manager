@@ -266,7 +266,8 @@ final class QrCodeControllerTest extends TestCase
         try {
             $controller->actionGenerate($link->slug);
             self::fail('Renderer failure should return a server error.');
-        } catch (ServerErrorHttpException $e) {
+        } catch (\Throwable $e) {
+            self::assertInstanceOf(ServerErrorHttpException::class, $e);
             self::assertSame('QR code generation failed.', $e->getMessage());
             self::assertNotEmpty($controller->loggedErrors);
             self::assertSame('Failed to generate QR code', $controller->loggedErrors[0]['message']);
@@ -321,7 +322,8 @@ final class QrCodeControllerTest extends TestCase
         try {
             $controller->actionDisplay($link->slug);
             self::fail('Display renderer failure should return a server error.');
-        } catch (ServerErrorHttpException $e) {
+        } catch (\Throwable $e) {
+            self::assertInstanceOf(ServerErrorHttpException::class, $e);
             self::assertSame('QR code generation failed.', $e->getMessage());
             self::assertNotEmpty($controller->loggedErrors);
             self::assertSame('Failed to generate QR code', $controller->loggedErrors[0]['message']);
@@ -410,7 +412,6 @@ final class TestQrCodeController extends QrCodeController
     {
         return $this->previewLogoAsset;
     }
-
 }
 
 final class QrControllerRequest extends Request
