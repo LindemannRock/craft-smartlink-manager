@@ -25,6 +25,7 @@ use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\fields\Link as LinkField;
+use craft\helpers\App;
 use craft\services\Dashboard;
 use craft\services\Elements;
 use craft\services\Fields;
@@ -655,27 +656,68 @@ class SmartLinkManager extends Plugin
         $qrPrefix = trim((string) ($settings->qrPrefix ?? 'qr'), '/');
         $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
         $qrPrefix = $qrPrefix !== '' ? $qrPrefix : 'qr';
-        $siteHandles = array_map(static fn($site) => preg_quote($site->handle, '/'), Craft::$app->getSites()->getAllSites());
-        $siteHandlePattern = !empty($siteHandles) ? implode('|', $siteHandles) : '[a-zA-Z0-9_-]+';
+        $siteIdentifiers = [];
+        foreach (Craft::$app->getSites()->getAllSites(false) as $site) {
+            $siteIdentifiers[] = preg_quote($site->handle, '/');
+            $siteIdentifiers[] = preg_quote((string)$site->id, '/');
+            $siteIdentifiers[] = preg_quote($site->uid, '/');
+        }
+        $siteIdentifiers = array_values(array_unique($siteIdentifiers));
+        $siteIdentifierPattern = $siteIdentifiers !== [] ? implode('|', $siteIdentifiers) : '[a-zA-Z0-9_-]+';
+        $siteRoutePrefix = '<siteHandle:' . $siteIdentifierPattern . '>';
 
         $rules = [
             'smartlink-manager/redirect/auto/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/auto-redirect',
-            '<siteHandle:' . $siteHandlePattern . '>/smartlink-manager/redirect/auto/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/auto-redirect',
+            $siteRoutePrefix . '/smartlink-manager/redirect/auto/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/auto-redirect',
             'smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
-            '<siteHandle:' . $siteHandlePattern . '>/smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
+            $siteRoutePrefix . '/smartlink-manager/redirect/go/<slug:[a-zA-Z0-9\-\_]+>/<platform:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/redirect/go',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
             $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
-            '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
-            '<siteHandle:' . $siteHandlePattern . '>/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
+            $siteRoutePrefix . '/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>' => 'smartlink-manager/qr-code/generate',
+            $siteRoutePrefix . '/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view' => 'smartlink-manager/qr-code/display',
             'smartlink-manager/qr-code/generate' => 'smartlink-manager/qr-code/generate',
         ];
 
+        $baseUrl = trim((string)App::parseEnv($settings->smartlinkBaseUrl ?? ''));
+        $basePath = trim((string)parse_url($baseUrl, PHP_URL_PATH), '/');
+        $tokenMatches = [];
+        preg_match_all('/\{site(?:Handle|Id|Uid)\}/', $baseUrl, $tokenMatches);
+        $customBasePaths = [];
+        $tokenCount = count($tokenMatches[0]);
+        if ($tokenCount === 1 && preg_match('/\{site(?:Handle|Id|Uid)\}/', $basePath) === 1) {
+            $customBasePaths[] = str_replace($tokenMatches[0][0], $siteRoutePrefix, $basePath);
+        } elseif ($tokenCount > 1) {
+            foreach (Craft::$app->getSites()->getAllSites(false) as $site) {
+                $expandedPath = trim((string)parse_url($settings->buildPublicUrl('', $site->id), PHP_URL_PATH), '/');
+                if ($expandedPath !== '') {
+                    $customBasePaths[] = $expandedPath;
+                }
+            }
+        } elseif ($basePath !== '') {
+            $customBasePaths[] = $basePath;
+        }
+        $customBasePaths = array_values(array_unique(array_filter(
+            $customBasePaths,
+            static fn(string $path): bool => $path !== '' && $path !== $siteRoutePrefix,
+        )));
+
+        foreach ($customBasePaths as $customBasePath) {
+            $rules[$customBasePath . '/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/qr-code/generate';
+            $rules[$customBasePath . '/' . $qrPrefix . '/<slug:[a-zA-Z0-9\-\_]+>/view'] = 'smartlink-manager/qr-code/display';
+        }
+
         if ($usePrefix) {
             $rules[$slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
-            $rules['<siteHandle:' . $siteHandlePattern . '>/' . $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            $rules[$siteRoutePrefix . '/' . $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            foreach ($customBasePaths as $customBasePath) {
+                $rules[$customBasePath . '/' . $slugPrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            }
         } else {
             $rules['<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
-            $rules['<siteHandle:' . $siteHandlePattern . '>/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            $rules[$siteRoutePrefix . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            foreach ($customBasePaths as $customBasePath) {
+                $rules[$customBasePath . '/<slug:[a-zA-Z0-9\-\_]+>'] = 'smartlink-manager/redirect/index';
+            }
         }
 
         return $rules;

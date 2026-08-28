@@ -97,7 +97,9 @@ Variables:
 }
 ```
 
-You can pass either `site` or `siteId`. If both are present, `site` wins. Invalid explicit site handles or IDs return no result instead of falling back to another site.
+You can pass either `site` or `siteId`. If both are present, `site` wins. An explicit site is an exact boundary: invalid sites, missing variants, unavailable links, and sites where SmartLink Manager is disabled return no result instead of falling back to another site. Rejected resolution does not increment hits or write analytics.
+
+When neither argument is present, the resolver keeps its current/default-site behavior: it tries the current site first and may use the existing default fallback semantics when that exact variant is absent.
 
 When no smart link matches, `null` is returned:
 

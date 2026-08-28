@@ -15,6 +15,7 @@ use lindemannrock\base\helpers\SafeSegmentHelper;
 use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\helpers\PublicSiteHelper;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -61,43 +62,16 @@ class QrCodeController extends Controller
             throw new NotFoundHttpException('QR code not found.');
         }
 
-        // Get the smart link for the resolved site first, then fallback across sites.
-        $smartLink = SmartLink::find()
-            ->slug($slug)
-            ->siteId($site->id)
-            ->status(null) // Allow any status
-            ->one();
-
-        if (!$smartLink) {
-            $smartLink = SmartLink::find()
-                ->slug($slug)
-                ->site('*')
-                ->status(null)
-                ->one();
-        }
-
-        if (!$smartLink) {
-            throw new NotFoundHttpException('QR code not found.');
-        }
-
-        // Check if link is trashed
-        if ($smartLink->trashed) {
-            throw new NotFoundHttpException('QR code not found.');
-        }
-
-        // Check if SmartLink Manager is enabled for the smart link's site
         $settings = SmartLinkManager::$plugin->getSettings();
-        if (!$settings->isSiteEnabled($smartLink->siteId)) {
-            $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
+        if (!$settings->isSiteEnabled($site->id)) {
             return $this->redirectToNotFound();
         }
 
-        // If QR is disabled, redirect to 404 redirect URL (consistent with smart link behavior)
+        $smartLink = $this->resolveAvailablePublicLink($slug, $site);
         if (!$smartLink->qrCodeEnabled) {
             return $this->redirectToNotFound();
         }
 
-        $settings = SmartLinkManager::$plugin->getSettings();
         $options = $this->canonicalOptions($smartLink);
         $size = (int)$options['size'];
         $format = (string)$options['format'];
@@ -205,11 +179,16 @@ class QrCodeController extends Controller
                 throw new NotFoundHttpException('Smart link not specified.');
             }
 
-            $smartLink = $this->resolvePublicLink($slug, $siteHandle);
-            if (!$settings->isSiteEnabled($smartLink->siteId)) {
-                $this->logInfo('SmartLink Manager disabled for this site', ['siteId' => $smartLink->siteId, 'slug' => $slug]);
+            $slug = strtolower(trim($slug));
+            $site = $this->resolveSite($siteHandle);
+            if (!$site) {
+                throw new NotFoundHttpException('QR code not found.');
+            }
+            if (!$settings->isSiteEnabled($site->id)) {
                 return $this->redirectToNotFound();
             }
+
+            $smartLink = $this->resolveAvailablePublicLink($slug, $site);
             if (!$smartLink->qrCodeEnabled) {
                 return $this->redirectToNotFound();
             }
@@ -386,29 +365,18 @@ class QrCodeController extends Controller
         return $smartLink;
     }
 
-    private function resolvePublicLink(string $slug, ?string $siteHandle): SmartLink
+    private function resolveAvailablePublicLink(string $slug, Site $site): SmartLink
     {
-        $slug = strtolower(trim($slug));
-        $site = $this->resolveSite($siteHandle);
-        if (!$site) {
-            throw new NotFoundHttpException('QR code not found.');
-        }
-
         $smartLink = SmartLink::find()
             ->slug($slug)
             ->siteId($site->id)
             ->status(null)
             ->one();
 
-        if (!$smartLink) {
-            $smartLink = SmartLink::find()
-                ->slug($slug)
-                ->site('*')
-                ->status(null)
-                ->one();
-        }
-
-        if (!$smartLink instanceof SmartLink || $smartLink->trashed) {
+        if (!$smartLink instanceof SmartLink
+            || $smartLink->trashed
+            || $smartLink->getStatus() !== SmartLink::STATUS_ENABLED
+        ) {
             throw new NotFoundHttpException('QR code not found.');
         }
 
@@ -424,15 +392,16 @@ class QrCodeController extends Controller
     }
 
     /**
-     * Resolve request site from route handle (if provided), otherwise use current site.
+     * Resolve request site from a route identifier or configured public host.
      */
     private function resolveSite(?string $siteHandle): ?Site
     {
         if ($siteHandle) {
-            return Craft::$app->getSites()->getSiteByHandle($siteHandle);
+            return PublicSiteHelper::resolveIdentifier($siteHandle);
         }
 
-        return Craft::$app->getSites()->getCurrentSite();
+        return PublicSiteHelper::resolveConfiguredRequest()
+            ?? Craft::$app->getSites()->getCurrentSite();
     }
 
     /**

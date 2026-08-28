@@ -31,6 +31,8 @@ When QR code generation is enabled on a smart link, two endpoints become availab
 | `/{qrPrefix}/{slug}` | Raw QR code image (PNG or SVG) |
 | `/{qrPrefix}/{slug}/view` | Display page with title, image, and download button |
 
+Both public endpoints resolve the exact requested Craft site. They return normal not-found behavior unless SmartLink Manager is enabled for that site and the site's link variant is active, available, and QR-enabled. A rejected request does not render or populate the QR cache.
+
 ## Enabling QR Codes Per Link
 
 On the smart link edit page, toggle **QR Code Enabled** to activate QR endpoints for that link. When disabled, both endpoints return a 404.
@@ -111,6 +113,8 @@ With default settings (`qrPrefix` = `qr`, `slugPrefix` = `go`):
 
 - Image: `https://example.com/qr/my-app`
 - Display page: `https://example.com/qr/my-app/view`
+
+When `smartlinkBaseUrl` contains `{siteHandle}`, `{siteId}`, or `{siteUid}`, the same exact site identifier appears in both URLs and is routable. See [Custom Domain](custom-domain.md#multisite-site-aware-urls) for the portability tradeoffs between those tokens.
 
 Public QR image and display URLs always use the link's saved QR configuration. Styling query parameters are deliberately ignored, so public URLs remain canonical and cacheable instead of creating a separate rendered variant for every query string.
 

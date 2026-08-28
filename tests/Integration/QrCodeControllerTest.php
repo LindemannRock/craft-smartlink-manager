@@ -21,6 +21,7 @@ use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -495,9 +496,187 @@ final class QrCodeControllerTest extends TestCase
     public function testMissingLinkRemainsNotFound(): void
     {
         $this->installRequest();
-        $this->expectException(NotFoundHttpException::class);
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+        $controller = $this->controller();
 
-        $this->controller()->actionGenerate('smartlink-test-qr-does-not-exist');
+        foreach (['image', 'display'] as $route) {
+            try {
+                $route === 'image'
+                    ? $controller->actionGenerate('smartlink-test-qr-does-not-exist')
+                    : $controller->actionDisplay('smartlink-test-qr-does-not-exist');
+                self::fail("Missing link should not reach the public QR {$route} renderer.");
+            } catch (NotFoundHttpException) {
+                self::assertTrue(true);
+            }
+        }
+
+        self::assertSame(0, $service->calls);
+        self::assertSame([], $controller->lastTemplateVariables);
+    }
+
+    public function testPublicQrRejectsScheduledLinksBeforeRendering(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-scheduled', 'png');
+        $link->postDate = new \DateTime('+1 day');
+        self::assertTrue(Craft::$app->getElements()->saveElement($link));
+        $this->installRequest();
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        $this->expectException(NotFoundHttpException::class);
+        try {
+            $this->controller()->actionGenerate($link->slug);
+        } finally {
+            self::assertSame([], $service->lastOptions);
+        }
+    }
+
+    public function testPublicQrRejectsDisabledRequestedSiteWithoutCrossSiteFallback(): void
+    {
+        $sites = Craft::$app->getSites()->getAllSites(false);
+        self::assertGreaterThanOrEqual(2, count($sites));
+        [$enabledSite, $disabledSite] = array_values($sites);
+
+        $notFoundUrl = 'https://not-found.example.test/disabled-site';
+        $this->withSettings([
+            'enabledSites' => [$enabledSite->id],
+            'notFoundRedirectUrl' => $notFoundUrl,
+        ], function() use ($disabledSite, $enabledSite, $notFoundUrl): void {
+            $link = $this->qrLink('smartlink-test-qr-disabled-site', 'png');
+            $this->installRequest();
+            $service = new ControllerRecordingQrCodeService();
+            $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+            foreach (['image', 'display'] as $route) {
+                $this->installRequest();
+                $controller = $this->controller();
+                $response = $route === 'image'
+                    ? $controller->actionGenerate($link->slug, $disabledSite->handle)
+                    : $controller->actionDisplay($link->slug, $disabledSite->handle);
+
+                self::assertSame(302, $response->getStatusCode());
+                self::assertSame($notFoundUrl, $response->headers->get('Location'));
+                self::assertSame([], $controller->lastTemplateVariables);
+            }
+
+            self::assertSame(0, $service->calls);
+            self::assertSame(0, $this->fetchHitsFromDb((int)$link->id));
+            self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]));
+            self::assertSame($enabledSite->id, $link->siteId);
+        });
+    }
+
+    public function testPublicQrDisabledLinkUsesConfiguredNotFoundRedirectWithoutSideEffects(): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-disabled-redirect', 'png');
+        $link->qrCodeEnabled = false;
+        self::assertTrue(Craft::$app->getElements()->saveElement($link));
+        $notFoundUrl = 'https://not-found.example.test/qr-disabled';
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        $this->withSettings(['notFoundRedirectUrl' => $notFoundUrl], function() use ($link, $notFoundUrl, $service): void {
+            foreach (['image', 'display'] as $route) {
+                $this->installRequest();
+                $controller = $this->controller();
+                $response = $route === 'image'
+                    ? $controller->actionGenerate($link->slug)
+                    : $controller->actionDisplay($link->slug);
+
+                self::assertSame(302, $response->getStatusCode());
+                self::assertSame($notFoundUrl, $response->headers->get('Location'));
+                self::assertSame([], $controller->lastTemplateVariables);
+            }
+
+            self::assertSame(0, $service->calls);
+            self::assertSame(0, $this->fetchHitsFromDb((int)$link->id));
+            self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]));
+        });
+    }
+
+    #[DataProvider('unavailablePublicLinkProvider')]
+    public function testPublicQrImageAndDisplayRejectUnavailableLinksWithoutSideEffects(string $state): void
+    {
+        $link = $this->qrLink('smartlink-test-qr-unavailable-' . $state, 'png');
+        $slug = $link->slug;
+        $linkId = (int)$link->id;
+
+        match ($state) {
+            'disabled' => $link->setEnabledForSite(false),
+            'pending' => $link->postDate = new \DateTime('+5 minutes'),
+            'future' => $link->postDate = new \DateTime('+2 days'),
+            'expired' => [$link->postDate = new \DateTime('-2 days'), $link->dateExpired = new \DateTime('-1 day')],
+            'trashed' => null,
+            default => throw new \InvalidArgumentException("Unknown public link state: {$state}"),
+        };
+
+        if ($state === 'trashed') {
+            self::assertTrue(Craft::$app->getElements()->deleteElement($link));
+        } else {
+            self::assertTrue(Craft::$app->getElements()->saveElement($link));
+        }
+
+        $this->installRequest();
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+        $controller = $this->controller();
+
+        foreach (['image', 'display'] as $route) {
+            try {
+                $route === 'image'
+                    ? $controller->actionGenerate($slug)
+                    : $controller->actionDisplay($slug);
+                self::fail("Unavailable {$state} link should not reach the public QR {$route} renderer.");
+            } catch (NotFoundHttpException) {
+                self::assertTrue(true);
+            }
+        }
+
+        self::assertSame(0, $service->calls);
+        self::assertSame([], $controller->lastTemplateVariables);
+        self::assertSame(0, $this->fetchHitsFromDb($linkId));
+        self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $linkId]));
+    }
+
+    /** @return array<string, array{0: string}> */
+    public static function unavailablePublicLinkProvider(): array
+    {
+        return [
+            'disabled' => ['disabled'],
+            'pending' => ['pending'],
+            'future dated' => ['future'],
+            'expired' => ['expired'],
+            'trashed' => ['trashed'],
+        ];
+    }
+
+    public function testPublicQrSiteIdentifiersSelectTheExactLocalizedVariant(): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        $site = $sites[1];
+        $link = $this->qrLink('smartlink-test-qr-exact-site', 'png');
+        $variant = SmartLink::find()->id($link->id)->siteId($site->id)->status(null)->one();
+        self::assertInstanceOf(SmartLink::class, $variant);
+        $variant->title = 'Exact QR site variant';
+        $variant->fallbackUrl = 'https://example.com/exact-qr-site';
+        self::assertTrue(Craft::$app->getElements()->saveElement($variant));
+
+        $this->installRequest();
+        $service = new ControllerRecordingQrCodeService();
+        $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+        $this->withSettings(['smartlinkBaseUrl' => 'https://smart.example/{siteHandle}'], function() use ($link, $service, $site): void {
+            foreach ([$site->handle, (string)$site->id, $site->uid] as $identifier) {
+                $this->controller()->actionGenerate($link->slug, $identifier);
+                self::assertStringContainsString('/' . $site->handle . '/', $service->lastUrl);
+
+                $controller = $this->controller();
+                $controller->actionDisplay($link->slug, $identifier);
+                self::assertSame('Exact QR site variant', $controller->lastTemplateVariables['smartLink']->title);
+            }
+        });
     }
 
     public function testRendererFailureReturnsServerErrorAndIsLogged(): void
@@ -701,9 +880,13 @@ final class ControllerRecordingQrCodeService extends QrCodeService
 
     /** @var array<string, mixed> */
     public array $lastOptions = [];
+    public string $lastUrl = '';
+    public int $calls = 0;
 
     public function generateQrCode(string $url, array $options = []): string
     {
+        $this->calls++;
+        $this->lastUrl = $url;
         $this->lastOptions = $options;
 
         return ($options['format'] ?? 'png') === 'svg' ? $this->svgOutput : $this->pngOutput;

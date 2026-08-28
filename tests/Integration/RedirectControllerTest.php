@@ -91,6 +91,46 @@ final class RedirectControllerTest extends TestCase
         });
     }
 
+    public function testPublicSiteIdentifiersResolveTheExactRedirectVariant(): void
+    {
+        $this->installWebHarness();
+        $this->swapPluginComponent('smartlink-manager', 'deviceDetection', new MobileIosDeviceDetectionService());
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        $site = $sites[1];
+        $link = $this->seedSmartLink([
+            'slug' => 'smartlink-test-redirect-site-identifiers',
+            'iosUrl' => 'https://example.com/source-ios',
+        ]);
+        $variant = SmartLink::find()->id($link->id)->siteId($site->id)->status(null)->one();
+        self::assertInstanceOf(SmartLink::class, $variant);
+        $variant->title = 'Exact redirect site variant';
+        $variant->iosUrl = 'https://example.com/exact-site-ios';
+        self::assertTrue(Craft::$app->getElements()->saveElement($variant));
+
+        $this->withSettings([
+            'ipHashSalt' => '0123456789abcdef0123456789abcdef',
+            'enableGeoDetection' => false,
+        ], function() use ($link, $site): void {
+            foreach ([$site->handle, (string)$site->id, $site->uid] as $identifier) {
+                $controller = $this->controller();
+                $response = $controller->actionIndex($link->slug, $identifier);
+                self::assertSame(200, $response->getStatusCode());
+                self::assertSame('Exact redirect site variant', $controller->lastVariables['smartLink']->title);
+
+                $response = $this->controller()->actionGo($link->slug, 'ios', $identifier);
+                self::assertSame('https://example.com/exact-site-ios', $response->headers->get('Location'));
+            }
+
+            $analytics = (new \craft\db\Query())
+                ->from('{{%smartlinkmanager_analytics}}')
+                ->where(['linkId' => $link->id])
+                ->all();
+            self::assertCount(3, $analytics);
+            self::assertSame([$site->id], array_values(array_unique(array_map('intval', array_column($analytics, 'siteId')))));
+        });
+    }
+
     public function testLandingPageAddsSiteParamWhenConfiguredBaseUrlHasNoSiteToken(): void
     {
         $this->installWebHarness();

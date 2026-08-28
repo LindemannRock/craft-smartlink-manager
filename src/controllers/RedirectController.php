@@ -15,6 +15,7 @@ use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\base\helpers\UrlSafetyHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\smartlinkmanager\elements\SmartLink;
+use lindemannrock\smartlinkmanager\helpers\PublicSiteHelper;
 use lindemannrock\smartlinkmanager\models\DeviceInfo;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use yii\web\Response;
@@ -237,19 +238,10 @@ class RedirectController extends Controller
             $platform = 'auto';
         }
 
-        // Resolve site from route first, then from query param, then fallback to current
-        $site = null;
-        if ($siteHandle) {
-            $site = Craft::$app->getSites()->getSiteByHandle($siteHandle);
-        }
+        // Resolve site from route first, then from the cache-safe site query contract.
+        $site = $this->resolveSite($siteHandle);
         if (!$site) {
-            $siteParam = Craft::$app->getRequest()->getParam('site');
-            if ($siteParam) {
-                $site = Craft::$app->getSites()->getSiteByHandle((string) $siteParam);
-            }
-        }
-        if (!$site) {
-            $site = Craft::$app->getSites()->getCurrentSite();
+            return $this->redirectToNotFound();
         }
         $siteId = $site->id;
 
@@ -413,20 +405,21 @@ class RedirectController extends Controller
     }
 
     /**
-     * Resolve request site from route handle (if provided), otherwise use current site.
+     * Resolve request site from a route identifier, action query, or configured public host.
      */
     private function resolveSite(?string $siteHandle): ?Site
     {
         if ($siteHandle) {
-            return Craft::$app->getSites()->getSiteByHandle($siteHandle);
+            return PublicSiteHelper::resolveIdentifier($siteHandle);
         }
 
         $siteParam = Craft::$app->getRequest()->getParam('site');
         if ($siteParam) {
-            return Craft::$app->getSites()->getSiteByHandle((string) $siteParam);
+            return PublicSiteHelper::resolveIdentifier((string)$siteParam);
         }
 
-        return Craft::$app->getSites()->getCurrentSite();
+        return PublicSiteHelper::resolveConfiguredRequest()
+            ?? Craft::$app->getSites()->getCurrentSite();
     }
 
     /**

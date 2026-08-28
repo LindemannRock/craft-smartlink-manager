@@ -296,6 +296,10 @@ If a settings save fails, keep the submitted form open and check the inline fiel
 
 Supported tokens: `{siteHandle}`, `{siteId}`, `{siteUid}`.
 
+All three tokens are routable for redirects, QR images, and QR display pages. If a tokenized URL returns not found, confirm that the identifier still belongs to an enabled Craft site, SmartLink Manager is enabled for that site, and the exact site's link variant is active. QR routes do not borrow a matching slug from another site.
+
+Use `{siteHandle}` for the most readable and portable troubleshooting path. Numeric `{siteId}` values can differ between environments after sites are created or imported in a different order. `{siteUid}` values remain stable through project config, but make the URL longer.
+
 ---
 
 ## "No Smart Links Found" When Querying in Templates

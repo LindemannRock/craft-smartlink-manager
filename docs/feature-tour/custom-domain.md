@@ -68,6 +68,8 @@ SMARTLINK_BASE_URL=https://go.myapp.com/{siteHandle}
 | `{siteId}` | The site's numeric ID |
 | `{siteUid}` | The site's UID |
 
+All three tokens generate routable redirect, QR image, and QR display URLs. Handles are usually the easiest to read. Numeric IDs are shorter but can differ between Craft environments, so do not assume a production site has the same ID as its development counterpart. Site UIDs are stable across project-config environments, but produce longer paths.
+
 With `https://go.myapp.com/{siteHandle}`, links generate URLs like:
 
 - English site: `https://go.myapp.com/en/go/my-app`
@@ -80,13 +82,15 @@ SmartLink Manager automatically registers site-aware routes in addition to the s
 | Route | Controller |
 |-------|-----------|
 | `/{slugPrefix}/{slug}` | Redirect controller |
-| `/{siteHandle}/{slugPrefix}/{slug}` | Redirect controller (site-aware) |
+| `/{siteIdentifier}/{slugPrefix}/{slug}` | Redirect controller (site-aware) |
 | `/{qrPrefix}/{slug}` | QR code image |
-| `/{siteHandle}/{qrPrefix}/{slug}` | QR code image (site-aware) |
+| `/{siteIdentifier}/{qrPrefix}/{slug}` | QR code image (site-aware) |
 | `/{qrPrefix}/{slug}/view` | QR code display page |
-| `/{siteHandle}/{qrPrefix}/{slug}/view` | QR code display page (site-aware) |
+| `/{siteIdentifier}/{qrPrefix}/{slug}/view` | QR code display page (site-aware) |
 
-The site-aware routes allow the controller to resolve which Craft site to look up the smart link in, based on the `{siteHandle}` in the URL path. QR image and display URLs remain canonical on custom domains: their output comes from the resolved link's saved QR settings, and public styling query parameters are ignored.
+`{siteIdentifier}` is the generated handle, numeric ID, or UID, depending on the token in `smartlinkBaseUrl`. The route resolves that identifier to one exact enabled Craft site. Static path segments before the token are supported as well, such as `https://go.myapp.com/public/{siteUid}`.
+
+QR image and display URLs remain canonical on custom domains: their output comes from an active, QR-enabled link variant on that exact requested site, and public styling query parameters are ignored. Unknown, deleted, disabled, or stale site identifiers use the normal not-found behavior; they never fall back to another site's QR content.
 
 ## How URLs Are Built
 

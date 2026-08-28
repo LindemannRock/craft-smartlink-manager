@@ -83,7 +83,7 @@ class AnalyticsSummaryService
             ->from('{{%smartlinkmanager_analytics}} a')
             ->innerJoin('{{%smartlinkmanager}} s', '[[a.linkId]] = [[s.id]]')
             ->innerJoin('{{%elements}} e', 's.id = e.id')
-            ->innerJoin('{{%elements_sites}} es', '[[e.id]] = [[es.elementId]]')
+            ->innerJoin('{{%elements_sites}} es', '[[e.id]] = [[es.elementId]] AND [[es.siteId]] = [[a.siteId]]')
             ->select('COUNT(DISTINCT [[a.linkId]])')
             ->where(['es.enabled' => true]);
 
@@ -275,7 +275,7 @@ class AnalyticsSummaryService
                 'SUM(CASE WHEN ' . DbHelper::jsonExtract('a.metadata', 'source') . ' != \'qr\' OR ' . DbHelper::jsonExtract('a.metadata', 'source') . ' IS NULL THEN 1 ELSE 0 END) as [[directVisits]]',
             ])
             ->groupBy(['a.linkId', 'a.siteId'])
-            ->orderBy(['clicks' => SORT_DESC])
+            ->orderBy(['clicks' => SORT_DESC, 'a.linkId' => SORT_ASC, 'a.siteId' => SORT_ASC])
             ->limit($limit);
 
         $this->applyDateRangeFilter($query, $dateRange, 'a.dateCreated');
@@ -288,10 +288,11 @@ class AnalyticsSummaryService
         $topLinks = [];
 
         $linkIds = array_unique(array_column($results, 'linkId'));
+        $siteIds = array_unique(array_column($results, 'siteId'));
         $smartLinksMap = [];
         if (!empty($linkIds)) {
-            foreach (SmartLink::find()->id($linkIds)->status(null)->all() as $link) {
-                $smartLinksMap[$link->id] = $link;
+            foreach (SmartLink::find()->id($linkIds)->siteId($siteIds)->status(null)->all() as $link) {
+                $smartLinksMap[self::linkSiteKey((int)$link->id, (int)$link->siteId)] = $link;
             }
         }
 
@@ -299,31 +300,34 @@ class AnalyticsSummaryService
         if (!empty($linkIds)) {
             $maxDatesQuery = (new Query())
                 ->from('{{%smartlinkmanager_analytics}}')
-                ->select(['linkId', 'MAX([[dateCreated]]) as [[maxDate]]'])
-                ->where(['linkId' => $linkIds])
-                ->groupBy(['linkId']);
+                ->select(['linkId', 'siteId', 'MAX([[dateCreated]]) as [[maxDate]]'])
+                ->where(['linkId' => $linkIds, 'siteId' => $siteIds])
+                ->groupBy(['linkId', 'siteId']);
             $this->applyDateRangeFilter($maxDatesQuery, $dateRange);
 
             $lastInteractions = (new Query())
                 ->from(['a' => '{{%smartlinkmanager_analytics}}'])
                 ->innerJoin(
                     ['m' => $maxDatesQuery],
-                    '[[a.linkId]] = [[m.linkId]] AND [[a.dateCreated]] = [[m.maxDate]]'
+                    '[[a.linkId]] = [[m.linkId]] AND [[a.siteId]] = [[m.siteId]] AND [[a.dateCreated]] = [[m.maxDate]]'
                 )
+                ->orderBy(['a.linkId' => SORT_ASC, 'a.siteId' => SORT_ASC, 'a.dateCreated' => SORT_DESC, 'a.id' => SORT_DESC])
                 ->all();
 
             foreach ($lastInteractions as $interaction) {
-                if (!isset($lastInteractionsMap[$interaction['linkId']])) {
-                    $lastInteractionsMap[$interaction['linkId']] = $interaction;
+                $key = self::linkSiteKey((int)$interaction['linkId'], (int)$interaction['siteId']);
+                if (!isset($lastInteractionsMap[$key])) {
+                    $lastInteractionsMap[$key] = $interaction;
                 }
             }
         }
 
         foreach ($results as $row) {
-            $smartLink = $smartLinksMap[$row['linkId']] ?? null;
+            $key = self::linkSiteKey((int)$row['linkId'], (int)$row['siteId']);
+            $smartLink = $smartLinksMap[$key] ?? null;
 
             if ($smartLink && $smartLink->getStatus() === SmartLink::STATUS_ENABLED) {
-                $lastInteraction = $lastInteractionsMap[$row['linkId']] ?? null;
+                $lastInteraction = $lastInteractionsMap[$key] ?? null;
 
                 $lastInteractionType = 'Unknown';
                 $lastDestinationUrl = '';
@@ -361,6 +365,7 @@ class AnalyticsSummaryService
 
                 $topLinks[] = [
                     'id' => $smartLink->id,
+                    'siteId' => (int)$row['siteId'],
                     'name' => $smartLink->title,
                     'slug' => $smartLink->slug,
                     'enabled' => $smartLink->enabled,
@@ -376,6 +381,11 @@ class AnalyticsSummaryService
         }
 
         return $topLinks;
+    }
+
+    private static function linkSiteKey(int $linkId, int $siteId): string
+    {
+        return $linkId . ':' . $siteId;
     }
 
     /**

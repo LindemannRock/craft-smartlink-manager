@@ -35,6 +35,8 @@ SMARTLINK_MANAGER_DEFAULT_CITY="New York"
 
 SmartLink Manager renders the redirect and QR landing pages from your site's `templates/` folder. Complete [Installation & Setup](installation.md#post-install-setup) first so the starter templates exist before public links render.
 
+All three `smartlinkBaseUrl` site tokens are routable for redirects, QR images, and QR display pages. Prefer `{siteHandle}` for readable paths. `{siteId}` is compact but numeric IDs can differ between environments; `{siteUid}` is stable across project config but longer. Tokenized requests resolve one exact enabled Craft site, and unavailable sites or links use normal not-found behavior.
+
 The `redirectTemplate` / `qrTemplate` fields only change where SmartLink Manager looks for those templates. Leave them empty to use the default paths, or point them at custom paths after you have placed templates there. For bundled template locations, manual copy commands, and the variables each template receives, see [Custom templates](../developers/custom-templates.md).
 
 ## Behavior Settings

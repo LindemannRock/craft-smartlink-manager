@@ -40,7 +40,7 @@ class SmartLinkResolver extends Resolver
             return null;
         }
 
-        $smartLink = self::findSmartLink($slug, $siteId);
+        $smartLink = self::findSmartLink($slug, $siteId, self::hasExplicitSite($arguments));
         if ($smartLink === null || !self::isUsable($smartLink)) {
             return null;
         }
@@ -58,7 +58,7 @@ class SmartLinkResolver extends Resolver
         $destinationUrl = UrlSafetyHelper::sanitizeRedirectUrl($destinationUrl);
 
         if ($smartLink->trackAnalytics && SmartLinkManager::$plugin->getSettings()->enableAnalytics) {
-            self::trackResolution($smartLink, $destinationUrl, $platform, $clickType, $siteId, 'graphql');
+            self::trackResolution($smartLink, $destinationUrl, $platform, $clickType, (int)$smartLink->siteId, 'graphql');
         }
 
         return self::toArray($smartLink, $destinationUrl, $platform, $clickType);
@@ -137,17 +137,47 @@ class SmartLinkResolver extends Resolver
      */
     private static function resolveRequestedSiteId(array $arguments): ?int
     {
+        $site = $arguments['site'] ?? null;
+        if (is_string($site) && trim($site) !== '') {
+            return GqlHelper::resolveSiteId(
+                $arguments,
+                Craft::$app->getSites()->getCurrentSite()->id,
+            );
+        }
+
+        if (array_key_exists('siteId', $arguments)
+            && $arguments['siteId'] !== null
+            && (!is_numeric($arguments['siteId']) || (int)$arguments['siteId'] <= 0)
+        ) {
+            return null;
+        }
+
         return GqlHelper::resolveSiteId(
             $arguments,
             Craft::$app->getSites()->getCurrentSite()->id,
         );
     }
 
-    private static function findSmartLink(string $slug, int $siteId): ?SmartLink
+    /** @param array<string, mixed> $arguments */
+    private static function hasExplicitSite(array $arguments): bool
+    {
+        $site = $arguments['site'] ?? null;
+        if (is_string($site) && trim($site) !== '') {
+            return true;
+        }
+
+        return array_key_exists('siteId', $arguments) && $arguments['siteId'] !== null;
+    }
+
+    private static function findSmartLink(string $slug, int $siteId, bool $exactSite): ?SmartLink
     {
         $smartLink = SmartLinkManager::$plugin->smartLinks->getSmartLinkBySlug($slug, $siteId);
 
-        return $smartLink ?? SmartLinkManager::$plugin->smartLinks->getSmartLinkBySlug($slug, null);
+        if ($smartLink !== null || $exactSite) {
+            return $smartLink;
+        }
+
+        return SmartLinkManager::$plugin->smartLinks->getSmartLinkBySlug($slug, null);
     }
 
     private static function isUsable(SmartLink $smartLink): bool

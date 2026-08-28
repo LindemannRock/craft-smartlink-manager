@@ -90,6 +90,8 @@ The `active()` shortcut on the Twig variable returns only enabled links:
 
 `getQrCodeUrl()` returns the canonical public image URL. Public style options passed to this helper are discarded; set the link's QR fields to change visitor-facing output. Trusted server-side code can still use `getQrCode()` or `getQrCodeDataUri()` with rendering options.
 
+If `smartlinkBaseUrl` uses `{siteHandle}`, `{siteId}`, or `{siteUid}`, the helper expands the token from the element's site and the resulting public QR route resolves that exact site variant. Numeric site IDs can differ between environments; site UIDs are stable but longer.
+
 ### Get Links That Are Tracked
 
 ```twig

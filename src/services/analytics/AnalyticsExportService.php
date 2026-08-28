@@ -89,10 +89,11 @@ class AnalyticsExportService
         $slugPrefix = $slugPrefix !== '' ? $slugPrefix : 'go';
 
         $linkIds = array_unique(array_column($results, 'linkId'));
+        $siteIds = array_unique(array_column($results, 'siteId'));
         $smartLinks = [];
         if (!empty($linkIds)) {
-            foreach (SmartLink::find()->id($linkIds)->status(null)->all() as $link) {
-                $smartLinks[$link->id] = $link;
+            foreach (SmartLink::find()->id($linkIds)->siteId($siteIds)->status(null)->all() as $link) {
+                $smartLinks[self::linkSiteKey((int)$link->id, (int)$link->siteId)] = $link;
             }
         }
 
@@ -104,7 +105,7 @@ class AnalyticsExportService
 
         $exportData = [];
         foreach ($results as $row) {
-            $smartLink = $smartLinks[$row['linkId']] ?? null;
+            $smartLink = $smartLinks[self::linkSiteKey((int)$row['linkId'], (int)$row['siteId'])] ?? null;
 
             if (!$smartLink) {
                 continue;
@@ -202,6 +203,11 @@ class AnalyticsExportService
         }
 
         return $exportData;
+    }
+
+    private static function linkSiteKey(int $linkId, int $siteId): string
+    {
+        return $linkId . ':' . $siteId;
     }
 
     /**

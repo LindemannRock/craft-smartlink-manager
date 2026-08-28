@@ -20,8 +20,10 @@ use lindemannrock\smartlinkmanager\gql\queries\SmartLinkQuery;
 use lindemannrock\smartlinkmanager\gql\resolvers\SmartLinkResolver;
 use lindemannrock\smartlinkmanager\models\DeviceInfo;
 use lindemannrock\smartlinkmanager\services\DeviceDetectionService;
+use lindemannrock\smartlinkmanager\services\SmartLinksService;
 use lindemannrock\smartlinkmanager\tests\Stubs\StubDeviceDetectionService;
 use lindemannrock\smartlinkmanager\tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use yii\base\Request as YiiRequest;
 
 /**
@@ -217,18 +219,175 @@ final class GraphqlSmartLinkTest extends TestCase
         self::assertCount(100, $results);
     }
 
-    public function testInvalidExplicitSiteDoesNotFallBack(): void
+    #[DataProvider('invalidExplicitSiteProvider')]
+    public function testInvalidExplicitSiteReturnsNoResultsWithoutSideEffects(array $siteArguments): void
     {
-        $this->seedSmartLink();
+        $link = $this->seedSmartLink();
+        Craft::$app->set('request', new StubWebRequest(userIp: '203.0.113.42'));
 
-        $result = SmartLinkResolver::resolveAll(
+        $result = SmartLinkResolver::resolve(
             null,
-            ['site' => '__missing_site__'],
+            ['slug' => $link->slug, ...$siteArguments],
             null,
             $this->createMock(ResolveInfo::class),
         );
 
-        self::assertSame([], $result);
+        $results = SmartLinkResolver::resolveAll(
+            null,
+            $siteArguments,
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+
+        self::assertNull($result);
+        self::assertSame([], $results);
+        self::assertSame(0, $this->fetchHitsFromDb((int)$link->id));
+        self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]));
+    }
+
+    /** @return array<string, array{0: array<string, int|string>}> */
+    public static function invalidExplicitSiteProvider(): array
+    {
+        return [
+            'zero site ID' => [['siteId' => 0]],
+            'negative site ID' => [['siteId' => -1]],
+            'nonexistent positive site ID' => [['siteId' => 2147483647]],
+            'invalid nonempty site handle' => [['site' => '__missing_site__']],
+        ];
+    }
+
+    public function testNonemptySiteHandleTakesPrecedenceOverInvalidSiteId(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+        $link = $this->seedSmartLink(['siteId' => $site->id]);
+        Craft::$app->set('request', new StubWebRequest(userIp: '203.0.113.42'));
+
+        $arguments = ['site' => $site->handle, 'siteId' => 0];
+        $result = SmartLinkResolver::resolve(
+            null,
+            ['slug' => $link->slug, ...$arguments],
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+        $results = SmartLinkResolver::resolveAll(
+            null,
+            $arguments,
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+
+        self::assertIsArray($result);
+        self::assertSame($site->id, $result['siteId']);
+        self::assertContains($link->id, array_column($results, 'id'));
+    }
+
+    public function testExplicitSiteMissDoesNotResolveAnotherSiteOrRecordAnalytics(): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        [$sourceSite, $requestedSite] = $sites;
+
+        $link = $this->seedSmartLink([
+            'siteId' => $sourceSite->id,
+            'fallbackUrl' => 'https://example.com/source-site',
+        ]);
+        $service = new GraphqlExactSiteSmartLinksService($link, $requestedSite->id);
+        $this->swapPluginComponent('smartlink-manager', 'smartLinks', $service);
+        Craft::$app->set('request', new StubWebRequest(userIp: '203.0.113.42'));
+
+        $result = SmartLinkResolver::resolve(
+            null,
+            ['slug' => $link->slug, 'siteId' => $requestedSite->id],
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+
+        self::assertNull($result);
+        self::assertSame([[$link->slug, $requestedSite->id]], $service->lookups);
+        self::assertSame(0, $this->fetchHitsFromDb((int)$link->id));
+        self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]));
+    }
+
+    #[DataProvider('implicitSiteProvider')]
+    public function testResolveWithoutExplicitSitePreservesCurrentSiteFallbackSemantics(array $siteArguments): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        $currentSite = Craft::$app->getSites()->getCurrentSite();
+        $sourceSite = $sites[1];
+        $link = $this->seedSmartLink([
+            'siteId' => $sourceSite->id,
+            'fallbackUrl' => 'https://example.com/default-site-fallback',
+        ]);
+        $sourceVariant = SmartLink::find()->id($link->id)->siteId($sourceSite->id)->status(null)->one();
+        self::assertInstanceOf(SmartLink::class, $sourceVariant);
+        $service = new GraphqlExactSiteSmartLinksService($sourceVariant, $currentSite->id);
+        $this->swapPluginComponent('smartlink-manager', 'smartLinks', $service);
+        Craft::$app->set('request', new StubWebRequest(userIp: '203.0.113.42'));
+
+        $listResults = SmartLinkResolver::resolveAll(
+            null,
+            $siteArguments,
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+        self::assertContains($link->id, array_column($listResults, 'id'));
+        self::assertSame(0, $this->fetchHitsFromDb((int)$link->id));
+
+        $result = SmartLinkResolver::resolve(
+            null,
+            ['slug' => $link->slug, ...$siteArguments],
+            null,
+            $this->createMock(ResolveInfo::class),
+        );
+
+        self::assertIsArray($result);
+        self::assertSame($sourceSite->id, $result['siteId']);
+        self::assertSame([[$link->slug, $currentSite->id], [$link->slug, null]], $service->lookups);
+        $analytics = $this->fetchRow('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]);
+        self::assertNotNull($analytics);
+        self::assertSame($sourceSite->id, (int)$analytics['siteId']);
+    }
+
+    /** @return array<string, array{0: array<string, mixed>}> */
+    public static function implicitSiteProvider(): array
+    {
+        return [
+            'arguments omitted' => [[]],
+            'site handle is null' => [['site' => null]],
+            'site ID is null' => [['siteId' => null]],
+        ];
+    }
+
+    public function testExplicitSiteRejectsUnavailableOrPluginDisabledLinkWithoutAnalytics(): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        [$enabledSite, $disabledSite] = $sites;
+        $pending = $this->seedSmartLink([
+            'siteId' => $enabledSite->id,
+            'postDate' => new \DateTime('+1 day'),
+        ]);
+        $disabledSiteLink = $this->seedSmartLink(['siteId' => $disabledSite->id]);
+        Craft::$app->set('request', new StubWebRequest(userIp: '203.0.113.42'));
+
+        $this->withSettings(['enabledSites' => [$enabledSite->id]], function() use ($disabledSite, $disabledSiteLink, $enabledSite, $pending): void {
+            foreach ([
+                [$pending, ['siteId' => $enabledSite->id]],
+                [$disabledSiteLink, ['site' => $disabledSite->handle]],
+            ] as [$link, $siteArguments]) {
+                $result = SmartLinkResolver::resolve(
+                    null,
+                    ['slug' => $link->slug, ...$siteArguments],
+                    null,
+                    $this->createMock(ResolveInfo::class),
+                );
+
+                self::assertNull($result);
+                self::assertSame(0, $this->fetchHitsFromDb((int)$link->id));
+                self::assertSame(0, $this->countRows('{{%smartlinkmanager_analytics}}', ['linkId' => $link->id]));
+            }
+        });
     }
 }
 
@@ -261,5 +420,30 @@ final class GraphqlSmartLinkDesktopDeviceDetectionService extends DeviceDetectio
     public function getRedirectUrl(SmartLink $smartLink, DeviceInfo $deviceInfo, ?string $language = null): string
     {
         return '';
+    }
+}
+
+final class GraphqlExactSiteSmartLinksService extends SmartLinksService
+{
+    /** @var list<array{0: string, 1: int|null}> */
+    public array $lookups = [];
+
+    public function __construct(
+        private readonly SmartLink $sourceLink,
+        private readonly int $requestedSiteId,
+        array $config = [],
+    ) {
+        parent::__construct($config);
+    }
+
+    public function getSmartLinkBySlug(string $slug, ?int $siteId = null): ?SmartLink
+    {
+        $this->lookups[] = [$slug, $siteId];
+
+        if ($siteId === $this->requestedSiteId) {
+            return null;
+        }
+
+        return $siteId === null ? $this->sourceLink : null;
     }
 }

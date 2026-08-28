@@ -14,6 +14,7 @@ use Craft;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use lindemannrock\base\helpers\DateFormatHelper;
+use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\tests\TestCase;
 
 /**
@@ -163,6 +164,123 @@ final class AnalyticsFormattingTest extends TestCase
         self::assertCount(4, $rows);
         self::assertSame(['Direct', 'Direct', 'Direct', 'Landing'], $sources);
         self::assertSame(['Button', 'Redirect', 'Redirect', 'Redirect'], $clickTypes);
+    }
+
+    public function testSiteScopedEnrichmentKeepsLocalizedVariantAndLatestInteractionTogether(): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        [$siteA, $siteB] = $sites;
+        $link = $this->seedSmartLink([
+            'siteId' => $siteA->id,
+            'title' => 'Site A analytics title',
+            'fallbackUrl' => 'https://example.com/site-a',
+        ]);
+
+        $siteBLink = SmartLink::find()->id($link->id)->siteId($siteB->id)->status(null)->one();
+        self::assertInstanceOf(SmartLink::class, $siteBLink);
+        $siteBLink->title = 'Site B analytics title';
+        $siteBLink->fallbackUrl = 'https://example.com/site-b';
+        self::assertTrue(Craft::$app->getElements()->saveElement($siteBLink));
+
+        $now = new \DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone()));
+        $this->insertAnalyticsRow($link->id, $siteA->id, $now->modify('-1 minute'), [
+            'source' => 'direct',
+            'clickType' => 'redirect',
+            'redirectUrl' => 'https://example.com/latest-site-a',
+        ]);
+        $this->insertAnalyticsRow($link->id, $siteB->id, $now, [
+            'source' => 'direct',
+            'clickType' => 'redirect',
+            'redirectUrl' => 'https://example.com/latest-site-b',
+        ]);
+
+        $topLinks = $this->analytics->getTopLinks('today', 5, $siteA->id);
+        self::assertCount(1, $topLinks);
+        self::assertSame('Site A analytics title', $topLinks[0]['name']);
+        self::assertSame('https://example.com/latest-site-a', $topLinks[0]['lastDestinationUrl']);
+
+        $exportRows = $this->analytics->getExportData($link->id, 'today', $siteB->id);
+        self::assertCount(1, $exportRows);
+        self::assertSame('Site B analytics title', $exportRows[0]['name']);
+    }
+
+    public function testLinksUsedRequiresTheAnalyticsSiteVariantToBeEnabled(): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        [$siteA, $siteB] = $sites;
+        $link = $this->seedSmartLink(['siteId' => $siteA->id]);
+        $siteAVariant = SmartLink::find()->id($link->id)->siteId($siteA->id)->status(null)->one();
+        $siteBVariant = SmartLink::find()->id($link->id)->siteId($siteB->id)->status(null)->one();
+        self::assertInstanceOf(SmartLink::class, $siteAVariant);
+        self::assertInstanceOf(SmartLink::class, $siteBVariant);
+        $siteAVariant->setEnabledForSite(false);
+        self::assertTrue(Craft::$app->getElements()->saveElement($siteAVariant));
+        self::assertSame(SmartLink::STATUS_ENABLED, $siteBVariant->getStatus());
+
+        $this->insertAnalyticsRow(
+            (int)$link->id,
+            $siteA->id,
+            new \DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone())),
+        );
+
+        $summary = $this->analytics->getAnalyticsSummary('today', null, $siteA->id);
+        self::assertSame(1, $summary['totalClicks']);
+        self::assertSame(0, $summary['activeLinks']);
+        self::assertSame(0, $summary['linksUsed']);
+        self::assertSame([], $summary['topLinks']);
+    }
+
+    public function testLatestInteractionTieIsDeterministicWithinEachSite(): void
+    {
+        $site = Craft::$app->getSites()->getPrimarySite();
+        $link = $this->seedSmartLink(['siteId' => $site->id]);
+        $time = new \DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone()));
+        $this->insertAnalyticsRow($link->id, $site->id, $time, [
+            'clickType' => 'redirect',
+            'redirectUrl' => 'https://example.com/first-tied-interaction',
+        ]);
+        $this->insertAnalyticsRow($link->id, $site->id, $time, [
+            'clickType' => 'redirect',
+            'redirectUrl' => 'https://example.com/second-tied-interaction',
+        ]);
+
+        $topLinks = $this->analytics->getTopLinks('today', 5, $site->id);
+
+        self::assertCount(1, $topLinks);
+        self::assertSame(2, $topLinks[0]['clicks']);
+        self::assertSame($site->id, $topLinks[0]['siteId']);
+        self::assertSame('https://example.com/second-tied-interaction', $topLinks[0]['lastDestinationUrl']);
+    }
+
+    public function testAllSitesTopLinksKeepsOneLocalizedRowPerSite(): void
+    {
+        $sites = array_values(Craft::$app->getSites()->getAllSites(false));
+        self::assertGreaterThanOrEqual(2, count($sites));
+        [$siteA, $siteB] = $sites;
+        $link = $this->seedSmartLink([
+            'siteId' => $siteA->id,
+            'title' => 'All sites title A',
+        ]);
+        $siteBLink = SmartLink::find()->id($link->id)->siteId($siteB->id)->status(null)->one();
+        self::assertInstanceOf(SmartLink::class, $siteBLink);
+        $siteBLink->title = 'All sites title B';
+        self::assertTrue(Craft::$app->getElements()->saveElement($siteBLink));
+        $time = new \DateTime('now', new \DateTimeZone(Craft::$app->getTimeZone()));
+        $this->insertAnalyticsRow($link->id, $siteA->id, $time, null);
+        $this->insertAnalyticsRow($link->id, $siteB->id, $time, null);
+
+        $topLinks = $this->analytics->getTopLinks('today', 5, null);
+        $ownedRows = array_values(array_filter(
+            $topLinks,
+            static fn(array $row): bool => (int)$row['id'] === (int)$link->id,
+        ));
+
+        self::assertCount(2, $ownedRows);
+        self::assertSame([$siteA->id, $siteB->id], array_column($ownedRows, 'siteId'));
+        self::assertSame(['All sites title A', 'All sites title B'], array_column($ownedRows, 'name'));
+        self::assertSame(['Unknown', 'Unknown'], array_column($ownedRows, 'lastInteractionType'));
     }
 
     private function insertAnalyticsRow(int $linkId, int $siteId, \DateTime $dateCreated, mixed $metadata = null): void
