@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'Smart lenke ikke funnet',
     'Cannot edit trashed smart links.' => 'Kan ikke redigere smarte lenker i papirkurven.',
     'Failed to generate QR code.' => 'Kunne ikke generere QR Code.',
+    'Failed {label}: configured template path cannot be copied.' => '{label} mislyktes: den konfigurerte malbanen kan ikke kopieres.',
+    'Skipped {label}: template already resolves for every enabled site.' => '{label} ble hoppet over: malen finnes allerede for hvert aktivert nettsted.',
     'Settings saved.' => 'Innstillinger lagret.',
     'Couldn\'t save settings.' => 'Kunne ikke lagre innstillingene.',
     'Field layout saved.' => 'Feltoppsett lagret.',

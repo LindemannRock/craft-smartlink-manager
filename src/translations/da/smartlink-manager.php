@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'Smart link ikke fundet',
     'Cannot edit trashed smart links.' => 'Kan ikke redigere smarte links i papirkurven.',
     'Failed to generate QR code.' => 'Kunne ikke generere QR Code.',
+    'Failed {label}: configured template path cannot be copied.' => '{label} mislykkedes: den konfigurerede skabelonsti kan ikke kopieres.',
+    'Skipped {label}: template already resolves for every enabled site.' => '{label} blev sprunget over: skabelonen findes allerede for hvert aktiveret websted.',
     'Settings saved.' => 'Indstillinger gemt.',
     'Couldn\'t save settings.' => 'Kunne ikke gemme indstillingerne.',
     'Field layout saved.' => 'Feltlayout gemt.',

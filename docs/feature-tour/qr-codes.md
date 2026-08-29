@@ -173,7 +173,7 @@ The server-side data URI and raw-data methods continue to accept rendering optio
 
 ## The Display Page
 
-The `/{qrPrefix}/{slug}/view` endpoint renders a styled page containing the QR code with context. A custom template can be set via the `qrTemplate` setting.
+The `/{qrPrefix}/{slug}/view` endpoint renders a styled page containing the QR code with context. A custom template can be set via the `qrTemplate` setting. In multisite projects, a `templates/{siteHandle}/...` override wins for its matching site and the global template remains the fallback; Setup uses the same effective setting and Craft resolution rules as the public display route.
 
 For the starter template, copy command, and available variables, see [Custom templates](../developers/custom-templates.md#qrtwig).
 

@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'スマートリンクが見つかりません',
     'Cannot edit trashed smart links.' => 'ゴミ箱内のスマートリンクは編集できません。',
     'Failed to generate QR code.' => 'QR コードの生成に失敗しました。',
+    'Failed {label}: configured template path cannot be copied.' => '{label} の処理に失敗しました：設定されたテンプレートパスはコピーできません。',
+    'Skipped {label}: template already resolves for every enabled site.' => '{label} をスキップしました：テンプレートは有効なすべてのサイトですでに解決されています。',
     'Settings saved.' => '設定を保存しました。',
     'Couldn\'t save settings.' => '設定を保存できませんでした。',
     'Field layout saved.' => 'フィールドレイアウトを保存しました。',

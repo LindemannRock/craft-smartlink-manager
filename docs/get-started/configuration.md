@@ -37,7 +37,11 @@ SmartLink Manager renders the redirect and QR landing pages from your site's `te
 
 All three `smartlinkBaseUrl` site tokens are routable for redirects, QR images, and QR display pages. Prefer `{siteHandle}` for readable paths. `{siteId}` is compact but numeric IDs can differ between environments; `{siteUid}` is stable across project config but longer. Tokenized requests resolve one exact enabled Craft site, and unavailable sites or links use normal not-found behavior.
 
-The `redirectTemplate` / `qrTemplate` fields only change where SmartLink Manager looks for those templates. Leave them empty to use the default paths, or point them at custom paths after you have placed templates there. For bundled template locations, manual copy commands, and the variables each template receives, see [Custom templates](../developers/custom-templates.md).
+The `redirectTemplate` / `qrTemplate` fields only change where SmartLink Manager looks for those templates. Leave them empty to use the default paths, or point them at custom paths after you have placed templates there. Paths may be extensionless, explicitly end in `.twig` or `.html`, name an exact extensionless file, or resolve to an `index` template using Craft's normal site-template rules.
+
+In multisite projects, Craft checks `templates/{siteHandle}/...` before the global path. Setup reports a template Ready only when every enabled Craft site where SmartLink Manager is enabled can resolve it. `{siteHandle}` means the Craft site handle exactly; SmartLink Manager does not substitute the site's language code unless that code is also the handle.
+
+When a Control Panel field contains `$ENV_VAR`, the raw expression remains stored and visible so it is portable between environments. Setup, the copy command, and public redirect/QR rendering resolve its current value at use time. Define it for both web and console processes and map it to the same relative template path in each environment. For bundled template locations, manual copy commands, and the variables each template receives, see [Custom templates](../developers/custom-templates.md).
 
 ## Behavior Settings
 

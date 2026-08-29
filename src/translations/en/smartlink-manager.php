@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'Smart link not found',
     'Cannot edit trashed smart links.' => 'Cannot edit trashed smart links.',
     'Failed to generate QR code.' => 'Failed to generate QR code.',
+    'Failed {label}: configured template path cannot be copied.' => 'Failed {label}: configured template path cannot be copied.',
+    'Skipped {label}: template already resolves for every enabled site.' => 'Skipped {label}: template already resolves for every enabled site.',
     'Settings saved.' => 'Settings saved.',
     'Couldn\'t save settings.' => 'Couldn\'t save settings.',
     'Field layout saved.' => 'Field layout saved.',

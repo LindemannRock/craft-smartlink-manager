@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'Smart link niet gevonden',
     'Cannot edit trashed smart links.' => 'Verwijderde smart links kunnen niet worden bewerkt.',
     'Failed to generate QR code.' => 'QR-code kon niet worden gegenereerd.',
+    'Failed {label}: configured template path cannot be copied.' => 'Mislukt voor {label}: het geconfigureerde templatepad kan niet worden gekopieerd.',
+    'Skipped {label}: template already resolves for every enabled site.' => '{label} overgeslagen: de template wordt al voor elke ingeschakelde site gevonden.',
     'Settings saved.' => 'Instellingen opgeslagen.',
     'Couldn\'t save settings.' => 'Instellingen konden niet worden opgeslagen.',
     'Field layout saved.' => 'Veldindeling opgeslagen.',

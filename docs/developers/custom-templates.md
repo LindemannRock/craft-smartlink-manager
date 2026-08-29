@@ -44,7 +44,20 @@ Once a file exists at `templates/smartlink-manager/{name}.twig`, the default pat
 - Each path field accepts a `$ENV_VAR` in the Control Panel, or `App::env()` in the config file.
 - A value in `config/smartlink-manager.php` overrides the Control Panel field (the CP field is shown disabled with an override warning).
 
-The CP tells you whether the files are in place: **Settings → General → Template Settings** shows a live status box ("All required frontend templates are available." or a warning pointing you to setup), and the **Setup** page lists each template as Ready or Missing with its resolved destination path.
+The raw `$ENV_VAR` expression stays in the setting for portability and Control Panel display. Whenever Setup, the copy command, or a public redirect/QR page uses it, SmartLink Manager resolves the current environment value first. Define the variable for both the web and console processes. An undefined or empty variable is treated as a missing configured template rather than being sent to Twig as a literal template name.
+
+### Multisite resolution
+
+For each enabled Craft site where SmartLink Manager is enabled, template lookup follows Craft's site-template behavior:
+
+1. `templates/{siteHandle}/{configured-path}`
+2. `templates/{configured-path}` as the global fallback
+
+The configured path may explicitly include `.twig` or `.html`, name an exact extensionless file, or resolve to a directory's `index` template. An explicit `.twig` path is not satisfied by a same-stem `.html` file. `{siteHandle}` is the Craft site handle exactly; a site's language code is not an automatic substitute unless it is also the handle.
+
+The CP tells you whether the files are in place: **Settings → General → Template Settings** shows a live status box ("All required frontend templates are available." or a warning pointing you to setup), and the **Setup** page lists each template as Ready or Missing with its effective destination path. Ready means every in-scope site can resolve the same effective path that the public controller will render.
+
+The setup command only manages the global fallback. It skips copying when every site resolves through overrides or fallback; otherwise it creates one global file. It never creates, replaces, or deletes per-site overrides. Explicit destination extensions are preserved, while an extensionless destination receives `.twig`.
 
 See [Configuration → Template settings](../get-started/configuration.md) for the settings reference.
 

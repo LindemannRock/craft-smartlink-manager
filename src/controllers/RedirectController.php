@@ -140,7 +140,7 @@ class RedirectController extends Controller
 
         // Render the template - all links will point to action URLs for tracking
         $settings = SmartLinkManager::$plugin->getSettings();
-        $template = $settings->redirectTemplate ?: 'smartlink-manager/redirect';
+        $template = $settings->getResolvedRedirectTemplate();
         $rawSource = Craft::$app->getRequest()->getParam('src', 'direct');
         $source = in_array($rawSource, ['qr', 'direct'], true) ? $rawSource : 'direct';
         $goUrls = $this->buildTrackedGoUrls($smartLink, $source);

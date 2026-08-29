@@ -109,7 +109,7 @@ class QrCodeController extends Controller
 
             // Get custom template path from settings
             $settings = SmartLinkManager::$plugin->getSettings();
-            $template = $settings->qrTemplate ?: 'smartlink-manager/qr';
+            $template = $settings->getResolvedQrTemplate();
 
             SmartLinkManager::$plugin->integration->prepareSeomaticMetadata($smartLink);
 

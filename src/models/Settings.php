@@ -368,6 +368,26 @@ class Settings extends Model
     }
 
     /**
+     * Returns the effective redirect template path.
+     *
+     * @since 5.38.0
+     */
+    public function getResolvedRedirectTemplate(): string
+    {
+        return $this->resolveTemplatePath($this->redirectTemplate, 'smartlink-manager/redirect');
+    }
+
+    /**
+     * Returns the effective QR display template path.
+     *
+     * @since 5.38.0
+     */
+    public function getResolvedQrTemplate(): string
+    {
+        return $this->resolveTemplatePath($this->qrTemplate, 'smartlink-manager/qr');
+    }
+
+    /**
      * @inheritdoc
      */
     protected function defineBehaviors(): array
@@ -792,6 +812,16 @@ class Settings extends Model
         $url = trim((string) App::parseEnv($this->notFoundRedirectUrl));
 
         return $url !== '' ? $url : '/';
+    }
+
+    private function resolveTemplatePath(?string $configuredTemplate, string $defaultTemplate): string
+    {
+        $configuredTemplate = trim((string)$configuredTemplate);
+        if ($configuredTemplate === '') {
+            return $defaultTemplate;
+        }
+
+        return trim((string)App::parseEnv($configuredTemplate), '/');
     }
 
     /**

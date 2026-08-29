@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'لم يتم العثور على smart link',
     'Cannot edit trashed smart links.' => 'لا يمكن تعديل smart links المحذوفة.',
     'Failed to generate QR code.' => 'فشل في إنشاء QR Code.',
+    'Failed {label}: configured template path cannot be copied.' => 'فشل {label}: لا يمكن نسخ مسار Template المهيأ.',
+    'Skipped {label}: template already resolves for every enabled site.' => 'تم تخطي {label}: تم حل Template بالفعل لكل موقع مفعّل.',
     'Settings saved.' => 'تم حفظ الإعدادات.',
     'Couldn\'t save settings.' => 'تعذّر حفظ الإعدادات.',
     'Field layout saved.' => 'تم حفظ تخطيط الحقول.',

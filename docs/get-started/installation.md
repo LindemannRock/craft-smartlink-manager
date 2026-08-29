@@ -70,7 +70,7 @@ php craft smartlink-manager/setup/copy-templates
 ddev craft smartlink-manager/setup/copy-templates
 ```
 
-The command copies missing templates only and skips existing files. Review and customize the copied templates before going live.
+The command installs only a global fallback for any template that an enabled SmartLink Manager site cannot resolve. It skips copying when every enabled site already has either a `templates/{siteHandle}/...` override or the global fallback, and it never creates or replaces per-site overrides. Review and customize copied templates before going live.
 
 For the full template reference, available variables, and manual copy paths, see [Custom templates](../developers/custom-templates.md).
 

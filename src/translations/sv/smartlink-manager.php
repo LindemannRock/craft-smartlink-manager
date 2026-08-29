@@ -139,6 +139,8 @@ return [
     'Smart link not found' => 'Smart link hittades inte',
     'Cannot edit trashed smart links.' => 'Det går inte att redigera smarta länkar i papperskorgen.',
     'Failed to generate QR code.' => 'Det gick inte att generera QR Code.',
+    'Failed {label}: configured template path cannot be copied.' => 'Misslyckades med {label}: den konfigurerade mallsökvägen kan inte kopieras.',
+    'Skipped {label}: template already resolves for every enabled site.' => '{label} hoppades över: mallen hittas redan för varje aktiverad webbplats.',
     'Settings saved.' => 'Inställningar sparade.',
     'Couldn\'t save settings.' => 'Det gick inte att spara inställningarna.',
     'Field layout saved.' => 'Fältlayout sparad.',

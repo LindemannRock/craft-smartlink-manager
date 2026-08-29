@@ -90,18 +90,22 @@ php craft smartlink-manager/setup/copy-templates
 ddev craft smartlink-manager/setup/copy-templates
 ```
 
-The command will:
+The command is a global-fallback installer. It will:
 
 1. Read the current SmartLink Manager template settings.
-2. Copy only missing starter templates by default.
-3. Create destination folders automatically.
-4. Skip existing destination templates unless you target one template interactively or pass `--overwrite`.
+2. Check every enabled Craft site where SmartLink Manager is enabled, using `templates/{siteHandle}/...` overrides before the global fallback.
+3. Skip copying when every in-scope site already resolves the configured template.
+4. Otherwise create one global destination and its folders; it never creates per-site copies.
+5. Preserve an explicit `.twig`, `.html`, or other extension exactly, and append `.twig` only to an extensionless destination.
+6. Skip an existing exact global destination unless you target one template interactively or pass `--overwrite`.
 
 | Option | Description |
 |--------|-------------|
 | `--template=redirect` | Copy only the redirect/landing template |
 | `--template=qr` | Copy only the QR display template |
 | `--overwrite` | Replace existing destination templates without prompting |
+
+`--overwrite` applies only to the calculated global destination. Site-specific overrides, same-stem files with another extension, and unrelated neighboring templates are left unchanged.
 
 Copy one template:
 

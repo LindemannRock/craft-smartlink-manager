@@ -48,7 +48,9 @@ php craft smartlink-manager/setup/copy-templates
 ddev craft smartlink-manager/setup/copy-templates
 ```
 
-The command copies missing starter templates into the paths configured in settings and skips existing files. If you changed `redirectTemplate` or `qrTemplate`, make sure the matching template exists at that configured path.
+The command installs a missing global fallback and skips copying when every enabled SmartLink Manager site already resolves the template. If you changed `redirectTemplate` or `qrTemplate`, make sure every enabled in-scope site can resolve either `templates/{siteHandle}/{configured-path}` or the global `templates/{configured-path}` fallback. Use the Craft site handle exactly; the site's language code is not substituted automatically.
+
+If the setting contains `$ENV_VAR`, confirm that the variable is defined for both web and console processes and resolves to the intended relative path. SmartLink Manager keeps the raw expression in the setting but uses its effective value for Setup, copying, and public rendering. An undefined, empty, or incorrectly mapped value remains Missing. Explicit `.twig` and `.html` paths must match exactly; an explicit `.twig` path is not satisfied by a same-stem `.html` file.
 
 For template source paths, manual copy commands, and available variables, see [Custom templates](../developers/custom-templates.md).
 
