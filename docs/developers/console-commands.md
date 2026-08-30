@@ -148,6 +148,10 @@ The command will:
 3. If found, ask for confirmation before replacing (warns about breaking unique visitor tracking)
 4. If not found, append the new variable to `.env`
 
+When `.env` already exists, SmartLink Manager prepares the complete updated file in the same directory, verifies its contents and permissions, and only then replaces `.env`. A failure before replacement leaves the original file unchanged and prints the generated `SMARTLINK_MANAGER_IP_SALT` assignment so you can add it manually. Check the `.env` directory permissions and available storage before trying again.
+
+The command does not create a persistent backup file. If an older SmartLink Manager version directly wrote an incomplete or damaged `.env`, restore that file from your deployment source, secret manager, or backup before rerunning the command.
+
 > [!WARNING]
 > Changing the salt after analytics have been collected will break unique visitor tracking. All existing analytics use hash values from the old salt.
 

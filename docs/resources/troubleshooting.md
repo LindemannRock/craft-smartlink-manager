@@ -124,6 +124,23 @@ For large print output, choose SVG from the authenticated edit-page download men
 
 ---
 
+## Salt Command Cannot Update `.env`
+
+**Symptom:** `smartlink-manager/security/generate-salt` reports that it could not write to `.env` and prints a `SMARTLINK_MANAGER_IP_SALT` assignment.
+
+**What happened:** SmartLink Manager prepares and verifies the complete replacement in the same directory before replacing an existing `.env`. If that preparation or replacement fails, the original `.env` bytes and permissions remain unchanged. The command does not leave a persistent backup file.
+
+**Fix:**
+
+1. Copy the printed assignment to a secure place so the generated salt is not lost.
+2. Check that the console process can read `.env` and create, write, change permissions on, and rename a file in the `.env` directory.
+3. Check that the filesystem has enough available storage.
+4. Correct the permission or storage issue, then rerun the command or add the printed assignment manually.
+
+If `.env` was already incomplete or damaged by an older SmartLink Manager version that wrote directly to it, this command cannot reconstruct the missing content. Restore `.env` from your deployment source, secret manager, or backup, verify the restored settings, and then rerun the salt command.
+
+---
+
 ## Scheduled Analytics Cleanup Does Not Reappear
 
 SmartLink Manager schedules a recurring queue job for analytics cleanup. If the queue is empty after the cleanup job runs:

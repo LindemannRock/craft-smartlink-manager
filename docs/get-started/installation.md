@@ -56,7 +56,9 @@ php craft smartlink-manager/security/generate-salt
 ddev craft smartlink-manager/security/generate-salt
 ```
 
-This writes `SMARTLINK_MANAGER_IP_SALT` to your `.env` file. Keep the same salt across all environments — changing it resets unique visitor tracking.
+This writes `SMARTLINK_MANAGER_IP_SALT` to your `.env` file. For an existing `.env`, SmartLink Manager first prepares and verifies the complete update in the same directory, including the original file permissions, and replaces `.env` only after those checks pass. If the update fails, the original remains unchanged and the command prints the assignment for you to add manually. Check the directory permissions and available storage before trying again.
+
+SmartLink Manager does not create a persistent `.env` backup. If an older direct-write version damaged the file, restore it from your deployment source, secret manager, or backup. Keep the same salt across all environments — changing it resets unique visitor tracking.
 
 ### Copy starter templates
 
