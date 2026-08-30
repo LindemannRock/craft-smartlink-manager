@@ -100,11 +100,13 @@ Rows are also permission-checked per site — see the "Site must be importable" 
 | `fallbackUrl` required | Rows without a fallback URL are skipped |
 | URL format | `fallbackUrl` and any platform URLs must be valid URLs |
 | Safe content | Rows whose title or description contain markup that could be unsafe are skipped |
-| `qrCodeSize` | Clamped to 100–1000 pixels |
+| `qrCodeSize` | An omitted, unmapped, empty, or whitespace-only value uses the effective `defaultQrSize`; an explicit value is normalized and clamped to 100–1000 pixels |
 | Boolean columns | `enabled`, `trackAnalytics`, `qrCodeEnabled`, `hideTitle` accept truthy/falsy values (e.g. `1`/`0`) |
 | Site must be importable | The target site must be enabled for the plugin and editable by you (multi-site) — otherwise the row fails. This check runs at the final import step, so it isn't reflected in the preview counts |
 
 If `title` is left empty, the slug is used as the title.
+
+The preview and final import resolve `qrCodeSize` the same way. A valid explicit size such as `100`, `256`, or `1000` overrides the global default. Otherwise, an absent value initializes the new link from the effective default, including an environment-specific config override. That size is saved on the imported link; later changes to `defaultQrSize` do not update existing links.
 
 ## Import history
 

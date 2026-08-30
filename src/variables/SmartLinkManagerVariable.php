@@ -116,6 +116,7 @@ class SmartLinkManagerVariable
     public function create(array $config = []): SmartLink
     {
         $smartLink = new SmartLink();
+        $smartLink->qrCodeSize = SmartLinkManager::$plugin->getSettings()->defaultQrSize;
 
         if (!empty($config)) {
             Craft::configure($smartLink, $config);

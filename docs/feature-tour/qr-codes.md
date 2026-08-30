@@ -55,6 +55,8 @@ QR code appearance is set globally in **Settings → QR Codes** and can be overr
 | `qrEyeStyle` | `string` | `'square'` | Finder pattern shape: `'square'`, `'rounded'`, `'pointed'` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (hex). Falls back to foreground color |
 
+`defaultQrSize` initializes a new smart link when a supported creation path does not provide a size. This includes the Control Panel, CSV imports, and `craft.smartLinks.create()`. An explicit valid size wins. The initialized value is saved on the link, so changing the global default later does not resize existing links.
+
 ### Error Correction
 
 The `L`, `M`, `Q`, and `H` levels apply to both PNG and SVG generation. SmartLink Manager defaults to `M` and passes the effective level explicitly to Bacon QR Code rather than relying on the library's fallback.

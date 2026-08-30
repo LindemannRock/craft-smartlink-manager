@@ -293,7 +293,7 @@ class ImportExportController extends Controller
                 'siteId' => null,
                 'trackAnalytics' => true,
                 'qrCodeEnabled' => true,
-                'qrCodeSize' => 256,
+                'qrCodeSize' => $this->resolveImportQrCodeSize(null),
                 'qrCodeColor' => null,
                 'qrCodeBgColor' => null,
                 'qrCodeEyeColor' => null,
@@ -317,7 +317,12 @@ class ImportExportController extends Controller
                     continue;
                 }
 
-                if (in_array($fieldName, ['siteId', 'imageId', 'qrCodeSize', 'qrLogoId'], true)) {
+                if ($fieldName === 'qrCodeSize') {
+                    $item[$fieldName] = $this->resolveImportQrCodeSize($value);
+                    continue;
+                }
+
+                if (in_array($fieldName, ['siteId', 'imageId', 'qrLogoId'], true)) {
                     $item[$fieldName] = $value === '' ? null : (int)$value;
                     continue;
                 }
@@ -648,7 +653,7 @@ class ImportExportController extends Controller
             $smartLink->slug = (string)($row['slug'] ?? $smartLink->slug);
             $smartLink->trackAnalytics = (bool)($row['trackAnalytics'] ?? true);
             $smartLink->qrCodeEnabled = (bool)($row['qrCodeEnabled'] ?? true);
-            $smartLink->qrCodeSize = max(100, min(1000, (int)($row['qrCodeSize'] ?? 256)));
+            $smartLink->qrCodeSize = $this->resolveImportQrCodeSize($row['qrCodeSize'] ?? null);
             $smartLink->qrCodeColor = $this->normalizeHexColor($row['qrCodeColor'] ?? null);
             $smartLink->qrCodeBgColor = $this->normalizeHexColor($row['qrCodeBgColor'] ?? null);
             $smartLink->qrCodeEyeColor = $this->normalizeHexColor($row['qrCodeEyeColor'] ?? null);
@@ -721,6 +726,15 @@ class ImportExportController extends Controller
     private function parseBool(string $value): bool
     {
         return in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'enabled', 'on'], true);
+    }
+
+    private function resolveImportQrCodeSize(mixed $value): int
+    {
+        if ($value === null || (is_string($value) && trim($value) === '')) {
+            $value = SmartLinkManager::$plugin->getSettings()->defaultQrSize;
+        }
+
+        return max(100, min(1000, (int)$value));
     }
 
     private function normalizeSlug(string $slug): string

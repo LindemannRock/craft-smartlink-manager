@@ -57,7 +57,7 @@ Found on **SmartLink Manager → Settings → Behavior**.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `defaultQrSize` | `int` | `256` | QR code size in pixels (100–1000) |
+| `defaultQrSize` | `int` | `256` | Initial QR code size for new links when a supported creation path supplies no size (100–1000) |
 | `defaultQrFormat` | `string` | `'png'` | QR code format: `png` or `svg` |
 | `defaultQrColor` | `string` | `'#000000'` | QR code foreground color |
 | `defaultQrBgColor` | `string` | `'#FFFFFF'` | QR code background color |
@@ -66,6 +66,8 @@ Found on **SmartLink Manager → Settings → Behavior**.
 | `qrModuleStyle` | `string` | `'square'` | Module shape: `square`, `rounded`, `dots` |
 | `qrEyeStyle` | `string` | `'square'` | Eye shape: `square`, `rounded`, `pointed` |
 | `qrEyeColor` | `?string` | `null` | Eye color override (`null` = same as foreground color) |
+
+The Control Panel, CSV importer, and `craft.smartLinks.create()` factory initialize new links from the effective `defaultQrSize` when they do not receive an explicit size. The resolved value includes supported config overrides and is saved on the link. Changing the global default later affects future initialization only; it does not resize existing links.
 
 The public QR image and display routes use saved per-link values with these defaults as fallbacks; public styling query parameters are ignored. Authenticated control-panel previews and downloads can render unsaved styling. Their error-correction values are trimmed and case-insensitive, with invalid values falling back to `defaultQrErrorCorrection` and then `M`.
 

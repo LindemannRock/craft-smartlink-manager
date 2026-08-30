@@ -20,6 +20,7 @@ use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\services\QrCodeService;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
 use lindemannrock\smartlinkmanager\tests\TestCase;
+use lindemannrock\smartlinkmanager\variables\SmartLinkManagerVariable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use yii\web\ForbiddenHttpException;
@@ -121,6 +122,50 @@ final class QrCodeControllerTest extends TestCase
                 'eyeStyle' => 'pointed',
                 'eyeColor' => 'AA2244',
             ], $service->lastOptions);
+        });
+    }
+
+    public function testInitializedSavedSizeRemainsCanonicalWhenDefaultChanges(): void
+    {
+        $this->withSettings(['defaultQrSize' => 1000], function(): void {
+            $slug = 'smartlink-test-qr-initialized-default';
+            $link = (new SmartLinkManagerVariable())->create([
+                'title' => 'Initialized default QR size',
+                'slug' => $slug,
+                'fallbackUrl' => 'https://example.com/' . $slug,
+                'siteId' => Craft::$app->getSites()->getPrimarySite()->id,
+                'qrCodeEnabled' => true,
+            ]);
+            $link->setEnabledForSite(true);
+            self::assertTrue($this->smartLinks->saveSmartLink($link));
+            self::assertNotNull($link->id);
+            $this->trackElementForCleanup((int)$link->id);
+            self::assertSame(1000, $link->qrCodeSize);
+
+            $service = new ControllerRecordingQrCodeService();
+            $this->swapPluginComponent('smartlink-manager', 'qrCode', $service);
+
+            $this->withSettings(['defaultQrSize' => 100], function() use ($link, $service): void {
+                $reloaded = SmartLink::find()
+                    ->id($link->id)
+                    ->siteId($link->siteId)
+                    ->status(null)
+                    ->one();
+                self::assertInstanceOf(SmartLink::class, $reloaded);
+                self::assertSame(1000, $reloaded->qrCodeSize);
+
+                $this->installRequest();
+                $this->controller()->actionGenerate($reloaded->slug);
+                self::assertSame(1000, $service->lastOptions['size']);
+
+                $this->installRequest(['linkId' => $reloaded->id, 'size' => 1000]);
+                $this->controller()->actionGenerate();
+                self::assertSame(150, $service->lastOptions['size']);
+
+                $this->installRequest(['linkId' => $reloaded->id, 'size' => 4096, 'download' => '1']);
+                $this->controller()->actionGenerate();
+                self::assertSame(4096, $service->lastOptions['size']);
+            });
         });
     }
 

@@ -121,11 +121,21 @@ Returns a query for only active (enabled) smart links.
 
 Creates a new unsaved `SmartLink` element. Does not save to the database — useful for previews or form defaults.
 
+The factory initializes `qrCodeSize` from the effective `defaultQrSize` before applying `config`. An explicit `qrCodeSize` in `config` therefore wins, while unrelated configuration retains the effective default. This is an initialization value on the returned element, not dynamic inheritance; saving it persists that size even if the global default changes later.
+
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `config` | `array` | `[]` | Element attributes to set |
 
 **Returns:** `SmartLink`
+
+```twig
+{% set defaultSized = craft.smartLinks.create({ title: 'Preview' }) %}
+{% set explicitlySized = craft.smartLinks.create({
+    title: 'Print preview',
+    qrCodeSize: 1000,
+}) %}
+```
 
 ---
 

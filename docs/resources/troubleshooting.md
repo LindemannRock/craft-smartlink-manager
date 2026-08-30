@@ -98,6 +98,20 @@ For large print output, choose SVG from the authenticated edit-page download men
 
 ---
 
+## A New Link Uses an Unexpected QR Size
+
+**Symptom:** A newly created or imported smart link uses a different QR size than expected.
+
+**Quick checks:**
+
+1. **Check the effective global default.** `defaultQrSize` can be set in the Control Panel or overridden by `config/smartlink-manager.php`. Supported creation paths use the effective value when no size is supplied.
+2. **Check for an explicit value.** A QR size supplied by the Control Panel, a mapped non-empty CSV column, or `craft.smartLinks.create({ qrCodeSize: ... })` overrides the default.
+3. **Check when the link was created.** The global default initializes new links; it does not dynamically resize saved links. Edit and save an existing link if its canonical public QR output needs a different size.
+
+CSV import preview and final persistence use the same resolution. Omitted, unmapped, empty, and whitespace-only QR-size cells use the effective default, while supplied values retain the importer's existing normalization and 100–1000px limits.
+
+---
+
 ## Analytics Not Recording Clicks
 
 **Symptom:** Clicks happen but the analytics tab shows 0 clicks, or click counts don't increment.
