@@ -27,7 +27,7 @@ use yii\db\Expression;
 /**
  * Owns SmartLink Manager's portable recurring analytics-cleanup schedule.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 class AnalyticsCleanupScheduler extends Component
 {

@@ -29,7 +29,7 @@ use yii\web\Response;
  * Protects configured frontend-template rendering through Craft's deferred
  * response formatter.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class ConfiguredTemplateRenderingTest extends TestCase
 {

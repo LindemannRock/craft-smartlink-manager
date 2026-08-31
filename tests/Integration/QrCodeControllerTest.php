@@ -28,7 +28,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
- * @since 5.38.0
+ * @since 5.37.4
  */
 #[CoversClass(QrCodeController::class)]
 final class QrCodeControllerTest extends TestCase

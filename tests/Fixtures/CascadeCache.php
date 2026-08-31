@@ -16,7 +16,7 @@ if (!class_exists(CascadeCache::class)) {
     /**
      * Opaque managed-cache test fixture.
      *
-     * @since 5.38.0
+     * @since 5.37.4
      */
     final class CascadeCache extends ArrayCache
     {

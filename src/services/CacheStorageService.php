@@ -24,7 +24,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 /**
  * Resolves and operates SmartLink Manager's disposable cache storage.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class CacheStorageService extends Component
 {

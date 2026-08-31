@@ -11,7 +11,7 @@ namespace lindemannrock\smartlinkmanager\services\analytics;
 /**
  * Normalizes analytics metadata read from native JSON columns.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class AnalyticsMetadata
 {

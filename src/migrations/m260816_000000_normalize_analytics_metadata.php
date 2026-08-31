@@ -15,7 +15,7 @@ use lindemannrock\smartlinkmanager\services\analytics\AnalyticsMetadata;
 /**
  * Normalizes analytics metadata strings created after the native JSON migration.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 class m260816_000000_normalize_analytics_metadata extends Migration
 {

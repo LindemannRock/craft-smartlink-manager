@@ -24,7 +24,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Covers static asset delivery for SmartLink Manager control-panel features.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class AssetDeliveryTest extends TestCase
 {

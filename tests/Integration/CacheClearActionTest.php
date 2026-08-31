@@ -30,7 +30,7 @@ use yii\caching\CacheInterface;
 require_once dirname(__DIR__) . '/Fixtures/CascadeCache.php';
 
 /**
- * @since 5.38.0
+ * @since 5.37.4
  */
 #[CoversClass(SettingsController::class)]
 final class CacheClearActionTest extends TestCase
@@ -162,7 +162,7 @@ final class CacheClearActionTest extends TestCase
 }
 
 /**
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class CacheClearRequest extends Request
 {
@@ -178,7 +178,7 @@ final class CacheClearRequest extends Request
 }
 
 /**
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class CacheClearUser extends User
 {

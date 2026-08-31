@@ -16,7 +16,7 @@ use lindemannrock\smartlinkmanager\SmartLinkManager;
 /**
  * Resolves site identifiers used by public SmartLink routes.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 class PublicSiteHelper
 {

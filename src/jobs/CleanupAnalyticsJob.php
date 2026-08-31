@@ -35,8 +35,6 @@ class CleanupAnalyticsJob extends BaseJob implements RetryableJobInterface
 
     /**
      * Stable owner token for the portable recurring cleanup chain.
-     *
-     * @since 5.38.0
      */
     public string $recurringOwner = '';
 

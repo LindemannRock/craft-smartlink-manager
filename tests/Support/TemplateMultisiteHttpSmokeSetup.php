@@ -21,7 +21,7 @@ use RuntimeException;
 /**
  * Owns the disposable data for the authenticated multisite HTTP smoke.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class TemplateMultisiteHttpSmokeSetup
 {

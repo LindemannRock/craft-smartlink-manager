@@ -369,8 +369,6 @@ class Settings extends Model
 
     /**
      * Returns the effective redirect template path.
-     *
-     * @since 5.38.0
      */
     public function getResolvedRedirectTemplate(): string
     {
@@ -379,8 +377,6 @@ class Settings extends Model
 
     /**
      * Returns the effective QR display template path.
-     *
-     * @since 5.38.0
      */
     public function getResolvedQrTemplate(): string
     {

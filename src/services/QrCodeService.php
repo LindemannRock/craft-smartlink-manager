@@ -198,8 +198,6 @@ class QrCodeService extends Component
 
     /**
      * Normalize a requested QR output format against the effective setting.
-     *
-     * @since 5.38.0
      */
     public function normalizeFormat(mixed $format): string
     {

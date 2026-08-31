@@ -30,7 +30,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Covers effective QR-size defaults at supported SmartLink creation boundaries.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 #[CoversClass(SmartlinksController::class)]
 #[CoversClass(ImportExportController::class)]

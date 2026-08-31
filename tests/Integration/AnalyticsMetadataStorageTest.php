@@ -27,7 +27,7 @@ use yii\db\Schema;
 /**
  * Covers native analytics metadata storage and historical normalization.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class AnalyticsMetadataStorageTest extends TestCase
 {
