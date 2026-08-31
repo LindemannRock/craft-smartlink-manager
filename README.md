@@ -35,28 +35,16 @@ Intelligent device detection and app store routing for Craft CMS. Create smart l
 
 ## Installation
 
-### Composer
+### Via Composer
 
 ```bash
-composer require lindemannrock/craft-smartlink-manager && php craft plugin/install smartlink-manager
+composer require lindemannrock/craft-smartlink-manager && php craft plugin/install smartlink-manager && php craft smartlink-manager/security/generate-salt
 ```
 
-### DDEV
+### Using DDEV
 
 ```bash
-ddev composer require lindemannrock/craft-smartlink-manager && ddev craft plugin/install smartlink-manager
-```
-
-### Post-install
-
-Generate the IP hash salt used by privacy-conscious analytics:
-
-```bash
-php craft smartlink-manager/security/generate-salt
-```
-
-```bash
-ddev craft smartlink-manager/security/generate-salt
+ddev composer require lindemannrock/craft-smartlink-manager && ddev craft plugin/install smartlink-manager && ddev craft smartlink-manager/security/generate-salt
 ```
 
 ## Documentation
