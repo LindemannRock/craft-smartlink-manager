@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.37.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.3...v5.37.4) (2026-08-31)
+
+
+### Fixed
+
+* **analytics:** preserve metadata JSON objects ([2711564](https://github.com/LindemannRock/craft-smartlink-manager/commit/2711564036786df96131a031b47c6e69273d3be3))
+* **cache:** support portable application caching ([1ad42f3](https://github.com/LindemannRock/craft-smartlink-manager/commit/1ad42f3db22eded56c8c4794d1d510a09a29deab))
+* **cli:** preserve env during salt generation ([20e7dc0](https://github.com/LindemannRock/craft-smartlink-manager/commit/20e7dc065507163e91b20b0835baa85d4f6250d3))
+* **cp:** support Craft Cloud asset delivery ([bd89166](https://github.com/LindemannRock/craft-smartlink-manager/commit/bd89166cb8513a4a8d39932aa936d6b74e535938))
+* **qr-code:** apply configured error correction ([48728f2](https://github.com/LindemannRock/craft-smartlink-manager/commit/48728f254cb1eec8d00bbdd2ce2500a09f7d0855))
+* **qr-code:** honor configured creation defaults ([b59aacd](https://github.com/LindemannRock/craft-smartlink-manager/commit/b59aacd02c7f71d4a14542e56322280840913ae9))
+* **qr-code:** make public output canonical ([8649ef9](https://github.com/LindemannRock/craft-smartlink-manager/commit/8649ef9368e25c74c8b3c8933212c7a6b96adb22))
+* **qr-code:** support GD PNG rendering ([53b2973](https://github.com/LindemannRock/craft-smartlink-manager/commit/53b2973980a916a4442920077cc5942a7fe36c24))
+* **queue:** support portable analytics cleanup ([2dcc406](https://github.com/LindemannRock/craft-smartlink-manager/commit/2dcc4062f0c464f15e52a5b3cc4b124c124ffd0e))
+* remove unused linkMode parameter from error summary ([5939550](https://github.com/LindemannRock/craft-smartlink-manager/commit/5939550ef09a20d48394e8831adc9d53085f4f74))
+* **smartlinks:** preserve multisite identity ([3df363d](https://github.com/LindemannRock/craft-smartlink-manager/commit/3df363dd2293db9bfe2499bea48c84482b8096f5))
+* **templates:** align setup and runtime resolution ([132f3a2](https://github.com/LindemannRock/craft-smartlink-manager/commit/132f3a266337a3c829225238bd9c27ac625d7e7b))
+* **templates:** correct title rendering in setup template ([07f1ed3](https://github.com/LindemannRock/craft-smartlink-manager/commit/07f1ed370137bfa326f72f047ea1f4f9525f307f))
+* **templates:** resolve bundled templates from plugin path ([7436527](https://github.com/LindemannRock/craft-smartlink-manager/commit/7436527803fd77dad45752fe8521186c90ceb9f7))
+
 ## [5.37.3](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.2...v5.37.3) - 2026-07-18
 
 
