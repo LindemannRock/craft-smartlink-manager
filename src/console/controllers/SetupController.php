@@ -124,7 +124,7 @@ final class SetupController extends Controller
             return 'skipped';
         }
 
-        $sourcePath = $this->absoluteProjectPath($status['source']);
+        $sourcePath = $this->bundledTemplatePath($status);
         $destinationPath = $this->absoluteTemplatePath($status['destination']);
 
         if (!is_file($sourcePath)) {
@@ -163,11 +163,13 @@ final class SetupController extends Controller
         return false;
     }
 
-    private function absoluteProjectPath(string $path): string
+    /**
+     * @param array{key: string, source: string} $status
+     */
+    private function bundledTemplatePath(array $status): string
     {
-        $root = defined('CRAFT_BASE_PATH') ? CRAFT_BASE_PATH : Craft::getAlias('@root');
-
-        return $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $path);
+        return SmartLinkManager::$plugin->getBasePath() . DIRECTORY_SEPARATOR . 'templates'
+            . DIRECTORY_SEPARATOR . basename($status['source']);
     }
 
     private function absoluteTemplatePath(string $destination): string

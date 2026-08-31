@@ -24,7 +24,7 @@ use yii\console\ExitCode;
 /**
  * Covers global starter-template installation behavior.
  *
- * @since 5.38.0
+ * @since 5.37.4
  */
 final class SetupControllerTest extends TestCase
 {
@@ -490,12 +490,8 @@ final class SetupControllerTest extends TestCase
 
     private function bundledTemplatePath(string $template): string
     {
-        $projectRoot = Craft::getAlias('@root');
-        self::assertIsString($projectRoot);
-
-        return $projectRoot . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'lindemannrock'
-            . DIRECTORY_SEPARATOR . 'craft-smartlink-manager' . DIRECTORY_SEPARATOR . 'src'
-            . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.twig';
+        return dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'templates'
+            . DIRECTORY_SEPARATOR . $template . '.twig';
     }
 
     /**
