@@ -318,11 +318,16 @@ class IntegrationService extends Component
      * Render SEOmatic tracking script
      *
      * @param \lindemannrock\smartlinkmanager\elements\SmartLink $smartLink
-     * @param string $eventType Event type: 'qr_scan' or 'redirect'
+     * @param string $eventType Landing-page tracking context; legacy 'qr_scan' display context emits nothing
      * @return \Twig\Markup|null HTML script tag or null if SEOmatic is not enabled
      */
     public function renderSeomaticTracking($smartLink, string $eventType = 'qr_scan'): ?\Twig\Markup
     {
+        // A QR display is not a scan. Keep existing display-template calls harmless.
+        if ($eventType === 'qr_scan') {
+            return null;
+        }
+
         // Check if SEOmatic integration is enabled
         $seomatic = $this->getIntegration('seomatic');
         if (!$seomatic || !$seomatic->isAvailable() || !$seomatic->isEnabled()) {

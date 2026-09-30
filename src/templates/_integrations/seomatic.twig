@@ -9,7 +9,7 @@
 {% set seomaticEnabled = settings
     and craft.app.plugins.isPluginEnabled('seomatic')
     and 'seomatic' in enabledIntegrations
-    and eventType in trackingEvents
+    and eventType != 'qr_scan'
 %}
 
 {% if seomaticEnabled %}
@@ -17,24 +17,12 @@
     <script>
         window.dataLayer = window.dataLayer || [];
 
-        {% if eventType == 'qr_scan' %}
-        (function() {
-            var eventData = {
-                event: '{{ eventPrefix|e('js') }}_qr_scan',
-                smart_link: {
-                    slug: '{{ smartLink.slug|e('js') }}',
-                    title: '{{ smartLink.title|e('js') }}',
-                    source: 'qr',
-                    click_type: 'qr_scan'
-                }
-            };
-            window.dataLayer.push(eventData);
-            {% if craft.app.config.general.devMode %}
-            console.log('SmartLink Manager QR scan event pushed:', eventData);
-            {% endif %}
-        })();
-        {% else %}
         function pushSmartLinkEvent(eventType, platform, source) {
+            var trackingEvents = {{ trackingEvents|json_encode|raw }};
+            if (trackingEvents.indexOf(eventType) === -1) {
+                return;
+            }
+
             var eventData = {
                 event: '{{ eventPrefix|e('js') }}_' + eventType,
                 smart_link: {
@@ -76,9 +64,12 @@
         (function() {
             var urlParams = new URLSearchParams(window.location.search);
             var source = urlParams.get('src') || 'direct';
-            pushSmartLinkEvent('redirect', 'auto', source);
+            if (source === 'qr') {
+                pushSmartLinkEvent('qr_scan', 'auto', source);
+            }
         })();
 
+        {% if 'button_click' in trackingEvents %}
         document.addEventListener('DOMContentLoaded', function() {
             var appLinks = document.querySelectorAll('a[href*="smartlink-manager/redirect/go"]');
 

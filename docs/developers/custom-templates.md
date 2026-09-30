@@ -82,7 +82,7 @@ It receives these variables:
 
 The element also exposes:
 
-- `smartLink.renderRedirectSeomaticTracking()` — [SEOmatic](integrations.md) data-layer tracking for the landing page.
+- `smartLink.renderRedirectSeomaticTracking()` — [SEOmatic](integrations.md) data-layer tracking for QR-tagged arrival, automatic onward navigation, and tracked button clicks. Render once before `renderRedirectScript()`.
 - `smartLink.renderRedirectScript()` @since(5.33.0) — the **cache-safe auto-redirect** script (see [below](#cache-safe-auto-redirect)).
 
 For the full redirect-template walkthrough (platform buttons, tracked hops), see [Device detection](../feature-tour/device-detection.md) and [Smart links](../feature-tour/smart-links.md).
@@ -111,7 +111,7 @@ For the full redirect-template walkthrough (platform buttons, tracked hops), see
 
 The landing page is platform-aware, so the auto-forward **must not** be baked into the HTML — if a CDN or static cache served a page that hard-coded one platform's tracked URL, every later visitor would be sent to the wrong store. `renderRedirectScript()` avoids this: it outputs a small script that, on each load, fetches a **no-store** server-side resolver which returns the correct auto-forward URL for *that* request, then forwards. So the cached HTML stays generic and the redirect decision is always resolved fresh.
 
-- Use `renderRedirectScript()` for the auto-forward; do not write your own template-level auto redirect.
+- Use `renderRedirectScript()` for the auto-forward; do not write your own template-level auto redirect. With SEOmatic tracking enabled, it emits `_redirect` immediately before starting navigation. Merely loading the page, pausing it with the supported debug option, or receiving no automatic destination emits no redirect event.
 - The per-platform **buttons** still use the tracked `goUrls` values (those record the click via the tracked `smartlink-manager/redirect/go` action).
 - Keep request-specific redirect decisions out of Twig conditionals. Use neutral page copy such as "Choose a store, or wait while we check your device" so statically cached HTML remains valid for every visitor.
 
@@ -124,6 +124,8 @@ The landing page is platform-aware, so the auto-forward **must not** be baked in
 > When you can't (or don't want to) enable debug — e.g. the shipped template on production — diagnose from the response headers instead. See [Troubleshooting](../resources/troubleshooting.md).
 
 ### `qr.twig`
+
+This page displays the code; it does not count as a scan. No SEOmatic event helper is required here. Existing `renderQrSeomaticTracking()` or `renderSeomaticTracking('qr_scan')` calls return nothing, so older custom display templates remain safe. Scan tracking occurs when the encoded landing URL is opened with `?src=qr`.
 
 | Variable | Type | Description |
 |----------|------|-------------|

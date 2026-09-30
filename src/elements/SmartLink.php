@@ -991,7 +991,7 @@ class SmartLink extends Element
     /**
      * Render SEOmatic tracking script for this smart link
      *
-     * @param string $eventType Event type: 'qr_scan' or 'redirect'
+     * @param string $eventType Landing-page tracking context; legacy 'qr_scan' display context emits nothing
      * @return \Twig\Markup|null HTML script tag or null if SEOmatic is not enabled
      * @since 1.23.0
      */
@@ -1012,7 +1012,8 @@ class SmartLink extends Element
     }
 
     /**
-     * Render SEOmatic QR scan tracking code for this smart link.
+     * Retain compatibility with QR display templates without recording a scan.
+     * Scans are recorded on QR-tagged landing-page arrivals instead.
      *
      * @return \Twig\Markup|null
      * @since 5.33.0

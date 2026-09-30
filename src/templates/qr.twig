@@ -1,9 +1,8 @@
 {#
   SmartLink QR display template.
 
-  Shows a scannable QR image for the current smart link. SEOmatic QR tracking is
-  rendered through `renderQrSeomaticTracking()`; the helper returns nothing when
-  the integration or QR tracking event is disabled.
+  Shows a scannable QR image for the current smart link. Displaying the image
+  does not record a scan; QR tracking runs on the QR-tagged landing-page visit.
 #}
 <!DOCTYPE html>
 <html lang="{{ currentSite.language }}">
@@ -17,7 +16,6 @@
 
 		<script src="https://cdn.tailwindcss.com"></script>
 
-		{{ smartLink.renderQrSeomaticTracking() }}
 	</head>
 	<body>
 		<div class="flex justify-center items-center min-h-screen max-w-lg mx-auto px-4 py-8">

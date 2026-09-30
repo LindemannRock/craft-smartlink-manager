@@ -35,6 +35,9 @@
 					return;
 				}
 				setTimeout(function() {
+					if (typeof window.pushSmartLinkEvent === 'function') {
+						window.pushSmartLinkEvent('redirect', 'auto', source || 'direct');
+					}
 					window.location.replace(data.goUrl);
 				}, 100);
 			})

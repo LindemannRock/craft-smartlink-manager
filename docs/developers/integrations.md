@@ -24,17 +24,17 @@ All integrations implement `IntegrationInterface`:
 | `validateEventData(eventType, data)` | `bool` | Validate event data before pushing |
 
 > [!NOTE]
-> The `pushEvent()`/`formatEventData()` path is the integration API path. Visitor-facing redirect and QR pages use the client-side tracking template documented in [Integrations](../feature-tour/integrations.md), so their data layer payload is intentionally smaller.
+> The `pushEvent()`/`formatEventData()` path is the integration API path. Visitor-facing landing pages use the client-side tracking template documented in [Integrations](../feature-tour/integrations.md), so their data layer payload is intentionally smaller.
 
 ## Event Types
 
-Three event types are supported:
+The PHP `pushEvent()` API accepts these types and required fields when explicitly called. The final column describes the corresponding browser-template action; the browser helper does not call this PHP API and uses the smaller payload shown in the integration guide.
 
 | Type | Required Fields | Triggered When |
 |------|----------------|----------------|
-| `redirect` | `slug`, `title`, `destinationUrl`, `platform`, `source` | Smart link redirect fires |
+| `redirect` | `slug`, `title`, `destinationUrl`, `platform`, `source` | Automatic onward navigation starts |
 | `button_click` | `slug`, `title`, `destinationUrl`, `platform`, `buttonType` | Template button with tracking is clicked |
-| `qr_scan` | `slug`, `title` | QR code endpoint is accessed |
+| `qr_scan` | `slug`, `title` | A visitor arrives at the landing URL with `?src=qr` |
 
 ## Internal Architecture
 

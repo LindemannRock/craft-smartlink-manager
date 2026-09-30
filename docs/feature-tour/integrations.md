@@ -12,7 +12,7 @@ SmartLink Manager integrates with SEOmatic, Redirect Manager, and Craft Link Fie
 
 ## SEOmatic Integration
 
-When SEOmatic is installed and the integration is enabled, SmartLink Manager registers SmartLinks as a SEOmatic content source and pushes structured data layer events to the GTM/GA4 data layer whenever a smart link is interacted with.
+When SEOmatic is installed and the integration is enabled, SmartLink Manager registers SmartLinks as a SEOmatic content source and pushes structured data layer events to the GTM/GA4 data layer for QR-tagged arrivals, automatic onward navigation, and manual platform choices.
 
 ### Event Types
 
@@ -20,15 +20,15 @@ Three event types are dispatched to the data layer:
 
 | Event Name | When It Fires |
 |------------|--------------|
-| `smart_links_redirect` | A visitor follows the redirect URL |
-| `smart_links_qr_scan` | A visitor accesses the QR code endpoint |
-| `smart_links_button_click` | A button that calls `renderSeomaticTracking()` is clicked |
+| `smart_links_redirect` | Automatic onward navigation starts, immediately before leaving the landing page |
+| `smart_links_qr_scan` | A visitor arrives at the landing URL with `?src=qr` |
+| `smart_links_button_click` | A visitor clicks a tracked platform or fallback button on the landing page |
 
 The `smart_links_` prefix is configurable via the `seomaticEventPrefix` setting (default `smart_links`) — if you change it, the event names change to match (e.g. `myapp_redirect`).
 
 ### Data Layer Structure
 
-Tracking is pushed **client-side** from the rendered redirect or QR page. A redirect event pushes this payload:
+Tracking is pushed **client-side** from the rendered landing page. A redirect event pushes this payload:
 
 ```json
 {
@@ -43,7 +43,11 @@ Tracking is pushed **client-side** from the rendered redirect or QR page. A redi
 }
 ```
 
-QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Button-click events use `click_type: "button_click"` and include the clicked platform, read from the `?platform=` query parameter on the tracked go URL (`…/actions/smartlink-manager/redirect/go`), falling back to `unknown` if it is absent.
+Each event switch works independently. A desktop landing page or a paused redirect emits no `_redirect`. A QR-tagged arrival can emit `_qr_scan` followed by `_redirect` if automatic navigation starts, or `_button_click` if the visitor chooses a button. Displaying or downloading a QR image emits no scan event. The QR marker records attribution; manually opening the same tagged URL has the same effect as scanning it.
+
+QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Automatic redirects keep `platform: "auto"`. Button-click events use `click_type: "button_click"` and include the clicked platform, read from the tracked action URL's `?platform=` parameter or path, falling back to `unknown` when neither supplies it. Public URL prefixes and custom domains do not change the event names.
+
+These events mark actions on the landing page, not confirmed destination loads. A data-layer push also does not confirm GA4 delivery: configure GTM to forward the selected events, and verify receipt in GA4. Use your existing SEOmatic/Google page-view tracking for page views; SmartLink Manager adds no separate view event.
 
 ### Configuration
 
@@ -71,17 +75,20 @@ SEOmatic only lists actual Craft field-layout fields as **Source Field** options
 
 Existing SEOmatic content bundles keep their saved settings. If you enabled the integration before changing defaults, resave or reset the SmartLinks source in SEOmatic to apply the current defaults.
 
-### Using `renderSeomaticTracking()` in Templates
+### Tracking in custom templates
 
-To fire a `smart_links_button_click` event when a user interacts with a specific element on your page, call `renderSeomaticTracking()` in your template:
+Keep both helpers on the landing page: `renderRedirectSeomaticTracking()` installs event tracking, and `renderRedirectScript()` resolves the device-specific destination and starts automatic navigation. Button links must use the controller-provided tracked URLs:
 
 ```twig
-<a href="{{ smartLink.getUrl() }}" {{ smartLink.renderSeomaticTracking('button_click')|raw }}>
-    Download the App
-</a>
+{{ smartLink.renderRedirectSeomaticTracking() }}
+<a href="{{ goUrls.ios }}">Download for iOS</a>
+<a href="{{ goUrls.fallback }}">Continue to website</a>
+{{ smartLink.renderRedirectScript() }}
 ```
 
-This outputs a `<script>` block that pushes the event object to `window.dataLayer`. It does not add `data-gtm-*` attributes — use it when you want to fire the event from your own markup.
+The tracking helper returns a `<script>` block, so place it outside an HTML tag's attributes. Render it once per page, before the redirect script. The legacy `renderSeomaticTracking('redirect')` call remains equivalent. QR display templates need no tracking helper; existing `renderQrSeomaticTracking()` and `renderSeomaticTracking('qr_scan')` calls remain callable but return nothing.
+
+See [Custom templates](../developers/custom-templates.md) for the complete landing-page example and the supported debug pause.
 
 ## Redirect Manager Integration
 
