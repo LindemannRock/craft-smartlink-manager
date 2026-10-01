@@ -20,7 +20,7 @@ Three event types are dispatched to the data layer:
 
 | Event Name | When It Fires |
 |------------|--------------|
-| `smart_links_redirect` | Automatic onward navigation starts, immediately before leaving the landing page |
+| `smart_links_redirect` | Automatic onward navigation is initiated, before the tracking grace period |
 | `smart_links_qr_scan` | A visitor arrives at the landing URL with `?src=qr` |
 | `smart_links_button_click` | A visitor clicks a tracked platform or fallback button on the landing page |
 
@@ -47,7 +47,9 @@ Each event switch works independently. A desktop landing page or a paused redire
 
 QR scan events use `source: "qr"` and `click_type: "qr_scan"`. Automatic redirects keep `platform: "auto"`. Button-click events use `click_type: "button_click"` and include the clicked platform, read from the tracked action URL's `?platform=` parameter or path, falling back to `unknown` when neither supplies it. Public URL prefixes and custom domains do not change the event names.
 
-These events mark actions on the landing page, not confirmed destination loads. A data-layer push also does not confirm GA4 delivery: configure GTM to forward the selected events, and verify receipt in GA4. Use your existing SEOmatic/Google page-view tracking for page views; SmartLink Manager adds no separate view event.
+For automatic navigation, SmartLink Manager keeps its initial 100 ms scheduling delay, queues the selected redirect event, then gives tracking scripts 2 seconds before leaving when a redirect or QR-arrival event was queued. QR-only tracking adds this grace period only on a QR-tagged visit. Disabled, unavailable, or inapplicable tracking adds no extra wait. Manual button clicks retain their existing 300 ms tracking delay, and a manual choice takes precedence over a pending automatic navigation.
+
+The grace period gives asynchronously loaded tags time to run; it does not guarantee delivery. These events mark actions on the landing page, not confirmed destination loads. A data-layer push also does not confirm GA4 delivery: configure GTM to forward the selected events, and verify receipt in GA4. Use your existing SEOmatic/Google page-view tracking for page views; SmartLink Manager adds no separate view event.
 
 ### Configuration
 

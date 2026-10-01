@@ -220,7 +220,7 @@ If a date-format setting does not appear to change the index:
 
 3. **Is your GTM/GA4 container configured?** SmartLink Manager pushes to `window.dataLayer`. GTM must be configured to listen for events with the names `smart_links_redirect`, `smart_links_qr_scan`, or `smart_links_button_click`.
 
-4. **Did automatic navigation actually start?** `_redirect` is emitted immediately before the browser automatically leaves the landing page. A desktop visit, missing platform destination, failed resolver, or supported `debug=1` pause should produce no redirect event. A manual choice produces `_button_click` instead.
+4. **Did automatic navigation actually start?** `_redirect` is emitted when automatic navigation is initiated. If the automatic visit queued a selected redirect or QR-arrival event, the browser gives tracking a 2-second grace period before leaving. A desktop visit, missing platform destination, failed resolver, or supported `debug=1` pause should produce no redirect event. Choosing a button before automatic navigation is initiated produces `_button_click` instead. Choosing one during the tracking grace period cancels the pending automatic navigation, but its already-queued `_redirect` event remains; that event does not confirm arrival at the destination.
 
 5. **Does the custom landing template include both helpers?** Render `{{ smartLink.renderRedirectSeomaticTracking() }}` once before `{{ smartLink.renderRedirectScript() }}`, outside any HTML tag attributes. Use `goUrls` for button links. Each selected event in **Settings → Integrations → SEOmatic** works independently.
 
@@ -228,7 +228,7 @@ If a date-format setting does not appear to change the index:
 
 7. **Does GTM preserve queued events?** SmartLink Manager can queue an event before GTM loads. Its initialization must preserve `window.dataLayer` with `window.dataLayer = window.dataLayer || []`, rather than replacing it with an empty array. Check the rendered script for the site you are testing, including any saved SEOmatic script customization.
 
-Use GTM Preview to identify the event and tag firing, then verify receipt in GA4. A tag firing is not a delivery guarantee; privacy settings, consent, blockers, and navigation can affect browser analytics independently of SmartLink Manager's own server-side analytics.
+Use GTM Preview to identify the event and tag firing, then verify receipt in GA4. The automatic tracking grace period is bounded, so a blocked or very slow tag cannot hold the visitor indefinitely. A tag firing is not a delivery guarantee; privacy settings, consent, blockers, and navigation can affect browser analytics independently of SmartLink Manager's own server-side analytics.
 
 ## SmartLinks do not appear in SEOmatic Content SEO
 

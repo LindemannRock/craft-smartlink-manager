@@ -34,6 +34,9 @@
                 }
             };
             window.dataLayer.push(eventData);
+            if (eventType === 'redirect' || eventType === 'qr_scan') {
+                window.smartLinkAutoTrackingQueued = true;
+            }
             {% if craft.app.config.general.devMode %}
             console.log('SmartLink Manager event pushed to dataLayer:', eventData);
             console.log('Current dataLayer length:', window.dataLayer.length);

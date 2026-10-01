@@ -43,14 +43,14 @@ class SeomaticTrackingTemplateTest extends TestCase
         self::assertSame($result['arrivalEvents'], $result['beforeTimers']);
         self::assertSame(['smart_links_qr_scan', 'smart_links_redirect', 'navigate'], $result['timeline']);
         self::assertSame([$goUrl], $result['navigations']);
-        self::assertSame([100], $result['timerDelays']);
+        self::assertSame([100, 2000], $result['timerDelays']);
         self::assertSame('qr', $result['events'][1]['smart_link']['source']);
         self::assertSame('qr', $result['events'][2]['smart_link']['source']);
         self::assertSame('no-store', $result['requests'][0]['options']['cache']);
         self::assertStringContainsString('src=qr', $result['requests'][0]['url']);
     }
 
-    public function testNormalAutomaticNavigationRecordsOneRedirectImmediatelyBeforeLeaving(): void
+    public function testNormalAutomaticNavigationRecordsOneRedirectBeforeLeaving(): void
     {
         $result = $this->executeTracking([
             'response' => ['autoRedirect' => true, 'goUrl' => 'https://links.example/tracked-auto'],
@@ -61,12 +61,90 @@ class SeomaticTrackingTemplateTest extends TestCase
         self::assertSame('auto', $result['events'][1]['smart_link']['platform']);
     }
 
+    #[DataProvider('automaticTrackingSelections')]
+    public function testAutomaticTrackingWaitsOnlyForApplicableQueuedEvents(array $enabled, string $search, bool $waits): void
+    {
+        $goUrl = 'https://links.example/7/actions/smartlink-manager/redirect/go/campaign/auto';
+        $result = $this->executeTracking([
+            'search' => $search,
+            'response' => ['autoRedirect' => true, 'goUrl' => $goUrl],
+            'checkpoints' => [99, 100, 2099, 2100, 4100],
+        ], ['seomaticTrackingEvents' => $enabled, 'seomaticEventPrefix' => 'custom_campaign']);
+
+        self::assertSame([], $result['checkpoints'][0]['navigations']);
+        self::assertSame($waits ? [] : [$goUrl], $result['checkpoints'][1]['navigations']);
+        self::assertSame($waits ? [] : [$goUrl], $result['checkpoints'][2]['navigations']);
+        self::assertSame([$goUrl], $result['checkpoints'][3]['navigations']);
+        self::assertSame([$goUrl], $result['checkpoints'][4]['navigations']);
+        self::assertSame($waits ? [100, 2000] : [100], $result['timerDelays']);
+        self::assertSame($waits ? [2100] : [100], $result['navigationTimes']);
+        $expectedEvents = [];
+        if ($search === '?src=qr' && in_array('qr_scan', $enabled, true)) {
+            $expectedEvents[] = ['event' => 'custom_campaign_qr_scan', 'time' => 0];
+        }
+        if (in_array('redirect', $enabled, true)) {
+            $expectedEvents[] = ['event' => 'custom_campaign_redirect', 'time' => 100];
+        }
+        self::assertSame($expectedEvents, $result['eventTimes']);
+    }
+
+    public static function automaticTrackingSelections(): iterable
+    {
+        yield 'redirect selected direct visit' => [['redirect'], '', true];
+        yield 'redirect selected QR visit' => [['redirect'], '?src=qr', true];
+        yield 'QR-only tagged visit' => [['qr_scan'], '?src=qr', true];
+        yield 'QR-only ordinary visit' => [['qr_scan'], '', false];
+        yield 'both automatic events' => [['redirect', 'qr_scan'], '?src=qr', true];
+        yield 'all events' => [['redirect', 'qr_scan', 'button_click'], '?src=qr', true];
+        yield 'manual tracking only' => [['button_click'], '?src=qr', false];
+        yield 'all events disabled' => [[], '?src=qr', false];
+    }
+
+    #[DataProvider('manualChoicesDuringAutomaticNavigation')]
+    public function testManualChoicePreventsAutomaticNavigationFromOverridingIt(int $clickAt, bool $trackButton): void
+    {
+        $buttonUrl = 'https://links.example/actions/smartlink-manager/redirect/go/campaign/android';
+        $enabled = ['redirect'];
+        if ($trackButton) {
+            $enabled[] = 'button_click';
+        }
+        $result = $this->executeTracking([
+            'response' => ['autoRedirect' => true, 'goUrl' => 'https://links.example/automatic-ios'],
+            'buttonUrl' => $buttonUrl,
+            'clickAt' => $clickAt,
+            'checkpoints' => [$clickAt + 299, $clickAt + 300, 4100],
+        ], ['seomaticTrackingEvents' => $enabled]);
+        self::assertSame([$buttonUrl], $result['navigations']);
+        self::assertSame([$clickAt + ($trackButton ? 300 : 0)], $result['navigationTimes']);
+        self::assertSame($trackButton ? [] : [$buttonUrl], $result['checkpoints'][0]['navigations']);
+        self::assertSame([$buttonUrl], $result['checkpoints'][1]['navigations']);
+        self::assertSame([$buttonUrl], $result['checkpoints'][2]['navigations']);
+        $expected = ['already_queued'];
+        if ($clickAt > 100) {
+            $expected[] = 'smart_links_redirect';
+        }
+        if ($trackButton) {
+            $expected[] = 'smart_links_button_click';
+        }
+        self::assertSame($expected, array_column($result['events'], 'event'));
+        self::assertSame($trackButton, $result['clickPrevented']);
+    }
+
+    public static function manualChoicesDuringAutomaticNavigation(): iterable
+    {
+        yield 'tracked button before automatic initiation' => [50, true];
+        yield 'tracked button during grace' => [500, true];
+        yield 'untracked button before automatic initiation' => [50, false];
+        yield 'untracked button during grace' => [500, false];
+    }
+
     public function testPausedQrLandingRecordsOnlyArrivalAndDoesNotResolveOrNavigate(): void
     {
         $result = $this->executeTracking(['search' => '?src=qr&debug=1']);
         self::assertSame(['already_queued', 'smart_links_qr_scan'], array_column($result['events'], 'event'));
         self::assertSame([], $result['requests']);
         self::assertSame([], $result['navigations']);
+        self::assertSame([], $result['timerDelays']);
     }
 
     #[DataProvider('nonNavigatingResponses')]
@@ -75,6 +153,7 @@ class SeomaticTrackingTemplateTest extends TestCase
         $result = $this->executeTracking($input);
         self::assertSame(['already_queued'], array_column($result['events'], 'event'));
         self::assertSame([], $result['navigations']);
+        self::assertSame([], $result['timerDelays']);
     }
 
     public static function nonNavigatingResponses(): iterable
@@ -159,6 +238,7 @@ class SeomaticTrackingTemplateTest extends TestCase
         self::assertFalse($result['clickPrevented']);
         self::assertFalse($result['clickListener']);
         self::assertCount(2, $result['navigations']);
+        self::assertSame([100], $result['timerDelays']);
     }
 
     public function testDisabledAnalyticsSuppressesIntegrationEvents(): void
@@ -188,6 +268,8 @@ class SeomaticTrackingTemplateTest extends TestCase
         self::assertSame(['already_queued'], array_column($result['events'], 'event'));
         self::assertSame(['https://links.example/tracked-auto'], $result['navigations']);
         self::assertFalse($result['clickListener']);
+        self::assertSame([100], $result['timerDelays']);
+        self::assertSame([100], $result['navigationTimes']);
     }
 
     public function testLegacyQrDisplayHelpersRemainCallableWithoutEmittingEvents(): void

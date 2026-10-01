@@ -11,6 +11,13 @@
 		}
 		{% endif %}
 
+		var manualNavigation = false;
+		document.addEventListener('click', function(event) {
+			if (event.target && event.target.closest && event.target.closest('a[href*="smartlink-manager/redirect/go"]')) {
+				manualNavigation = true;
+			}
+		});
+
 		var source = urlParams.get('src');
 		var resolverUrl = new URL({{ autoRedirectUrl|json_encode|raw }}, window.location.href);
 		if (source === 'qr') {
@@ -35,10 +42,23 @@
 					return;
 				}
 				setTimeout(function() {
+					if (manualNavigation) {
+						return;
+					}
 					if (typeof window.pushSmartLinkEvent === 'function') {
 						window.pushSmartLinkEvent('redirect', 'auto', source || 'direct');
 					}
-					window.location.replace(data.goUrl);
+					var navigate = function() {
+						if (!manualNavigation) {
+							window.location.replace(data.goUrl);
+						}
+					};
+					if (window.smartLinkAutoTrackingQueued === true) {
+						// Give asynchronous tracking a bounded grace period, not a delivery guarantee.
+						setTimeout(navigate, 2000);
+					} else {
+						navigate();
+					}
 				}, 100);
 			})
 			.catch(function() {

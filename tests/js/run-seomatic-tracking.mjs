@@ -5,19 +5,24 @@ import vm from 'node:vm';
 const input = JSON.parse(readFileSync(0, 'utf8'));
 const events = [{event: 'already_queued'}];
 const timeline = [];
+let now = 0;
+const eventTimes = [];
 events.push = function (event) {
     timeline.push(event.event);
+    eventTimes.push({event: event.event, time: now});
     return Array.prototype.push.call(this, event);
 };
 const timers = [];
 const listeners = new Map();
 const clicks = new Map();
 const navigations = [];
+const navigationTimes = [];
 const requests = [];
 const location = {
     search: input.search ?? '',
     replace(url) {
         navigations.push(url);
+        navigationTimes.push(now);
         timeline.push('navigate');
     },
     get href() { return 'https://links.example/site/custom/campaign' + this.search; },
@@ -42,7 +47,7 @@ const context = vm.createContext({
             return [link];
         },
     },
-    setTimeout(callback, delay) { timers.push({callback, delay}); },
+    setTimeout(callback, delay) { timers.push({callback, delay, due: now + delay}); },
     async fetch(url, options) {
         requests.push({url, options});
         if (input.fetchFailure) throw new Error('Resolver unavailable');
@@ -62,22 +67,47 @@ listeners.get('DOMContentLoaded')?.();
 await new Promise(resolve => setImmediate(resolve));
 const beforeTimers = events.map(event => event.event);
 const timerDelays = [];
-while (timers.length) {
-    const timer = timers.shift();
-    timerDelays.push(timer.delay);
-    timer.callback();
-}
 let clickPrevented = false;
-if (input.click) {
-    clicks.get('click')?.({preventDefault() { clickPrevented = true; }});
+function clickButton() {
+    const event = {
+        preventDefault() { clickPrevented = true; },
+        target: {closest() { return link; }},
+    };
+    clicks.get('click')?.(event);
+    listeners.get('click')?.(event);
     if (!clickPrevented) location.href = link.href;
-    while (timers.length) {
+}
+function advanceClock(target) {
+    timers.sort((a, b) => a.due - b.due);
+    while (timers.length && timers[0].due <= target) {
         const timer = timers.shift();
+        now = timer.due;
         timerDelays.push(timer.delay);
         timer.callback();
+        timers.sort((a, b) => a.due - b.due);
+    }
+    now = target;
+}
+const checkpoints = [];
+if (input.clickAt !== undefined) {
+    advanceClock(input.clickAt);
+    clickButton();
+}
+for (const time of input.checkpoints ?? []) {
+    advanceClock(time);
+    checkpoints.push({time, navigations: [...navigations], events: events.map(event => event.event)});
+}
+while (timers.length) {
+    advanceClock(Math.min(...timers.map(timer => timer.due)));
+}
+if (input.click) {
+    clickButton();
+    while (timers.length) {
+        advanceClock(Math.min(...timers.map(timer => timer.due)));
     }
 }
 process.stdout.write(JSON.stringify({
     arrivalEvents, beforeTimers, events, timeline, navigations, requests,
     timerDelays, clickPrevented, clickListener: clicks.has('click'),
+    checkpoints, eventTimes, navigationTimes,
 }));
