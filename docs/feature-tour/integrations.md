@@ -55,6 +55,8 @@ The grace period gives asynchronously loaded tags time to run; it does not guara
 
 Enable the integration in **Settings → Integrations → SEOmatic**. The integration is automatically detected. (When SEOmatic isn't installed, see [Integration requirements](#integration-requirements) below for what the card shows.)
 
+If you use a custom **DataLayer Variable Name** in SEOmatic’s Google Tag Manager settings, SmartLink Manager sends events to that same queue for the rendered site. Environment-backed names are resolved before use, and existing queued entries are preserved. The default is `dataLayer`; there is no separate queue-name setting in SmartLink Manager. Configure GTM triggers and tags to forward the events to GA4 or your other analytics platform.
+
 ### Content SEO and sitemaps
 
 When the integration is enabled, SEOmatic adds a **SmartLinks** source (named after the plugin's display name) in **SEOmatic → Content SEO**. That source lets you manage the SEOmatic metadata bundle for rendered smart link and QR pages, including title, robots, canonical URL, and sitemap settings.

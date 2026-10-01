@@ -15,7 +15,8 @@
 {% if seomaticEnabled %}
     {% set eventPrefix = settings.seomaticEventPrefix ?? 'smart_links' %}
     <script>
-        window.dataLayer = window.dataLayer || [];
+        var smartLinkDataLayerName = {{ dataLayerName|json_encode|raw }};
+        window[smartLinkDataLayerName] = window[smartLinkDataLayerName] || [];
 
         function pushSmartLinkEvent(eventType, platform, source) {
             var trackingEvents = {{ trackingEvents|json_encode|raw }};
@@ -33,14 +34,14 @@
                     click_type: eventType
                 }
             };
-            window.dataLayer.push(eventData);
+            window[smartLinkDataLayerName].push(eventData);
             if (eventType === 'redirect' || eventType === 'qr_scan') {
                 window.smartLinkAutoTrackingQueued = true;
             }
             {% if craft.app.config.general.devMode %}
-            console.log('SmartLink Manager event pushed to dataLayer:', eventData);
-            console.log('Current dataLayer length:', window.dataLayer.length);
-            console.log('Last 3 dataLayer events:', window.dataLayer.slice(-3));
+            console.log('SmartLink Manager event pushed to data layer:', smartLinkDataLayerName, eventData);
+            console.log('Current dataLayer length:', window[smartLinkDataLayerName].length);
+            console.log('Last 3 dataLayer events:', window[smartLinkDataLayerName].slice(-3));
             {% endif %}
         }
 

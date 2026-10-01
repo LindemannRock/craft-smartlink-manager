@@ -37,7 +37,7 @@ const context = vm.createContext({
     URLSearchParams,
     console: {log() {}},
     location,
-    dataLayer: events,
+    dataLayer: input.dataLayerName && input.dataLayerName !== 'dataLayer' ? [{event: 'default_queue_untouched'}] : events,
     document: {
         addEventListener(name, listener) { listeners.set(name, listener); },
         querySelectorAll(selector) {
@@ -58,6 +58,7 @@ const context = vm.createContext({
     },
 });
 context.window = context;
+context[input.dataLayerName ?? 'dataLayer'] = events;
 for (const script of input.html.matchAll(/<script>([\s\S]*?)<\/script>/g)) {
     vm.runInContext(script[1], context, {timeout: 1000});
 }
@@ -109,5 +110,5 @@ if (input.click) {
 process.stdout.write(JSON.stringify({
     arrivalEvents, beforeTimers, events, timeline, navigations, requests,
     timerDelays, clickPrevented, clickListener: clicks.has('click'),
-    checkpoints, eventTimes, navigationTimes,
+    checkpoints, eventTimes, navigationTimes, defaultEvents: context.dataLayer,
 }));

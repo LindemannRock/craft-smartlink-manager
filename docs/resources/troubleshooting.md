@@ -218,7 +218,7 @@ If a date-format setting does not appear to change the index:
 
 2. **Is SEOmatic installed and enabled?** Go to **Settings → Plugins** and confirm SEOmatic is installed. The integration option only appears when SEOmatic is present.
 
-3. **Is your GTM/GA4 container configured?** SmartLink Manager pushes to `window.dataLayer`. GTM must be configured to listen for events with the names `smart_links_redirect`, `smart_links_qr_scan`, or `smart_links_button_click`.
+3. **Is your GTM/GA4 container configured?** SmartLink Manager pushes to SEOmatic’s configured GTM queue (`window.dataLayer` by default). GTM must be configured to listen for events with the names `smart_links_redirect`, `smart_links_qr_scan`, or `smart_links_button_click`.
 
 4. **Did automatic navigation actually start?** `_redirect` is emitted when automatic navigation is initiated. If the automatic visit queued a selected redirect or QR-arrival event, the browser gives tracking a 2-second grace period before leaving. A desktop visit, missing platform destination, failed resolver, or supported `debug=1` pause should produce no redirect event. Choosing a button before automatic navigation is initiated produces `_button_click` instead. Choosing one during the tracking grace period cancels the pending automatic navigation, but its already-queued `_redirect` event remains; that event does not confirm arrival at the destination.
 
@@ -226,7 +226,7 @@ If a date-format setting does not appear to change the index:
 
 6. **Are you testing a QR arrival or displaying its image?** Open the encoded landing URL with `?src=qr` to emit `_qr_scan`. The QR display page and image download do not represent a scan and emit no scan event. Automatic navigation afterward can emit a separate `_redirect` with QR source.
 
-7. **Does GTM preserve queued events?** SmartLink Manager can queue an event before GTM loads. Its initialization must preserve `window.dataLayer` with `window.dataLayer = window.dataLayer || []`, rather than replacing it with an empty array. Check the rendered script for the site you are testing, including any saved SEOmatic script customization.
+7. **Do the queue names match, and does GTM preserve queued events?** SmartLink Manager uses the active SEOmatic Google Tag Manager script’s **DataLayer Variable Name** for the rendered site, including environment-backed names. Inspect that queue: for example, `window.linkEvents` when the configured name is `linkEvents`, or `window.dataLayer` for the default. GTM initialization must preserve existing entries with `window.linkEvents = window.linkEvents || []` (using your actual queue name). Check the rendered script for the site you are testing, including any saved SEOmatic script customization; replacing the queue with an empty array discards events queued before GTM loads.
 
 Use GTM Preview to identify the event and tag firing, then verify receipt in GA4. The automatic tracking grace period is bounded, so a blocked or very slow tag cannot hold the visitor indefinitely. A tag firing is not a delivery guarantee; privacy settings, consent, blockers, and navigation can affect browser analytics independently of SmartLink Manager's own server-side analytics.
 
