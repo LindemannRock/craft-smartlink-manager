@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Run only in the disposable Craft project owned by scripts/test-craft-compat.
+# The runner also removes project resources after failures or interruption.
 php craft plugin/list
 
 php craft exec '
 use Craft;
+use craft\db\Query;
+use craft\helpers\StringHelper;
 use lindemannrock\smartlinkmanager\SmartLinkManager;
+use lindemannrock\smartlinkmanager\elements\SmartLink;
 use lindemannrock\smartlinkmanager\models\Settings;
 use lindemannrock\logginglibrary\LoggingLibrary;
 
@@ -47,5 +52,90 @@ foreach (["smartLinks", "analytics", "qrCode", "deviceDetection", "integration"]
     $plugin->get($component);
 }
 
+if ($plugin->servdStaticCache->isAvailable()) {
+    throw new RuntimeException("The disposable smoke project must not connect to Servd static cache.");
+}
+
+$uid = StringHelper::UUID();
+$slug = "smartlink-smoke-" . bin2hex(random_bytes(8));
+$link = new SmartLink();
+$link->uid = $uid;
+$link->title = "SmartLink release smoke";
+$link->slug = $slug;
+$link->siteId = Craft::$app->getSites()->getPrimarySite()->id;
+$link->fallbackUrl = "https://example.com/smartlink-smoke/fallback";
+$link->iosUrl = "https://example.com/smartlink-smoke/ios";
+$link->trackAnalytics = false;
+$link->qrCodeEnabled = true;
+$link->setEnabledForSite(true);
+
+try {
+    if (!$plugin->smartLinks->saveSmartLink($link)) {
+        throw new RuntimeException("SmartLink fixture could not be saved: " . json_encode($link->getErrors()));
+    }
+
+    $reloaded = $plugin->smartLinks->getSmartLinkById($link->id, $link->siteId);
+    $bySlug = $plugin->smartLinks->getSmartLinkBySlug(" " . strtoupper($slug) . " ", $link->siteId);
+    if (!$reloaded instanceof SmartLink || !$bySlug instanceof SmartLink
+        || $reloaded->uid !== $uid || $bySlug->id !== $link->id
+        || $reloaded->fallbackUrl !== $link->fallbackUrl || $reloaded->iosUrl !== $link->iosUrl) {
+        throw new RuntimeException("SmartLink service lookup did not preserve the saved destinations and identity.");
+    }
+
+    $baseUrl = rtrim(Craft::$app->getSites()->getPrimarySite()->getBaseUrl(), "/");
+    if ($reloaded->getRedirectUrl() !== $baseUrl . "/go/" . $slug
+        || $reloaded->getUrl() !== $reloaded->getRedirectUrl()
+        || $reloaded->getQrCodeUrl() !== $baseUrl . "/go/qr/" . $slug) {
+        throw new RuntimeException("Persisted SmartLink public URLs do not use the fresh-install prefixes.");
+    }
+
+    // Exercise real QR rendering without creating persistent cache entries.
+    $options = ["format" => "svg", "size" => 180, "_cache" => false];
+    $svg = $plugin->smartLinks->generateQrCode($reloaded, $options);
+    $document = new DOMDocument();
+    if (!$document->loadXML($svg, LIBXML_NONET)
+        || $document->documentElement?->localName !== "svg"
+        || $document->documentElement->getAttribute("width") !== "180"
+        || $document->documentElement->getAttribute("height") !== "180"
+        || $document->getElementsByTagName("path")->length === 0) {
+        throw new RuntimeException("SmartLink SVG QR rendering did not produce a valid 180px image.");
+    }
+
+    $options["format"] = "png";
+    $dataUrl = $reloaded->getQrCodeDataUri($options);
+    $prefix = "data:image/png;base64,";
+    $png = str_starts_with($dataUrl, $prefix) ? base64_decode(substr($dataUrl, strlen($prefix)), true) : false;
+    $dimensions = is_string($png) ? getimagesizefromstring($png) : false;
+    if (!is_string($png) || !str_starts_with($png, "\x89PNG\r\n\x1a\n")
+        || !is_array($dimensions) || $dimensions["mime"] !== "image/png"
+        || $dimensions[0] !== 180 || $dimensions[1] !== 180) {
+        throw new RuntimeException("SmartLink PNG QR data URI did not contain a valid 180px image.");
+    }
+} finally {
+    // Match only this invocation, including a save that failed after persistence.
+    $owned = SmartLink::find()->uid($uid)->siteId("*")->status(null)->trashed(null)->one();
+    if ($owned !== null && !Craft::$app->getElements()->deleteElement($owned, true)) {
+        throw new RuntimeException("Could not remove the owned SmartLink smoke fixture.");
+    }
+
+    if ((new Query())->from("{{%elements}}")->where(["uid" => $uid])->exists()) {
+        throw new RuntimeException("The owned SmartLink smoke element remains after cleanup.");
+    }
+
+    if ($link->id !== null) {
+        foreach ([
+            "{{%smartlinkmanager}}" => "id",
+            "{{%smartlinkmanager_content}}" => "smartLinkId",
+            "{{%elements_sites}}" => "elementId",
+            "{{%searchindex}}" => "elementId",
+        ] as $table => $column) {
+            if ((new Query())->from($table)->where([$column => $link->id])->exists()) {
+                throw new RuntimeException("Owned SmartLink smoke rows remain after cleanup: " . $table);
+            }
+        }
+    }
+}
+
+echo "SmartLink persistence, public URLs, SVG/PNG QR rendering, and exact fixture cleanup passed.\n";
 echo "SmartLink Manager smoke test passed.\n";
 '
