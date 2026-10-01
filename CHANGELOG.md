@@ -1,5 +1,15 @@
 # Changelog
 
+## [5.37.5](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.4...v5.37.5) (2026-10-01)
+
+
+### Fixed
+
+* **integrations:** allow automatic tracking time before navigation ([3afb45b](https://github.com/LindemannRock/craft-smartlink-manager/commit/3afb45b74d2d84fd408f0150e20866b29eb7d507))
+* **integrations:** clarify event tracking settings and translations ([0350fcf](https://github.com/LindemannRock/craft-smartlink-manager/commit/0350fcf882c391f02f27dcf608fa73d56b88d76f))
+* **integrations:** honor SEOmatic data-layer names ([9d639b6](https://github.com/LindemannRock/craft-smartlink-manager/commit/9d639b649e7612d69752ba116d53c8e0fe35d6a2))
+* **integrations:** track SEOmatic events at their actual actions ([739dbd5](https://github.com/LindemannRock/craft-smartlink-manager/commit/739dbd519d9cf02ed0a10fb3c0c321ea586189ae))
+
 ## [5.37.4](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.3...v5.37.4) - 2026-08-31
 
 
