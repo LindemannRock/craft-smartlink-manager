@@ -204,9 +204,9 @@ final class SettingsControllerSectionScopeTest extends TestCase
         self::assertStringNotContainsString('message: "URL Prefix is disabled. {singularName} URLs will be generated as root paths like <code>/your-link</code>."|t(\'smartlink-manager\', {singularName: smartlinkHelper.displayName})|raw', $general);
         self::assertStringNotContainsString('singularName: smartlinkHelper.displayName, siteHandle:', $general);
 
-        self::assertStringContainsString('{% set smartlinkFullNameHtml = smartlinkHelper.fullName|e %}', $integrations);
-        self::assertStringContainsString('pluginName: smartlinkFullNameHtml', $integrations);
-        self::assertStringContainsString('~ smartlinkFullNameHtml ~', $integrations);
+        self::assertStringContainsString('{% set seomaticPluginNameHtml = seomaticPluginName|e %}', $integrations);
+        self::assertStringContainsString('pluginName: seomaticPluginNameHtml', $integrations);
+        self::assertStringNotContainsString("|t('smartlink-manager', { pluginName: seomaticPluginName })\n                    } %}", $integrations);
         self::assertStringNotContainsString("|t('smartlink-manager', {pluginName: smartlinkHelper.fullName}) ~", $integrations);
         self::assertStringNotContainsString('~ smartlinkHelper.fullName ~', $integrations);
     }
@@ -236,7 +236,7 @@ final class SettingsControllerSectionScopeTest extends TestCase
                     'rmPluginName: rmPluginNameHtml',
                 ],
                 'notContains' => [
-                    'message: \'<strong>\' ~ "Note"|t(\'smartlink-manager\') ~ \':</strong> \' ~ "No tracking scripts are currently configured in {pluginName}. Events will be queued but not sent until you configure GTM or Google Analytics in {pluginName}."|t(\'smartlink-manager\', { pluginName: seomaticPluginName })',
+                    'message: \'<strong>\' ~ "Note"|t(\'smartlink-manager\') ~ \':</strong> \' ~ "No tracking scripts are currently configured in {pluginName}. Configure Google Tag Manager and its event triggers and tags to send these events to your analytics platform."|t(\'smartlink-manager\', { pluginName: seomaticPluginName })',
                     ' ~ "View and manage all redirects ({pluginName} + regular pages) in one place"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
                     ' ~ "Track how many people access old {pluginName} slugs after changes"|t(\'smartlink-manager\', {pluginName: smartlinkHelper.pluralLowerDisplayName}) ~ ',
                     ' ~ "{rmPluginName} shows which plugin created each redirect for better organization"|t(\'smartlink-manager\', {rmPluginName: rmPluginName}) ~ ',
