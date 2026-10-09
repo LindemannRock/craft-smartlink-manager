@@ -3,7 +3,7 @@
 # SmartLink Manager for Craft CMS
 
 [![Latest Version](https://img.shields.io/packagist/v/lindemannrock/craft-smartlink-manager.svg)](https://packagist.org/packages/lindemannrock/craft-smartlink-manager)
-[![Craft CMS](https://img.shields.io/badge/Craft%20CMS-5.10%2B-orange.svg)](https://craftcms.com/)
+[![Craft CMS](https://img.shields.io/badge/Craft%20CMS-5.11%2B-orange.svg)](https://craftcms.com/)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://php.net/)
 [![Logging Library](https://img.shields.io/badge/Logging%20Library-5.19.0%2B-green.svg)](https://github.com/LindemannRock/craft-logging-library)
 [![License](https://img.shields.io/packagist/l/lindemannrock/craft-smartlink-manager.svg)](LICENSE.md)
@@ -27,9 +27,9 @@ Intelligent device detection and app store routing for Craft CMS. Create smart l
 
 ## Requirements
 
-- Craft CMS 5.10+
+- Craft CMS 5.11+
 - PHP 8.2+
-- [Base](https://github.com/LindemannRock/craft-plugin-base) 5.38.2+
+- [Base](https://github.com/LindemannRock/craft-plugin-base) 5.39.0+
 - [Logging Library](https://github.com/LindemannRock/craft-logging-library) 5.19.0+ (required by Composer; install in CP for log viewing)
 - [bacon/bacon-qr-code](https://github.com/Bacon/BaconQrCode) ^3.0
 

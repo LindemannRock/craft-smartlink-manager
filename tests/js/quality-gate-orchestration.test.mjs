@@ -118,12 +118,18 @@ test('PHP quality tooling declares its executable and includes product, tests, b
     assert.match(ecs, /__DIR__ \. '\/src'[\s\S]*__DIR__ \. '\/tests'[\s\S]*__FILE__/);
 });
 
+test('package dependency floors match the validated Base release contract', () => {
+    const composer = JSON.parse(readFileSync(path.join(packageRoot, 'composer.json'), 'utf8'));
+    assert.equal(composer.require['craftcms/cms'], '^5.11');
+    assert.equal(composer.require['lindemannrock/craft-plugin-base'], '^5.39.0');
+});
+
 test('PHPUnit bootstrap supports package and workspace dependency layouts', () => {
     const bootstrap = readFileSync(path.join(packageRoot, 'tests/bootstrap.php'), 'utf8');
     const packageVendor = "dirname(__DIR__) . '/vendor/lindemannrock/craft-plugin-base/src/testing/bootstrap.php'";
     const workspaceVendor = "dirname(__DIR__, 3) . '/vendor/lindemannrock/craft-plugin-base/src/testing/bootstrap.php'";
     assert.ok(bootstrap.indexOf(packageVendor) < bootstrap.indexOf(workspaceVendor));
-    assert.match(bootstrap, /craft-plugin-base \^5\.38/);
+    assert.match(bootstrap, /craft-plugin-base \^5\.39\.0/);
 });
 
 test('PHPUnit constituent owns a disposable MySQL Craft project', () => {
