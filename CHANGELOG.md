@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.38.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.5...v5.38.0) - 2026-10-12
+
+
+### Added
+
+* **geo:** use shared default locations ([0810e2e](https://github.com/LindemannRock/craft-smartlink-manager/commit/0810e2e672c5241db9e8a7583f87542182fbc22b))
+
 ## [5.37.5](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.4...v5.37.5) - 2026-10-01
 
 
