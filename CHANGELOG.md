@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.39.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.38.0...v5.39.0) (2026-11-27)
+
+
+### Fixed
+
+* **deps:** require Base 5.40 and Logging Library 5.21 ([cd99caa](https://github.com/LindemannRock/craft-smartlink-manager/commit/cd99caa3178f8f2e469c54500c9be1c15ec3fb55))
+
 ## [5.38.0](https://github.com/LindemannRock/craft-smartlink-manager/compare/v5.37.5...v5.38.0) - 2026-10-12
 
 
