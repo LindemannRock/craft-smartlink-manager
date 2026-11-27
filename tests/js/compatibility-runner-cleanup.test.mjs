@@ -181,6 +181,7 @@ exit 0
     }
     const environment = {
         ...process.env,
+        BASH_ENV: '',
         PATH: `${binRoot}:/usr/bin:/bin`,
         CRAFT_COMPAT_TEMP_ROOT: ownedTempRoot,
         SMARTLINK_MANAGER_COMPAT_TEST_LOG: logPath,

@@ -53,6 +53,7 @@ function fixture({workspace = true, ddevExit = 0, provideDdev = true} = {}) {
     const before = fileSnapshot(currentPackage);
     const environment = {
         ...process.env,
+        BASH_ENV: '',
         PATH: provideDdev ? `${binRoot}:/usr/bin:/bin` : '/usr/bin:/bin',
         SMARTLINK_MANAGER_HOOK_TEST_LOG: logPath,
     };
